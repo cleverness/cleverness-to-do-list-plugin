@@ -16,7 +16,7 @@ function cleverness_todo_dashboard_widget() {
 	$limit = $cleverness_todo_dashboard_settings['dashboard_number'];
 
 	// get to-do items
-	$results = cleverness_todo_get_todos($user, $limit, 0, 1);
+	$results = cleverness_todo_get_todos($user, $limit, 0, $cat_id);
 
 	if ($results) {
 		$catid = '';

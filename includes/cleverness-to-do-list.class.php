@@ -3,6 +3,8 @@
 
 class ClevernessToDoList {
 	protected $settings;
+	protected $cat_id = '';
+	protected $list;
 
 	public function __construct($settings) {
 		add_action( 'init', array(&$this, 'cleverness_todo_checklist_init') );
@@ -14,7 +16,6 @@ public function display() {
 	get_currentuserinfo();
 
 	$priority = array(0 => $cleverness_todo_option['priority_0'] , 1 => $cleverness_todo_option['priority_1'], 2 => $cleverness_todo_option['priority_2']);
-
 
 	$cleverness_todo_settings = get_option('cleverness_todo_settings');
 
@@ -70,17 +71,17 @@ public function display() {
 	protected function show_checkbox($result, $priority_class = '') {
 		$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'complete' );
 		if ( $cleverness_todo_permission === true ) {
-			echo '<input type="checkbox" id="ctdl-'.$result->id.'" class="todo-checkbox"/>';
+			$this->list .= '<input type="checkbox" id="ctdl-'.$result->id.'" class="todo-checkbox"/>';
 			}
 		}
 
 	protected function show_todo_text($result) {
-		echo '<td>'.stripslashes($result->todotext).'</td>';
+		$this->list .= '<td>'.stripslashes($result->todotext).'</td>';
 		}
 
 	protected function show_edit_link($result) {
 		if ( current_user_can($this->settings['edit_capability']) || $this->settings['list_view'] == '0' ) {
-			echo '<input class="edit-todo button-secondary" type="button" value="'. _e( 'Edit' ).'" />';
+			$this->list .= '<input class="edit-todo button-secondary" type="button" value="'. _e( 'Edit' ).'" />';
 			}
 		}
 
@@ -90,9 +91,9 @@ public function display() {
 			$assign_user = '';
 			if ( $result->assign != '-1' && $result->assign != '' && $result->assign != '0') {
 				$assign_user = get_userdata($result->assign);
-				echo '<td>'.$assign_user->display_name.'</td>';
+				$this->list .= '<td>'.$assign_user->display_name.'</td>';
 			} else {
-				echo '<td></td>';
+				$this->list .= '<td></td>';
 				}
 			}
    		}
@@ -100,22 +101,22 @@ public function display() {
 	protected function show_addedby($result, $user_info) {
 		if ( $this->settings['list_view'] == '1' && $this->settings['todo_author'] == '0' ) {
 			if ( $result->author != '0' ) {
-				echo '<td>'.$user_info->display_name.'</td>';
+				$this->list .= '<td>'.$user_info->display_name.'</td>';
 			} else {
-				echo '<td></td>';
+				$this->list .= '<td></td>';
 				}
 			}
 		}
 
 	protected function show_deadline($result) {
 		if ( $this->settings['show_deadline'] == '1' && $result->deadline != '' ) {
-			echo '<td>'.$result->deadline.'</td>';
+			$this->list .= '<td>'.$result->deadline.'</td>';
 			}
 		}
 
 	protected function show_progress($result) {
 		if ( $this->settings['show_progress'] == '1' && $result->progress != '' ) {
-			echo '<td>'.$result->progress.'</td>';
+			$this->list .= '<td>'.$result->progress.'</td>';
 			}
 		}
 

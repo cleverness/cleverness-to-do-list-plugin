@@ -26,12 +26,11 @@ function cleverness_todo_user_can($type, $action) {
 }
 
 /* Get to-do list items */
-function cleverness_todo_get_todos($user, $limit = 0, $status = 0, $dashboard = 0) {
+function cleverness_todo_get_todos($user, $limit = 0, $status = 0, $cat_id = 0) {
    	global $wpdb;
 
 	$cleverness_todo_settings = get_option('cleverness_todo_settings');
 	$cleverness_todo_dashboard_settings = get_option('cleverness_todo_dashboard_settings');
-	$cat_id = $cleverness_todo_dashboard_settings['dashboard_cat'];
 
 	$select = 'SELECT id, author, priority, todotext, assign, progress, deadline, cat_id FROM '.CTDL_TODO_TABLE.' WHERE status = '.absint($status);
 
@@ -64,7 +63,7 @@ function cleverness_todo_get_todos($user, $limit = 0, $status = 0, $dashboard = 
 			}
 		}
 
-	if ( $dashboard == 1 ) {
+	if ( $cat_id != 1 ) {
 		// show only one category
 		if ( $cleverness_todo_settings['categories'] == '1' && $cat_id != 'All' ) {
 			$select .= $wpdb->prepare(" AND cat_id = %d ", $cat_id);
