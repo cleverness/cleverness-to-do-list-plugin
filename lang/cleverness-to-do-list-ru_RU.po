@@ -1,0 +1,532 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Cleverness To-Do List 1.5.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-09 21:47-0500\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Almaz <AlmazWorks@gmail.com>\n"
+"Language-Team: AlmazWorks <AlmazWorks@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: WordPress;plugin\n"
+
+#: ../cleverness-to-do-list-options.php:6
+msgid "To-Do List Settings"
+msgstr "Настройки списка задач"
+
+#: ../cleverness-to-do-list-options.php:12
+msgid "<em>List View</em> sets how the to-do lists are viewed. The <em>Individual</em> setting allows each user to have their own private to-do list. The <em>Group</em> setting allows all users to share one to-do list."
+msgstr "<em>Просмотр списка</em> определяет, каким образом список будет просматриваться. <em>Индивидуальный</em> вариант предполагает использование каждым пользователем своего собственного списка задач. <em>Групповой</em> предполагает использование общего для всех списка задач."
+
+#: ../cleverness-to-do-list-options.php:17
+msgid "List View"
+msgstr "Просмотр списка"
+
+#: ../cleverness-to-do-list-options.php:20
+msgid "Individual"
+msgstr "Индивидуальный"
+
+#: ../cleverness-to-do-list-options.php:21
+msgid "Group"
+msgstr "Групповой"
+
+#: ../cleverness-to-do-list-options.php:26
+#: ../cleverness-to-do-list-options.php:77
+#: ../cleverness-to-do-list-widget.php:93
+msgid "Show Deadline"
+msgstr "Показывать сроки"
+
+#: ../cleverness-to-do-list-options.php:29
+#: ../cleverness-to-do-list-options.php:38
+#: ../cleverness-to-do-list-options.php:47
+#: ../cleverness-to-do-list-options.php:80
+#: ../cleverness-to-do-list-options.php:122
+#: ../cleverness-to-do-list-options.php:131
+#: ../cleverness-to-do-list-options.php:140
+#: ../cleverness-to-do-list-options.php:148
+#: ../cleverness-to-do-list-options.php:158
+msgid "No"
+msgstr "Нет"
+
+#: ../cleverness-to-do-list-options.php:30
+#: ../cleverness-to-do-list-options.php:39
+#: ../cleverness-to-do-list-options.php:48
+#: ../cleverness-to-do-list-options.php:81
+#: ../cleverness-to-do-list-options.php:121
+#: ../cleverness-to-do-list-options.php:130
+#: ../cleverness-to-do-list-options.php:139
+#: ../cleverness-to-do-list-options.php:149
+#: ../cleverness-to-do-list-options.php:157
+msgid "Yes"
+msgstr "Да"
+
+#: ../cleverness-to-do-list-options.php:35
+#: ../cleverness-to-do-list-widget.php:96
+msgid "Show Progress"
+msgstr "Показывать поле прогресса"
+
+#: ../cleverness-to-do-list-options.php:44
+msgid "Show Date Completed"
+msgstr "Показывать даты завершения"
+
+#: ../cleverness-to-do-list-options.php:53
+msgid "Date Format"
+msgstr "Формат даты"
+
+#: ../cleverness-to-do-list-options.php:55
+msgid "Documentation on Date Formatting"
+msgstr "Документация по форматированию даты"
+
+#: ../cleverness-to-do-list-options.php:61
+msgid "Dashboard Widget Settings"
+msgstr "Настройки виджета консоли"
+
+#: ../cleverness-to-do-list-options.php:65
+msgid "Number of List Items to Show"
+msgstr "Количество отображаемых задач списка"
+
+#: ../cleverness-to-do-list-options.php:68
+msgid "1"
+msgstr "1"
+
+#: ../cleverness-to-do-list-options.php:69
+msgid "5"
+msgstr "5"
+
+#: ../cleverness-to-do-list-options.php:70
+msgid "10"
+msgstr "10"
+
+#: ../cleverness-to-do-list-options.php:71
+msgid "15"
+msgstr "15"
+
+#: ../cleverness-to-do-list-options.php:72
+msgid "20"
+msgstr "20"
+
+#: ../cleverness-to-do-list-options.php:88
+msgid "Priority Label Settings"
+msgstr "Настройки меток приоритетов"
+
+#: ../cleverness-to-do-list-options.php:89
+msgid "The highest priority list items are shown in red in the lists. The lowest priority list items are shown in a lighter grey."
+msgstr "Задачи с высоким приоритетом будут показаны красными, низкоприоритетные задачи будут светлосерыми."
+
+#: ../cleverness-to-do-list-options.php:93
+msgid "Highest Priority Label"
+msgstr "Метка высокого приоритета"
+
+#: ../cleverness-to-do-list-options.php:99
+msgid "Middle Priority Label"
+msgstr "Метка среднего приоритета"
+
+#: ../cleverness-to-do-list-options.php:105
+msgid "Lowest Priority Label"
+msgstr "Метка низкого приоритета"
+
+#: ../cleverness-to-do-list-options.php:113
+msgid "Group View Settings"
+msgstr "Настройки группового просмотра"
+
+#: ../cleverness-to-do-list-options.php:114
+msgid "These settings are only used when <em>List View</em> is set to <em>Group</em>."
+msgstr "Эти настройки используются только если параметр <em>Просмотр списка</em> установлен как <em>Групповой</em>!"
+
+#: ../cleverness-to-do-list-options.php:118
+msgid "Show <em>Added By</em> on Dashboard Widget"
+msgstr "Указывать <em>авторов задач</em> в Виджете Консоли"
+
+#: ../cleverness-to-do-list-options.php:127
+msgid "Show <em>Added By</em> on To-Do List page"
+msgstr "Указывать <em>авторов задач</em> на странице Списка Задач"
+
+#: ../cleverness-to-do-list-options.php:136
+msgid "Assign Tasks to Users"
+msgstr "Назначение исполнителей задач"
+
+#: ../cleverness-to-do-list-options.php:145
+msgid "Email Assigned Task to User"
+msgstr "Отправлять назначенную задачу исполнителю на Email"
+
+#: ../cleverness-to-do-list-options.php:154
+msgid "Show Each User Only Their Assigned Tasks"
+msgstr "Показывать каждому пользователь только порученные ему задачи"
+
+#: ../cleverness-to-do-list-options.php:163
+msgid "User Roles"
+msgstr "Пользовательские роли"
+
+#: ../cleverness-to-do-list-options.php:165
+msgid "This is used in displaying the list of users to-do items can be assigned to."
+msgstr "Пользователям с ролями, указанными в этом списке, можно будет назначать задания."
+
+#: ../cleverness-to-do-list-options.php:166
+msgid "Separate each role with a comma."
+msgstr "Указываемые роли разделяются запятой."
+
+#: ../cleverness-to-do-list-options.php:167
+msgid "Documentation on User Roles"
+msgstr "Документация по ролям пользователей"
+
+#: ../cleverness-to-do-list-options.php:171
+msgid "View To-Do Item Capability"
+msgstr "Право видеть список задач"
+
+#: ../cleverness-to-do-list-options.php:174
+#: ../cleverness-to-do-list-options.php:187
+#: ../cleverness-to-do-list-options.php:200
+#: ../cleverness-to-do-list-options.php:213
+#: ../cleverness-to-do-list-options.php:226
+#: ../cleverness-to-do-list-options.php:240
+#: ../cleverness-to-do-list-options.php:253
+#: ../cleverness-to-do-list-options.php:266
+msgid "Edit Posts"
+msgstr "Редактировать записи"
+
+#: ../cleverness-to-do-list-options.php:175
+#: ../cleverness-to-do-list-options.php:188
+#: ../cleverness-to-do-list-options.php:201
+#: ../cleverness-to-do-list-options.php:214
+#: ../cleverness-to-do-list-options.php:227
+#: ../cleverness-to-do-list-options.php:241
+#: ../cleverness-to-do-list-options.php:254
+#: ../cleverness-to-do-list-options.php:267
+msgid "Publish Posts"
+msgstr "Публиковать записи"
+
+#: ../cleverness-to-do-list-options.php:176
+#: ../cleverness-to-do-list-options.php:189
+#: ../cleverness-to-do-list-options.php:202
+#: ../cleverness-to-do-list-options.php:215
+#: ../cleverness-to-do-list-options.php:228
+#: ../cleverness-to-do-list-options.php:242
+#: ../cleverness-to-do-list-options.php:255
+#: ../cleverness-to-do-list-options.php:268
+msgid "Edit Others Posts"
+msgstr "Редактировать чужие публикации"
+
+#: ../cleverness-to-do-list-options.php:177
+#: ../cleverness-to-do-list-options.php:190
+#: ../cleverness-to-do-list-options.php:203
+#: ../cleverness-to-do-list-options.php:216
+#: ../cleverness-to-do-list-options.php:229
+#: ../cleverness-to-do-list-options.php:243
+#: ../cleverness-to-do-list-options.php:256
+#: ../cleverness-to-do-list-options.php:269
+msgid "Publish Pages"
+msgstr "Публиковать страницы"
+
+#: ../cleverness-to-do-list-options.php:178
+#: ../cleverness-to-do-list-options.php:191
+#: ../cleverness-to-do-list-options.php:204
+#: ../cleverness-to-do-list-options.php:217
+#: ../cleverness-to-do-list-options.php:230
+#: ../cleverness-to-do-list-options.php:244
+#: ../cleverness-to-do-list-options.php:257
+#: ../cleverness-to-do-list-options.php:270
+msgid "Edit Users"
+msgstr "Редактировать пользователей"
+
+#: ../cleverness-to-do-list-options.php:179
+#: ../cleverness-to-do-list-options.php:192
+#: ../cleverness-to-do-list-options.php:205
+#: ../cleverness-to-do-list-options.php:218
+#: ../cleverness-to-do-list-options.php:231
+#: ../cleverness-to-do-list-options.php:245
+#: ../cleverness-to-do-list-options.php:258
+#: ../cleverness-to-do-list-options.php:271
+msgid "Manage Options"
+msgstr "Управлять настройками"
+
+#: ../cleverness-to-do-list-options.php:184
+msgid "Complete To-Do Item Capability"
+msgstr "Право завершать задачи"
+
+#: ../cleverness-to-do-list-options.php:197
+msgid "Add To-Do Item Capability"
+msgstr "Право создавать задачи"
+
+#: ../cleverness-to-do-list-options.php:210
+msgid "Edit To-Do Item Capability"
+msgstr "Право редактировать задачи"
+
+#: ../cleverness-to-do-list-options.php:223
+msgid "Assign To-Do Item Capability"
+msgstr "Право назначать задачи"
+
+#: ../cleverness-to-do-list-options.php:236
+msgid "View All Assigned Tasks Capability"
+msgstr "Право видеть все задачи"
+
+#: ../cleverness-to-do-list-options.php:239
+msgid "None"
+msgstr "Нет"
+
+#: ../cleverness-to-do-list-options.php:250
+msgid "Delete To-Do Item Capability"
+msgstr "Право удалять задачи"
+
+#: ../cleverness-to-do-list-options.php:263
+msgid "Purge To-Do Items Capability"
+msgstr "Право очищать список завершенных задач"
+
+#: ../cleverness-to-do-list-options.php:278
+msgid "Save Changes"
+msgstr "Сохранить изменения"
+
+#: ../cleverness-to-do-list-widget.php:9
+msgid "Lists To-Do Items"
+msgstr "Список задач"
+
+#: ../cleverness-to-do-list-widget.php:11
+msgid "To-Do List Widget"
+msgstr "Виджет Списка Задач"
+
+#: ../cleverness-to-do-list-widget.php:39
+msgid "Deadline: "
+msgstr "Срок: "
+
+#: ../cleverness-to-do-list-widget.php:44
+msgid "Assigned to "
+msgstr "Исполнитель"
+
+#: ../cleverness-to-do-list-widget.php:49
+#: ../cleverness-to-do-list.php:700
+msgid "No items to do."
+msgstr "Задачи отсутствуют."
+
+#: ../cleverness-to-do-list-widget.php:69
+#: ../cleverness-to-do-list.php:340
+#: ../cleverness-to-do-list.php:411
+#: ../cleverness-to-do-list.php:890
+#: ../cleverness-to-do-list.php:891
+#: ../cleverness-to-do-list.php:908
+msgid "To-Do List"
+msgstr "Список Задач"
+
+#: ../cleverness-to-do-list-widget.php:73
+msgid "Title:"
+msgstr "Заголовок:"
+
+#: ../cleverness-to-do-list-widget.php:78
+msgid "Number of Items to Display:"
+msgstr "Количество показываемых задач:"
+
+#: ../cleverness-to-do-list-widget.php:90
+msgid "Show Assigned To"
+msgstr "Показывать Исполнителей"
+
+#: ../cleverness-to-do-list.php:17
+msgid "To-Do List requires WordPress 2.8 or newer. <a href=\"http://codex.wordpress.org/Upgrading_WordPress\">Please update.</a>"
+msgstr "Плагин Список Задач требует версию WordPress 2.8 и выше. Пожалуйста <a href=\"http://codex.wordpress.org/Upgrading_WordPress\"> обновитесь</a>!"
+
+#: ../cleverness-to-do-list.php:163
+msgid "A task has been assigned to you"
+msgstr "Вам была поручена новая задача"
+
+#: ../cleverness-to-do-list.php:166
+msgid "Task:"
+msgstr "Задача:"
+
+#: ../cleverness-to-do-list.php:167
+msgid "Priority:"
+msgstr "Приоритет:"
+
+#: ../cleverness-to-do-list.php:169
+#: ../cleverness-to-do-list.php:690
+msgid "Deadline:"
+msgstr "Срок:"
+
+#: ../cleverness-to-do-list.php:170
+msgid "Website:"
+msgstr "Веб-сайт:"
+
+#: ../cleverness-to-do-list.php:171
+msgid "Website Login:"
+msgstr "Имя пользователя на сайте:"
+
+#: ../cleverness-to-do-list.php:258
+msgid "Add your first To-Do List item"
+msgstr "Создать вашу первую задачу"
+
+#: ../cleverness-to-do-list.php:317
+msgid "New To-Do item has been added."
+msgstr "Новая задача создана."
+
+#: ../cleverness-to-do-list.php:318
+msgid "To-Do item has been marked completed."
+msgstr "Задача была отмечена как завершенная."
+
+#: ../cleverness-to-do-list.php:319
+msgid "To-Do item has been deleted."
+msgstr "Задача была удалена."
+
+#: ../cleverness-to-do-list.php:320
+msgid "To-Do item has been updated."
+msgstr "Задача была обновлена."
+
+#: ../cleverness-to-do-list.php:321
+msgid "To-Do database table has been installed."
+msgstr "Таблицы базы данных списка задач установлены."
+
+#: ../cleverness-to-do-list.php:322
+msgid "Completed To-Do items have been deleted."
+msgstr "Завершенный задачи были удалены."
+
+#: ../cleverness-to-do-list.php:323
+msgid "To-Do item has been marked uncompleted."
+msgstr "Задача была отмечена как незавершенная."
+
+#: ../cleverness-to-do-list.php:324
+msgid "You do not have sufficient privileges to do that."
+msgstr "У вас недостаточно привилегий для этого."
+
+#: ../cleverness-to-do-list.php:325
+msgid "To-Do cannot be blank."
+msgstr "Задача не может быть пустой!"
+
+#: ../cleverness-to-do-list.php:341
+#: ../cleverness-to-do-list.php:400
+msgid "Edit To-Do Item"
+msgstr "Редактировать задачу"
+
+#: ../cleverness-to-do-list.php:345
+#: ../cleverness-to-do-list.php:421
+#: ../cleverness-to-do-list.php:499
+#: ../cleverness-to-do-list.php:573
+#: ../cleverness-to-do-list.php:732
+#: ../cleverness-to-do-list.php:789
+msgid "Priority"
+msgstr "Приоритет"
+
+#: ../cleverness-to-do-list.php:357
+#: ../cleverness-to-do-list.php:584
+msgid "Assign To"
+msgstr "Исполнитель"
+
+#: ../cleverness-to-do-list.php:362
+#: ../cleverness-to-do-list.php:423
+#: ../cleverness-to-do-list.php:501
+#: ../cleverness-to-do-list.php:606
+#: ../cleverness-to-do-list.php:734
+#: ../cleverness-to-do-list.php:791
+msgid "Deadline"
+msgstr "Срок"
+
+#: ../cleverness-to-do-list.php:367
+#: ../cleverness-to-do-list.php:424
+#: ../cleverness-to-do-list.php:612
+#: ../cleverness-to-do-list.php:735
+msgid "Progress"
+msgstr "Прогресс"
+
+#: ../cleverness-to-do-list.php:394
+#: ../cleverness-to-do-list.php:639
+msgid "To-Do"
+msgstr "Задача"
+
+#: ../cleverness-to-do-list.php:402
+msgid "&laquo; Return to To-Do List"
+msgstr "&laquo; Вернуться к списку задач"
+
+#: ../cleverness-to-do-list.php:412
+msgid "To-Do Items"
+msgstr "Задачи"
+
+#: ../cleverness-to-do-list.php:414
+msgid "Add New Item"
+msgstr "Создать новую задачу"
+
+#: ../cleverness-to-do-list.php:420
+#: ../cleverness-to-do-list.php:498
+#: ../cleverness-to-do-list.php:731
+#: ../cleverness-to-do-list.php:788
+msgid "Item"
+msgstr "Задача"
+
+#: ../cleverness-to-do-list.php:422
+#: ../cleverness-to-do-list.php:500
+#: ../cleverness-to-do-list.php:733
+#: ../cleverness-to-do-list.php:790
+msgid "Assigned To"
+msgstr "Исполнитель"
+
+#: ../cleverness-to-do-list.php:425
+#: ../cleverness-to-do-list.php:503
+#: ../cleverness-to-do-list.php:736
+#: ../cleverness-to-do-list.php:793
+msgid "Added By"
+msgstr "Автор"
+
+#: ../cleverness-to-do-list.php:426
+#: ../cleverness-to-do-list.php:504
+msgid "Action"
+msgstr "Действие"
+
+#: ../cleverness-to-do-list.php:450
+#: ../cleverness-to-do-list.php:696
+msgid "Edit"
+msgstr "Редактировать"
+
+#: ../cleverness-to-do-list.php:452
+#: ../cleverness-to-do-list.php:528
+msgid "Delete"
+msgstr "Удалить"
+
+#: ../cleverness-to-do-list.php:483
+msgid "There is nothing to do..."
+msgstr "Задачи отсутствуют..."
+
+#: ../cleverness-to-do-list.php:490
+msgid "Completed Items"
+msgstr "Завершенные задачи"
+
+#: ../cleverness-to-do-list.php:492
+msgid "Delete All"
+msgstr "Удалить все"
+
+#: ../cleverness-to-do-list.php:502
+#: ../cleverness-to-do-list.php:792
+msgid "Completed"
+msgstr "Завершена"
+
+#: ../cleverness-to-do-list.php:561
+msgid "There are no completed items"
+msgstr "Завершенных задач пока нет"
+
+#: ../cleverness-to-do-list.php:569
+msgid "Add New To-Do Item"
+msgstr "Создать новую задачу"
+
+#: ../cleverness-to-do-list.php:645
+msgid "Add To-Do Item &raquo;"
+msgstr "Создать задачу &raquo;"
+
+#: ../cleverness-to-do-list.php:686
+msgid "assigned to"
+msgstr "исполнитель"
+
+#: ../cleverness-to-do-list.php:694
+msgid "added by"
+msgstr "Автор"
+
+#: ../cleverness-to-do-list.php:703
+msgid "New To-Do Item &raquo;"
+msgstr "Создать новую задачу &raquo;"
+
+#: ../cleverness-to-do-list.php:778
+#: ../cleverness-to-do-list.php:836
+#: ../cleverness-to-do-list.php:854
+#: ../cleverness-to-do-list.php:876
+msgid "There are no items listed."
+msgstr "Задачи отсутствуют."
+
+#: ../cleverness-to-do-list.php:908
+msgid "&raquo;"
+msgstr "&raquo;"
+
