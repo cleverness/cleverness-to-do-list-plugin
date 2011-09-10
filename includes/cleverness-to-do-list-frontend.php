@@ -2,6 +2,29 @@
 /* Allows administration of items on front-end */
 require_once 'cleverness-to-do-list.class.php';
 
+class ClevernessToDoFrontEndAdmin extends ClevernessToDoList {
+
+	public function __construct($settings) {
+		add_shortcode('todoadmin', array(&$this,  'cleverness_todo_display_admin') );
+		parent::__construct($settings);
+		}
+
+	public function cleverness_todo_display_admin($atts) {
+		extract(shortcode_atts(array(
+	    	'title' => ''
+		), $atts));
+
+		if ( $title != '') {
+			$this->list .= '<h3>'.$title.'</h3>';
+			}
+
+		$this->display($title);
+
+		return $this->list;
+		}
+
+}
+
 class ClevernessToDoFrontEndChecklist extends ClevernessToDoList {
 
 	public function __construct($settings) {
@@ -116,5 +139,5 @@ class ClevernessToDoFrontEndChecklist extends ClevernessToDoList {
 
 $settings = get_option('cleverness_todo_settings');
 $cleverness_todo_frontend_checklist = new ClevernessToDoFrontEndChecklist($settings);// NEED TO ONLY ADD ON SHORTCODE PAGE
-
+$cleverness_todo_frontend_admin = new ClevernessToDoFrontEndAdmin($settings);// NEED TO ONLY ADD ON SHORTCODE PAGE
 ?>

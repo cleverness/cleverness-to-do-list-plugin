@@ -32,7 +32,7 @@ function cleverness_todo_get_todos($user, $limit = 0, $status = 0, $cat_id = 0) 
 	$cleverness_todo_settings = get_option('cleverness_todo_settings');
 	$cleverness_todo_dashboard_settings = get_option('cleverness_todo_dashboard_settings');
 
-	$select = 'SELECT id, author, priority, todotext, assign, progress, deadline, cat_id FROM '.CTDL_TODO_TABLE.' WHERE status = '.absint($status);
+	$select = 'SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed FROM '.CTDL_TODO_TABLE.' WHERE status = '.absint($status);
 
 	// individual view
 	if ( $cleverness_todo_settings['list_view'] == '0' ) {

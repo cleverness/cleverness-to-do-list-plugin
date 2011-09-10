@@ -4,60 +4,69 @@
 class ClevernessToDoList {
 	protected $settings;
 	protected $cat_id = '';
-	protected $list;
+	protected $list = '';
 
 	public function __construct($settings) {
 		add_action( 'init', array(&$this, 'cleverness_todo_checklist_init') );
 		$this->settings = $settings;
 		}
 
-public function display() {
-	global $wpdb, $cleverness_todo_option, $userdata, $current_user;
-	get_currentuserinfo();
+	public function display($title = '') {
+		global $wpdb, $cleverness_todo_option, $userdata, $current_user;
+		get_currentuserinfo();
 
-	$priority = array(0 => $cleverness_todo_option['priority_0'] , 1 => $cleverness_todo_option['priority_1'], 2 => $cleverness_todo_option['priority_2']);
+		$priority = array(0 => $this->settings['priority_0'] , 1 => $this->settings['priority_1'], 2 => $this->settings['priority_2']);
+		$user = $this->get_user($current_user, $userdata);
 
-	$cleverness_todo_settings = get_option('cleverness_todo_settings');
+		if (current_user_can($this->settings['add_capability']) || $this->settings['list_view'] == '0') {
+			$this->list .= '<a href="#addtd">'.__('Add New Item', 'cleverness-to-do-list').'</a>';
+		 }
 
-	$user = $this->get_user($current_user, $userdata);
+/*
+		<table id="todo-list" class="widefat">
+		<thead>
+		<tr>
+	   		<th><?php _e('Item', 'cleverness-to-do-list'); ?></th>
+	  		<th><?php _e('Priority', 'cleverness-to-do-list'); ?></th>
+			<?php if ( $cleverness_todo_option['assign'] == '0' ) : ?><th><?php _e('Assigned To', 'cleverness-to-do-list'); ?></th><?php endif; ?>
+			<?php if ( $cleverness_todo_option['show_deadline'] == '1' ) : ?><th><?php _e('Deadline', 'cleverness-to-do-list'); ?></th><?php endif; ?>
+			<?php if ( $cleverness_todo_option['show_progress'] == '1' ) : ?><th><?php _e('Progress', 'cleverness-to-do-list'); ?></th><?php endif; ?>
+			<?php if ( $cleverness_todo_option['categories'] == '1' ) : ?><th><?php _e('Category', 'cleverness-to-do-list'); ?></th><?php endif; ?>
+	  		<?php if ( $cleverness_todo_option['list_view'] == '1' && $cleverness_todo_option['todo_author'] == '0' ) : ?><th><?php _e('Added By', 'cleverness-to-do-list'); ?></th><?php endif; ?>
+       		<?php if (current_user_can($cleverness_todo_option['edit_capability'])|| $cleverness_todo_option['list_view'] == '0') : ?><th><?php _e('Action', 'cleverness-to-do-list'); ?></th><?php endif; ?>
+    	</tr>
+		</thead>*/
 
-	// get to-do items
-	$results = cleverness_todo_get_todos($user, 0);
 
-	if ($results) {
-		$catid = '';
-		foreach ($results as $result) {
-			$user_info = get_userdata($result->author);
-			$priority_class = '';
-		   	if ($result->priority == '0') $priority_class = ' class="todo-important"';
-			if ($result->priority == '2') $priority_class = ' class="todo-low"';
+		// get to-do items
+		$results = cleverness_todo_get_todos($user, 0, 0);
 
-			if ( $cleverness_todo_settings['categories'] == '1' && $result->cat_id != 0 ) {
-				$cat = cleverness_todo_get_cat_name($result->cat_id);
-				if ( $catid != $result->cat_id  && $cat->name != '' ) echo '<h4>'.$cat->name.'</h4>';
-				$catid = $result->cat_id;
+		if ($results) {
+
+			foreach ($results as $result) {
+				$user_info = get_userdata($result->author);
+				$priority_class = '';
+		   		if ($result->priority == '0') $priority_class = ' class="todo-important"';
+				if ($result->priority == '2') $priority_class = ' class="todo-low"';
+
+
+
+				$this->show_checkbox($result);
+				$this->show_todo_text($result, $priority_class);
+				$this->show_assigned($result);
+				$this->show_deadline($result);
+				$this->show_progress($result);
+				$this->show_addedby($result, $user_info);
+
+
+				}
+
+		} else {
+			/* if there are no to-do items, display this message */
+			$this->list .= '<p>'.__('No items to do.', 'cleverness-to-do-list').'</p>';
 			}
-			echo '<p id="todo-'.$result->id.'">';
 
-			$this->show_checkbox($result);
-			$this->show_todo_text($result, $priority_class);
-			$this->show_assigned($result);
-			$this->show_deadline($result);
-			$this->show_progress($result);
-			$this->show_addedby($result, $user_info);
-			$this->show_edit_link($result);
-
-			echo '</p>';
-			}
-	} else {
-		echo '<p>'.__('No items to do.', 'cleverness-to-do-list').'</p>';
-		}
-	$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'add' );
-	if ( $cleverness_todo_permission === true ) {
-		echo '<p style="text-align: right">'. '<a href="admin.php?page=cleverness-to-do-list#addtodo">'. __('New To-Do Item &raquo;', 'cleverness-to-do-list').'</a></p>';
 	}
-
-}
 
 	protected function get_user($current_user, $userdata) {
 		if ( $this->settings['list_view'] == '2' ) {

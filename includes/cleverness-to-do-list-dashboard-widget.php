@@ -49,8 +49,11 @@ function cleverness_todo_dashboard_widget() {
 				echo ' <small>['.__('Deadline:', 'cleverness-to-do-list').' '.$result->deadline.']</small>';
 			if ( $cleverness_todo_settings['show_progress'] == '1' && $result->progress != '' )
 				echo ' <small>['.$result->progress.'%]</small>';
-			if ( $cleverness_todo_settings['list_view'] == '1' && $cleverness_todo_dashboard_settings['dashboard_author'] == '0' )
-				echo ' <small>- '.__('added by', 'cleverness-to-do-list').' '.$user_info->display_name.'</small>';
+			if ( $cleverness_todo_settings['list_view'] == '1' && $cleverness_todo_dashboard_settings['dashboard_author'] == '0' ) {
+				if ($result->author != '0') {
+					echo ' <small>- '.__('added by', 'cleverness-to-do-list').' '.$user_info->display_name.'</small>';
+					}
+				}
 			if (current_user_can($cleverness_todo_settings['edit_capability']) || $cleverness_todo_settings['list_view'] == '0')
 		   		echo ' <small>(<a href="admin.php?page=cleverness-to-do-list&amp;action=edittodo&amp;id='. $result->id . '">'. __('Edit', 'cleverness-to-do-list') . '</a>)</small>';
 			echo '</p>';

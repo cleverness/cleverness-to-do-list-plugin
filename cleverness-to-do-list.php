@@ -370,8 +370,13 @@ function cleverness_todo_subpanel() {
 							echo '<td></td>';
 							}
 					}
-		   		if ( $cleverness_todo_option['list_view'] == '1' && $cleverness_todo_option['todo_author'] == '0' )
+		   		if ( $cleverness_todo_option['list_view'] == '1' && $cleverness_todo_option['todo_author'] == '0' ) {
+				if ($result->author != '0') {
 		   			echo '<td>'.$user_info->display_name.'</td>';
+					} else {
+						echo '<td></td>';
+						}
+					}
 		  		if (current_user_can($cleverness_todo_option['delete_capability']) || $cleverness_todo_option['list_view'] == '0')
 					 echo '<td>'.$edit.'</td>
 			 	</tr>';
