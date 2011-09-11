@@ -10,8 +10,15 @@ class ClevernessToDoFrontEndAdmin extends ClevernessToDoList {
 		}
 
 	public function cleverness_todo_display_admin($atts) {
-		extract(shortcode_atts(array(
-	    	'title' => ''
+		extract(shortcode_atts(array( // NEED TO MAKE OTHER ATTS DO SOMETHING
+	    	'title' => '',
+			'priority' => 0,
+			'assigned' => 0,
+			'deadline' => 0,
+			'progress' => 0,
+			'category' => 0,
+			'addedby' => 0,
+			'action' => 1
 		), $atts));
 
 		if ( $title != '') {

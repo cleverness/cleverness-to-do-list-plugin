@@ -151,7 +151,7 @@ function cleverness_todo_subpanel() {
 		  		<th scope="row"><label for="cleverness_todo_assign"><?php _e('Assign To', 'cleverness-to-do-list') ?></label></th>
 		  		<td>
 				<select name='cleverness_todo_assign' id='cleverness_todo_assign' class=''>
-					<option value='-1'<?php if ( $todo->assign == '-1' ) echo ' selected="selected"'; ?>><?php _e('None', 'cleverness-to-do-list') ?></option>
+					<option value='-1'<?php if ( isset($todo->assign) && $todo->assign == '-1' ) echo ' selected="selected"'; ?>><?php _e('None', 'cleverness-to-do-list') ?></option>
 					<?php
 					if ( $cleverness_todo_option['user_roles'] == '' ) $roles = array('contributor', 'author', 'editor', 'administrator');
 					else $roles = explode(", ", $cleverness_todo_option['user_roles']);
@@ -160,7 +160,7 @@ function cleverness_todo_subpanel() {
 						foreach($role_users as $role_user){
 							$user_info = get_userdata($role_user->ID);
 							echo '<option value="'.$role_user->ID.'"';
-							if ( $todo->assign == $role_user->ID ) echo ' selected="selected"';
+							if ( isset($todo->assign) && $todo->assign == $role_user->ID ) echo ' selected="selected"';
 							echo '>'.$user_info->display_name.'</option>';
 						}
 					}
@@ -174,7 +174,7 @@ function cleverness_todo_subpanel() {
 			<?php endif; ?>
 			<?php if ($cleverness_todo_option['show_deadline'] == '1') : ?>
 			<tr><th scope="row"><label for="cleverness_todo_deadline"><?php _e('Deadline', 'cleverness-to-do-list') ?></label></th>
-				<td><input type="text" name="cleverness_todo_deadline" id="cleverness_todo_deadline" value="<?php echo esc_html($todo->deadline, 1); ?>" /></td>
+				<td><input type="text" name="cleverness_todo_deadline" id="cleverness_todo_deadline" value="<?php if ( isset($todo->deadline) ) echo esc_html($todo->deadline, 1); ?>" /></td>
 			</tr>
 			<?php endif; ?>
 			<?php if ($cleverness_todo_option['show_progress'] == '1') : ?>
@@ -195,7 +195,7 @@ function cleverness_todo_subpanel() {
 				<td><select name="cleverness_todo_category">
 					<?php $cats = cleverness_todo_get_cats();
 					foreach ( $cats as $cat ) { ?>
-					<option value="<?php echo $cat->id; ?>"<?php if ( $todo->cat_id == $cat->id ) echo ' selected="selected"'; ?>><?php echo $cat->name; ?></option>
+					<option value="<?php echo $cat->id; ?>"<?php if ( isset($todo->cat_id) && $todo->cat_id == $cat->id ) echo ' selected="selected"'; ?>><?php echo $cat->name; ?></option>
 					<?php } ?>
 					</select></td>
 			</tr>
@@ -583,7 +583,7 @@ function cleverness_todo_add_js() {
 /* Delete To-Do Ajax */
 function cleverness_todo_delete_callback() {
 	check_ajax_referer( 'cleverness-todo' );
-	$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'add_todo' );
+	$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'delete' );
 
 	if ( $cleverness_todo_permission === true ) {
 		$cleverness_todo_status = cleverness_todo_delete();
