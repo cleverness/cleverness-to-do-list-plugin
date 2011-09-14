@@ -5,6 +5,7 @@ class ClevernessToDoList {
 	protected $settings;
 	protected $cat_id = '';
 	protected $list = '';
+	protected $form = '';
 
 	public function __construct($settings) {
 		add_action( 'init', array(&$this, 'cleverness_todo_checklist_init') );
@@ -56,11 +57,138 @@ class ClevernessToDoList {
 
 		$this->list .= '</table>';
 
+		$this->list .= $this->todo_form();
+
 	}
 
 	protected function get_user($current_user, $userdata) {
 		$user = ( $this->settings['list_view'] == 2 ? $current_user->ID : $userdata->ID );
 		return $user;
+		}
+
+	protected function todo_form() {
+		if (current_user_can($this->settings['add_capability']) || $this->settings['list_view'] == '0') {
+
+   	 	$this->form = '<h3>'.__('Add New To-Do Item', 'cleverness-to-do-list').'</h3>';
+
+    	$this->form .= '<form name="addtodo" id="addtodo" action="" method="post">
+	  		<table class="todo-form">';
+			$this->priority_field();
+			$this->assign_field();
+			$this->deadline_field();
+			$this->progress_field();
+			$this->category_field();
+			$this->todo_field();
+			$this->form .= '</table>'.wp_nonce_field( 6, 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
+        	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'. __('Add To-Do Item', 'cleverness-to-do-list').'" /></p>';
+			/* for edit form <input type="hidden" name="id" value="'. absint($result->id).'" />*/
+		$this->form .= '</form>';
+
+		return $this->form;
+		}
+	}
+
+	protected function priority_field($result = NULL) {
+		$selected = '';
+		$this->form .= '<tr>
+		  		<th scope="row"><label for="cleverness_todo_priority">'.__('Priority', 'cleverness-to-do-list').'</label></th>
+		  		<td>
+        			<select name="cleverness_todo_priority">';
+					if ( isset($result) ) $selected = ( $result->priority == 0 ? ' selected = "selected"' : '' );
+					$this->form .= sprintf('<option value="0"%s>%s</option>', $selected, $this->settings['priority_0']);
+					if ( isset($result) ) {
+						$selected = ( $result->priority == 1 ? ' selected' : '' );
+						} else {
+							$selected = ' selected="selected"';
+						}
+					$this->form .= sprintf('<option value="1"%s>%s</option>', $selected, $this->settings['priority_1']);
+					$selected = '';
+					if ( isset($result) ) $selected = ( $result->priority == 2 ? ' selected' : '' );
+					$this->form .= sprintf('<option value="2"%s>%s</option>', $selected, $this->settings['priority_2']);
+        			$this->form .= '</select>
+		  		</td>
+			</tr>';
+		}
+
+	protected function assign_field($result = NULL) {
+		if ($this->settings['assign'] == '0' && current_user_can($this->settings['assign_capability'])) {
+			$selected = '';
+			$this->form .= '<tr>
+		  		<th scope="row"><label for="cleverness_todo_assign">'.__('Assign To', 'cleverness-to-do-list').'</label></th>
+		  		<td>
+					<select name="cleverness_todo_assign" id="cleverness_todo_assign">';
+					if ( isset($result) && $result->assign == '-1' ) $selected = ' selected="selected"';
+					$this->form .= sprintf('<option value="-1"%s>%s</option>', $selected, __('None', 'cleverness-to-do-list'));
+
+					if ( $this->settings['user_roles'] == '' ) {
+						$roles = array('contributor', 'author', 'editor', 'administrator');
+					} else {
+						$roles = explode(", ", $this->settings['user_roles']);
+						}
+					foreach ( $roles as $role ) {
+						$role_users = cleverness_todo_get_users($role);
+						foreach($role_users as $role_user) {
+							$user_info = get_userdata($role_user->ID);
+							if ( isset($result) && $result->assign == $role_user->ID ) $selected = ' selected="selected"';
+							$this->form .= sprintf('<option value="%d"%s>%s</option>', $role_user->ID, $selected, $user_info->display_name);
+						}
+					}
+
+					$this->form .= '</select>
+				</td>
+			</tr>';
+			}
+		}
+
+	protected function deadline_field($result = NULL) {
+		if ($this->settings['show_deadline'] == '1') {
+			$value = ( isset($result) && $result->deadline == 0 ? $result->deadline : '' );
+			$this->form .= sprintf('<tr>
+				<th scope="row"><label for="cleverness_todo_deadline">%s</label></th>
+				<td><input type="text" name="cleverness_todo_deadline" id="cleverness_todo_deadline" value="%s" /></td>
+			</tr>', __('Deadline', 'cleverness-to-do-list'), $value);
+			}
+		}
+
+	protected function progress_field($result = NULL) {
+		if ($this->settings['show_progress'] == '1') {
+			$this->form .= '<tr>
+				<th scope="row"><label for="cleverness_todo_progress">'.__('Progress', 'cleverness-to-do-list').'</label></th>
+				<td><select name="cleverness_todo_progress">';
+				$i = 0;
+				while ( $i <= 100 ) {
+					$this->form .= '<option value="'.$i.'"';
+					if ( isset($result) ) $this->form .= ' selected="selected"';
+					$this->form .= '>'.$i.'</option>';
+					$i += 5;
+				}
+				$this->form .= '</select></td>
+			</tr>';
+			}
+		}
+
+	protected function category_field($result = NULL) {
+		if ($this->settings['categories'] == '1') {
+			$selected = '';
+			$this->form .= '<tr>
+				<th scope="row"><label for="cleverness_todo_category">'. __('Category', 'cleverness-to-do-list').'</label></th>
+				<td><select name="cleverness_todo_category">';
+					$cats = cleverness_todo_get_cats();
+					foreach ( $cats as $cat ) {
+						if ( isset($result->cat_id) && $result->cat_id == $cat->id ) $selected = ' selected="selected"';
+						$this->form .= sprintf('<option value="%d"%s>%s</option>', $cat->id, $selected, $cat->name);
+					 }
+					$this->form .= '</select></td>
+			</tr>';
+			}
+		}
+
+	protected function todo_field($result = NULL) {
+		$text = ( isset($result) ? stripslashes(esc_html($result->todotext, 1)) : '' );
+		$this->form .= sprintf('<tr>
+        	<th scope="row" valign="top"><label for="cleverness_todo_description">%s</label></th>
+        	<td><textarea name="cleverness_todo_description" rows="5" cols="50" id="the_editor">%s</textarea></td>
+			</tr>', __('To-Do', 'cleverness-to-do-list'), $text);
 		}
 
 	protected function show_table_headings() {
