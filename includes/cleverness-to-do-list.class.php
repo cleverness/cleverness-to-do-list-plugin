@@ -19,6 +19,16 @@ class ClevernessToDoList {
 		$priority = array(0 => $this->settings['priority_0'] , 1 => $this->settings['priority_1'], 2 => $this->settings['priority_2']);
 		$user = $this->get_user($current_user, $userdata);
 
+		$action = ( isset($_GET['action']) ? $_GET['action'] : '' );
+
+		if ($action == 'edit-todo') {
+
+    		$id = absint($_GET['id']);
+    		$result = cleverness_todo_get_todo($id);
+			$this->list .= $this->edit_form($result);
+
+		} else {
+
 		if (current_user_can($this->settings['add_capability']) || $this->settings['list_view'] == '0') {
 			$this->list .= '<a href="#addtd">'.__('Add New Item', 'cleverness-to-do-list').'</a>';
 		 	}
@@ -46,7 +56,7 @@ class ClevernessToDoList {
 				$this->show_progress($result);
 				$this->show_category($result);
 				$this->show_addedby($result, $user_info);
-				$this->show_edit_link();
+				$this->show_edit_link($result);
 				$this->list .= '</tr>';
 				}
 
@@ -59,12 +69,31 @@ class ClevernessToDoList {
 
 		$this->list .= $this->todo_form();
 
+		}
+
 	}
 
 	protected function get_user($current_user, $userdata) {
 		$user = ( $this->settings['list_view'] == 2 ? $current_user->ID : $userdata->ID );
 		return $user;
 		}
+
+	protected function edit_form($result) {
+		$this->form = '';
+    	$this->form .= '<form name="edittodo" id="edittodo" action="" method="post">
+	  		<table class="todo-form">';
+		$this->priority_field($result);
+		$this->assign_field($result);
+		$this->deadline_field($result);
+		$this->progress_field($result);
+		$this->category_field($result);
+		$this->todo_field($result);
+		$this->form .= '</table>'.wp_nonce_field( 6, 'todoedit', true, false ).'<input type="hidden" name="action" value="updatetodo" />
+        	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'. __('Edit To-Do Item', 'cleverness-to-do-list').'" /></p>
+			<input type="hidden" name="id" value="'. absint($result->id).'" />';
+		$this->form .= '</form>';
+		return $this->form;
+	}
 
 	protected function todo_form() {
 		if (current_user_can($this->settings['add_capability']) || $this->settings['list_view'] == '0') {
@@ -117,7 +146,7 @@ class ClevernessToDoList {
 		  		<th scope="row"><label for="cleverness_todo_assign">'.__('Assign To', 'cleverness-to-do-list').'</label></th>
 		  		<td>
 					<select name="cleverness_todo_assign" id="cleverness_todo_assign">';
-					if ( isset($result) && $result->assign == '-1' ) $selected = ' selected="selected"';
+					if ( isset($result->assign) && $result->assign == '-1' ) $selected = ' selected="selected"';
 					$this->form .= sprintf('<option value="-1"%s>%s</option>', $selected, __('None', 'cleverness-to-do-list'));
 
 					if ( $this->settings['user_roles'] == '' ) {
@@ -129,7 +158,7 @@ class ClevernessToDoList {
 						$role_users = cleverness_todo_get_users($role);
 						foreach($role_users as $role_user) {
 							$user_info = get_userdata($role_user->ID);
-							if ( isset($result) && $result->assign == $role_user->ID ) $selected = ' selected="selected"';
+							if ( isset($result->assign) && $result->assign == $role_user->ID ) $selected = ' selected="selected"';
 							$this->form .= sprintf('<option value="%d"%s>%s</option>', $role_user->ID, $selected, $user_info->display_name);
 						}
 					}
@@ -142,7 +171,7 @@ class ClevernessToDoList {
 
 	protected function deadline_field($result = NULL) {
 		if ($this->settings['show_deadline'] == '1') {
-			$value = ( isset($result) && $result->deadline == 0 ? $result->deadline : '' );
+			$value = ( isset($result->deadline) && $result->deadline == 0 ? $result->deadline : '' );
 			$this->form .= sprintf('<tr>
 				<th scope="row"><label for="cleverness_todo_deadline">%s</label></th>
 				<td><input type="text" name="cleverness_todo_deadline" id="cleverness_todo_deadline" value="%s" /></td>
@@ -158,7 +187,7 @@ class ClevernessToDoList {
 				$i = 0;
 				while ( $i <= 100 ) {
 					$this->form .= '<option value="'.$i.'"';
-					if ( isset($result) ) $this->form .= ' selected="selected"';
+					if ( isset($result->progress) && $result->progress == $i ) $this->form .= ' selected="selected"';
 					$this->form .= '>'.$i.'</option>';
 					$i += 5;
 				}
@@ -177,6 +206,7 @@ class ClevernessToDoList {
 					foreach ( $cats as $cat ) {
 						if ( isset($result->cat_id) && $result->cat_id == $cat->id ) $selected = ' selected="selected"';
 						$this->form .= sprintf('<option value="%d"%s>%s</option>', $cat->id, $selected, $cat->name);
+						$selected = '';
 					 }
 					$this->form .= '</select></td>
 			</tr>';
@@ -215,11 +245,13 @@ class ClevernessToDoList {
 		$this->list .= '<td>'.stripslashes($result->todotext).'</td>';
 		}
 
-	protected function show_edit_link() {
+	protected function show_edit_link($result) {
 		$edit = '';
+		$url = 'http://127.0.0.1:8888/wp-plugin-testing/sample-page/?action=edit-todo&amp;id='.$result->id;  // NEED TO GET CORRECT URL OF PAGE
+		//$url = esc_url($this->get_page_url().'?action=edit-todo&amp;id='.$result->id);
 		if (current_user_can($this->settings['edit_capability']) || $this->settings['list_view'] == '0')
 			//$edit = '<input class="edit-todo button-secondary" type="button" value="'. __( 'Edit' ).'" />';
-			$edit = '<a href="" class="edit-todo">'.__( 'Edit' ).'</a>';
+			$edit = '<a href="'.$url.'" class="edit-todo">'.__( 'Edit' ).'</a>';
 		if (current_user_can($this->settings['delete_capability']) || $this->settings['list_view'] == '0')
 			//$edit .= ' <input class="delete-todo button-secondary" type="button" value="'. __( 'Delete' ).'" />';
 			$edit .= ' | <a href="" class="delete-todo">'.__( 'Delete' ).'</a>';
@@ -266,6 +298,18 @@ class ClevernessToDoList {
 			$this->list .= ( $result->progress != '' ? sprintf('<td>%d</td>', $result->progress) : '<td></td>' );
 			}
 		}
+
+	protected function get_page_url() {
+        $pageURL = 'http';
+        if ( isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+            $pageURL .= "://";
+        if ($_SERVER["SERVER_PORT"] != "80") {
+            $pageURL .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+        } else {
+            $pageURL .= $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
+        }
+        return $pageURL;
+    }
 
 /* JS and Ajax Setup */
 // returns various JavaScript vars needed for the scripts

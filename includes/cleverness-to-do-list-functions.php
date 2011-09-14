@@ -213,7 +213,7 @@ function cleverness_todo_complete($id, $status) {
 function cleverness_todo_get_todo($id) {
    	global $wpdb;
 
-   	$select = "SELECT id, todotext, priority FROM ".CTDL_TODO_TABLE." WHERE id = '%d' LIMIT 1";
+   	$select = "SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed FROM ".CTDL_TODO_TABLE." WHERE id = '%d' LIMIT 1";
    	$result = $wpdb->get_row( $wpdb->prepare($select, $id) );
    	return $result;
 	}
