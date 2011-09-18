@@ -10,22 +10,26 @@ class ClevernessToDoFrontEndAdmin extends ClevernessToDoList {
 		}
 
 	public function cleverness_todo_display_admin($atts) {
-		extract(shortcode_atts(array( // NEED TO MAKE OTHER ATTS DO SOMETHING
+		extract(shortcode_atts(array(
 	    	'title' => '',
 			'priority' => 0,
 			'assigned' => 0,
 			'deadline' => 0,
 			'progress' => 0,
-			'category' => 0,
+			'categories' => 0,
 			'addedby' => 0,
-			'action' => 1
+			'editlink' => 1
 		), $atts));
 
 		if ( $title != '') {
 			$this->list .= '<h3>'.$title.'</h3>';
 			}
 
-		$this->display($title);
+		if ( is_user_logged_in() ) {
+			$this->display($title, $priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink);
+		} else {
+			$this->list .= __('You must be logged in to view', 'cleverness-to-do-list');
+			}
 
 		return $this->list;
 		}
@@ -45,7 +49,11 @@ class ClevernessToDoFrontEndChecklist extends ClevernessToDoList {
 			'category' => 0
 		), $atts));
 
-		$this->display($title, $category);
+		if ( is_user_logged_in() ) {
+			$this->display($title, $category);
+		} else {
+			$this->list .= __('You must be logged in to view', 'cleverness-to-do-list');
+			}
 
 		return $this->list;
 		}
@@ -144,7 +152,29 @@ class ClevernessToDoFrontEndChecklist extends ClevernessToDoList {
 
 }
 
-$settings = get_option('cleverness_todo_settings');
-$cleverness_todo_frontend_checklist = new ClevernessToDoFrontEndChecklist($settings);// NEED TO ONLY ADD ON SHORTCODE PAGE
-$cleverness_todo_frontend_admin = new ClevernessToDoFrontEndAdmin($settings);// NEED TO ONLY ADD ON SHORTCODE PAGE
+function has_cleverness_todo_shortcode($posts) {
+    if ( empty($posts) )
+        return $posts;
+
+    $cleverness_todo_shortcode_found = false;
+
+    foreach ($posts as $post) {
+        if ( stripos($post->post_content, '[todoadmin') || stripos($post->post_content, '[todochecklist') )
+            $cleverness_todo_shortcode_found = true;
+            break;
+        }
+
+    if ($cleverness_todo_shortcode_found){
+
+		$cleverness_todo_shortcode_settings = get_option('cleverness_todo_settings');
+		$cleverness_todo_frontend_checklist = new ClevernessToDoFrontEndChecklist($cleverness_todo_shortcode_settings);
+		$cleverness_todo_frontend_admin = new ClevernessToDoFrontEndAdmin($cleverness_todo_shortcode_settings);
+
+		// JS NEEDS ADDED
+
+}
+    return $posts;
+}
+add_action('the_posts', 'has_cleverness_todo_shortcode');
+
 ?>

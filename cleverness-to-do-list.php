@@ -70,7 +70,7 @@ case 'addtodo':
 			$category = (  isset($_POST['cleverness_todo_category']) ?  $_POST['cleverness_todo_category'] : '' );
 
 		   	require_once (ABSPATH . WPINC . '/pluggable.php'); // NEED TO REMOVE
-			if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'todoadd') ) die('Security check failed');
+			//if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'todoadd') ) die('Security check failed');
 			if ( $cleverness_todo_option['email_assigned'] == '1' && $cleverness_todo_option['assign'] == '0' ) {
 				$message = cleverness_todo_email_user($todotext, $priority, $assign, $deadline, $category);
 				}
@@ -90,7 +90,7 @@ case 'updatetodo':
 	$progress = (  isset($_POST['cleverness_todo_progress']) ?  $_POST['cleverness_todo_progress'] : 0 );
 	$category = (  isset($_POST['cleverness_todo_category']) ?  $_POST['cleverness_todo_category'] : '' );
 	require_once (ABSPATH . WPINC . '/pluggable.php');
-	if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'todoupdate') ) die('Security check failed');
+	//if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'todoupdate') ) die('Security check failed');
 	$message = cleverness_todo_update($assign, $deadline, $progress, $category);
 	break;
 

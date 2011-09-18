@@ -77,7 +77,6 @@ function cleverness_todo_get_todos($user, $limit = 0, $status = 0, $cat_id = 0) 
 	else
 		$select .= $wpdb->prepare(" ORDER BY cat_id, priority, %s", $cleverness_todo_settings['sort_order']);
 	if ( $limit != 0 ) $select .= $wpdb->prepare("  LIMIT %d", $limit);
-	echo $select;
    	$result = $wpdb->get_results( $select, OBJECT_K );
    	return $result;
 	}
@@ -86,9 +85,10 @@ function cleverness_todo_get_todos($user, $limit = 0, $status = 0, $cat_id = 0) 
 
 /* Insert new to-do item into the database */
 function cleverness_todo_insert($assign = 0, $deadline, $progress = 0, $category = 0) {
-	global $wpdb, $userdata;
+	global $wpdb, $current_user;
+	get_currentuserinfo();
 
-   	$results = $wpdb->insert( CTDL_TODO_TABLE, array( 'author' => $userdata->ID, 'status' => 0,
+   	$results = $wpdb->insert( CTDL_TODO_TABLE, array( 'author' => $current_user->ID, 'status' => 0,
 		'priority' => $_POST['cleverness_todo_priority'], 'todotext' => $_POST['cleverness_todo_description'],
 		'assign' => $assign, 'deadline' => $deadline, 'progress' => $progress, 'cat_id' => $category ) );
 	if ( $results ) {

@@ -12,11 +12,11 @@ class ClevernessToDoList {
 		$this->settings = $settings;
 		}
 
-	public function display($title = '') {
+	public function display($title = '', $priority = 1, $assigned = 1, $deadline = 1, $progress = 1, $categories = 1, $addedby = 1, $editlink = 1) {
 		global $wpdb, $cleverness_todo_option, $userdata, $current_user;
 		get_currentuserinfo();
 
-		$priority = array(0 => $this->settings['priority_0'] , 1 => $this->settings['priority_1'], 2 => $this->settings['priority_2']);
+		$priorities = array(0 => $this->settings['priority_0'] , 1 => $this->settings['priority_1'], 2 => $this->settings['priority_2']);
 		$user = $this->get_user($current_user, $userdata);
 
 		$action = ( isset($_GET['action']) ? $_GET['action'] : '' );
@@ -30,12 +30,12 @@ class ClevernessToDoList {
 		} else {
 
 		if (current_user_can($this->settings['add_capability']) || $this->settings['list_view'] == '0') {
-			$this->list .= '<a href="#addtd">'.__('Add New Item', 'cleverness-to-do-list').'</a>';
+			$this->list .= '<a href="#addtodo">'.__('Add New Item', 'cleverness-to-do-list').'</a>';
 		 	}
 
 		$this->list .= '<table id="todo-list" class="todo-table">';
 
-		$this->show_table_headings();
+		$this->show_table_headings($priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink);
 
 		// get to-do items
 		$results = cleverness_todo_get_todos($user, 0, 0);
@@ -51,12 +51,13 @@ class ClevernessToDoList {
 				$this->list .= '<tr id="todo-'.$result->id.'" class="'.$priority_class.'">';
 				$this->show_checkbox($result);
 				$this->show_todo_text($result, $priority_class);
-				$this->show_assigned($result);
-				$this->show_deadline($result);
-				$this->show_progress($result);
-				$this->show_category($result);
-				$this->show_addedby($result, $user_info);
-				$this->show_edit_link($result);
+				if ( $priority == 1 ) $this->show_priority($result, $priorities);
+				if ( $assigned == 1 ) $this->show_assigned($result);
+				if ( $deadline == 1 ) $this->show_deadline($result);
+				if ( $progress == 1 ) $this->show_progress($result);
+				if ( $categories == 1 ) $this->show_category($result);
+				if ( $addedby == 1 ) $this->show_addedby($result, $user_info);
+				if ( $editlink == 1 ) $this->show_edit_link($result);
 				$this->list .= '</tr>';
 				}
 
@@ -80,7 +81,8 @@ class ClevernessToDoList {
 
 	protected function edit_form($result) {
 		$this->form = '';
-    	$this->form .= '<form name="edittodo" id="edittodo" action="" method="post">
+		// NEED TO GET URL WITHOUT PARaMETERS
+    	$this->form .= '<form name="edittodo" id="edittodo" action="http://127.0.0.1:8888/wp-plugin-testing/sample-page/" method="post">
 	  		<table class="todo-form">';
 		$this->priority_field($result);
 		$this->assign_field($result);
@@ -221,16 +223,15 @@ class ClevernessToDoList {
 			</tr>', __('To-Do', 'cleverness-to-do-list'), $text);
 		}
 
-	protected function show_table_headings() {
-		$this->list .= '<thead><tr>
-	   		<th>'.__('Item', 'cleverness-to-do-list').'</th>
-	  		<th>'.__('Priority', 'cleverness-to-do-list').'</th>';
-		if ( $this->settings['assign'] == 0 ) $this->list .= '<th>'.__('Assigned To', 'cleverness-to-do-list').'</th>';
-		if ( $this->settings['show_deadline'] == 1 ) $this->list .= '<th>'.__('Deadline', 'cleverness-to-do-list').'</th>';
-		if ( $this->settings['show_progress'] == 1 ) $this->list .= '<th>'.__('Progress', 'cleverness-to-do-list').'</th>';
-		if ( $this->settings['categories'] == 1 ) $this->list .= '<th>'.__('Category', 'cleverness-to-do-list').'</th>';
-		if ( $this->settings['list_view'] == 1  && $this->settings['todo_author'] == 0 ) $this->list .= '<th>'.__('Added By', 'cleverness-to-do-list').'</th>';
-		if ( current_user_can($this->settings['edit_capability']) || $this->settings['list_view'] == 0 ) $this->list .= '<th>'.__('Action', 'cleverness-to-do-list').'</th>';
+	protected function show_table_headings($priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink) {
+		$this->list .= '<thead><tr><th></th><th>'.__('Item', 'cleverness-to-do-list').'</th>';
+	  	if ( $priority == 1 ) $this->list .= '<th>'.__('Priority', 'cleverness-to-do-list').'</th>';
+		if ( $assigned == 1 && $this->settings['assign'] == 0 ) $this->list .= '<th>'.__('Assigned To', 'cleverness-to-do-list').'</th>';
+		if ( $deadline == 1 && $this->settings['show_deadline'] == 1 ) $this->list .= '<th>'.__('Deadline', 'cleverness-to-do-list').'</th>';
+		if ( $progress == 1 && $this->settings['show_progress'] == 1 ) $this->list .= '<th>'.__('Progress', 'cleverness-to-do-list').'</th>';
+		if ( $categories == 1 && $this->settings['categories'] == 1 ) $this->list .= '<th>'.__('Category', 'cleverness-to-do-list').'</th>';
+		if ( $addedby == 1 && $this->settings['list_view'] == 1  && $this->settings['todo_author'] == 0 ) $this->list .= '<th>'.__('Added By', 'cleverness-to-do-list').'</th>';
+		if ( $editlink == 1 ) { if ( current_user_can($this->settings['edit_capability']) || $this->settings['list_view'] == 0 ) $this->list .= '<th>'.__('Action', 'cleverness-to-do-list').'</th>'; }
     	$this->list .= '</tr></thead>';
 	 	}
 
@@ -257,6 +258,10 @@ class ClevernessToDoList {
 			$edit .= ' | <a href="" class="delete-todo">'.__( 'Delete' ).'</a>';
 	  	if (current_user_can($this->settings['edit_capability'])|| $this->settings['list_view'] == '0')
 			$this->list .= '<td>'.$edit.'</td>';
+		}
+
+	protected function show_priority($result, $priority) {
+		$this->list .= sprintf('<td>%s</td>', $priority[$result->priority]);
 		}
 
 	protected function show_assigned($result) {
@@ -295,7 +300,7 @@ class ClevernessToDoList {
 
 	protected function show_progress($result) {
 		if ( $this->settings['show_progress'] == 1 ) {
-			$this->list .= ( $result->progress != '' ? sprintf('<td>%d</td>', $result->progress) : '<td></td>' );
+			$this->list .= ( $result->progress != '' ? sprintf('<td>%d%%</td>', $result->progress) : '<td></td>' );
 			}
 		}
 
