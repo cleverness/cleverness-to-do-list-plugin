@@ -7,6 +7,7 @@ class ClevernessToDoFrontEndAdmin extends ClevernessToDoList {
 	public function __construct($settings) {
 		add_shortcode('todoadmin', array(&$this,  'cleverness_todo_display_admin') );
 		parent::__construct($settings);
+		parent::cleverness_todo_checklist_init();
 		}
 
 	public function cleverness_todo_display_admin($atts) {
@@ -41,16 +42,23 @@ class ClevernessToDoFrontEndChecklist extends ClevernessToDoList {
 	public function __construct($settings) {
 		add_shortcode('todochecklist', array(&$this,  'cleverness_todo_display_checklist') );
 		parent::__construct($settings);
+		parent::cleverness_todo_checklist_init();
 		}
 
 	public function cleverness_todo_display_checklist($atts) {
 		extract(shortcode_atts(array(
 	    	'title' => '',
-			'category' => 0
+			'priority' => 0,
+			'assigned' => 0,
+			'deadline' => 0,
+			'progress' => 0,
+			'categories' => 0,
+			'addedby' => 0,
+			'editlink' => 0
 		), $atts));
 
 		if ( is_user_logged_in() ) {
-			$this->display($title, $category);
+			$this->display($title, $priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink);
 		} else {
 			$this->list .= __('You must be logged in to view', 'cleverness-to-do-list');
 			}
@@ -59,7 +67,7 @@ class ClevernessToDoFrontEndChecklist extends ClevernessToDoList {
 		}
 
 	/* display the to-do list with checkboxes */
-	public function display($title, $category) {
+	public function display($title, $priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink) {
 		global $userdata, $current_user;
 		get_currentuserinfo();
 
@@ -71,7 +79,7 @@ class ClevernessToDoFrontEndChecklist extends ClevernessToDoList {
 			}
 
 		// get to-do items
-		$results = cleverness_todo_get_todos($user, 0, 0, $category);
+		$results = cleverness_todo_get_todos($user, 0, 0, $categories);
 
 		if ($results) {
 
@@ -87,10 +95,12 @@ class ClevernessToDoFrontEndChecklist extends ClevernessToDoList {
 
 				$this->show_checkbox($result);
 				$this->show_todo_text($result, $priority_class);
-				$this->show_assigned($result);
-				$this->show_deadline($result);
-				$this->show_progress($result);
-				$this->show_addedby($result, $user_info);
+				if ( $priority == 1 ) $this->show_priority($result, $priorities);
+				if ( $assigned == 1 ) $this->show_assigned($result);
+				if ( $deadline == 1 ) $this->show_deadline($result);
+				if ( $progress == 1 ) $this->show_progress($result);
+				if ( $categories == 1 ) $this->show_category($result);
+				if ( $addedby == 1 ) $this->show_addedby($result, $user_info);
 
 				$this->list .= '</p>';
 				}
@@ -164,13 +174,11 @@ function has_cleverness_todo_shortcode($posts) {
             break;
         }
 
-    if ($cleverness_todo_shortcode_found){
+    if ($cleverness_todo_shortcode_found) {
 
 		$cleverness_todo_shortcode_settings = get_option('cleverness_todo_settings');
 		$cleverness_todo_frontend_checklist = new ClevernessToDoFrontEndChecklist($cleverness_todo_shortcode_settings);
 		$cleverness_todo_frontend_admin = new ClevernessToDoFrontEndAdmin($cleverness_todo_shortcode_settings);
-
-		// JS NEEDS ADDED
 
 }
     return $posts;

@@ -167,6 +167,7 @@ function cleverness_todo_delete() {
 /* Mark to-do list item as completed or uncompleted */
 function cleverness_todo_complete($id, $status) {
 	global $wpdb, $userdata, $cleverness_todo_option, $current_user;
+	$cleverness_todo_option = get_option('cleverness_todo_settings');
 	require_once (ABSPATH . WPINC . '/pluggable.php');
    	get_currentuserinfo();
 

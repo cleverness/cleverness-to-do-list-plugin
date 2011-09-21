@@ -16,6 +16,7 @@ jQuery(document).ready(function($) {
 
 		jQuery.post(cltd.AJAX_URL, data, function(response) {
 			$(todoid).fadeOut();
+			$('.todo-checkbox').removeAttr("checked");
 			// add the row to the correct table
 			});
 	});

@@ -316,6 +316,53 @@ class ClevernessToDoList {
         return $pageURL;
     }
 
+/* Mark to-do list item as completed or uncompleted */
+protected function cleverness_todo_complete($id, $status) {
+	global $wpdb, $userdata, $cleverness_todo_option, $current_user;
+	$cleverness_todo_option = get_option('cleverness_todo_settings');
+	require_once (ABSPATH . WPINC . '/pluggable.php');
+   	get_currentuserinfo();
+
+	 // if individual view, group view with complete capability, or master view with edit capability
+   	 if ( $cleverness_todo_option['list_view'] == '0' ||
+	 ( $cleverness_todo_option['list_view'] == '1' && current_user_can($cleverness_todo_option['complete_capability']) ) ||
+	 ( $cleverness_todo_option['list_view'] == '2' && current_user_can($cleverness_todo_option['edit_capability']) )
+	 ) {
+		$results = $wpdb->update( CTDL_TODO_TABLE, array( 'status' => $status ), array( 'id' => $id ) );
+		//$success = ( $results === FALSE ? 0 : 1 );
+	   //	return $success;
+	 	if ( $status == '1' ) $status_text = __('completed', 'cleverness-to-do-list');
+		else $status_text = __('uncompleted', 'cleverness-to-do-list');
+		if ( $results ) $message = __('To-Do item has been marked as ', 'cleverness-to-do-list').$status_text.'.';
+		else {
+			$message = __('There was a problem changing the status of the item.', 'cleverness-to-do-list');
+			}
+	 // master view - individual
+	 } elseif ( $cleverness_todo_option['list_view'] == '2' ) {
+	 	$user = $current_user->ID;
+		$wpdb->get_results("SELECT * FROM ".CTDL_TODO_TABLE." WHERE id = $id AND user = $user");
+		$num = $wpdb->num_rows;
+
+		if ( $num == 0 ) {
+			$results = $wpdb->insert( CTDL_STATUS_TABLE, array( 'id' => $id, 'status' => $status, 'user' => $user ) );
+	 	} else {
+			$results = $wpdb->update( CTDL_STATUS_TABLE, array( 'status' => $status ), array( 'id' => $id, 'user' => $user ) );
+			}
+
+		if ( $status == '1' ) $status_text = __('completed', 'cleverness-to-do-list');
+		else $status_text = __('uncompleted', 'cleverness-to-do-list');
+		if ( $results ) $message = __('To-Do item has been marked as ', 'cleverness-to-do-list').$status_text.'.';
+		else {
+			$message = __('There was a problem changing the status of the item.', 'cleverness-to-do-list');
+			}
+	 // no capability
+	 } else {
+		$message = __('You do not have sufficient privileges to do that.', 'cleverness-to-do-list');
+		}
+	return $message;
+	}
+
+
 /* JS and Ajax Setup */
 // returns various JavaScript vars needed for the scripts
 public function cleverness_todo_checklist_get_js_vars() {
@@ -349,8 +396,8 @@ public function cleverness_todo_checklist_complete_callback() {
 	$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'complete' );
 
 	if ( $cleverness_todo_permission === true ) {
-		$cleverness_widget_id = intval($_POST['cleverness_id']);
-		$message = cleverness_todo_complete($cleverness_widget_id, 1);
+		$cleverness_id = intval($_POST['cleverness_id']);
+		$message = $this->cleverness_todo_complete($cleverness_id, 1);
 	} else {
 		$message = __('You do not have sufficient privileges to do that.', 'cleverness-to-do-list');
 	}
