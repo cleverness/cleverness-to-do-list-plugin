@@ -175,7 +175,6 @@ function has_cleverness_todo_shortcode($posts) {
         }
 
     if ($cleverness_todo_shortcode_found) {
-
 		$cleverness_todo_shortcode_settings = get_option('cleverness_todo_settings');
 		$cleverness_todo_frontend_checklist = new ClevernessToDoFrontEndChecklist($cleverness_todo_shortcode_settings);
 		$cleverness_todo_frontend_admin = new ClevernessToDoFrontEndAdmin($cleverness_todo_shortcode_settings);
@@ -183,6 +182,10 @@ function has_cleverness_todo_shortcode($posts) {
 }
     return $posts;
 }
-add_action('the_posts', 'has_cleverness_todo_shortcode');
 
+		$cleverness_todo_shortcode_settings = get_option('cleverness_todo_settings');
+		$cleverness_todo_frontend_checklist = new ClevernessToDoFrontEndChecklist($cleverness_todo_shortcode_settings);
+		$cleverness_todo_frontend_admin = new ClevernessToDoFrontEndAdmin($cleverness_todo_shortcode_settings);
+
+		//add_action('the_posts', 'has_cleverness_todo_shortcode');
 ?>

@@ -6,10 +6,10 @@ jQuery(document).ready(function($) {
 		var status = 1;
 		var id = $(this).attr('id').substr(5);
 		var todoid = '#todo-' + id;
-		if ($(this).prop('checked') == false ) status = 0;
+		//if ($(this).prop('checked') == false ) status = 0;
 
 		var data = {
-		action: 'cleverness_todo_complete',
+		action: 'cleverness_todo_dashboard_complete',
 		cleverness_id: id,
 		cleverness_status: status
 		};

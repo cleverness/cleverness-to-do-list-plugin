@@ -151,7 +151,7 @@ add_action( 'admin_init', 'cleverness_todo_dashboard_init' );
 function cleverness_todo_dashboard_init() {
 	wp_register_script( 'cleverness_todo_dashboard_complete_js', CTDL_PLUGIN_URL.'/js/complete-todo.js', '', 1.0, true );
 	add_action('admin_print_scripts-index.php', 'cleverness_todo_dashboard_add_js');
-	add_action('wp_ajax_cleverness_todo_complete', 'cleverness_todo_dashboard_complete_callback');
+	add_action('wp_ajax_cleverness_todo_dashboard_complete', 'cleverness_todo_dashboard_complete_callback');
 }
 
 function cleverness_todo_dashboard_add_js() {
@@ -164,10 +164,13 @@ function cleverness_todo_dashboard_complete_callback() {
 
 	if ( $cleverness_todo_permission === true ) {
 		$cleverness_widget_id = intval($_POST['cleverness_id']);
-		$message = cleverness_todo_complete($cleverness_widget_id, '0');
+		$cleverness_widget_status = intval($_POST['cleverness_status']);
+		$message = cleverness_todo_complete($cleverness_widget_id, $cleverness_widget_status);
 	} else {
 		$message = __('You do not have sufficient privileges to do that.', 'cleverness-to-do-list');
 	}
+
+	echo $message;
 
 	die(); // this is required to return a proper result
 }
