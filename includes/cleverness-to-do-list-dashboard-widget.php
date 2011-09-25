@@ -156,10 +156,11 @@ function cleverness_todo_dashboard_init() {
 
 function cleverness_todo_dashboard_add_js() {
 	wp_enqueue_script( 'cleverness_todo_dashboard_complete_js' );
-	wp_localize_script( 'cleverness_todo_dashboard_complete_js', 'cltd', cleverness_todo_get_js_vars());
+	wp_localize_script( 'cleverness_todo_dashboard_complete_js', 'ctdl', cleverness_todo_get_js_vars());
     }
 
 function cleverness_todo_dashboard_complete_callback() {
+	check_ajax_referer( 'cleverness-todo' );
 	$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'complete' );
 
 	if ( $cleverness_todo_permission === true ) {

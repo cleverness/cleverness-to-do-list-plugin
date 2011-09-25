@@ -11,10 +11,11 @@ jQuery(document).ready(function($) {
 		var data = {
 		action: 'cleverness_todo_dashboard_complete',
 		cleverness_id: id,
-		cleverness_status: status
+		cleverness_status: status,
+		_ajax_nonce: ctdl.NONCE
 		};
 
-		jQuery.post(cltd.AJAX_URL, data, function(response) {
+		jQuery.post(ctdl.AJAX_URL, data, function(response) {
 			$(todoid).fadeOut();
 			// add the row to the correct table
 			});

@@ -18,6 +18,7 @@ class ClevernessToDoList {
 
 		$priorities = array(0 => $this->settings['priority_0'] , 1 => $this->settings['priority_1'], 2 => $this->settings['priority_2']);
 		$user = $this->get_user($current_user, $userdata);
+		$url = $this->get_page_url();
 
 		$action = ( isset($_GET['action']) ? $_GET['action'] : '' );
 
@@ -25,7 +26,7 @@ class ClevernessToDoList {
 
     		$id = absint($_GET['id']);
     		$result = cleverness_todo_get_todo($id);
-			$this->list .= $this->edit_form($result);
+			$this->list .= $this->edit_form($result, $url);
 
 		} else {
 
@@ -57,7 +58,7 @@ class ClevernessToDoList {
 				if ( $progress == 1 ) $this->show_progress($result);
 				if ( $categories == 1 ) $this->show_category($result);
 				if ( $addedby == 1 ) $this->show_addedby($result, $user_info);
-				if ( $editlink == 1 ) $this->show_edit_link($result);
+				if ( $editlink == 1 ) $this->show_edit_link($result, $url);
 				$this->list .= '</tr>';
 				}
 
@@ -79,10 +80,10 @@ class ClevernessToDoList {
 		return $user;
 		}
 
-	protected function edit_form($result) {
+	protected function edit_form($result, $url) {
+		$url = strtok($url, "?");
 		$this->form = '';
-		// NEED TO GET URL WITHOUT PARaMETERS
-    	$this->form .= '<form name="edittodo" id="edittodo" action="http://127.0.0.1:8888/wp-plugin-testing/sample-page/" method="post">
+    	$this->form .= '<form name="edittodo" id="edittodo" action="'.$url.'" method="post">
 	  		<table class="todo-form">';
 		$this->priority_field($result);
 		$this->assign_field($result);
@@ -90,7 +91,7 @@ class ClevernessToDoList {
 		$this->progress_field($result);
 		$this->category_field($result);
 		$this->todo_field($result);
-		$this->form .= '</table>'.wp_nonce_field( 6, 'todoedit', true, false ).'<input type="hidden" name="action" value="updatetodo" />
+		$this->form .= '</table>'.wp_nonce_field( 'todoupdate', 'todoupdate', true, false ).'<input type="hidden" name="action" value="updatetodo" />
         	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'. __('Edit To-Do Item', 'cleverness-to-do-list').'" /></p>
 			<input type="hidden" name="id" value="'. absint($result->id).'" />';
 		$this->form .= '</form>';
@@ -110,9 +111,8 @@ class ClevernessToDoList {
 			$this->progress_field();
 			$this->category_field();
 			$this->todo_field();
-			$this->form .= '</table>'.wp_nonce_field( 6, 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
+			$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
         	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'. __('Add To-Do Item', 'cleverness-to-do-list').'" /></p>';
-			/* for edit form <input type="hidden" name="id" value="'. absint($result->id).'" />*/
 		$this->form .= '</form>';
 
 		return $this->form;
@@ -246,10 +246,9 @@ class ClevernessToDoList {
 		$this->list .= '<td>'.stripslashes($result->todotext).'</td>';
 		}
 
-	protected function show_edit_link($result) {
+	protected function show_edit_link($result, $url) {
 		$edit = '';
-		$url = 'http://127.0.0.1:8888/wp-plugin-testing/sample-page/?action=edit-todo&amp;id='.$result->id;  // NEED TO GET CORRECT URL OF PAGE
-		//$url = esc_url($this->get_page_url().'?action=edit-todo&amp;id='.$result->id);
+		$url = $url.'?action=edit-todo&amp;id='.$result->id;
 		if (current_user_can($this->settings['edit_capability']) || $this->settings['list_view'] == '0')
 			//$edit = '<input class="edit-todo button-secondary" type="button" value="'. __( 'Edit' ).'" />';
 			$edit = '<a href="'.$url.'" class="edit-todo">'.__( 'Edit' ).'</a>';
@@ -309,49 +308,13 @@ class ClevernessToDoList {
         if ( isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
             $pageURL .= "://";
         if ($_SERVER["SERVER_PORT"] != "80") {
-            $pageURL .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+            //$pageURL .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+			$pageURL .= $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
         } else {
             $pageURL .= $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
         }
         return $pageURL;
     }
-
-/* Mark to-do list item as completed */
-public function todo_complete($id, $status) {
-	global $wpdb, $userdata, $cleverness_todo_option, $current_user;
-	$cleverness_todo_option = get_option('cleverness_todo_settings');
-	require_once (ABSPATH . WPINC . '/pluggable.php');
-   	get_currentuserinfo();
-
-	 // if individual view, group view with complete capability, or master view with edit capability
-   	 if ( $cleverness_todo_option['list_view'] == '0' ||
-	 ( $cleverness_todo_option['list_view'] == '1' && current_user_can($cleverness_todo_option['complete_capability']) ) ||
-	 ( $cleverness_todo_option['list_view'] == '2' && current_user_can($cleverness_todo_option['edit_capability']) )
-	 ) {
-		$results = $wpdb->update( CTDL_TODO_TABLE, array( 'status' => $status ), array( 'id' => $id ) );
-		$success = ( $results === FALSE ? 0 : 1 );
-
-	 // master view - individual
-	 } elseif ( $cleverness_todo_option['list_view'] == '2' ) {
-	 	$user = $current_user->ID;
-		$wpdb->get_results("SELECT * FROM ".CTDL_TODO_TABLE." WHERE id = $id AND user = $user");
-		$num = $wpdb->num_rows;
-
-		if ( $num == 0 ) {
-			$results = $wpdb->insert( CTDL_STATUS_TABLE, array( 'id' => $id, 'status' => $status, 'user' => $user ) );
-	 	} else {
-			$results = $wpdb->update( CTDL_STATUS_TABLE, array( 'status' => $status ), array( 'id' => $id, 'user' => $user ) );
-			}
-
-
-	 // no capability
-	 } else {
-		$message = __('You do not have sufficient privileges to do that.', 'cleverness-to-do-list');
-		return $message;
-		}
-
-	}
-
 
 /* JS and Ajax Setup */
 // returns various JavaScript vars needed for the scripts
@@ -383,8 +346,8 @@ public function cleverness_todo_checklist_add_js() {
     }
 
 public function cleverness_todo_checklist_complete_callback() {
-	//$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'complete' );
-	$cleverness_todo_permission = true;
+	check_ajax_referer( 'cleverness-todo' );
+	$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'complete' );
 
 	if ( $cleverness_todo_permission === true ) {
 		$cleverness_id = intval($_POST['cleverness_id']);
@@ -394,8 +357,6 @@ public function cleverness_todo_checklist_complete_callback() {
 	} else {
 		$message = __('You do not have sufficient privileges to do that.', 'cleverness-to-do-list');
 	}
-		echo $cleverness_id;
-   //	echo $message;
 
 	die(); // this is required to return a proper result
 }

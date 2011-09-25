@@ -1,7 +1,5 @@
 jQuery(document).ready(function($) {
 
-// add nonce
-
 	$('.todo-checkbox').click(function () {
 		var status = 1;
 		var id = $(this).attr('id').substr(5);
@@ -11,7 +9,8 @@ jQuery(document).ready(function($) {
 		var data = {
 		action: 'cleverness_todo_complete',
 		cleverness_id: id,
-		cleverness_status: status
+		cleverness_status: status,
+		_ajax_nonce: ctdl.NONCE
 		};
 
 		jQuery.post(ctdl.AJAX_URL, data, function(response) {
@@ -25,7 +24,7 @@ jQuery(document).ready(function($) {
 /* Delete To-Dos */
 $('.delete-todo').live('click', function (e) {
 	e.preventDefault();
-	var confirmed = confirm(cltd.CONFIRMATION_MSG);
+	var confirmed = confirm(ctdl.CONFIRMATION_MSG);
 	if ( confirmed == false ) return;
 	var _item = this;
 	var todotr = $(_item).closest('tr');

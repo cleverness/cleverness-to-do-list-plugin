@@ -70,7 +70,7 @@ case 'addtodo':
 			$category = (  isset($_POST['cleverness_todo_category']) ?  $_POST['cleverness_todo_category'] : '' );
 
 		   	require_once (ABSPATH . WPINC . '/pluggable.php'); // NEED TO REMOVE
-			//if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'todoadd') ) die('Security check failed');
+			if (!wp_verify_nonce($_REQUEST['todoadd'], 'todoadd') ) die('Security check failed');
 			if ( $cleverness_todo_option['email_assigned'] == '1' && $cleverness_todo_option['assign'] == '0' ) {
 				$message = cleverness_todo_email_user($todotext, $priority, $assign, $deadline, $category);
 				}
@@ -90,7 +90,7 @@ case 'updatetodo':
 	$progress = (  isset($_POST['cleverness_todo_progress']) ?  $_POST['cleverness_todo_progress'] : 0 );
 	$category = (  isset($_POST['cleverness_todo_category']) ?  $_POST['cleverness_todo_category'] : '' );
 	require_once (ABSPATH . WPINC . '/pluggable.php');
-	//if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'todoupdate') ) die('Security check failed');
+	if (!wp_verify_nonce($_REQUEST['todoupdate'], 'todoupdate') ) die('Security check failed');
 	$message = cleverness_todo_update($assign, $deadline, $progress, $category);
 	break;
 
@@ -205,7 +205,7 @@ function cleverness_todo_subpanel() {
 				<td><textarea name="cleverness_todo_description" rows="5" cols="50"><?php echo stripslashes(esc_html($todo->todotext, 1)); ?></textarea></td>
 			</tr>
 			</table>
-			<?php wp_nonce_field( 'todoupdate' ) ?>
+			<?php echo wp_nonce_field( 'todoupdate', 'todoupdate', true, false ); ?>
 			<input type="hidden" name="action" value="updatetodo" />
 	  		<p class="submit"><input type="submit" name="submit" class="button-primary" value="<?php _e('Edit To-Do Item', 'cleverness-to-do-list') ?> &raquo;" /></p>
  		</form>
@@ -469,7 +469,7 @@ function cleverness_todo_subpanel() {
         		<td><textarea name="cleverness_todo_description" rows="5" cols="50" id="the_editor"></textarea></td>
 			</tr>
 			</table>
-	   		<?php wp_nonce_field( 'todoadd' ) ?>
+	   		<?php echo wp_nonce_field( 'todoadd', 'todoadd', true, false ); ?>
 			<input type="hidden" name="action" value="addtodo" />
         	<p class="submit"><input type="submit" name="submit" class="button-primary" value="<?php _e('Add To-Do Item &raquo;', 'cleverness-to-do-list') ?>" /></p>
 		</form>
@@ -577,7 +577,7 @@ function cleverness_todo_init() {
 function cleverness_todo_add_js() {
 	wp_enqueue_script( 'cleverness_todo_js' );
 	wp_enqueue_script( 'jquery-color' );
-	wp_localize_script( 'cleverness_todo_js', 'cltd', cleverness_todo_get_dashboard_js_vars());
+	wp_localize_script( 'cleverness_todo_js', 'ctdl', cleverness_todo_get_dashboard_js_vars());
     }
 
 /* Delete To-Do Ajax */
