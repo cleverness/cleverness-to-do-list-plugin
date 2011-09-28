@@ -2,6 +2,7 @@
 /* Check if User Has Permission */
 function cleverness_todo_user_can($type, $action) {
 	global $cleverness_todo_option, $current_user;
+	$cleverness_todo_option = get_option('cleverness_todo_settings');
     get_currentuserinfo();
 
 	switch ($type) {

@@ -12,19 +12,12 @@ Plugin URI: http://cleverness.org/plugins/to-do-list/
 Based on the ToDo plugin by Abstract Dimensions with a patch by WordPress by Example.
 */
 
-global $wp_version;
-
-$exit_msg = __('To-Do List requires WordPress 3.2 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please update.</a>', 'cleverness-to-do-list');
-
-if (version_compare($wp_version, "3.2", "<")) {
-	exit($exit_msg);
-  	}
-
+//add_action('init', 'cleverness_todo_loader');
+global $wpdb;
 define( 'CTDL_BASENAME', plugin_basename(__FILE__) );
 define( 'CTDL_PLUGIN_DIR', plugin_dir_path( __FILE__) );
 define( 'CTDL_PLUGIN_URL', plugins_url('', __FILE__) );
-if ( ! function_exists( 'is_plugin_active_for_network' ) )
-   require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+if ( !function_exists( 'is_plugin_active_for_network' ) ) require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 if ( is_plugin_active_for_network( CTDL_BASENAME ) ) {
 	$prefix = $wpdb->base_prefix;
 } else {
@@ -34,81 +27,79 @@ define( 'CTDL_TODO_TABLE', $prefix.'todolist' );
 define( 'CTDL_CATS_TABLE', $prefix.'todolist_cats' );
 define( 'CTDL_STATUS_TABLE', $prefix.'todolist_status' );
 
-include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-options.php');
-include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-dashboard-widget.php');
-include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-widget.php');
-include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-shortcode.php');
-include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-categories.php');
-include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-help.php');
-include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-functions.php');
-include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-frontend.php');
+include_once 'includes/cleverness-to-do-loader.class.php';
+include_once 'includes/cleverness-to-do-list.class.php';
+global $ClevernessToDoList;
+add_action('init', 'ClevernessToDoLoader::init' );
 
+function cleverness_todo_loader() {
 
-/* 	WANT TO BE ABLE TO REMOVE OPTION FROM GLOBAL */
-$cleverness_todo_option = get_option('cleverness_todo_settings');
+	$action = '';
+	if ( isset($_GET['action']) ) $action = $_GET['action'];
+	if ( isset($_POST['action']) ) $action = $_POST['action'];
 
-$action = '';
-if ( isset($_GET['action']) ) $action = $_GET['action'];
-if ( isset($_POST['action']) ) $action = $_POST['action'];
+	$cleverness_todo_option = get_option('cleverness_todo_settings');
 
-switch($action) {
+	switch($action) {
 
-case 'setuptodo':
-	cleverness_todo_install();
-	break;
+	case 'setuptodo':
+		cleverness_todo_install();
+		break;
 
-case 'addtodo':
-	$message = '';
-	if ( $_POST['cleverness_todo_description'] != '' ) {
-		//$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'add_todo' ); NEED TO FIX
-		$cleverness_todo_permission = true;
+	case 'addtodo':
+		$message = '';
+		if ( $_POST['cleverness_todo_description'] != '' ) {
+			//$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'add_todo' ); NEED TO FIX
+			$cleverness_todo_permission = true;
 
-		if ( $cleverness_todo_permission === true ) {
-			$assign = (  isset($_POST['cleverness_todo_assign']) ?  $_POST['cleverness_todo_assign'] : 0 );
-			$deadline = (  isset($_POST['cleverness_todo_deadline']) ?  $_POST['cleverness_todo_deadline'] : '' );
-			$progress = (  isset($_POST['cleverness_todo_progress']) ?  $_POST['cleverness_todo_progress'] : 0 );
-			$category = (  isset($_POST['cleverness_todo_category']) ?  $_POST['cleverness_todo_category'] : '' );
+			if ( $cleverness_todo_permission === true ) {
+				$assign = (  isset($_POST['cleverness_todo_assign']) ?  $_POST['cleverness_todo_assign'] : 0 );
+				$deadline = (  isset($_POST['cleverness_todo_deadline']) ?  $_POST['cleverness_todo_deadline'] : '' );
+				$progress = (  isset($_POST['cleverness_todo_progress']) ?  $_POST['cleverness_todo_progress'] : 0 );
+				$category = (  isset($_POST['cleverness_todo_category']) ?  $_POST['cleverness_todo_category'] : '' );
 
-		   	require_once (ABSPATH . WPINC . '/pluggable.php'); // NEED TO REMOVE
-			if (!wp_verify_nonce($_REQUEST['todoadd'], 'todoadd') ) die('Security check failed');
-			if ( $cleverness_todo_option['email_assigned'] == '1' && $cleverness_todo_option['assign'] == '0' ) {
-				$message = cleverness_todo_email_user($todotext, $priority, $assign, $deadline, $category);
-				}
-			$message .= cleverness_todo_insert($assign, $deadline, $progress, $category);
+		   		require_once (ABSPATH . WPINC . '/pluggable.php'); // NEED TO REMOVE
+				if (!wp_verify_nonce($_REQUEST['todoadd'], 'todoadd') ) die('Security check failed');
+				if ( $cleverness_todo_option['email_assigned'] == '1' && $cleverness_todo_option['assign'] == '0' ) {
+					$message = cleverness_todo_email_user($todotext, $priority, $assign, $deadline, $category);
+					}
+				$message .= cleverness_todo_insert($assign, $deadline, $progress, $category);
+			} else {
+		   		$message = __('You do not have sufficient privileges to add an item.', 'cleverness-to-do-list');
+			}
+
 		} else {
-		   	$message = __('You do not have sufficient privileges to add an item.', 'cleverness-to-do-list');
+			$message = __('To-Do cannot be blank.', 'cleverness-to-do-list');
 		}
+		break;
 
-	} else {
-		$message = __('To-Do cannot be blank.', 'cleverness-to-do-list');
-	}
-	break;
+	case 'updatetodo':
+		$assign = ( isset($_POST['cleverness_todo_assign']) ?  $_POST['cleverness_todo_assign'] : 0 );
+		$deadline = ( isset($_POST['cleverness_todo_deadline']) ?  $_POST['cleverness_todo_deadline'] : '' );
+		$progress = ( isset($_POST['cleverness_todo_progress']) ?  $_POST['cleverness_todo_progress'] : 0 );
+		$category = ( isset($_POST['cleverness_todo_category']) ?  $_POST['cleverness_todo_category'] : '' );
+		require_once (ABSPATH . WPINC . '/pluggable.php');
+		if (!wp_verify_nonce($_REQUEST['todoupdate'], 'todoupdate') ) die('Security check failed');
+		$message = cleverness_todo_update($assign, $deadline, $progress, $category);
+		break;
 
-case 'updatetodo':
-	$assign = (  isset($_POST['cleverness_todo_assign']) ?  $_POST['cleverness_todo_assign'] : 0 );
-	$deadline = (  isset($_POST['cleverness_todo_deadline']) ?  $_POST['cleverness_todo_deadline'] : '' );
-	$progress = (  isset($_POST['cleverness_todo_progress']) ?  $_POST['cleverness_todo_progress'] : 0 );
-	$category = (  isset($_POST['cleverness_todo_category']) ?  $_POST['cleverness_todo_category'] : '' );
-	require_once (ABSPATH . WPINC . '/pluggable.php');
-	if (!wp_verify_nonce($_REQUEST['todoupdate'], 'todoupdate') ) die('Security check failed');
-	$message = cleverness_todo_update($assign, $deadline, $progress, $category);
-	break;
+	case 'completetodo':
+		$id = absint($_GET['id']);
+		$message = cleverness_todo_complete($id, '1');
+		break;
 
-case 'completetodo':
-	$id = absint($_GET['id']);
-	$message = cleverness_todo_complete($id, '1');
-	break;
+	case 'uncompletetodo':
+		$id = absint($_GET['id']);
+		$message = cleverness_todo_complete($id, '0');
+		break;
 
-case 'uncompletetodo':
-	$id = absint($_GET['id']);
-	$message = cleverness_todo_complete($id, '0');
-	break;
-
-case 'purgetodo':
-	$message = cleverness_todo_purge();
-	break;
+	case 'purgetodo':
+		$message = cleverness_todo_purge();
+		break;
 
 } // end switch
+
+}
 
 /* Create admin page */
 function cleverness_todo_subpanel() {
@@ -484,115 +475,21 @@ function cleverness_todo_get_users($role) {
       return $wp_user_search->get_results();
 }
 
-/* Add Page under admin and Add Settings Page */
-function cleverness_todo_admin_menu() {
-	if (function_exists('add_menu_page')) {
-		global $userdata, $cleverness_todo_option, $cleverness_todo_page, $cleverness_todo_cat_page;
-   		get_currentuserinfo();
+		add_action('wp_ajax_cleverness_todo_delete', 'cleverness_todo_delete_todo_callback');
 
-        $cleverness_todo_page = add_menu_page( __('To-Do List', 'cleverness-to-do-list'), __('To-Do List', 'cleverness-to-do-list'), $cleverness_todo_option['view_capability'], 'cleverness-to-do-list', 'cleverness_todo_subpanel', CTDL_PLUGIN_URL.'/images/cleverness-todo-icon-sm.png');
-		if ( $cleverness_todo_option['categories'] == '1' )
-			$cleverness_todo_cat_page = add_submenu_page( 'cleverness-to-do-list', __('To-Do List Categories', 'cleverness-to-do-list'), __('Categories', 'cleverness-to-do-list'), $cleverness_todo_option['add_cat_capability'], 'cleverness-to-do-list-cats', 'cleverness_todo_categories');
-		add_submenu_page( 'cleverness-to-do-list', __('To-Do List Settings', 'cleverness-to-do-list'), __('Settings', 'cleverness-to-do-list'), 'manage_options', 'cleverness-to-do-list-options', 'cleverness_todo_settings_page');
-		add_submenu_page( 'cleverness-to-do-list', __('To-Do List Help', 'cleverness-to-do-list'), __('Help', 'cleverness-to-do-list'), $cleverness_todo_option['view_capability'], 'cleverness-to-do-list-help', 'cleverness_todo_help');
-        }
+			/* Delete To-Do Ajax */
+   function cleverness_todo_delete_todo_callback() {
+		check_ajax_referer( 'cleverness-todo' );
+		$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'delete' );
+
+		if ( $cleverness_todo_permission === true ) {
+			$cleverness_todo_status = cleverness_todo_delete();
+		} else {
+	   		$cleverness_todo_status = 2;
+			}
+
+		echo $cleverness_todo_status;
+		die(); // this is required to return a proper result
 	}
-
-/* Add plugin info to admin footer */
-function cleverness_todo_admin_footer() {
-	$plugin_data = get_plugin_data( __FILE__ );
-	printf(__("%s plugin | Version %s | by %s<br />", 'cleverness-to-do-list'), $plugin_data['Title'], $plugin_data['Version'], $plugin_data['Author']);
-	}
-
-/* Add CSS file to admin header */
-function cleverness_todo_admin_add_css() {
-		$cleverness_style_url = CTDL_PLUGIN_URL . '/css/admin.css';
-		$cleverness_style_file = CTDL_PLUGIN_DIR . '/css/admin.css';
-        if ( file_exists($cleverness_style_file) ) {
-            wp_register_style('cleverness_todo_style_sheet', $cleverness_style_url);
-            wp_enqueue_style( 'cleverness_todo_style_sheet');
-        }
-	}
-
-/* Translation Support */
-function cleverness_todo_load_translation_file() {
-	$plugin_path = CTDL_BASENAME .'/lang';
-	load_plugin_textdomain( 'cleverness-to-do-list', '', $plugin_path );
-}
-
-/* Register the options field */
-function cleverness_todo_register_settings() {
-  register_setting( 'cleverness-todo-settings-group', 'cleverness_todo_settings' );
-}
-
-/* Add Settings link to plugin */
-function cleverness_add_settings_link($links, $file) {
-	static $this_plugin;
-	if (!$this_plugin) $this_plugin = CTDL_BASENAME;
-
-	if ($file == $this_plugin){
-		$settings_link = '<a href="admin.php?page=cleverness-to-do-list-options">'.__('Settings', 'cleverness-to-do-list').'</a>';
-	 	array_unshift($links, $settings_link);
-		}
-	return $links;
-}
-
-add_filter('plugin_action_links', 'cleverness_add_settings_link', 10, 2 );
-
-/* Add Action Hooks */
-	add_action('activate_'.CTDL_BASENAME,'cleverness_todo_install');
-   	add_action('admin_menu', 'cleverness_todo_admin_menu');
-   	add_action('init', 'cleverness_todo_register_settings');
-   	add_action('wp_dashboard_setup', 'cleverness_todo_dashboard_setup');
-  	add_action('widgets_init', 'cleverness_todo_widget');
-   	add_action('init', 'cleverness_todo_load_translation_file');
-
-/* JS and Ajax Setup */
-// returns various JavaScript vars needed for the scripts
-function cleverness_todo_get_dashboard_js_vars() {
-	return array(
-	'SUCCESS_MSG' => __('To-Do Deleted.', 'cleverness-to-do-list'),
-	'ERROR_MSG' => __('There was a problem performing that action.', 'cleverness-to-do-list'),
-	'PERMISSION_MSG' => __('You do not have sufficient privileges to do that.', 'cleverness-to-do-list'),
-	'EDIT_TODO' => __('Edit To-Do', 'cleverness-to-do-list'),
-	'PUBLIC' => __('Public', 'cleverness-to-do-list'),
-	'PRIVATE' => __('Private', 'cleverness-to-do-list'),
-	'CONFIRMATION_MSG' => __("You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list'),
-	'NONCE' => wp_create_nonce('cleverness-todo'),
-	'AJAX_URL' => admin_url('admin-ajax.php')
-	);
-}
-/* end JS Setup */
-
-add_action( 'admin_init', 'cleverness_todo_init' );
-
-function cleverness_todo_init() {
-	global $cleverness_todo_page;
-   	add_action('admin_print_styles-' . $cleverness_todo_page, 'cleverness_todo_admin_add_css');
-	wp_register_script( 'cleverness_todo_js', CTDL_PLUGIN_URL.'/js/todos.js', '', 1.0, true );
-	add_action('admin_print_scripts-' . $cleverness_todo_page, 'cleverness_todo_add_js');
-	add_action('wp_ajax_cleverness_todo_delete', 'cleverness_todo_delete_callback');
-}
-
-function cleverness_todo_add_js() {
-	wp_enqueue_script( 'cleverness_todo_js' );
-	wp_enqueue_script( 'jquery-color' );
-	wp_localize_script( 'cleverness_todo_js', 'ctdl', cleverness_todo_get_dashboard_js_vars());
-    }
-
-/* Delete To-Do Ajax */
-function cleverness_todo_delete_callback() {
-	check_ajax_referer( 'cleverness-todo' );
-	$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'delete' );
-
-	if ( $cleverness_todo_permission === true ) {
-		$cleverness_todo_status = cleverness_todo_delete();
-	} else {
-		$cleverness_todo_status = 2;
-		}
-
-	echo $cleverness_todo_status;
-	die(); // this is required to return a proper result
-}
-/* end Delete To-Do Ajax */
+	/* end Delete To-Do Ajax */
 ?>

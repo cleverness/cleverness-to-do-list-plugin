@@ -43,6 +43,6 @@ function cleverness_todo_help() {
 </div>
 <?php
 /* Adds information about the plugin on the settings page footer */
-add_action( 'in_admin_footer', 'cleverness_todo_admin_footer' );
+add_action( 'in_admin_footer', 'ClevernessToDoLoader::cleverness_todo_admin_footer' );
 }
 ?>
