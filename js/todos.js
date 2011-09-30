@@ -6,12 +6,13 @@ $('#todo-list tbody tr:visible:even').addClass('alternate');
 $('.todo-checkbox').click(function () {
 	var action = '';
 	var id = $(this).attr('id').substr(5);
+	var cleverness_todo_complete_nonce = $("input[name=cleverness_todo_complete_nonce]").val();
 	if ($(this).hasClass('uncompleted')) {
 		action = 'completetodo';
 	} else if ($(this).hasClass('completed')) {
 		action = 'uncompletetodo';
 	}
-	document.location.href = 'admin.php?page=cleverness-to-do-list&action='+action+'&id='+id;
+	document.location.href = 'admin.php?page=cleverness-to-do-list&action='+action+'&id='+id+'&_wpnonce='+cleverness_todo_complete_nonce;
 	});
 /* end Complete To-Dos */
 
@@ -19,7 +20,7 @@ $('.todo-checkbox').click(function () {
 $('.edit-todo').live('click', function () {
 		var todotr = $(this).closest('tr');
 		var id = $(todotr).attr('id').substr(5)
-		document.location.href = 'admin.php?page=cleverness-to-do-list&action=edittodo&id='+id;
+		document.location.href = 'admin.php?page=cleverness-to-do-list&action=edit-todo&id='+id;
 		});
 /* end Edit To-Dos */
 

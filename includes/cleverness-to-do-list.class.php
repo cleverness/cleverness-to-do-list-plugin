@@ -4,7 +4,7 @@
 class ClevernessToDoList {
 	protected $settings;
 	protected $cat_id = '';
-	protected $list = '';
+	public $list = '';
 	protected $form = '';
 
 	public function __construct($settings) {
@@ -22,19 +22,28 @@ class ClevernessToDoList {
 
 		$action = ( isset($_GET['action']) ? $_GET['action'] : '' );
 
+		if ( is_admin() ) {
+			$this->list .= '<div class="wrap"><div class="icon32"><img src="'.CTDL_PLUGIN_URL.'/images/cleverness-todo-icon.png" alt="" /></div> <h2>'.__('To-Do List', 'cleverness-to-do-list').'</h2>';
+		}
+
 		if ($action == 'edit-todo') {
 
     		$id = absint($_GET['id']);
     		$result = cleverness_todo_get_todo($id);
 			$this->list .= $this->edit_form($result, $url);
+			if ( is_admin() ) $this->list .= '<p><a href="admin.php?page=cleverness-to-do-list">'.__('&laquo; Return to To-Do List', 'cleverness-to-do-list').'</a></p>';
 
 		} else {
+
+		if ( is_admin() ) $this->list .= '<h3>'.__('To-Do Items', 'cleverness-to-do-list').' (';
 
 		if (current_user_can($this->settings['add_capability']) || $this->settings['list_view'] == '0') {
 			$this->list .= '<a href="#addtodo">'.__('Add New Item', 'cleverness-to-do-list').'</a>';
 		 	}
 
-		$this->list .= '<table id="todo-list" class="todo-table">';
+		if ( is_admin() ) $this->list .= ') </h3>';
+
+		$this->list .= '<table id="todo-list" class="todo-table widefat">';
 
 		$this->show_table_headings($priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink);
 
@@ -49,7 +58,7 @@ class ClevernessToDoList {
 		   		if ($result->priority == '0') $priority_class = ' class="todo-important"';
 				if ($result->priority == '2') $priority_class = ' class="todo-low"';
 
-				$this->list .= '<tr id="todo-'.$result->id.'" class="'.$priority_class.'">';
+				$this->list .= '<tr id="todo-'.$result->id.'"'.$priority_class.'>';
 				$this->show_checkbox($result);
 				$this->show_todo_text($result, $priority_class);
 				if ( $priority == 1 ) $this->show_priority($result, $priorities);
@@ -71,6 +80,8 @@ class ClevernessToDoList {
 
 		$this->list .= $this->todo_form();
 
+		if ( is_admin() ) $this->list .= '</div>';
+
 		}
 
 	}
@@ -81,10 +92,11 @@ class ClevernessToDoList {
 		}
 
 	protected function edit_form($result, $url) {
-		$url = strtok($url, "?");
+		if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list'; else $url = strtok($url, "?");
 		$this->form = '';
+		if ( is_admin() ) $this->form .= '<h3>'.__('Edit To-Do Item', 'cleverness-to-do-list').'</h3>';
     	$this->form .= '<form name="edittodo" id="edittodo" action="'.$url.'" method="post">
-	  		<table class="todo-form">';
+	  		<table class="todo-form form-table">';
 		$this->priority_field($result);
 		$this->assign_field($result);
 		$this->deadline_field($result);
@@ -104,7 +116,7 @@ class ClevernessToDoList {
    	 	$this->form = '<h3>'.__('Add New To-Do Item', 'cleverness-to-do-list').'</h3>';
 
     	$this->form .= '<form name="addtodo" id="addtodo" action="" method="post">
-	  		<table class="todo-form">';
+	  		<table class="todo-form form-table">';
 			$this->priority_field();
 			$this->assign_field();
 			$this->deadline_field();
@@ -224,7 +236,9 @@ class ClevernessToDoList {
 		}
 
 	protected function show_table_headings($priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink) {
-		$this->list .= '<thead><tr><th></th><th>'.__('Item', 'cleverness-to-do-list').'</th>';
+		$this->list .= '<thead><tr>';
+		if ( !is_admin() ) $this->list .= '<th></th>';
+		$this->list .= '<th>'.__('Item', 'cleverness-to-do-list').'</th>';
 	  	if ( $priority == 1 ) $this->list .= '<th>'.__('Priority', 'cleverness-to-do-list').'</th>';
 		if ( $assigned == 1 && $this->settings['assign'] == 0 ) $this->list .= '<th>'.__('Assigned To', 'cleverness-to-do-list').'</th>';
 		if ( $deadline == 1 && $this->settings['show_deadline'] == 1 ) $this->list .= '<th>'.__('Deadline', 'cleverness-to-do-list').'</th>';
@@ -238,23 +252,35 @@ class ClevernessToDoList {
 	protected function show_checkbox($result, $priority_class = '') {
 		$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'complete' );
 		if ( $cleverness_todo_permission === true ) {
-			$this->list .= sprintf('<td><input type="checkbox" id="ctdl-%d" class="todo-checkbox"/></td>', $result->id);
+			$this->list .= sprintf('<td><input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted"/>', $result->id);
+			$cleverness_todo_complete_nonce = wp_create_nonce('todocomplete');
+			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="'.$cleverness_todo_complete_nonce.'" />';
+			if ( !is_admin() ) $this->list .= '</td>';
 			}
 		}
 
 	protected function show_todo_text($result) {
-		$this->list .= '<td>'.stripslashes($result->todotext).'</td>';
+		if ( !is_admin() ) $this->list .= '<td>'; else $this->list .= '&nbsp;';
+		$this->list .= stripslashes($result->todotext).'</td>';
 		}
 
 	protected function show_edit_link($result, $url) {
 		$edit = '';
 		$url = $url.'?action=edit-todo&amp;id='.$result->id;
-		if (current_user_can($this->settings['edit_capability']) || $this->settings['list_view'] == '0')
-			//$edit = '<input class="edit-todo button-secondary" type="button" value="'. __( 'Edit' ).'" />';
-			$edit = '<a href="'.$url.'" class="edit-todo">'.__( 'Edit' ).'</a>';
-		if (current_user_can($this->settings['delete_capability']) || $this->settings['list_view'] == '0')
-			//$edit .= ' <input class="delete-todo button-secondary" type="button" value="'. __( 'Delete' ).'" />';
-			$edit .= ' | <a href="" class="delete-todo">'.__( 'Delete' ).'</a>';
+		if (current_user_can($this->settings['edit_capability']) || $this->settings['list_view'] == '0') {
+			if ( is_admin() ) {
+				$edit = '<input class="edit-todo button-secondary" type="button" value="'. __( 'Edit' ).'" />';
+			} else {
+				$edit = '<a href="'.$url.'" class="edit-todo">'.__( 'Edit' ).'</a>';
+				}
+			}
+		if (current_user_can($this->settings['delete_capability']) || $this->settings['list_view'] == '0') {
+			if ( is_admin() ) {
+				$edit .= ' <input class="delete-todo button-secondary" type="button" value="'. __( 'Delete' ).'" />';
+			} else {
+				$edit .= ' | <a href="" class="delete-todo">'.__( 'Delete' ).'</a>';
+				}
+			}
 	  	if (current_user_can($this->settings['edit_capability'])|| $this->settings['list_view'] == '0')
 			$this->list .= '<td>'.$edit.'</td>';
 		}
