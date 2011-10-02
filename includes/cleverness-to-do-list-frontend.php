@@ -116,8 +116,10 @@ class ClevernessToDoFrontEndChecklist extends ClevernessToDoList {
 	protected function show_category_headings($result, $cat_id) {
 		if ( $this->settings['categories'] == '1' && $result->cat_id != 0 ) {
 			$cat = cleverness_todo_get_cat_name($result->cat_id);
-			if ( $cat_id != $result->cat_id  && $cat->name != '' ) $this->list .= '<h4>'.$cat->name.'</h4>';
-				$this->cat_id = $result->cat_id;
+			if ( isset($cat) ) {
+				if ( $cat_id != $result->cat_id  && $cat->name != '' ) $this->list .= '<h4>'.$cat->name.'</h4>';
+					$this->cat_id = $result->cat_id;
+				}
 			}
 		}
 
@@ -183,9 +185,5 @@ function has_cleverness_todo_shortcode($posts) {
     return $posts;
 }
 
-		$cleverness_todo_shortcode_settings = get_option('cleverness_todo_settings');
-		$cleverness_todo_frontend_checklist = new ClevernessToDoFrontEndChecklist($cleverness_todo_shortcode_settings);
-		$cleverness_todo_frontend_admin = new ClevernessToDoFrontEndAdmin($cleverness_todo_shortcode_settings);
-
-		//add_action('the_posts', 'has_cleverness_todo_shortcode');
+add_action('the_posts', 'has_cleverness_todo_shortcode');
 ?>

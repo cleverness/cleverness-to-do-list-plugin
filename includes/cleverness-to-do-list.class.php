@@ -19,6 +19,7 @@ class ClevernessToDoList {
 		$priorities = array(0 => $this->settings['priority_0'] , 1 => $this->settings['priority_1'], 2 => $this->settings['priority_2']);
 		$user = $this->get_user($current_user, $userdata);
 		$url = $this->get_page_url();
+		$url = strtok($url, '?');
 
 		$action = ( isset($_GET['action']) ? $_GET['action'] : '' );
 
@@ -26,12 +27,20 @@ class ClevernessToDoList {
 			$this->list .= '<div class="wrap"><div class="icon32"><img src="'.CTDL_PLUGIN_URL.'/images/cleverness-todo-icon.png" alt="" /></div> <h2>'.__('To-Do List', 'cleverness-to-do-list').'</h2>';
 		}
 
+		if ( isset($message) ) {
+			$this->list .= '<div id="message" class="updated fade"><p>'.$message.'</p></div>';
+			}
+
 		if ($action == 'edit-todo') {
 
     		$id = absint($_GET['id']);
     		$result = cleverness_todo_get_todo($id);
 			$this->list .= $this->edit_form($result, $url);
-			if ( is_admin() ) $this->list .= '<p><a href="admin.php?page=cleverness-to-do-list">'.__('&laquo; Return to To-Do List', 'cleverness-to-do-list').'</a></p>';
+			if ( is_admin() ) {
+				$this->list .= '<p><a href="admin.php?page=cleverness-to-do-list">'.__('&laquo; Return to To-Do List', 'cleverness-to-do-list').'</a></p>';
+			} else {
+				$this->list .= '<p><a href="'.$url.'">'.__('&laquo; Return to To-Do List', 'cleverness-to-do-list').'</a></p>';
+				}
 
 		} else {
 
@@ -77,6 +86,54 @@ class ClevernessToDoList {
 			}
 
 		$this->list .= '</table>';
+
+		/* Show completed items */
+		if ( is_admin() ) {
+			$this->list .= '<h3>'.__('Completed Items', 'cleverness-to-do-list').' (';
+
+		if (current_user_can($this->settings['purge_capability']) || $this->settings['list_view'] == '0') {
+			$cleverness_todo_purge_nonce = wp_create_nonce('todopurge');
+			$this->list .= '<a href="admin.php?page=cleverness-to-do-list&amp;action=purgetodo&_wpnonce='.$cleverness_todo_purge_nonce.'">'.__('Delete All', 'cleverness-to-do-list').'</a>';
+		 	}
+
+		if ( is_admin() ) $this->list .= ') </h3>';
+
+		$this->list .= '<table id="todo-list-completed" class="todo-table widefat">';
+
+		$this->show_table_headings($priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink, 1);
+
+		// get to-do items
+		$results = cleverness_todo_get_todos($user, 0, 1);
+
+		if ($results) {
+
+			foreach ($results as $result) {
+				$user_info = get_userdata($result->author);
+				$priority_class = '';
+		   		if ($result->priority == '0') $priority_class = ' class="todo-important"';
+				if ($result->priority == '2') $priority_class = ' class="todo-low"';
+
+				$this->list .= '<tr id="todo-'.$result->id.'"'.$priority_class.'>';
+				$this->show_checkbox($result, 1);
+				$this->show_todo_text($result, $priority_class);
+				if ( $priority == 1 ) $this->show_priority($result, $priorities);
+				if ( $assigned == 1 ) $this->show_assigned($result);
+				if ( $deadline == 1 ) $this->show_deadline($result);
+				$this->show_completed($result);
+				if ( $progress == 1 ) $this->show_progress($result);
+				if ( $categories == 1 ) $this->show_category($result);
+				if ( $addedby == 1 ) $this->show_addedby($result, $user_info);
+				if ( $editlink == 1 ) $this->show_edit_link($result, $url);
+				$this->list .= '</tr>';
+				}
+
+		} else {
+			/* if there are no to-do items, display this message */
+			$this->list .= '<tr><td>'.__('No items to do.', 'cleverness-to-do-list').'</td></tr>';
+			}
+
+		$this->list .= '</table>';
+		}
 
 		$this->list .= $this->todo_form();
 
@@ -235,13 +292,14 @@ class ClevernessToDoList {
 			</tr>', __('To-Do', 'cleverness-to-do-list'), $text);
 		}
 
-	protected function show_table_headings($priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink) {
+	protected function show_table_headings($priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink, $completed = NULL) {
 		$this->list .= '<thead><tr>';
 		if ( !is_admin() ) $this->list .= '<th></th>';
 		$this->list .= '<th>'.__('Item', 'cleverness-to-do-list').'</th>';
 	  	if ( $priority == 1 ) $this->list .= '<th>'.__('Priority', 'cleverness-to-do-list').'</th>';
 		if ( $assigned == 1 && $this->settings['assign'] == 0 ) $this->list .= '<th>'.__('Assigned To', 'cleverness-to-do-list').'</th>';
 		if ( $deadline == 1 && $this->settings['show_deadline'] == 1 ) $this->list .= '<th>'.__('Deadline', 'cleverness-to-do-list').'</th>';
+		if ( $completed == 1 ) $this->list .= '<th>'.__('Completed', 'cleverness-to-do-list').'</th>';
 		if ( $progress == 1 && $this->settings['show_progress'] == 1 ) $this->list .= '<th>'.__('Progress', 'cleverness-to-do-list').'</th>';
 		if ( $categories == 1 && $this->settings['categories'] == 1 ) $this->list .= '<th>'.__('Category', 'cleverness-to-do-list').'</th>';
 		if ( $addedby == 1 && $this->settings['list_view'] == 1  && $this->settings['todo_author'] == 0 ) $this->list .= '<th>'.__('Added By', 'cleverness-to-do-list').'</th>';
@@ -249,10 +307,14 @@ class ClevernessToDoList {
     	$this->list .= '</tr></thead>';
 	 	}
 
-	protected function show_checkbox($result, $priority_class = '') {
+	protected function show_checkbox($result, $completed = NULL) {
 		$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'complete' );
 		if ( $cleverness_todo_permission === true ) {
-			$this->list .= sprintf('<td><input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted"/>', $result->id);
+			if ( $completed == 1 ) {
+				$this->list .= sprintf('<td><input type="checkbox" id="cltd-%d" class="todo-checkbox completed" checked="checked" />', $result->id);
+			} else {
+				$this->list .= sprintf('<td><input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted"/>', $result->id);
+			}
 			$cleverness_todo_complete_nonce = wp_create_nonce('todocomplete');
 			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="'.$cleverness_todo_complete_nonce.'" />';
 			if ( !is_admin() ) $this->list .= '</td>';
@@ -323,6 +385,14 @@ class ClevernessToDoList {
 			}
 		}
 
+	protected function show_completed($result) {
+			$date = '';
+			if ( $this->settings['show_completed_date'] && $result->completed != '0000-00-00 00:00:00' ) {
+				$date = date($this->settings['date_format'], strtotime($result->completed));
+				}
+			$this->list .= '<td>'.$date.'</td>';
+		}
+
 	protected function show_progress($result) {
 		if ( $this->settings['show_progress'] == 1 ) {
 			$this->list .= ( $result->progress != '' ? sprintf('<td>%d%%</td>', $result->progress) : '<td></td>' );
@@ -349,9 +419,6 @@ public function cleverness_todo_checklist_get_js_vars() {
 	'SUCCESS_MSG' => __('To-Do Deleted.', 'cleverness-to-do-list'),
 	'ERROR_MSG' => __('There was a problem performing that action.', 'cleverness-to-do-list'),
 	'PERMISSION_MSG' => __('You do not have sufficient privileges to do that.', 'cleverness-to-do-list'),
-	'EDIT_TODO' => __('Edit To-Do', 'cleverness-to-do-list'),
-	'PUBLIC' => __('Public', 'cleverness-to-do-list'),
-	'PRIVATE' => __('Private', 'cleverness-to-do-list'),
 	'CONFIRMATION_MSG' => __("You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list'),
 	'NONCE' => wp_create_nonce('cleverness-todo'),
 	'AJAX_URL' => admin_url('admin-ajax.php')

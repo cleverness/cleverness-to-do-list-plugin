@@ -1,7 +1,5 @@
 jQuery(document).ready(function($) {
 
-// add nonce
-
 	$('.todo-checkbox').click(function () {
 		var status = 1;
 		var id = $(this).attr('id').substr(5);
@@ -17,7 +15,6 @@ jQuery(document).ready(function($) {
 
 		jQuery.post(ctdl.AJAX_URL, data, function(response) {
 			$(todoid).fadeOut();
-			// add the row to the correct table
 			});
 	});
 });

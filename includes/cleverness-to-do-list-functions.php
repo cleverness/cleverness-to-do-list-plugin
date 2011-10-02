@@ -1,4 +1,22 @@
 <?php
+/* Get list of users */
+function cleverness_todo_get_users($role) {
+      $wp_user_search = new WP_User_Query( array( 'role' => $role ) );
+      return $wp_user_search->get_results();
+}
+
+/* Add Settings link to plugin */
+function cleverness_add_settings_link($links, $file) {
+	static $this_plugin;
+	if (!$this_plugin) $this_plugin = CTDL_BASENAME;
+
+	if ($file == $this_plugin){
+		$settings_link = '<a href="admin.php?page=cleverness-to-do-list-options">'.__('Settings', 'cleverness-to-do-list').'</a>';
+	 	array_unshift($links, $settings_link);
+		}
+	return $links;
+}
+
 /* Check if User Has Permission */
 function cleverness_todo_user_can($type, $action) {
 	global $cleverness_todo_option, $current_user;
@@ -108,9 +126,10 @@ function cleverness_todo_email_user($todotext, $priority, $assign, $deadline, $c
 
    	if ( current_user_can($cleverness_todo_option['assign_capability']) && $assign != '' && $assign != '-1' && $assign != '0') {
 		$headers = 'From: '.$cleverness_todo_option['email_from'].' <'.get_bloginfo('admin_email').'>' . "\r\n\\";
-        $categoryobj=cleverness_todo_get_cat_name($category);
-        $categoryname=$categoryobj->name;
-		$subject = $cleverness_todo_option['email_subject'].' '.$categoryname; // MAKE CATEGORY NAME OPTION
+        //$categoryobj = cleverness_todo_get_cat_name($category);
+        //$categoryname = $categoryobj->name;
+		//$subject = $cleverness_todo_option['email_subject'].' '.$categoryname; // MAKE CATEGORY NAME OPTION
+		$subject = $cleverness_todo_option['email_subject'];
 		$assign_user = get_userdata($assign);
 		$email = $assign_user->user_email;
 		$email_message = $cleverness_todo_option['email_text'];
@@ -159,6 +178,22 @@ function cleverness_todo_delete() {
 	$success = ( $results === FALSE ? 0 : 1 );
 	return $success;
 	}
+
+/* Delete To-Do Ajax */
+function cleverness_todo_delete_todo_callback() {
+		check_ajax_referer( 'cleverness-todo' );
+		$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'delete' );
+
+		if ( $cleverness_todo_permission === true ) {
+			$cleverness_todo_status = cleverness_todo_delete();
+		} else {
+	   		$cleverness_todo_status = 2;
+			}
+
+		echo $cleverness_todo_status;
+		die(); // this is required to return a proper result
+	}
+	/* end Delete To-Do Ajax */
 
 /* Mark to-do list item as completed or uncompleted */
 function cleverness_todo_complete($id, $status) {
