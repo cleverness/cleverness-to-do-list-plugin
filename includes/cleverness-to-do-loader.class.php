@@ -29,14 +29,14 @@ class ClevernessToDoLoader {
 
 	private static function call_hooks() {
 		add_filter('plugin_action_links', 'cleverness_add_settings_link', 10, 2 );
-		add_action('activate_'.CTDL_BASENAME,'cleverness_todo_install');
    		add_action('admin_menu', __CLASS__.'::create_admin_menu');
-   		add_action('init', __CLASS__.'::register_settings');
+   		add_action('admin_init', __CLASS__.'::register_settings');
    		add_action('wp_dashboard_setup', 'cleverness_todo_dashboard_setup');
   		add_action('widgets_init', 'cleverness_todo_widget');
    		add_action('init', __CLASS__.'::load_translation_file');
 	   	add_action('admin_init', __CLASS__.'::admin_init');
 		add_action('wp_ajax_cleverness_todo_delete', 'cleverness_todo_delete_todo_callback');
+		add_action('wp_ajax_cleverness_todo_complete', 'cleverness_todo_checklist_complete_callback' );
 		}
 
 	private static function check_version() {

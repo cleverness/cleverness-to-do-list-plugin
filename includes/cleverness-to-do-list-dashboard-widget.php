@@ -55,7 +55,7 @@ function cleverness_todo_dashboard_widget() {
 					}
 				}
 			if (current_user_can($cleverness_todo_settings['edit_capability']) || $cleverness_todo_settings['list_view'] == '0')
-		   		echo ' <small>(<a href="admin.php?page=cleverness-to-do-list&amp;action=edittodo&amp;id='. $result->id . '">'. __('Edit', 'cleverness-to-do-list') . '</a>)</small>';
+		   		echo ' <small>(<a href="admin.php?page=cleverness-to-do-list&amp;action=edit-todo&amp;id='. $result->id . '">'. __('Edit', 'cleverness-to-do-list') . '</a>)</small>';
 			echo '</p>';
 			}
 	} else {

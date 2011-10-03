@@ -132,7 +132,6 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Changelog ==
 = 2.3 =
-* Integrated code from bas_der_gruene (Janne Fleischer): widget options, assign additional users, and to-do list comments
 * Moved dashboard widgets settings to the dashboard widget
 * Added ajax to dashboard widget, main plugin page, and category page
 * Added front-end shortcode

@@ -34,9 +34,6 @@ function cleverness_todo_user_can($type, $action) {
 			break;
 		case 'todo':
 			if ( current_user_can($cleverness_todo_option[$action.'_capability'])  ) {
-
-// NEED TO FINISH
-			//if ( $cleverness_todo_option['list_view'] == '0' ) {
    				return true;
    			} else {
    				return false;
@@ -67,7 +64,7 @@ function cleverness_todo_get_todos($user, $limit = 0, $status = 0, $cat_id = 0) 
 		$select = $select;
 	// group view - show only assigned
 	elseif ( $cleverness_todo_settings['list_view'] == '1' && $cleverness_todo_settings['show_only_assigned'] == '0' )
-		$select = $wpdb->prepare(" AND assign = %d", $user);
+		$select .= $wpdb->prepare(" AND assign = %d", $user);
 	// group view - show all
 	elseif ( $cleverness_todo_settings['list_view'] == '1' )
 		$select = $select;
@@ -77,9 +74,9 @@ function cleverness_todo_get_todos($user, $limit = 0, $status = 0, $cat_id = 0) 
 	// master view
 	elseif ( $cleverness_todo_settings['list_view'] == '2' ) {
 		if ($status == 0 ) {
-		   	$select = $wpdb->prepare(" AND ( id = ANY ( SELECT id FROM ".CTDL_STATUS_TABLE." WHERE user = %d AND status = 0) OR id NOT IN( SELECT id FROM ".CTDL_STATUS_TABLE." WHERE user = %d AND status = 1 ) )", $user, $user);
+		   	$select .= $wpdb->prepare(" AND ( id = ANY ( SELECT id FROM ".CTDL_STATUS_TABLE." WHERE user = %d AND status = 0) OR id NOT IN( SELECT id FROM ".CTDL_STATUS_TABLE." WHERE user = %d AND status = 1 ) )", $user, $user);
 		} elseif ( $status == 1 ) {
-		   	$select = $wpdb->prepare(" LEFT OUTER JOIN ".CTDL_STATUS_TABLE." USING (id) WHERE ( ".CTDL_STATUS_TABLE.".status = 1 AND ".CTDL_STATUS_TABLE.".user = %d )", $user);
+		   	$select .= $wpdb->prepare(" LEFT OUTER JOIN ".CTDL_STATUS_TABLE." USING (id) WHERE ( ".CTDL_STATUS_TABLE.".status = 1 AND ".CTDL_STATUS_TABLE.".user = %d )", $user);
 			}
 		}
 
@@ -98,6 +95,7 @@ function cleverness_todo_get_todos($user, $limit = 0, $status = 0, $cat_id = 0) 
 		$select .= $wpdb->prepare(" ORDER BY cat_id, priority, %s", $cleverness_todo_settings['sort_order']);
 	if ( $limit != 0 ) $select .= $wpdb->prepare("  LIMIT %d", $limit);
    	$result = $wpdb->get_results( $select, OBJECT_K );
+
    	return $result;
 	}
 
@@ -119,8 +117,10 @@ function cleverness_todo_insert($assign = 0, $deadline, $progress = 0, $category
 
 
 /* Send an email to assigned user - Category code contributed by Daniel */
-function cleverness_todo_email_user($todotext, $priority, $assign, $deadline, $category) {
+function cleverness_todo_email_user($assign, $deadline, $category) {
 	global $wpdb, $userdata, $cleverness_todo_option;
+	$priority = esc_attr($_POST['cleverness_todo_priority']);
+	$todotext = esc_html($_POST['cleverness_todo_description']);
 	$priority_array = array(0 => $cleverness_todo_option['priority_0'] , 1 => $cleverness_todo_option['priority_1'], 2 => $cleverness_todo_option['priority_2']);
    	get_currentuserinfo();
 
@@ -133,9 +133,9 @@ function cleverness_todo_email_user($todotext, $priority, $assign, $deadline, $c
 		$assign_user = get_userdata($assign);
 		$email = $assign_user->user_email;
 		$email_message = $cleverness_todo_option['email_text'];
-		$email_message .= "\r\n\\".$todotext."\r\n\\";
+		$email_message .= "\r\n".$todotext."\r\n";
 		if ( $deadline != '' )
-			$email_message .= __('Deadline:', 'cleverness-to-do-list').' '.$deadline."\r\n\\";
+			$email_message .= __('Deadline:', 'cleverness-to-do-list').' '.$deadline."\r\n";
   		if ( wp_mail($email, $subject, $email_message, $headers) )
 			$message = __('A email has been sent to the assigned user.', 'cleverness-to-do-list').'<br /><br />';
 		else
@@ -209,6 +209,7 @@ function cleverness_todo_complete($id, $status) {
 		$results = $wpdb->update( CTDL_TODO_TABLE, array( 'status' => $status ), array( 'id' => $id ) );
 		//$success = ( $results === FALSE ? 0 : 1 );
 	   //	return $success;
+	   return $id;
 	 	if ( $status == '1' ) $status_text = __('completed', 'cleverness-to-do-list');
 		else $status_text = __('uncompleted', 'cleverness-to-do-list');
 		if ( $results ) $message = __('To-Do item has been marked as ', 'cleverness-to-do-list').$status_text.'.';
@@ -239,6 +240,23 @@ function cleverness_todo_complete($id, $status) {
 		}
 	return $message;
 	}
+
+function cleverness_todo_checklist_complete_callback() {
+	check_ajax_referer( 'cleverness-todo' );
+	$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'complete' );
+
+	if ( $cleverness_todo_permission === true ) {
+		$cleverness_id = intval($_POST['cleverness_id']);
+		$cleverness_status = intval($_POST['cleverness_status']);
+
+		$message = cleverness_todo_complete($cleverness_id, $cleverness_status);
+	} else {
+		$message = __('You do not have sufficient privileges to do that.', 'cleverness-to-do-list');
+	}
+	echo $message;
+
+	die(); // this is required to return a proper result
+}
 
 /* Get to-do list item */
 function cleverness_todo_get_todo($id) {
@@ -342,10 +360,20 @@ function cleverness_todo_install () {
    	global $wpdb, $userdata;
    	get_currentuserinfo();
 
-	$cleverness_todo_db_version = '1.9';
+	$cleverness_todo_db_version = '1.8';
+	if ( !function_exists( 'is_plugin_active_for_network' ) ) require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+	if ( is_plugin_active_for_network( __FILE__ ) ) {
+		$prefix = $wpdb->base_prefix;
+	} else {
+		$prefix = $wpdb->prefix;
+	}
 
-   	if ($wpdb->get_var("SHOW TABLES LIKE '".CTDL_TODO_TABLE."'") != CTDL_TODO_TABLE) {
-   		$sql = "CREATE TABLE ".CTDL_TODO_TABLE." (
+	$table_name = $prefix.'todolist';
+	$cat_table_name = $prefix.'todolist_cats';
+	$status_table_name = $prefix.'todolist_status';
+
+   	if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+   		$sql = "CREATE TABLE ".$table_name." (
 	      id bigint(20) UNIQUE NOT NULL AUTO_INCREMENT,
 	      author bigint(20) NOT NULL,
 	      status tinyint(1) DEFAULT '0' NOT NULL,
@@ -359,23 +387,24 @@ function cleverness_todo_install () {
 	    );";
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
    		dbDelta($sql);
-		$sql2 = "CREATE TABLE ".CTDL_CATS_TABLE." (
+		$sql2 = "CREATE TABLE ".$cat_table_name." (
 	      id bigint(20) UNIQUE NOT NULL AUTO_INCREMENT,
 	      name varchar(100),
 	      visibility tinyint(1) DEFAULT '0' NOT NULL
 	    );";
    		dbDelta($sql2);
-		$sql3 = "CREATE TABLE ".CTDL_STATUS_TABLE." (
+		$sql3 = "CREATE TABLE ".$status_table_name." (
 	      id bigint(20),
 	      user bigint(20),
 	      status tinyint(1) DEFAULT '0' NOT NULL
 	    );";
    		dbDelta($sql3);
    		$welcome_text = __('Add your first To-Do List item', 'cleverness-to-do-list');
-   		$results = $wpdb->insert( CTDL_TODO_TABLE, array( 'author' => $userdata->ID, 'status' => 0, 'priority' => 1, 'todotext' => $welcome_text ) );
+   		$results = $wpdb->insert( $table_name, array( 'author' => $userdata->ID, 'status' => 0, 'priority' => 1, 'todotext' => $welcome_text ) );
 
 		$new_options = array(
 		'list_view' => '0',
+		'dashboard_author' => '0',
 		'todo_author' => '0',
 		'assign' => '1',
 		'show_only_assigned' => '1',
@@ -387,10 +416,12 @@ function cleverness_todo_install () {
 		'complete_capability' => 'publish_posts',
 		'assign_capability' => 'manage_options',
 		'view_all_assigned_capability' => 'manage_options',
+		'dashboard_number' => '10',
 		'priority_0' => __('Important', 'cleverness-to-do-list'),
 		'priority_1' => __('Normal', 'cleverness-to-do-list'),
 		'priority_2' => __('Low', 'cleverness-to-do-list'),
 		'show_deadline' => '0',
+		'show_dashboard_deadline' => '0',
 		'show_progress' => '0',
 		'email_assigned' => '0',
 		'show_completed_date' => '0',
@@ -399,20 +430,12 @@ function cleverness_todo_install () {
 		'categories' => '0',
 		'sort_order' => 'id',
 		'add_cat_capability' => 'manage_options',
+		'dashboard_cat' => 'All',
 		'email_text' => __('The following item has been assigned to you.', 'cleverness-to-do-list'),
 		'email_subject' => __('A to-do list item has been assigned to you', 'cleverness-to-do-list'),
 		'email_from' => html_entity_decode(get_bloginfo('name'))
    		);
-
-		$dashboard_options = array(
-			'dashboard_number' => '10',
-			'show_dashboard_deadline' => '0',
-			'dashboard_cat' => 'All',
-			'dashboard_author' => '0'
-		);
-
    		add_option( 'cleverness_todo_settings', $new_options );
-		add_option( 'cleverness_todo_dashboard_settings', $dashboard_options );
 		add_option( 'cleverness_todo_db_version', $cleverness_todo_db_version );
 		}
 
@@ -424,18 +447,18 @@ function cleverness_todo_install () {
 			require_once(ABSPATH . 'wp-admin/install-helper.php');
 		}
 
-		maybe_add_column(CTDL_TODO_TABLE, 'assign', "ALTER TABLE `$table_name` ADD `assign` int(10);");
-		maybe_add_column(CTDL_TODO_TABLE, 'deadline', "ALTER TABLE `$table_name` ADD `deadline` varchar(30);");
-		maybe_add_column(CTDL_TODO_TABLE, 'progress', "ALTER TABLE `$table_name` ADD `progress` int(3);");
-		maybe_add_column(CTDL_TODO_TABLE, 'completed', "ALTER TABLE `$table_name` ADD `completed` timestamp;");
-		maybe_add_column(CTDL_TODO_TABLE, 'cat_id', "ALTER TABLE `$table_name` ADD `cat_id` bigint(20);");
-		maybe_create_table(CTDL_CATS_TABLE, "CREATE TABLE ".CTDL_CATS_TABLE." (
+		maybe_add_column($table_name, 'assign', "ALTER TABLE `$table_name` ADD `assign` int(10);");
+		maybe_add_column($table_name, 'deadline', "ALTER TABLE `$table_name` ADD `deadline` varchar(30);");
+		maybe_add_column($table_name, 'progress', "ALTER TABLE `$table_name` ADD `progress` int(3);");
+		maybe_add_column($table_name, 'completed', "ALTER TABLE `$table_name` ADD `completed` timestamp;");
+		maybe_add_column($table_name, 'cat_id', "ALTER TABLE `$table_name` ADD `cat_id` bigint(20);");
+		maybe_create_table($cat_table_name, "CREATE TABLE ".$cat_table_name." (
 	      id bigint(20) UNIQUE NOT NULL AUTO_INCREMENT,
 	      name varchar(100),
 	      sort tinyint(3) DEFAULT '0' NOT NULL,
 	      visibility tinyint(1) DEFAULT '0' NOT NULL
 	    );");
-		maybe_create_table(CTDL_STATUS_TABLE, "CREATE TABLE ".CTDL_STATUS_TABLE." (
+		maybe_create_table($status_table_name, "CREATE TABLE ".$status_table_name." (
 	      id bigint(20),
 	      user bigint(20),
 	      status tinyint(1) DEFAULT '0' NOT NULL
@@ -445,38 +468,15 @@ function cleverness_todo_install () {
 		if ( $theoptions['categories'] == '' ) $theoptions['categories'] = '0';
 		if ( $theoptions['sort_order'] == '' ) $theoptions['sort_order'] = 'id';
 		if ( $theoptions['add_cat_capability'] == '' ) $theoptions['add_cat_capability'] = 'manage_options';
+		if ( $theoptions['dashboard_cat'] == '' ) $theoptions['dashboard_cat'] = 'All';
 		if ( $theoptions['email_text'] == '' ) $theoptions['email_text'] = __('The following item has been assigned to you.', 'cleverness-to-do-list');
 		if ( $theoptions['email_subject'] == '' ) $theoptions['email_subject'] = __('A to-do list item has been assigned to you', 'cleverness-to-do-list');
 		if ( $theoptions['email_from'] == '' ) $theoptions['email_from'] = html_entity_decode(get_bloginfo('name'));
 		update_option( 'cleverness_todo_settings', $theoptions);
 
-		$dash_options = get_option('cleverness_todo_dashboard_settings');
-		if ( $dash_options['dashboard_number'] == '' ) {
-			$dash_options['dashboard_number'] = '10';
-		} else {
-			$dash_options['dashboard_number'] = $theoptions['dashboard_number'];
-			}
-		if ( $dash_options['show_dashboard_deadline'] == '' ) {
-			$dash_options['show_dashboard_deadline'] = '0';
-		} else {
-			$dash_options['show_dashboard_deadline'] = $theoptions['show_dashboard_deadline'];
-			}
-		if ( $dash_options['dashboard_cat'] == '' ) {
-			$dash_options['dashboard_cat'] = 'All';
-		} else {
-			$dash_options['dashboard_cat'] = $theoptions['dashboard_cat'];
-			}
-		if ( $dash_options['dashboard_author'] == '' ) {
-			$dash_options['dashboard_author'] = '0';
-		} else {
-			$dash_options['dashboard_author'] = $theoptions['dashboard_author'];
-			}
-		update_option( 'cleverness_todo_dashboard_settings', $dash_options );
-
     	update_option( 'cleverness_todo_db_version', $cleverness_todo_db_version );
 		delete_option( 'atd_db_version' );
 		}
 	}
-
 
 ?>

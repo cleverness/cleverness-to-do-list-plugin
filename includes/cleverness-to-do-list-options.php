@@ -6,6 +6,12 @@ function cleverness_todo_settings_page() {
 <div class="wrap">
 <div class="icon32"><img src="<?php echo CTDL_PLUGIN_URL; ?>/images/cleverness-todo-icon.png" alt="" /></div> <h2><?php _e('To-Do List Settings', 'cleverness-to-do-list'); ?></h2>
 
+<?php
+if (!current_user_can('manage_options')) {
+	wp_die( __('You do not have sufficient permissions to access this page.') );
+	}
+?>
+
 <form method="post" action="options.php">
     <?php settings_fields( 'cleverness-todo-settings-group' ); ?>
 	<?php $options = get_option('cleverness_todo_settings'); ?>

@@ -15,7 +15,6 @@ Based on the ToDo plugin by Abstract Dimensions with a patch by WordPress by Exa
 add_action('init', 'cleverness_todo_loader');
 
 function cleverness_todo_loader() {
-
 	global $wpdb;
 	define( 'CTDL_BASENAME', plugin_basename(__FILE__) );
 	define( 'CTDL_PLUGIN_DIR', plugin_dir_path( __FILE__) );
@@ -60,7 +59,7 @@ function cleverness_todo_loader() {
 
 				if (!wp_verify_nonce($_REQUEST['todoadd'], 'todoadd') ) die('Security check failed');
 				if ( $cleverness_todo_option['email_assigned'] == '1' && $cleverness_todo_option['assign'] == '0' ) {
-					$message = cleverness_todo_email_user($todotext, $priority, $assign, $deadline, $category);
+					$message = cleverness_todo_email_user($assign, $deadline, $category);
 					}
 				$message .= cleverness_todo_insert($assign, $deadline, $progress, $category);
 			} else {
@@ -118,6 +117,12 @@ function cleverness_todo_loader() {
 } // end switch
 
 }
+
+register_activation_hook( __FILE__, 'cleverness_todo_activation' );
+function cleverness_todo_activation() {
+	include_once('includes/cleverness-to-do-list-functions.php');
+	cleverness_todo_install();
+	}
 
 /* Add plugin info to admin footer */
 function cleverness_todo_admin_footer() {

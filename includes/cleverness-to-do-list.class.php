@@ -44,13 +44,13 @@ class ClevernessToDoList {
 
 		} else {
 
-		if ( is_admin() ) $this->list .= '<h3>'.__('To-Do Items', 'cleverness-to-do-list').' (';
+		if ( is_admin() ) $this->list .= '<h3>'.__('To-Do Items', 'cleverness-to-do-list');
 
 		if (current_user_can($this->settings['add_capability']) || $this->settings['list_view'] == '0') {
-			$this->list .= '<a href="#addtodo">'.__('Add New Item', 'cleverness-to-do-list').'</a>';
+			$this->list .= ' (<a href="#addtodo">'.__('Add New Item', 'cleverness-to-do-list').'</a>)';
 		 	}
 
-		if ( is_admin() ) $this->list .= ') </h3>';
+		if ( is_admin() ) $this->list .= '</h3>';
 
 		$this->list .= '<table id="todo-list" class="todo-table widefat">';
 
@@ -89,14 +89,14 @@ class ClevernessToDoList {
 
 		/* Show completed items */
 		if ( is_admin() ) {
-			$this->list .= '<h3>'.__('Completed Items', 'cleverness-to-do-list').' (';
+			$this->list .= '<h3>'.__('Completed Items', 'cleverness-to-do-list');
 
 		if (current_user_can($this->settings['purge_capability']) || $this->settings['list_view'] == '0') {
 			$cleverness_todo_purge_nonce = wp_create_nonce('todopurge');
-			$this->list .= '<a href="admin.php?page=cleverness-to-do-list&amp;action=purgetodo&_wpnonce='.$cleverness_todo_purge_nonce.'">'.__('Delete All', 'cleverness-to-do-list').'</a>';
+			$this->list .= ' (<a href="admin.php?page=cleverness-to-do-list&amp;action=purgetodo&_wpnonce='.$cleverness_todo_purge_nonce.'">'.__('Delete All', 'cleverness-to-do-list').'</a>)';
 		 	}
 
-		if ( is_admin() ) $this->list .= ') </h3>';
+		if ( is_admin() ) $this->list .= '</h3>';
 
 		$this->list .= '<table id="todo-list-completed" class="todo-table widefat">';
 
@@ -297,9 +297,9 @@ class ClevernessToDoList {
 		if ( !is_admin() ) $this->list .= '<th></th>';
 		$this->list .= '<th>'.__('Item', 'cleverness-to-do-list').'</th>';
 	  	if ( $priority == 1 ) $this->list .= '<th>'.__('Priority', 'cleverness-to-do-list').'</th>';
-		if ( $assigned == 1 && $this->settings['assign'] == 0 ) $this->list .= '<th>'.__('Assigned To', 'cleverness-to-do-list').'</th>';
+		if ( $assigned == 1 &&  $this->settings['assign'] == 0  && ($this->settings['list_view'] == 1 && $this->settings['show_only_assigned'] == 0 && (current_user_can($this->settings['view_all_assigned_capability']))) || ($this->settings['list_view'] == 1 && $this->settings['show_only_assigned'] == 1) && $this->settings['assign'] == 0) $this->list .= '<th>'.__('Assigned To', 'cleverness-to-do-list').'</th>';
 		if ( $deadline == 1 && $this->settings['show_deadline'] == 1 ) $this->list .= '<th>'.__('Deadline', 'cleverness-to-do-list').'</th>';
-		if ( $completed == 1 ) $this->list .= '<th>'.__('Completed', 'cleverness-to-do-list').'</th>';
+		if ( $completed == 1 && $this->settings['show_completed_date'] == 1) $this->list .= '<th>'.__('Completed', 'cleverness-to-do-list').'</th>';
 		if ( $progress == 1 && $this->settings['show_progress'] == 1 ) $this->list .= '<th>'.__('Progress', 'cleverness-to-do-list').'</th>';
 		if ( $categories == 1 && $this->settings['categories'] == 1 ) $this->list .= '<th>'.__('Category', 'cleverness-to-do-list').'</th>';
 		if ( $addedby == 1 && $this->settings['list_view'] == 1  && $this->settings['todo_author'] == 0 ) $this->list .= '<th>'.__('Added By', 'cleverness-to-do-list').'</th>';
@@ -386,11 +386,11 @@ class ClevernessToDoList {
 		}
 
 	protected function show_completed($result) {
-			$date = '';
 			if ( $this->settings['show_completed_date'] && $result->completed != '0000-00-00 00:00:00' ) {
+				$date = '';
 				$date = date($this->settings['date_format'], strtotime($result->completed));
+				$this->list .= '<td>'.$date.'</td>';
 				}
-			$this->list .= '<td>'.$date.'</td>';
 		}
 
 	protected function show_progress($result) {
@@ -428,7 +428,6 @@ public function cleverness_todo_checklist_get_js_vars() {
 public function cleverness_todo_checklist_init() {
 	wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL.'/js/frontend-todo.js', '', 1.0, true );
 	add_action('wp_enqueue_scripts', array(&$this, 'cleverness_todo_checklist_add_js') );
-	add_action('wp_ajax_cleverness_todo_complete', array(&$this, 'cleverness_todo_checklist_complete_callback') );
 }
 
 public function cleverness_todo_checklist_add_js() {
@@ -437,38 +436,6 @@ public function cleverness_todo_checklist_add_js() {
 	wp_enqueue_script( 'cleverness_todo_checklist_complete_js' );
 	wp_localize_script( 'cleverness_todo_checklist_complete_js', 'ctdl', $this->cleverness_todo_checklist_get_js_vars() );
     }
-
-public function cleverness_todo_checklist_complete_callback() {
-	check_ajax_referer( 'cleverness-todo' );
-	$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'complete' );
-
-	if ( $cleverness_todo_permission === true ) {
-		$cleverness_id = intval($_POST['cleverness_id']);
-		$cleverness_status = intval($_POST['cleverness_status']);
-
-		$message = cleverness_todo_complete($cleverness_id, $cleverness_status);
-	} else {
-		$message = __('You do not have sufficient privileges to do that.', 'cleverness-to-do-list');
-	}
-
-	die(); // this is required to return a proper result
-}
-
-/* Delete To-Do Ajax */
-public function cleverness_todo_delete_callback() {
-	check_ajax_referer( 'cleverness-todo' );
-	$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'delete' );
-
-	if ( $cleverness_todo_permission === true ) {
-		$cleverness_todo_status = cleverness_todo_delete();
-	} else {
-		$cleverness_todo_status = 2;
-		}
-
-	echo $cleverness_todo_status;
-	die(); // this is required to return a proper result
-}
-/* end Delete To-Do Ajax */
 
 } // end class
 ?>
