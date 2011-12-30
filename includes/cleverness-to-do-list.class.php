@@ -1,41 +1,43 @@
 <?php
-/* Main class */
-
+/**
+ * Cleverness To-Do List
+ *
+ */
 class ClevernessToDoList {
 	protected $settings;
 	protected $cat_id = '';
 	public $list = '';
 	protected $form = '';
 
-	public function __construct($settings) {
-		add_action( 'init', array(&$this, 'cleverness_todo_checklist_init') );
+	public function __construct( $settings ) {
+		add_action( 'init', array( &$this, 'cleverness_todo_checklist_init' ) );
 		$this->settings = $settings;
 		}
 
-	public function display($title = '', $priority = 1, $assigned = 1, $deadline = 1, $progress = 1, $categories = 1, $addedby = 1, $editlink = 1) {
+	public function display( $title = '', $priority = 1, $assigned = 1, $deadline = 1, $progress = 1,  $categories = 1, $addedby = 1, $editlink = 1)  {
 		global $wpdb, $cleverness_todo_option, $userdata, $current_user;
 		get_currentuserinfo();
 
-		$priorities = array(0 => $this->settings['priority_0'] , 1 => $this->settings['priority_1'], 2 => $this->settings['priority_2']);
-		$user = $this->get_user($current_user, $userdata);
+		$priorities = array( 0 => $this->settings['priority_0'] , 1 => $this->settings['priority_1'], 2 => $this->settings['priority_2'] );
+		$user = $this->get_user( $current_user, $userdata );
 		$url = $this->get_page_url();
-		$url = strtok($url, '?');
+		$url = strtok( $url, '?' );
 
-		$action = ( isset($_GET['action']) ? $_GET['action'] : '' );
+		$action = ( isset( $_GET['action'] ) ? $_GET['action'] : '' );
 
 		if ( is_admin() ) {
 			$this->list .= '<div class="wrap"><div class="icon32"><img src="'.CTDL_PLUGIN_URL.'/images/cleverness-todo-icon.png" alt="" /></div> <h2>'.__('To-Do List', 'cleverness-to-do-list').'</h2>';
 		}
 
-		if ( isset($message) ) {
+		if ( isset( $message ) ) {
 			$this->list .= '<div id="message" class="updated fade"><p>'.$message.'</p></div>';
 			}
 
-		if ($action == 'edit-todo') {
+		if ( $action == 'edit-todo' ) {
 
-    		$id = absint($_GET['id']);
-    		$result = cleverness_todo_get_todo($id);
-			$this->list .= $this->edit_form($result, $url);
+    		$id = absint( $_GET['id'] );
+    		$result = cleverness_todo_get_todo( $id );
+			$this->list .= $this->edit_form( $result, $url );
 			if ( is_admin() ) {
 				$this->list .= '<p><a href="admin.php?page=cleverness-to-do-list">'.__('&laquo; Return to To-Do List', 'cleverness-to-do-list').'</a></p>';
 			} else {
@@ -46,7 +48,7 @@ class ClevernessToDoList {
 
 		if ( is_admin() ) $this->list .= '<h3>'.__('To-Do Items', 'cleverness-to-do-list');
 
-		if (current_user_can($this->settings['add_capability']) || $this->settings['list_view'] == '0') {
+		if ( current_user_can ($this->settings['add_capability'] ) || $this->settings['list_view'] == '0' ) {
 			$this->list .= ' (<a href="#addtodo">'.__('Add New Item', 'cleverness-to-do-list').'</a>)';
 		 	}
 
@@ -54,29 +56,29 @@ class ClevernessToDoList {
 
 		$this->list .= '<table id="todo-list" class="todo-table widefat">';
 
-		$this->show_table_headings($priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink);
+		$this->show_table_headings( $priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink );
 
 		// get to-do items
 		$results = cleverness_todo_get_todos($user, 0, 0);
 
-		if ($results) {
+		if ( $results ) {
 
-			foreach ($results as $result) {
-				$user_info = get_userdata($result->author);
+			foreach ( $results as $result ) {
+				$user_info = get_userdata( $result->author );
 				$priority_class = '';
 		   		if ($result->priority == '0') $priority_class = ' class="todo-important"';
 				if ($result->priority == '2') $priority_class = ' class="todo-low"';
 
 				$this->list .= '<tr id="todo-'.$result->id.'"'.$priority_class.'>';
-				$this->show_checkbox($result);
-				$this->show_todo_text($result, $priority_class);
-				if ( $priority == 1 ) $this->show_priority($result, $priorities);
-				if ( $assigned == 1 ) $this->show_assigned($result);
-				if ( $deadline == 1 ) $this->show_deadline($result);
-				if ( $progress == 1 ) $this->show_progress($result);
-				if ( $categories == 1 ) $this->show_category($result);
-				if ( $addedby == 1 ) $this->show_addedby($result, $user_info);
-				if ( $editlink == 1 ) $this->show_edit_link($result, $url);
+				$this->show_checkbox( $result );
+				$this->show_todo_text( $result, $priority_class );
+				if ( $priority == 1 ) $this->show_priority( $result, $priorities );
+				if ( $assigned == 1 ) $this->show_assigned( $result );
+				if ( $deadline == 1 ) $this->show_deadline( $result );
+				if ( $progress == 1 ) $this->show_progress( $result );
+				if ( $categories == 1 ) $this->show_category( $result );
+				if ( $addedby == 1 ) $this->show_addedby( $result, $user_info );
+				if ( $editlink == 1 ) $this->show_edit_link( $result, $url );
 				$this->list .= '</tr>';
 				}
 
@@ -91,8 +93,8 @@ class ClevernessToDoList {
 		if ( is_admin() ) {
 			$this->list .= '<h3>'.__('Completed Items', 'cleverness-to-do-list');
 
-		if (current_user_can($this->settings['purge_capability']) || $this->settings['list_view'] == '0') {
-			$cleverness_todo_purge_nonce = wp_create_nonce('todopurge');
+		if ( current_user_can( $this->settings['purge_capability'] ) || $this->settings['list_view'] == '0' ) {
+			$cleverness_todo_purge_nonce = wp_create_nonce( 'todopurge' );
 			$this->list .= ' (<a href="admin.php?page=cleverness-to-do-list&amp;action=purgetodo&_wpnonce='.$cleverness_todo_purge_nonce.'">'.__('Delete All', 'cleverness-to-do-list').'</a>)';
 		 	}
 
@@ -100,36 +102,36 @@ class ClevernessToDoList {
 
 		$this->list .= '<table id="todo-list-completed" class="todo-table widefat">';
 
-		$this->show_table_headings($priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink, 1);
+		$this->show_table_headings( $priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink, 1 );
 
 		// get to-do items
-		$results = cleverness_todo_get_todos($user, 0, 1);
+		$results = cleverness_todo_get_todos( $user, 0, 1 );
 
-		if ($results) {
+		if ( $results ) {
 
-			foreach ($results as $result) {
-				$user_info = get_userdata($result->author);
+			foreach ( $results as $result ) {
+				$user_info = get_userdata( $result->author );
 				$priority_class = '';
-		   		if ($result->priority == '0') $priority_class = ' class="todo-important"';
-				if ($result->priority == '2') $priority_class = ' class="todo-low"';
+		   		if ( $result->priority == '0' ) $priority_class = ' class="todo-important"';
+				if ( $result->priority == '2' ) $priority_class = ' class="todo-low"';
 
 				$this->list .= '<tr id="todo-'.$result->id.'"'.$priority_class.'>';
-				$this->show_checkbox($result, 1);
-				$this->show_todo_text($result, $priority_class);
-				if ( $priority == 1 ) $this->show_priority($result, $priorities);
-				if ( $assigned == 1 ) $this->show_assigned($result);
-				if ( $deadline == 1 ) $this->show_deadline($result);
-				$this->show_completed($result);
-				if ( $progress == 1 ) $this->show_progress($result);
-				if ( $categories == 1 ) $this->show_category($result);
-				if ( $addedby == 1 ) $this->show_addedby($result, $user_info);
-				if ( $editlink == 1 ) $this->show_edit_link($result, $url);
+				$this->show_checkbox( $result, 1 );
+				$this->show_todo_text( $result, $priority_class );
+				if ( $priority == 1 ) $this->show_priority( $result, $priorities );
+				if ( $assigned == 1 ) $this->show_assigned( $result );
+				if ( $deadline == 1 ) $this->show_deadline( $result );
+				$this->show_completed( $result );
+				if ( $progress == 1 ) $this->show_progress( $result );
+				if ( $categories == 1 ) $this->show_category( $result );
+				if ( $addedby == 1 ) $this->show_addedby( $result, $user_info );
+				if ( $editlink == 1 ) $this->show_edit_link( $result, $url );
 				$this->list .= '</tr>';
 				}
 
 		} else {
 			/* if there are no to-do items, display this message */
-			$this->list .= '<tr><td>'.__('No items to do.', 'cleverness-to-do-list').'</td></tr>';
+			$this->list .= '<tr><td>'.__( 'No items to do.', 'cleverness-to-do-list' ).'</td></tr>';
 			}
 
 		$this->list .= '</table>';
@@ -143,23 +145,23 @@ class ClevernessToDoList {
 
 	}
 
-	protected function get_user($current_user, $userdata) {
+	protected function get_user( $current_user, $userdata ) {
 		$user = ( $this->settings['list_view'] == 2 ? $current_user->ID : $userdata->ID );
 		return $user;
 		}
 
-	protected function edit_form($result, $url) {
+	protected function edit_form( $result, $url ) {
 		if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list'; else $url = strtok($url, "?");
 		$this->form = '';
 		if ( is_admin() ) $this->form .= '<h3>'.__('Edit To-Do Item', 'cleverness-to-do-list').'</h3>';
     	$this->form .= '<form name="edittodo" id="edittodo" action="'.$url.'" method="post">
 	  		<table class="todo-form form-table">';
-		$this->priority_field($result);
-		$this->assign_field($result);
-		$this->deadline_field($result);
-		$this->progress_field($result);
-		$this->category_field($result);
-		$this->todo_field($result);
+		$this->priority_field( $result );
+		$this->assign_field( $result );
+		$this->deadline_field( $result );
+		$this->progress_field( $result );
+		$this->category_field( $result );
+		$this->todo_field( $result );
 		$this->form .= '</table>'.wp_nonce_field( 'todoupdate', 'todoupdate', true, false ).'<input type="hidden" name="action" value="updatetodo" />
         	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'. __('Edit To-Do Item', 'cleverness-to-do-list').'" /></p>
 			<input type="hidden" name="id" value="'. absint($result->id).'" />';
@@ -168,9 +170,9 @@ class ClevernessToDoList {
 	}
 
 	protected function todo_form() {
-		if (current_user_can($this->settings['add_capability']) || $this->settings['list_view'] == '0') {
+		if ( current_user_can( $this->settings['add_capability'] ) || $this->settings['list_view'] == '0' ) {
 
-   	 	$this->form = '<h3>'.__('Add New To-Do Item', 'cleverness-to-do-list').'</h3>';
+   	 	$this->form = '<h3>'.__( 'Add New To-Do Item', 'cleverness-to-do-list' ).'</h3>';
 
     	$this->form .= '<form name="addtodo" id="addtodo" action="" method="post">
 	  		<table class="todo-form form-table">';
@@ -188,49 +190,55 @@ class ClevernessToDoList {
 		}
 	}
 
-	protected function priority_field($result = NULL) {
+	protected function priority_field( $result = NULL ) {
 		$selected = '';
 		$this->form .= '<tr>
 		  		<th scope="row"><label for="cleverness_todo_priority">'.__('Priority', 'cleverness-to-do-list').'</label></th>
 		  		<td>
         			<select name="cleverness_todo_priority">';
-					if ( isset($result) ) $selected = ( $result->priority == 0 ? ' selected = "selected"' : '' );
-					$this->form .= sprintf('<option value="0"%s>%s</option>', $selected, $this->settings['priority_0']);
-					if ( isset($result) ) {
+					if ( isset( $result ) ) $selected = ( $result->priority == 0 ? ' selected = "selected"' : '' );
+					$this->form .= sprintf( '<option value="0"%s>%s</option>', $selected,
+						$this->settings['priority_0'] );
+					if ( isset( $result) ) {
 						$selected = ( $result->priority == 1 ? ' selected' : '' );
 						} else {
 							$selected = ' selected="selected"';
 						}
-					$this->form .= sprintf('<option value="1"%s>%s</option>', $selected, $this->settings['priority_1']);
+					$this->form .= sprintf( '<option value="1"%s>%s</option>', $selected,
+						$this->settings['priority_1'] );
 					$selected = '';
-					if ( isset($result) ) $selected = ( $result->priority == 2 ? ' selected' : '' );
-					$this->form .= sprintf('<option value="2"%s>%s</option>', $selected, $this->settings['priority_2']);
+					if ( isset( $result ) ) $selected = ( $result->priority == 2 ? ' selected' : '' );
+					$this->form .= sprintf( '<option value="2"%s>%s</option>', $selected,
+						$this->settings['priority_2'] );
         			$this->form .= '</select>
 		  		</td>
 			</tr>';
 		}
 
-	protected function assign_field($result = NULL) {
-		if ($this->settings['assign'] == '0' && current_user_can($this->settings['assign_capability'])) {
+	protected function assign_field( $result = NULL ) {
+		if ( $this->settings['assign'] == '0' && current_user_can( $this->settings['assign_capability'] ) ) {
 			$selected = '';
 			$this->form .= '<tr>
 		  		<th scope="row"><label for="cleverness_todo_assign">'.__('Assign To', 'cleverness-to-do-list').'</label></th>
 		  		<td>
 					<select name="cleverness_todo_assign" id="cleverness_todo_assign">';
-					if ( isset($result->assign) && $result->assign == '-1' ) $selected = ' selected="selected"';
-					$this->form .= sprintf('<option value="-1"%s>%s</option>', $selected, __('None', 'cleverness-to-do-list'));
+					if ( isset( $result->assign ) && $result->assign == '-1' ) $selected = ' selected="selected"';
+					$this->form .= sprintf( '<option value="-1"%s>%s</option>', $selected, __('None',
+						'cleverness-to-do-list') );
 
 					if ( $this->settings['user_roles'] == '' ) {
-						$roles = array('contributor', 'author', 'editor', 'administrator');
+						$roles = array( 'contributor', 'author', 'editor', 'administrator' );
 					} else {
-						$roles = explode(", ", $this->settings['user_roles']);
+						$roles = explode( ", ", $this->settings['user_roles'] );
 						}
 					foreach ( $roles as $role ) {
-						$role_users = cleverness_todo_get_users($role);
-						foreach($role_users as $role_user) {
-							$user_info = get_userdata($role_user->ID);
-							if ( isset($result->assign) && $result->assign == $role_user->ID ) $selected = ' selected="selected"';
-							$this->form .= sprintf('<option value="%d"%s>%s</option>', $role_user->ID, $selected, $user_info->display_name);
+						$role_users = cleverness_todo_get_users( $role );
+						foreach( $role_users as $role_user ) {
+							$user_info = get_userdata( $role_user->ID );
+							if ( isset( $result->assign ) && $result->assign == $role_user->ID ) $selected = '
+							selected="selected"';
+							$this->form .= sprintf( '<option value="%d"%s>%s</option>', $role_user->ID, $selected,
+								$user_info->display_name );
 						}
 					}
 

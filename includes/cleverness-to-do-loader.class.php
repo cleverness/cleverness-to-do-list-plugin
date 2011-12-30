@@ -18,6 +18,7 @@ class ClevernessToDoLoader {
 
 	private static function include_files() {
 		include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-options.php');
+		include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-settings.php');
 		include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-dashboard-widget.php');
 		include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-widget.php');
 		include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-shortcode.php');
