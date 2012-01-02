@@ -13,11 +13,12 @@ class ClevernessToDoLoader {
 
 		global $ClevernessToDoList;
         $ClevernessToDoList = new ClevernessToDoList(self::$settings);
+		new ClevernessToDoSettings();
 
 		}
 
 	private static function include_files() {
-		include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-options.php');
+		include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-settings.php');
 		include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-dashboard-widget.php');
 		include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-widget.php');
 		include_once(CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-shortcode.php');
@@ -41,24 +42,24 @@ class ClevernessToDoLoader {
 
 	private static function check_version() {
 		global $wp_version;
-		$exit_msg = __('To-Do List requires WordPress 3.2 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please update.</a>', 'cleverness-to-do-list');
-		if (version_compare($wp_version, "3.2", "<")) {
+		$exit_msg = __('To-Do List requires WordPress 3.3 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please update.</a>', 'cleverness-to-do-list');
+		if (version_compare($wp_version, "3.3", "<")) {
    			exit($exit_msg);
   			}
 		}
 
-	/* Add Page under admin and Add Settings Page */
+	/* Add Admin Pages */
 	public static function create_admin_menu() {
-		global $userdata, $cleverness_todo_page, $cleverness_todo_cat_page;
+		global $cleverness_todo_page, $cleverness_todo_cat_page;
    		get_currentuserinfo();
 
         $cleverness_todo_page = add_menu_page( __('To-Do List', 'cleverness-to-do-list'), __('To-Do List', 'cleverness-to-do-list'), self::$settings['view_capability'], 'cleverness-to-do-list', __CLASS__.'::admin_subpanel', CTDL_PLUGIN_URL.'/images/cleverness-todo-icon-sm.png');
 		if ( self::$settings['categories'] == '1' ) {
-		$cleverness_todo_cat_page = add_submenu_page( 'cleverness-to-do-list', __('To-Do List Categories', 'cleverness-to-do-list'), __('Categories', 'cleverness-to-do-list'), self::$settings['add_cat_capability'], 'cleverness-to-do-list-cats', 'cleverness_todo_categories');
-			}
-		add_submenu_page( 'cleverness-to-do-list', __('To-Do List Settings', 'cleverness-to-do-list'), __('Settings', 'cleverness-to-do-list'), 'manage_options', 'cleverness-to-do-list-options', 'cleverness_todo_settings_page');
-		add_submenu_page( 'cleverness-to-do-list', __('To-Do List Help', 'cleverness-to-do-list'), __('Help', 'cleverness-to-do-list'), self::$settings['view_capability'], 'cleverness-to-do-list-help', 'cleverness_todo_help');
+			$cleverness_todo_cat_page = add_submenu_page( 'cleverness-to-do-list', __('To-Do List Categories', 'cleverness-to-do-list'), __('Categories', 'cleverness-to-do-list'), self::$settings['add_cat_capability'], 'cleverness-to-do-list-cats', 'cleverness_todo_categories');
+			add_action( "load-$cleverness_todo_cat_page", 'cleverness_todo_help_tab' );
 		}
+		add_action( "load-$cleverness_todo_page", 'cleverness_todo_help_tab' );
+	}
 
 	/* Create admin page */
 	public static function admin_subpanel() {

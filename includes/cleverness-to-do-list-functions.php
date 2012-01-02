@@ -476,6 +476,7 @@ function cleverness_todo_install () {
 
     	update_option( 'cleverness_todo_db_version', $cleverness_todo_db_version );
 		delete_option( 'atd_db_version' );
+		/* TODO: separate permission settings from general settings */
 		}
 	}
 

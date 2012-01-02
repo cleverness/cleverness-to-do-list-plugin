@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Cleverness To-Do List
-Version: 2.2.8
+Version: 3.0
 Description: Manage to-do list items on a individual or group basis with categories. Includes a dashboard widget and a sidebar widget.
 Author: C.M. Kendrick
 Author URI: http://cleverness.org
@@ -32,7 +32,7 @@ function cleverness_todo_loader() {
 	include_once 'includes/cleverness-to-do-loader.class.php';
 	include_once 'includes/cleverness-to-do-list.class.php';
 
-	$cleverness_todo_option = get_option('cleverness_todo_settings');
+	$cleverness_todo_option = array_merge( get_option('cleverness-to-do-list-general'), get_option( 'cleverness-to-do-list-advanced' ), get_option( 'cleverness-to-do-list-permissions' ) );
 
 	ClevernessToDoLoader::init($cleverness_todo_option);
 
@@ -127,6 +127,6 @@ function cleverness_todo_activation() {
 /* Add plugin info to admin footer */
 function cleverness_todo_admin_footer() {
 	$plugin_data = get_plugin_data(__FILE__);
-	printf(__("%s plugin | Version %s | by %s<br />", 'cleverness-to-do-list'), $plugin_data['Title'], $plugin_data['Version'], $plugin_data['Author']);
+	printf(__("%s plugin | Version %s | by %s | <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org' target='_blank'>Donate</a><br />", 'cleverness-to-do-list'), $plugin_data['Title'], $plugin_data['Version'], $plugin_data['Author']);
 	}
 ?>
