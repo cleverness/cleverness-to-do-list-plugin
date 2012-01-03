@@ -72,7 +72,7 @@ class ClevernessToDoFrontEndChecklist extends ClevernessToDoList {
 		get_currentuserinfo();
 
 		$priority = array(0 => $this->settings['priority_0'] , 1 => $this->settings['priority_1'], 2 => $this->settings['priority_2']);
-		$user = $this->get_user($current_user, $userdata);
+		$user = $this->get_user_id($current_user, $userdata);
 
 		if ( $title != '') {
 			$this->list .= '<h3>'.$title.'</h3>';
@@ -129,36 +129,36 @@ class ClevernessToDoFrontEndChecklist extends ClevernessToDoList {
 		}
 
 	/* show who the to-do item was assigned to, if defined */
-	protected function show_assigned($result) {
+	protected function show_assigned($todofielddata) {
 		if ( ($this->settings['list_view'] == '1' && $this->settings['show_only_assigned'] == '0' && (current_user_can($this->settings['view_all_assigned_capability']))) ||
 		($this->settings['list_view'] == '1' && $this->settings['show_only_assigned'] == '1') && $this->settings['assign'] == '0') {
 			$assign_user = '';
-			if ( $result->assign != '-1' && $result->assign != '' && $result->assign != '0') {
-				$assign_user = get_userdata($result->assign);
+			if ( $todofielddata->assign != '-1' && $todofielddata->assign != '' && $todofielddata->assign != '0') {
+				$assign_user = get_userdata($todofielddata->assign);
 				$this->list .= ' <small>['.__('assigned to', 'cleverness-to-do-list').' '.$assign_user->display_name.']</small>';
 				}
 			}
    		}
 
 	/* show who added the to-do item */
-	protected function show_addedby($result, $user_info) {
+	protected function show_addedby($todofielddata, $user_info) {
 		if ( $this->settings['list_view'] == '1' && $this->settings['todo_author'] == '0' ) {
-			if ( $result->author != '0' ) {
+			if ( $todofielddata->author != '0' ) {
 				$this->list .= ' <small>- '.__('added by', 'cleverness-to-do-list').' '.$user_info->display_name.'</small>';
 				}
 			}
 		}
 
 	/* show the deadline for the to-do item */
-	protected function show_deadline($result) {
-		if ( $this->settings['show_deadline'] == '1' && $result->deadline != '' )
-			$this->list .= ' <small>['.__('Deadline:', 'cleverness-to-do-list').' '.$result->deadline.']</small>';
+	protected function show_deadline($todofielddata) {
+		if ( $this->settings['show_deadline'] == '1' && $todofielddata->deadline != '' )
+			$this->list .= ' <small>['.__('Deadline:', 'cleverness-to-do-list').' '.$todofielddata->deadline.']</small>';
 		}
 
 	/* show the progress of the to-do item */
-	protected function show_progress($result) {
-		if ( $this->settings['show_progress'] == '1' && $result->progress != '' ) {
-			$this->list .= ' <small>['.$result->progress.'%]</small>';
+	protected function show_progress($todofielddata) {
+		if ( $this->settings['show_progress'] == '1' && $todofielddata->progress != '' ) {
+			$this->list .= ' <small>['.$todofielddata->progress.'%]</small>';
 			}
 		}
 

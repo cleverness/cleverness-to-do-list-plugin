@@ -1,6 +1,11 @@
 <?php
-/* Main class */
-
+/**
+ * The main to-do list class
+ * @author C.M. Kendrick
+ * @version 3.0
+ * @package cleverness-to-do-list
+ * @todo remove tables from forms, possibly remove functions from frontend class
+ */
 class ClevernessToDoList {
 	protected $settings;
 	protected $cat_id = '';
@@ -12,12 +17,24 @@ class ClevernessToDoList {
 		$this->settings = $settings;
 		}
 
+	/**
+	 * Display a to-do list
+	 * @param string $title
+	 * @param int $priority
+	 * @param int $assigned
+	 * @param int $deadline
+	 * @param int $progress
+	 * @param int $categories
+	 * @param int $addedby
+	 * @param int $editlink
+	 * @todo break out into smaller functions
+	 */
 	public function display($title = '', $priority = 1, $assigned = 1, $deadline = 1, $progress = 1, $categories = 1, $addedby = 1, $editlink = 1) {
 		global $wpdb, $cleverness_todo_option, $userdata, $current_user;
 		get_currentuserinfo();
 
 		$priorities = array(0 => $this->settings['priority_0'] , 1 => $this->settings['priority_1'], 2 => $this->settings['priority_2']);
-		$user = $this->get_user($current_user, $userdata);
+		$user = $this->get_user_id($current_user, $userdata);
 		$url = $this->get_page_url();
 		$url = strtok($url, '?');
 
@@ -35,7 +52,7 @@ class ClevernessToDoList {
 
     		$id = absint($_GET['id']);
     		$result = cleverness_todo_get_todo($id);
-			$this->list .= $this->edit_form($result, $url);
+			$this->list .= $this->create_edit_todo_form($result, $url);
 			if ( is_admin() ) {
 				$this->list .= '<p><a href="admin.php?page=cleverness-to-do-list">'.__('&laquo; Return to To-Do List', 'cleverness-to-do-list').'</a></p>';
 			} else {
@@ -135,7 +152,7 @@ class ClevernessToDoList {
 		$this->list .= '</table>';
 		}
 
-		$this->list .= $this->todo_form();
+		$this->list .= $this->create_new_todo_form();
 
 		if ( is_admin() ) $this->list .= '</div>';
 
@@ -143,94 +160,121 @@ class ClevernessToDoList {
 
 	}
 
-	protected function get_user($current_user, $userdata) {
+	/**
+	 * Gets the ID of a user
+	 * @param $current_user
+	 * @param $userdata
+	 * @return int
+	 */
+	protected function get_user_id( $current_user, $userdata ) {
 		$user = ( $this->settings['list_view'] == 2 ? $current_user->ID : $userdata->ID );
 		return $user;
 		}
 
-	protected function edit_form($result, $url) {
-		if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list'; else $url = strtok($url, "?");
+	/**
+	 * Creates the HTML for the form used to edit a to-do item
+	 * @param $todo_data Existing to-do item values
+	 * @param string $url The URL the form should be submitted to
+	 * @return string Form HTML
+	 */
+	protected function create_edit_todo_form( $todo_data, $url ) {
+		if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list'; else $url = strtok( $url, "?" );
 		$this->form = '';
-		if ( is_admin() ) $this->form .= '<h3>'.__('Edit To-Do Item', 'cleverness-to-do-list').'</h3>';
+
+		if ( is_admin() ) $this->form .= '<h3>'.__( 'Edit To-Do Item', 'cleverness-to-do-list' ).'</h3>';
+
     	$this->form .= '<form name="edittodo" id="edittodo" action="'.$url.'" method="post">
 	  		<table class="todo-form form-table">';
-		$this->priority_field($result);
-		$this->assign_field($result);
-		$this->deadline_field($result);
-		$this->progress_field($result);
-		$this->category_field($result);
-		$this->todo_field($result);
+		$this->create_priority_field( $todo_data );
+		$this->create_assign_field( $todo_data );
+		$this->create_deadline_field( $todo_data );
+		$this->create_progress_field( $todo_data );
+		$this->create_category_field( $todo_data );
+		$this->create_todo_text_field( $todo_data );
 		$this->form .= '</table>'.wp_nonce_field( 'todoupdate', 'todoupdate', true, false ).'<input type="hidden" name="action" value="updatetodo" />
-        	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'. __('Edit To-Do Item', 'cleverness-to-do-list').'" /></p>
-			<input type="hidden" name="id" value="'. absint($result->id).'" />';
+        	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'. __( 'Edit To-Do Item', 'cleverness-to-do-list' ).'" /></p>
+			<input type="hidden" name="id" value="'. absint( $todo_data->id ).'" />';
 		$this->form .= '</form>';
+
 		return $this->form;
 	}
 
-	protected function todo_form() {
-		if (current_user_can($this->settings['add_capability']) || $this->settings['list_view'] == '0') {
+	/**
+	 * Creates the HTML form to add a new to-do item
+	 * @return string Form HTML
+	 */
+	protected function create_new_todo_form() {
+		if ( current_user_can( $this->settings['add_capability'] ) || $this->settings['list_view'] == '0' ) {
 
-   	 	$this->form = '<h3>'.__('Add New To-Do Item', 'cleverness-to-do-list').'</h3>';
+   	 	$this->form = '<h3>'.__( 'Add New To-Do Item', 'cleverness-to-do-list' ).'</h3>';
 
     	$this->form .= '<form name="addtodo" id="addtodo" action="" method="post">
 	  		<table class="todo-form form-table">';
-			$this->priority_field();
-			$this->assign_field();
-			$this->deadline_field();
-			$this->progress_field();
-			$this->category_field();
-			$this->todo_field();
+			$this->create_priority_field();
+			$this->create_assign_field();
+			$this->create_deadline_field();
+			$this->create_progress_field();
+			$this->create_category_field();
+			$this->create_todo_text_field();
 			$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
-        	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'. __('Add To-Do Item', 'cleverness-to-do-list').'" /></p>';
+        	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'. __( 'Add To-Do Item', 'cleverness-to-do-list' ).'" /></p>';
 		$this->form .= '</form>';
 
 		return $this->form;
 		}
 	}
 
-	protected function priority_field($result = NULL) {
+	/**
+	 * Creates the HTML for the Priority Form Field
+	 * @param array $todo_field_data Existing field data
+	 */
+	protected function create_priority_field( $todo_field_data = NULL ) {
 		$selected = '';
 		$this->form .= '<tr>
-		  		<th scope="row"><label for="cleverness_todo_priority">'.__('Priority', 'cleverness-to-do-list').'</label></th>
+		  		<th scope="row"><label for="cleverness_todo_priority">'.__( 'Priority', 'cleverness-to-do-list' ).'</label></th>
 		  		<td>
         			<select name="cleverness_todo_priority">';
-					if ( isset($result) ) $selected = ( $result->priority == 0 ? ' selected = "selected"' : '' );
-					$this->form .= sprintf('<option value="0"%s>%s</option>', $selected, $this->settings['priority_0']);
-					if ( isset($result) ) {
-						$selected = ( $result->priority == 1 ? ' selected' : '' );
+					if ( isset( $todo_field_data ) ) $selected = ( $todo_field_data->priority == 0 ? ' selected = "selected"' : '' );
+					$this->form .= sprintf( '<option value="0"%s>%s</option>', $selected, $this->settings['priority_0'] );
+					if ( isset( $todo_field_data ) ) {
+						$selected = ( $todo_field_data->priority == 1 ? ' selected' : '' );
 						} else {
 							$selected = ' selected="selected"';
 						}
-					$this->form .= sprintf('<option value="1"%s>%s</option>', $selected, $this->settings['priority_1']);
+					$this->form .= sprintf( '<option value="1"%s>%s</option>', $selected, $this->settings['priority_1'] );
 					$selected = '';
-					if ( isset($result) ) $selected = ( $result->priority == 2 ? ' selected' : '' );
-					$this->form .= sprintf('<option value="2"%s>%s</option>', $selected, $this->settings['priority_2']);
+					if ( isset( $todo_field_data ) ) $selected = ( $todo_field_data->priority == 2 ? ' selected' : '' );
+					$this->form .= sprintf( '<option value="2"%s>%s</option>', $selected, $this->settings['priority_2'] );
         			$this->form .= '</select>
 		  		</td>
 			</tr>';
 		}
 
-	protected function assign_field($result = NULL) {
-		if ($this->settings['assign'] == '0' && current_user_can($this->settings['assign_capability'])) {
+	/**
+	 * Creates the HTML for the Assign to Use Field
+	 * @param array $todo_field_data Existing field data
+	 */
+	protected function create_assign_field( $todo_field_data = NULL ) {
+		if ( $this->settings['assign'] == '0' && current_user_can( $this->settings['assign_capability'] ) ) {
 			$selected = '';
 			$this->form .= '<tr>
-		  		<th scope="row"><label for="cleverness_todo_assign">'.__('Assign To', 'cleverness-to-do-list').'</label></th>
+		  		<th scope="row"><label for="cleverness_todo_assign">'.__( 'Assign To', 'cleverness-to-do-list' ).'</label></th>
 		  		<td>
 					<select name="cleverness_todo_assign" id="cleverness_todo_assign">';
-					if ( isset($result->assign) && $result->assign == '-1' ) $selected = ' selected="selected"';
-					$this->form .= sprintf('<option value="-1"%s>%s</option>', $selected, __('None', 'cleverness-to-do-list'));
+					if ( isset ($todo_field_data->assign ) && $todo_field_data->assign == '-1' ) $selected = ' selected="selected"';
+					$this->form .= sprintf( '<option value="-1"%s>%s</option>', $selected, __( 'None', 'cleverness-to-do-list' ) );
 
 					if ( $this->settings['user_roles'] == '' ) {
-						$roles = array('contributor', 'author', 'editor', 'administrator');
+						$roles = array( 'contributor', 'author', 'editor', 'administrator' );
 					} else {
-						$roles = explode(", ", $this->settings['user_roles']);
+						$roles = explode( ", ", $this->settings['user_roles'] );
 						}
 					foreach ( $roles as $role ) {
-						$role_users = cleverness_todo_get_users($role);
-						foreach($role_users as $role_user) {
-							$user_info = get_userdata($role_user->ID);
-							if ( isset($result->assign) && $result->assign == $role_user->ID ) $selected = ' selected="selected"';
-							$this->form .= sprintf('<option value="%d"%s>%s</option>', $role_user->ID, $selected, $user_info->display_name);
+						$role_users = cleverness_todo_get_users( $role );
+						foreach( $role_users as $role_user ) {
+							$user_info = get_userdata( $role_user->ID );
+							if ( isset( $todo_field_data->assign ) && $todo_field_data->assign == $role_user->ID ) $selected = ' selected="selected"';
+							$this->form .= sprintf( '<option value="%d"%s>%s</option>', $role_user->ID, $selected, $user_info->display_name );
 						}
 					}
 
@@ -240,25 +284,33 @@ class ClevernessToDoList {
 			}
 		}
 
-	protected function deadline_field($result = NULL) {
+	/**
+	 * Creates the HTML for the Deadline Field
+	 * @param array $todo_field_data Existing field data
+	 */
+	protected function create_deadline_field( $todo_field_data = NULL ) {
 		if ($this->settings['show_deadline'] == '1') {
-			$value = ( isset($result->deadline) && $result->deadline == 0 ? $result->deadline : '' );
-			$this->form .= sprintf('<tr>
+			$value = ( isset( $todo_field_data->deadline ) && $todo_field_data->deadline == 0 ? $todo_field_data->deadline : '' );
+			$this->form .= sprintf( '<tr>
 				<th scope="row"><label for="cleverness_todo_deadline">%s</label></th>
 				<td><input type="text" name="cleverness_todo_deadline" id="cleverness_todo_deadline" value="%s" /></td>
-			</tr>', __('Deadline', 'cleverness-to-do-list'), $value);
+			</tr>', __( 'Deadline', 'cleverness-to-do-list' ), $value );
 			}
 		}
 
-	protected function progress_field($result = NULL) {
-		if ($this->settings['show_progress'] == '1') {
+	/**
+	 * Creates the HTML for the Progress Field
+	 * @param array $todo_field_data Existing field data
+	 */
+	protected function create_progress_field( $todo_field_data = NULL ) {
+		if ( $this->settings['show_progress'] == '1' ) {
 			$this->form .= '<tr>
-				<th scope="row"><label for="cleverness_todo_progress">'.__('Progress', 'cleverness-to-do-list').'</label></th>
+				<th scope="row"><label for="cleverness_todo_progress">'.__( 'Progress', 'cleverness-to-do-list' ).'</label></th>
 				<td><select name="cleverness_todo_progress">';
 				$i = 0;
 				while ( $i <= 100 ) {
 					$this->form .= '<option value="'.$i.'"';
-					if ( isset($result->progress) && $result->progress == $i ) $this->form .= ' selected="selected"';
+					if ( isset( $todo_field_data->progress ) && $todo_field_data->progress == $i ) $this->form .= ' selected="selected"';
 					$this->form .= '>'.$i.'</option>';
 					$i += 5;
 				}
@@ -267,7 +319,11 @@ class ClevernessToDoList {
 			}
 		}
 
-	protected function category_field($result = NULL) {
+	/**
+	 * Creates the HTML for the Category Field
+	 * @param array $todo_field_data Existing field data
+	 */
+	protected function create_category_field( $todo_field_data = NULL ) {
 		if ($this->settings['categories'] == '1') {
 			$selected = '';
 			$this->form .= '<tr>
@@ -275,8 +331,8 @@ class ClevernessToDoList {
 				<td><select name="cleverness_todo_category">';
 					$cats = cleverness_todo_get_cats();
 					foreach ( $cats as $cat ) {
-						if ( isset($result->cat_id) && $result->cat_id == $cat->id ) $selected = ' selected="selected"';
-						$this->form .= sprintf('<option value="%d"%s>%s</option>', $cat->id, $selected, $cat->name);
+						if ( isset( $todo_field_data->cat_id ) && $todo_field_data->cat_id == $cat->id ) $selected = ' selected="selected"';
+						$this->form .= sprintf( '<option value="%d"%s>%s</option>', $cat->id, $selected, $cat->name );
 						$selected = '';
 					 }
 					$this->form .= '</select></td>
@@ -284,20 +340,38 @@ class ClevernessToDoList {
 			}
 		}
 
-	protected function todo_field($result = NULL) {
-		$text = ( isset($result) ? stripslashes(esc_html($result->todotext, 1)) : '' );
-		$this->form .= sprintf('<tr>
+	/**
+	 * Creates the HTML for the To-Do Text Field
+	 * @param array $todo_field_data Existing field data
+	 */
+	protected function create_todo_text_field( $todo_field_data = NULL ) {
+		$text = ( isset( $todo_field_data ) ? stripslashes( esc_html( $todo_field_data->todotext, 1) ) : '' );
+		$this->form .= sprintf( '<tr>
         	<th scope="row" valign="top"><label for="cleverness_todo_description">%s</label></th>
         	<td><textarea name="cleverness_todo_description" rows="5" cols="50" id="the_editor">%s</textarea></td>
-			</tr>', __('To-Do', 'cleverness-to-do-list'), $text);
+			</tr>', __( 'To-Do', 'cleverness-to-do-list' ), $text );
 		}
 
-	protected function show_table_headings($priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink, $completed = NULL) {
+	/**
+	 * Creates the HTML for the To-Do List Table Headings
+	 * @param boolean $priority
+	 * @param boolean $assigned
+	 * @param boolean $deadline
+	 * @param boolean $progress
+	 * @param boolean $categories
+	 * @param boolean $addedby
+	 * @param boolean $editlink
+	 * @param boolean $completed
+	 * @todo get rid of long assign if statement
+	 */
+	protected function show_table_headings( $priority, $assigned, $deadline, $progress, $categories, $addedby, $editlink, $completed = NULL ) {
 		$this->list .= '<thead><tr>';
 		if ( !is_admin() ) $this->list .= '<th></th>';
-		$this->list .= '<th>'.__('Item', 'cleverness-to-do-list').'</th>';
-	  	if ( $priority == 1 ) $this->list .= '<th>'.__('Priority', 'cleverness-to-do-list').'</th>';
-		if ( $assigned == 1 &&  $this->settings['assign'] == 0  && ($this->settings['list_view'] == 1 && $this->settings['show_only_assigned'] == 0 && (current_user_can($this->settings['view_all_assigned_capability']))) || ($this->settings['list_view'] == 1 && $this->settings['show_only_assigned'] == 1) && $this->settings['assign'] == 0) $this->list .= '<th>'.__('Assigned To', 'cleverness-to-do-list').'</th>';
+		$this->list .= '<th>'.__( 'Item', 'cleverness-to-do-list' ).'</th>';
+	  	if ( $priority == 1 ) $this->list .= '<th>'.__( 'Priority', 'cleverness-to-do-list' ).'</th>';
+		if ( $assigned == 1 &&  $this->settings['assign'] == 0  && ($this->settings['list_view'] == 1 && $this->settings['show_only_assigned'] == 0
+			&& ( current_user_can( $this->settings['view_all_assigned_capability'] ) ) ) || ($this->settings['list_view'] == 1 && $this->settings['show_only_assigned'] == 1)
+			&& $this->settings['assign'] == 0) $this->list .= '<th>'.__( 'Assigned To', 'cleverness-to-do-list' ).'</th>';
 		if ( $deadline == 1 && $this->settings['show_deadline'] == 1 ) $this->list .= '<th>'.__('Deadline', 'cleverness-to-do-list').'</th>';
 		if ( $completed == 1 && $this->settings['show_completed_date'] == 1) $this->list .= '<th>'.__('Completed', 'cleverness-to-do-list').'</th>';
 		if ( $progress == 1 && $this->settings['show_progress'] == 1 ) $this->list .= '<th>'.__('Progress', 'cleverness-to-do-list').'</th>';
@@ -307,56 +381,80 @@ class ClevernessToDoList {
     	$this->list .= '</tr></thead>';
 	 	}
 
-	protected function show_checkbox($result, $completed = NULL) {
+	/**
+	 * Create the HTML to show a To-Do List Checkbox
+	 * @param array $todo_field_data
+	 * @param boolean $completed
+	 */
+	protected function show_checkbox( $todo_field_data, $completed = NULL ) {
 		$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'complete' );
 		if ( $cleverness_todo_permission === true ) {
 			if ( $completed == 1 ) {
-				$this->list .= sprintf('<td><input type="checkbox" id="cltd-%d" class="todo-checkbox completed" checked="checked" />', $result->id);
+				$this->list .= sprintf( '<td><input type="checkbox" id="cltd-%d" class="todo-checkbox completed" checked="checked" />', $todo_field_data->id );
 			} else {
-				$this->list .= sprintf('<td><input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted"/>', $result->id);
+				$this->list .= sprintf( '<td><input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted"/>', $todo_field_data->id );
 			}
-			$cleverness_todo_complete_nonce = wp_create_nonce('todocomplete');
+			$cleverness_todo_complete_nonce = wp_create_nonce( 'todocomplete' );
 			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="'.$cleverness_todo_complete_nonce.'" />';
 			if ( !is_admin() ) $this->list .= '</td>';
 			}
 		}
 
-	protected function show_todo_text($result) {
+	/**
+	 * Show the To-Do Text
+	 * @param array $todo_field_data
+	 * @param string $priority_class
+	 */
+	protected function show_todo_text( $todo_field_data, $priority_class ) {
 		if ( !is_admin() ) $this->list .= '<td>'; else $this->list .= '&nbsp;';
-		$this->list .= stripslashes($result->todotext).'</td>';
+		$this->list .= stripslashes( $todo_field_data->todotext ).'</td>';
 		}
 
-	protected function show_edit_link($result, $url) {
+	/**
+	 * Show the Edit To-Do Link
+	 * @param array $todo_field_data
+	 * @param string $url
+	 */
+	protected function show_edit_link( $todo_field_data, $url ) {
 		$edit = '';
-		$url = $url.'?action=edit-todo&amp;id='.$result->id;
-		if (current_user_can($this->settings['edit_capability']) || $this->settings['list_view'] == '0') {
+		$url = $url.'?action=edit-todo&amp;id='.$todo_field_data->id;
+		if ( current_user_can( $this->settings['edit_capability'] ) || $this->settings['list_view'] == '0' ) {
 			if ( is_admin() ) {
 				$edit = '<input class="edit-todo button-secondary" type="button" value="'. __( 'Edit' ).'" />';
 			} else {
 				$edit = '<a href="'.$url.'" class="edit-todo">'.__( 'Edit' ).'</a>';
 				}
 			}
-		if (current_user_can($this->settings['delete_capability']) || $this->settings['list_view'] == '0') {
+		if ( current_user_can( $this->settings['delete_capability'] ) || $this->settings['list_view'] == '0' ) {
 			if ( is_admin() ) {
 				$edit .= ' <input class="delete-todo button-secondary" type="button" value="'. __( 'Delete' ).'" />';
 			} else {
 				$edit .= ' | <a href="" class="delete-todo">'.__( 'Delete' ).'</a>';
 				}
 			}
-	  	if (current_user_can($this->settings['edit_capability'])|| $this->settings['list_view'] == '0')
+	  	if ( current_user_can( $this->settings['edit_capability'] ) || $this->settings['list_view'] == '0' )
 			$this->list .= '<td>'.$edit.'</td>';
 		}
 
-	protected function show_priority($result, $priority) {
-		$this->list .= sprintf('<td>%s</td>', $priority[$result->priority]);
+	/**
+	 * Show the Priority Level of a To-Do Item
+	 * @param array $todo_field_data
+	 * @param array $priority
+	 */
+	protected function show_priority( $todo_field_data, $priority ) {
+		$this->list .= sprintf( '<td>%s</td>', $priority[$todo_field_data->priority] );
 		}
 
-	protected function show_assigned($result) {
-		if ( ($this->settings['list_view'] == 1 && $this->settings['show_only_assigned'] == 0 && (current_user_can($this->settings['view_all_assigned_capability']))) ||
-		($this->settings['list_view'] == 1 && $this->settings['show_only_assigned'] == 1) && $this->settings['assign'] == 0) {
+	/**
+	 * Show the User that a To-Do Item is Assigned To
+	 * @param array $todo_field_data
+	 */
+	protected function show_assigned( $todo_field_data ) {
+		if ( ( $this->settings['list_view'] == 1 && $this->settings['show_only_assigned'] == 0 && ( current_user_can( $this->settings['view_all_assigned_capability'] ) ) ) ||
+		( $this->settings['list_view'] == 1 && $this->settings['show_only_assigned'] == 1) && $this->settings['assign'] == 0 ) {
 			$assign_user = '';
-			if ( $result->assign != '-1' && $result->assign != '' && $result->assign != 0) {
-				$assign_user = get_userdata($result->assign);
+			if ( $todo_field_data->assign != '-1' && $todo_field_data->assign != '' && $todo_field_data->assign != 0 ) {
+				$assign_user = get_userdata( $todo_field_data->assign );
 				$this->list .= '<td>'.$assign_user->display_name.'</td>';
 			} else {
 				$this->list .= '<td></td>';
@@ -364,46 +462,71 @@ class ClevernessToDoList {
 			}
    		}
 
-	protected function show_category($result) {
+	/**
+	 * Show the Category that a To-Do Item is In
+	 * @param array $todo_field_data
+	 */
+	protected function show_category( $todo_field_data ) {
 		if ( $this->settings['categories'] == '1' ) {
-			$cat = cleverness_todo_get_cat_name($result->cat_id);
+			$cat = cleverness_todo_get_cat_name( $todo_field_data->cat_id );
 			$this->list .= '<td>';
-			if ( isset($cat) ) $this->list .= $cat->name;
+			if ( isset( $cat ) ) $this->list .= $cat->name;
 			$this->list .= '</td>';
 			}
 		}
 
-	protected function show_addedby($result, $user_info) {
+	/**
+	 * Show Who Added a To-Do Item
+	 * @param array $todo_field_data
+	 * @param array $user_info
+	 */
+	protected function show_addedby( $todo_field_data, $user_info ) {
 		if ( $this->settings['list_view'] == 1 && $this->settings['todo_author'] == 0 ) {
-			$this->list .= ( $result->author != 0 ? sprintf('<td>%s</td>', $user_info->display_name) : '<td></td>' );
+			$this->list .= ( $todo_field_data->author != 0 ? sprintf( '<td>%s</td>', $user_info->display_name ) : '<td></td>' );
 			}
 		}
 
-	protected function show_deadline($result) {
+	/**
+	 * Show the Deadline for a To-Do Item
+	 * @param array $todo_field_data
+	 */
+	protected function show_deadline( $todo_field_data ) {
 		if ( $this->settings['show_deadline'] == 1 ) {
-			$this->list .= ( $result->deadline != '' ? sprintf('<td>%s</td>', $result->deadline) : '<td></td>' );
+			$this->list .= ( $todo_field_data->deadline != '' ? sprintf( '<td>%s</td>', $todo_field_data->deadline ) : '<td></td>' );
 			}
 		}
 
-	protected function show_completed($result) {
-			if ( $this->settings['show_completed_date'] && $result->completed != '0000-00-00 00:00:00' ) {
+	/**
+	 * Show the Date that a To-Do Item was Completed
+	 * @param array $todo_field_data
+	 */
+	protected function show_completed( $todo_field_data ) {
+			if ( $this->settings['show_completed_date'] && $todo_field_data->completed != '0000-00-00 00:00:00' ) {
 				$date = '';
-				$date = date($this->settings['date_format'], strtotime($result->completed));
+				$date = date( $this->settings['date_format'], strtotime( $todo_field_data->completed ) );
 				$this->list .= '<td>'.$date.'</td>';
 				}
 		}
 
-	protected function show_progress($result) {
+	/**
+	 * Show the Progress of a To-Do Item
+	 * @param array $todo_field_data
+	 */
+	protected function show_progress( $todo_field_data ) {
 		if ( $this->settings['show_progress'] == 1 ) {
-			$this->list .= ( $result->progress != '' ? sprintf('<td>%d%%</td>', $result->progress) : '<td></td>' );
+			$this->list .= ( $todo_field_data->progress != '' ? sprintf( '<td>%d%%</td>', $todo_field_data->progress ) : '<td></td>' );
 			}
 		}
 
+	/**
+	 * Get the Correct URL of a Page
+	 * @return string
+	 */
 	protected function get_page_url() {
         $pageURL = 'http';
-        if ( isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+        if ( isset( $_SERVER["HTTPS"] ) && $_SERVER["HTTPS"] == "on" ) { $pageURL .= "s"; }
             $pageURL .= "://";
-        if ($_SERVER["SERVER_PORT"] != "80") {
+        if ( $_SERVER["SERVER_PORT"] != "80" ) {
             //$pageURL .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
 			$pageURL .= $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
         } else {
@@ -412,29 +535,37 @@ class ClevernessToDoList {
         return $pageURL;
     }
 
-/* JS and Ajax Setup */
-// returns various JavaScript vars needed for the scripts
-public function cleverness_todo_checklist_get_js_vars() {
-	return array(
-	'SUCCESS_MSG' => __('To-Do Deleted.', 'cleverness-to-do-list'),
-	'ERROR_MSG' => __('There was a problem performing that action.', 'cleverness-to-do-list'),
-	'PERMISSION_MSG' => __('You do not have sufficient privileges to do that.', 'cleverness-to-do-list'),
-	'CONFIRMATION_MSG' => __("You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list'),
-	'NONCE' => wp_create_nonce('cleverness-todo'),
-	'AJAX_URL' => admin_url('admin-ajax.php')
-	);
-}
+	/**
+	 * Set Up JavaScript and Ajax Variables
+	 * @return array
+	 */
+	public function cleverness_todo_checklist_get_js_vars() {
+		return array(
+		'SUCCESS_MSG' => __( 'To-Do Deleted.', 'cleverness-to-do-list' ),
+		'ERROR_MSG' => __( 'There was a problem performing that action.', 'cleverness-to-do-list' ),
+		'PERMISSION_MSG' => __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' ),
+		'CONFIRMATION_MSG' => __( "You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
+		'NONCE' => wp_create_nonce( 'cleverness-todo' ),
+		'AJAX_URL' => admin_url( 'admin-ajax.php' )
+		);
+	}
 
-public function cleverness_todo_checklist_init() {
-	wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL.'/js/frontend-todo.js', '', 1.0, true );
-	add_action('wp_enqueue_scripts', array(&$this, 'cleverness_todo_checklist_add_js') );
-}
+	/**
+	 * Add the JavaScript Files for the To-Do List
+	 */
+	public function cleverness_todo_checklist_init() {
+		wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL.'/js/frontend-todo.js', '', 1.0, true );
+		add_action( 'wp_enqueue_scripts', array( &$this, 'cleverness_todo_checklist_add_js' ) );
+	}
 
-public function cleverness_todo_checklist_add_js() {
-	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'jquery-color' );
-	wp_enqueue_script( 'cleverness_todo_checklist_complete_js' );
-	wp_localize_script( 'cleverness_todo_checklist_complete_js', 'ctdl', $this->cleverness_todo_checklist_get_js_vars() );
+	/**
+	 * Enqueue and Localize JavaScript
+	 */
+	public function cleverness_todo_checklist_add_js() {
+		wp_enqueue_script( 'jquery' );
+		wp_enqueue_script( 'jquery-color' );
+		wp_enqueue_script( 'cleverness_todo_checklist_complete_js' );
+		wp_localize_script( 'cleverness_todo_checklist_complete_js', 'ctdl', $this->cleverness_todo_checklist_get_js_vars() );
     }
 
 } // end class

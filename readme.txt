@@ -136,6 +136,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Changelog ==
 = 3.0 =
+* Divided settings into three sections
 * Moved Help page to the Help Admin Tab
 * Added tabs to Settings page
 * Changed some wording on the Settings page
