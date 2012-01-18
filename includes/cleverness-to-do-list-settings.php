@@ -70,6 +70,7 @@ class ClevernessToDoSettings {
 		add_settings_field( 'show_deadline', __( 'Show Deadline', 'cleverness-to-do-list' ), array( &$this, 'show_deadline_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'show_progress', __( 'Show Progress', 'cleverness-to-do-list' ), array( &$this, 'show_progress_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'sort_order', __( 'Sort Order', 'cleverness-to-do-list' ), array( &$this, 'sort_order_option' ), $this->general_key, 'section_general' );
+		add_settings_field( 'admin_bar', __( 'Show Admin Bar Menu', 'cleverness-to-do-list' ), array( &$this, 'admin_bar_option' ), $this->general_key, 'section_general' );
 	}
 
 	function categories_option() { ?>
@@ -130,6 +131,15 @@ class ClevernessToDoSettings {
 		</select>
 		<span class="description"><?php _e( 'Items are first sorted by priority', 'cleverness-to-do-list' ); ?></span>
 	<?php }
+
+	function admin_bar_option() {
+		?>
+	<select name="<?php echo $this->general_key; ?>[admin_bar]">
+		<option value="1"<?php if ( $this->general_settings['admin_bar'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+		<option value="0"<?php if ( $this->general_settings['admin_bar'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+	</select>
+	<?php
+	}
 
 	function register_advanced_settings() {
 		$this->plugin_tabs[$this->advanced_key] = 'Advanced Settings';

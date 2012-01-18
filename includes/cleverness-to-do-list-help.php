@@ -4,15 +4,9 @@ function cleverness_todo_help_tab() {
 	global $cleverness_todo_page, $cleverness_todo_cat_page, $cleverness_todo_settings_page;
 	$screen = get_current_screen();
 
-	$cleverness_todo_help_sidebar = '<p><a href="http://cleverness.org/plugins/to-do-list/" target="_blank">' . __( 'Plugin Website', 'cleverness-to-do-list' ) . '</a></p>
-	<p><form method="post" action="https://www.paypal.com/cgi-bin/webscr">
-	<input type="hidden" value="_donations" name="cmd">
-	<input type="hidden" value="cindy@cleverness.org" name="business">
-	<input type="hidden" value="To-Do List Plugin" name="item_number">
-	<input type="hidden" value="USD" name="currency_code">
-	<input type="image" alt="PayPal - The safer, easier way to pay online." name="submit" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif">
-	<img width="1" height="1" src="https://www.paypal.com/en_US/i/scr/pixel.gif" alt="">
-	</form></p>';
+	$cleverness_todo_help_sidebar = '<p><strong>' . __( 'Like This Plugin?', 'cleverness-to-do-list' ) . '</strong><br />
+		<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org" target="_blank">' . __( 'Please Donate', 'cleverness-to-do-list' ) . '</a></p>
+		<p><a href="http://cleverness.org/plugins/to-do-list/" target="_blank">' . __( 'Plugin Website', 'cleverness-to-do-list' ) . '</a></p>';
 
 	if ( $screen->id != $cleverness_todo_page && $screen->id != $cleverness_todo_cat_page && $screen->id != $cleverness_todo_settings_page )
 		return;

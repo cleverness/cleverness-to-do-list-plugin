@@ -4,7 +4,7 @@ function cleverness_todo_dashboard_widget() {
    	global $wpdb, $userdata, $current_user;
 	get_currentuserinfo();
 
-	$cleverness_todo_settings = get_option('cleverness_todo_settings');
+	$cleverness_todo_settings = array_merge( get_option( 'cleverness-to-do-list-general' ), get_option( 'cleverness-to-do-list-advanced' ), get_option( 'cleverness-to-do-list-permissions' ) );
 	$cleverness_todo_dashboard_settings = get_option('cleverness_todo_dashboard_settings');
 	$cat_id = $cleverness_todo_dashboard_settings['dashboard_cat'];
 

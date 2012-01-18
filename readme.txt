@@ -136,6 +136,8 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Changelog ==
 = 3.0 =
+* Added To-Do List menu to Admin Bar (with option to remove in Settings)
+* Renamed cleverness-to-do-list-options.php to cleverness-to-do-list-settings.php
 * Divided settings into three sections
 * Moved Help page to the Help Admin Tab
 * Added tabs to Settings page
@@ -399,6 +401,8 @@ Major changes to plugin
 == Credits ==
 
 This plugin was originally from Abstract Dimensions (site no longer available) with a patch to display the list in the dashboard by WordPress by Example (site also no longer available). It was abandoned prior to WordPress 2.7.
+
+Icon from http://www.iconfinder.com/icondetails/30045/32/list_shopping_list_todo_todo_list_icon
 
 Spanish translation by [Ricardo](http://yabocs.avytes.com/)
 

@@ -141,7 +141,7 @@ class cleverness_todo_list_widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'deadline' ); ?>"><?php _e('Show Deadline', 'cleverness-to-do-list'); ?></label>
 			<br />
 			<input class="checkbox" type="checkbox" <?php checked( $instance['progress'], on ); ?> id="<?php echo $this->get_field_id( 'progress' ); ?>" name="<?php echo $this->get_field_name( 'progress' ); ?>" />
-			<label for="<?php echo $this->get_field_id( 'progresso' ); ?>"><?php _e('Show Progress', 'cleverness-to-do-list'); ?></label>
+			<label for="<?php echo $this->get_field_id( 'progress' ); ?>"><?php _e('Show Progress', 'cleverness-to-do-list'); ?></label>
 		</p>
 
 	<?php
