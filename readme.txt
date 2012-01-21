@@ -1,24 +1,28 @@
 === Plugin Name ===
-Contributors: elusivelight, bas_der_gruene
-Donate link: http://cleverness.org/plugins/to-do-list/
-Tags: to-do, to do list, to-do list, list, assign tasks, tasks, admin
-Requires at least: 2.8
-Tested up to: 3.0.2
-Stable tag: 2.2.8
+Contributors: elusivelight
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy%40cleverness%2eorg
+Author URI: http://cleverness.org
+Plugin URI: http://cleverness.org/plugins/to-do-list
+Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments
+Requires at least: 3.3
+Tested up to: 3.3
+Stable tag: 3.0
 
-Integrates a very customizable, multi-featured to-do list into WordPress.
+Integrates a very customizable, multi-featured to-do list.
 
 == Description ==
 
 This plugin provides users with a to-do list feature.
 
-You can configure the plugin to have private to-do lists for each user, for all users to share a to-do list, or a master list with individual completing of items. The shared to-do list has a variety of settings available. You can assign tasks to a specific user (includes a setting to email a new task to the assigned user) and have only those tasks assigned viewable to a user. You can also assign different permission levels using capabilities. There are also settings to show deadline and progress fields. Category support is now included as well as front-end administration.
+You can configure the plugin to have private to-do lists for each user, for all users to share a to-do list, or a master list with individual completing of items. The shared to-do list has a variety of settings
+available. You can assign to-do items to a specific user (includes a setting to email a new to-do item to the assigned user) and have only those to-do items assigned viewable to a user. You can also assign different
+permission levels using capabilities. There are also settings to show deadline and progress fields. Category support is included as well as front-end administration.
 
-A new menu item is added to manage your list and it is also listed on a dashboard widget.
+A new menu item is added to the backend to manage your list and it is also listed on a dashboard widget.
 
 A sidebar widget is available as well as shortcode to display the to-do list items on your site.
 
-There are two shortcodes for front-end adminstration of the list. Management of categories is restricted to the back-end.
+There are two shortcodes for front-end administration of the list. Management of categories is restricted to the back-end.
 
 [Plugin Website](http://cleverness.org/plugins/to-do-list/)
 
@@ -131,6 +135,15 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 3. Settings Page
 
 == Changelog ==
+= 3.0 =
+* Added To-Do List menu to Admin Bar (with option to remove in Settings)
+* Renamed cleverness-to-do-list-options.php to cleverness-to-do-list-settings.php
+* Divided settings into three sections
+* Moved Help page to the Help Admin Tab
+* Added tabs to Settings page
+* Changed some wording on the Settings page
+* Fixed master list view
+
 = 2.3 =
 * Moved dashboard widgets settings to the dashboard widget
 * Added ajax to dashboard widget, main plugin page, and category page
@@ -283,6 +296,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Upgrade Notice ==
 
+= 3.0 =
+Code rewrite continued
+
 = 2.3 =
 Code rewrite and front-end administration
 
@@ -386,6 +402,8 @@ Major changes to plugin
 == Credits ==
 
 This plugin was originally from Abstract Dimensions (site no longer available) with a patch to display the list in the dashboard by WordPress by Example (site also no longer available). It was abandoned prior to WordPress 2.7.
+
+Icon from http://www.iconfinder.com/icondetails/30045/32/list_shopping_list_todo_todo_list_icon
 
 Spanish translation by [Ricardo](http://yabocs.avytes.com/)
 

@@ -1,39 +1,27 @@
 <?php
 /* Get list of users */
-function cleverness_todo_get_users($role) {
+function cleverness_todo_get_users( $role ) {
       $wp_user_search = new WP_User_Query( array( 'role' => $role ) );
       return $wp_user_search->get_results();
 }
 
-/* Add Settings link to plugin */
-function cleverness_add_settings_link($links, $file) {
-	static $this_plugin;
-	if (!$this_plugin) $this_plugin = CTDL_BASENAME;
-
-	if ($file == $this_plugin){
-		$settings_link = '<a href="admin.php?page=cleverness-to-do-list-options">'.__('Settings', 'cleverness-to-do-list').'</a>';
-	 	array_unshift($links, $settings_link);
-		}
-	return $links;
-}
 
 /* Check if User Has Permission */
-function cleverness_todo_user_can($type, $action) {
-	global $cleverness_todo_option, $current_user;
-	$cleverness_todo_option = get_option('cleverness_todo_settings');
+function cleverness_todo_user_can( $type, $action ) {
+	$cleverness_todo_option = array_merge( get_option( 'cleverness-to-do-list-general' ), get_option( 'cleverness-to-do-list-advanced' ), get_option( 'cleverness-to-do-list-permissions' ) );
     get_currentuserinfo();
 
-	switch ($type) {
+	switch ( $type ) {
 		case 'category':
 			// check if categories are enabled and the user has the capability or the list view is individual
-   			if ( $cleverness_todo_option['categories'] == '1' && ( current_user_can($cleverness_todo_option[$action.'_capability']) || $cleverness_todo_option['list_view'] == '0' ) ) {
+   			if ( $cleverness_todo_option['categories'] == '1' && ( current_user_can( $cleverness_todo_option[$action.'_capability'] ) || $cleverness_todo_option['list_view'] == '0' ) ) {
    				return true;
    			} else {
    				return false;
 			}
 			break;
 		case 'todo':
-			if ( current_user_can($cleverness_todo_option[$action.'_capability'])  ) {
+			if ( current_user_can( $cleverness_todo_option[$action.'_capability'] ) ) {
    				return true;
    			} else {
    				return false;
@@ -46,8 +34,7 @@ function cleverness_todo_user_can($type, $action) {
 function cleverness_todo_get_todos($user, $limit = 0, $status = 0, $cat_id = 0) {
    	global $wpdb;
 
-	$cleverness_todo_settings = get_option('cleverness_todo_settings');
-	$cleverness_todo_dashboard_settings = get_option('cleverness_todo_dashboard_settings');
+	$cleverness_todo_settings = array_merge( get_option( 'cleverness-to-do-list-general' ), get_option( 'cleverness-to-do-list-advanced' ), get_option( 'cleverness-to-do-list-permissions' ) );
 
 	$select = 'SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed FROM '.CTDL_TODO_TABLE.' WHERE status = '.absint($status);
 
@@ -76,7 +63,7 @@ function cleverness_todo_get_todos($user, $limit = 0, $status = 0, $cat_id = 0) 
 		if ($status == 0 ) {
 		   	$select .= $wpdb->prepare(" AND ( id = ANY ( SELECT id FROM ".CTDL_STATUS_TABLE." WHERE user = %d AND status = 0) OR id NOT IN( SELECT id FROM ".CTDL_STATUS_TABLE." WHERE user = %d AND status = 1 ) )", $user, $user);
 		} elseif ( $status == 1 ) {
-		   	$select .= $wpdb->prepare(" LEFT OUTER JOIN ".CTDL_STATUS_TABLE." USING (id) WHERE ( ".CTDL_STATUS_TABLE.".status = 1 AND ".CTDL_STATUS_TABLE.".user = %d )", $user);
+		   	$select = $wpdb->prepare(" SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed FROM ".CTDL_TODO_TABLE." LEFT OUTER JOIN ".CTDL_STATUS_TABLE." USING (id) WHERE ( ".CTDL_STATUS_TABLE.".status = 1 AND ".CTDL_STATUS_TABLE.".user = %d )", $user);
 			}
 		}
 
@@ -198,7 +185,7 @@ function cleverness_todo_delete_todo_callback() {
 /* Mark to-do list item as completed or uncompleted */
 function cleverness_todo_complete($id, $status) {
 	global $wpdb, $userdata, $cleverness_todo_option, $current_user;
-	$cleverness_todo_option = get_option('cleverness_todo_settings');
+	$cleverness_todo_option = array_merge( get_option( 'cleverness-to-do-list-general' ), get_option( 'cleverness-to-do-list-advanced' ), get_option( 'cleverness-to-do-list-permissions' ) );
    	get_currentuserinfo();
 
 	 // if individual view, group view with complete capability, or master view with edit capability
@@ -219,7 +206,7 @@ function cleverness_todo_complete($id, $status) {
 	 // master view - individual
 	 } elseif ( $cleverness_todo_option['list_view'] == '2' ) {
 	 	$user = $current_user->ID;
-		$wpdb->get_results("SELECT * FROM ".CTDL_TODO_TABLE." WHERE id = $id AND user = $user");
+		$wpdb->get_results("SELECT * FROM ".CTDL_STATUS_TABLE." WHERE id = $id AND user = $user");
 		$num = $wpdb->num_rows;
 
 		if ( $num == 0 ) {
@@ -262,7 +249,7 @@ function cleverness_todo_checklist_complete_callback() {
 function cleverness_todo_get_todo($id) {
    	global $wpdb;
 
-   	$select = "SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed FROM ".CTDL_TODO_TABLE." WHERE id = '%d' LIMIT 1";
+   	$select = "SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed, status FROM ".CTDL_TODO_TABLE." WHERE id = '%d' LIMIT 1";
    	$result = $wpdb->get_row( $wpdb->prepare($select, $id) );
    	return $result;
 	}
@@ -329,7 +316,7 @@ function cleverness_todo_get_todo_cat() {
 /* Get to-do list categories */
 function cleverness_todo_get_cats() {
    	global $wpdb, $cleverness_todo_option;
-	$cleverness_todo_option = get_option('cleverness_todo_settings');
+	$cleverness_todo_option = array_merge( get_option( 'cleverness-to-do-list-general' ), get_option( 'cleverness-to-do-list-advanced' ), get_option( 'cleverness-to-do-list-permissions' ) );
 
 	// check if categories are enabled
    	if ( $cleverness_todo_option['categories'] == '1' ) {
@@ -360,7 +347,7 @@ function cleverness_todo_install () {
    	global $wpdb, $userdata;
    	get_currentuserinfo();
 
-	$cleverness_todo_db_version = '1.8';
+	$cleverness_todo_db_version = '1.9';
 	if ( !function_exists( 'is_plugin_active_for_network' ) ) require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 	if ( is_plugin_active_for_network( __FILE__ ) ) {
 		$prefix = $wpdb->base_prefix;
@@ -402,40 +389,47 @@ function cleverness_todo_install () {
    		$welcome_text = __('Add your first To-Do List item', 'cleverness-to-do-list');
    		$results = $wpdb->insert( $table_name, array( 'author' => $userdata->ID, 'status' => 0, 'priority' => 1, 'todotext' => $welcome_text ) );
 
-		$new_options = array(
-		'list_view' => '0',
-		'dashboard_author' => '0',
-		'todo_author' => '0',
-		'assign' => '1',
-		'show_only_assigned' => '1',
-		'view_capability' => 'publish_posts',
-		'add_capability' => 'publish_posts',
-		'edit_capability' => 'publish_posts',
-		'delete_capability' => 'manage_options',
-		'purge_capability' => 'manage_options',
-		'complete_capability' => 'publish_posts',
-		'assign_capability' => 'manage_options',
-		'view_all_assigned_capability' => 'manage_options',
-		'dashboard_number' => '10',
-		'priority_0' => __('Important', 'cleverness-to-do-list'),
-		'priority_1' => __('Normal', 'cleverness-to-do-list'),
-		'priority_2' => __('Low', 'cleverness-to-do-list'),
-		'show_deadline' => '0',
-		'show_dashboard_deadline' => '0',
-		'show_progress' => '0',
-		'email_assigned' => '0',
-		'show_completed_date' => '0',
-		'date_format' => 'm-d-Y',
-		'user_roles' => 'contributor, author, editor, administrator',
-		'categories' => '0',
-		'sort_order' => 'id',
-		'add_cat_capability' => 'manage_options',
-		'dashboard_cat' => 'All',
-		'email_text' => __('The following item has been assigned to you.', 'cleverness-to-do-list'),
-		'email_subject' => __('A to-do list item has been assigned to you', 'cleverness-to-do-list'),
-		'email_from' => html_entity_decode(get_bloginfo('name'))
+		$general_options = array(
+			'categories'            => '0',
+			'list_view'             => '0',
+			'todo_author'           => '0',
+			'show_completed_date'   => '0',
+			'show_deadline'         => '0',
+			'show_progress'         => '0',
+			'sort_order'            => 'id',
+			'admin_bar'             => '1'
    		);
-   		add_option( 'cleverness_todo_settings', $new_options );
+
+		 $advanced_options = array(
+			 'date_format'                  => 'm-d-Y',
+			 'priority_0'                   => __( 'Important', 'cleverness-to-do-list' ),
+			 'priority_1'                   => __( 'Normal', 'cleverness-to-do-list' ),
+			 'priority_2'                   => __( 'Low', 'cleverness-to-do-list' ),
+			 'assign'                       => '1',
+			 'show_only_assigned'           => '1',
+			 'user_roles'                   => 'contributor, author, editor, administrator',
+			 'email_assigned'               => '0',
+			 'email_from'                   => html_entity_decode( get_bloginfo( 'name' ) ),
+			 'email_subject'                => __( 'A to-do list item has been assigned to you', 'cleverness-to-do-list' ),
+			 'email_text'                   => __( 'The following item has been assigned to you.', 'cleverness-to-do-list' ),
+			 'show_id'                      => '0',
+		   );
+
+		$permissions_options = array(
+			'view_capability'              => 'publish_posts',
+			'add_capability'               => 'publish_posts',
+			'edit_capability'              => 'publish_posts',
+			'delete_capability'            => 'manage_options',
+			'purge_capability'             => 'manage_options',
+			'complete_capability'          => 'publish_posts',
+			'assign_capability'            => 'manage_options',
+			'view_all_assigned_capability' => 'manage_options',
+			'add_cat_capability'           => 'manage_options',
+		   );
+
+   		add_option( 'cleverness-to-do-list-general', $general_options );
+		add_option( 'cleverness-to-do-list-advanced', $advanced_options );
+		add_option( 'cleverness-to-do-list-permissions', $permissions_options );
 		add_option( 'cleverness_todo_db_version', $cleverness_todo_db_version );
 		}
 
@@ -443,8 +437,8 @@ function cleverness_todo_install () {
 
 	if( $installed_ver != $cleverness_todo_db_version ) {
 
-		if ( !function_exists('maybe_create_table') ) {
-			require_once(ABSPATH . 'wp-admin/install-helper.php');
+		if ( !function_exists( 'maybe_create_table' ) ) {
+			require_once( ABSPATH . 'wp-admin/install-helper.php' );
 		}
 
 		maybe_add_column($table_name, 'assign', "ALTER TABLE `$table_name` ADD `assign` int(10);");
@@ -464,18 +458,60 @@ function cleverness_todo_install () {
 	      status tinyint(1) DEFAULT '0' NOT NULL
 	    );");
 
-		$theoptions = get_option('cleverness_todo_settings');
-		if ( $theoptions['categories'] == '' ) $theoptions['categories'] = '0';
-		if ( $theoptions['sort_order'] == '' ) $theoptions['sort_order'] = 'id';
-		if ( $theoptions['add_cat_capability'] == '' ) $theoptions['add_cat_capability'] = 'manage_options';
-		if ( $theoptions['dashboard_cat'] == '' ) $theoptions['dashboard_cat'] = 'All';
-		if ( $theoptions['email_text'] == '' ) $theoptions['email_text'] = __('The following item has been assigned to you.', 'cleverness-to-do-list');
-		if ( $theoptions['email_subject'] == '' ) $theoptions['email_subject'] = __('A to-do list item has been assigned to you', 'cleverness-to-do-list');
-		if ( $theoptions['email_from'] == '' ) $theoptions['email_from'] = html_entity_decode(get_bloginfo('name'));
-		update_option( 'cleverness_todo_settings', $theoptions);
+		$the_options = get_option( 'cleverness_todo_settings' );
+		if ( $the_options['categories'] == '' ) $the_options['categories'] = '0';
+		if ( $the_options['sort_order'] == '' ) $the_options['sort_order'] = 'id';
+		if ( $the_options['add_cat_capability'] == '' ) $the_options['add_cat_capability'] = 'manage_options';
+		if ( $the_options['dashboard_cat'] == '' ) $the_options['dashboard_cat'] = 'All';
+		if ( $the_options['email_text'] == '' ) $the_options['email_text'] = __( 'The following item has been assigned to you.', 'cleverness-to-do-list' );
+		if ( $the_options['email_subject'] == '' ) $the_options['email_subject'] = __( 'A to-do list item has been assigned to you', 'cleverness-to-do-list' );
+		if ( $the_options['email_from'] == '' ) $the_options['email_from'] = html_entity_decode( get_bloginfo( 'name' ) );
+
+		$general_options = array(
+			'categories'            => $the_options['categories'],
+			'list_view'             => $the_options['list_view'],
+			'todo_author'           => $the_options['todo_author'],
+			'show_completed_date'   => $the_options['show_completed_date'],
+			'show_deadline'         => $the_options['show_deadline'],
+			'show_progress'         => $the_options['show_progress'],
+			'sort_order'            => $the_options['sort_order'],
+			'admin_bar'             => '1'
+			);
+
+		$advanced_options = array(
+			'date_format'                  => $the_options['date_format'],
+			'priority_0'                   => $the_options['priority_0'],
+			'priority_1'                   => $the_options['priority_1'],
+			'priority_2'                   => $the_options['priority_2'],
+			'assign'                       => $the_options['assign'],
+			'show_only_assigned'           => $the_options['show_only_assigned'],
+			'user_roles'                   => $the_options['user_roles'],
+			'email_assigned'               => $the_options['email_assigned'],
+			'email_from'                   => $the_options['email_from'],
+			'email_subject'                => $the_options['email_subject'],
+			'email_text'                   => $the_options['email_text'],
+			'show_id'                      => '0',
+		);
+
+		$permissions_options = array(
+			'view_capability'              => $the_options['view_capability'],
+			'add_capability'               => $the_options['add_capability'],
+			'edit_capability'              => $the_options['edit_capability'],
+			'delete_capability'            => $the_options['delete_capability'],
+			'purge_capability'             => $the_options['purge_capability'],
+			'complete_capability'          => $the_options['complete_capability'],
+			'assign_capability'            => $the_options['assign_capability'],
+			'view_all_assigned_capability' => $the_options['view_all_assigned_capability'],
+			'add_cat_capability'           => $the_options['add_cat_capability'],
+		);
+
+		add_option( 'cleverness-to-do-list-general', $general_options );
+		add_option( 'cleverness-to-do-list-advanced', $advanced_options );
+		add_option( 'cleverness-to-do-list-permissions', $permissions_options );
 
     	update_option( 'cleverness_todo_db_version', $cleverness_todo_db_version );
 		delete_option( 'atd_db_version' );
+		delete_option( 'cleverness_todo_settings' );
 		}
 	}
 
