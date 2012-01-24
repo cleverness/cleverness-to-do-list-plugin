@@ -33,9 +33,7 @@ function cleverness_todo_loader() {
 	include_once 'includes/cleverness-to-do-list.class.php';
 	include_once 'includes/cleverness-to-do-list-library.class.php';
 
-	$cleverness_todo_option = array_merge( get_option( 'cleverness-to-do-list-general' ), get_option( 'cleverness-to-do-list-advanced' ), get_option( 'cleverness-to-do-list-permissions' ) );
-
-	ClevernessToDoLoader::init( $cleverness_todo_option );
+	CTDL_Loader::init();
 
 	$action = '';
 	if ( isset( $_GET['action'] ) ) $action = $_GET['action'];
@@ -44,74 +42,43 @@ function cleverness_todo_loader() {
 	switch( $action ) {
 
 		case 'addtodo':
-			$message = '';
-			if ( $_POST['cleverness_todo_description'] != '' ) {
-				$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'add' );
-
-				if ( $cleverness_todo_permission === true ) {
-					$assign = ( isset( $_POST['cleverness_todo_assign'] ) ? $_POST['cleverness_todo_assign'] : 0 );
-					$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ? $_POST['cleverness_todo_deadline'] : '' );
-					$progress = ( isset( $_POST['cleverness_todo_progress'] ) ? $_POST['cleverness_todo_progress'] : 0 );
-					$category = ( isset( $_POST['cleverness_todo_category'] ) ? $_POST['cleverness_todo_category'] : '' );
-
-					if ( !wp_verify_nonce( $_REQUEST['todoadd'], 'todoadd' ) ) die( 'Security check failed' );
-					if ( $cleverness_todo_option['email_assigned'] == '1' && $cleverness_todo_option['assign'] == '0' ) {
-						$message = cleverness_todo_email_user( $assign, $deadline, $category );
-						}
-					$message .= cleverness_todo_insert( $assign, $deadline, $progress, $category );
-				} else {
-		   		    $message = __( 'You do not have sufficient privileges to add an item.', 'cleverness-to-do-list' );
-				}
-
-			} else {
-				$message = __( 'To-Do cannot be blank.', 'cleverness-to-do-list' );
-			}
+			$message = CTDL_Lib::insert_todo();
 		break;
 
 		case 'updatetodo':
-			$message = '';
-			$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'edit' );
-
-			if ( $cleverness_todo_permission === true ) {
-				$assign = ( isset( $_POST['cleverness_todo_assign'] ) ?  $_POST['cleverness_todo_assign'] : 0 );
-				$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ?  $_POST['cleverness_todo_deadline'] : '' );
-				$progress = ( isset( $_POST['cleverness_todo_progress'] ) ?  $_POST['cleverness_todo_progress'] : 0 );
-				$category = ( isset( $_POST['cleverness_todo_category'] ) ?  $_POST['cleverness_todo_category'] : '' );
-				if ( !wp_verify_nonce( $_REQUEST['todoupdate'], 'todoupdate' ) ) die( 'Security check failed' );
-				$message = cleverness_todo_update( $assign, $deadline, $progress, $category );
-			} else {
-				$message = __( 'You do not have sufficient privileges to edit an item.', 'cleverness-to-do-list' );
-				}
+			$message = CTDL_Lib::edit_todo();
 		break;
 
 		case 'completetodo':
-			$id = absint( $_GET['id'] );
-			$cleverness_todo_complete_nonce = $_REQUEST['_wpnonce'];
-			if ( !wp_verify_nonce( $cleverness_todo_complete_nonce, 'todocomplete' ) ) die( 'Security check failed' );
-			$message = cleverness_todo_complete ($id, '1' );
+			$message = CTDL_LIb::complete_todo( absint( $_GET['id'] ), 1 );
 			break;
 
 		case 'uncompletetodo':
-			$id = absint( $_GET['id'] );
-			$cleverness_todo_complete_nonce = $_REQUEST['_wpnonce'];
-			if ( !wp_verify_nonce( $cleverness_todo_complete_nonce, 'todocomplete' ) ) die( 'Security check failed' );
-			$message = cleverness_todo_complete( $id, '0' );
+			$message = CTDL_LIb::complete_todo( absint( $_GET['id'] ), 0 );
 			break;
 
 		case 'purgetodo':
-			$message = '';
-			$cleverness_todo_permission = cleverness_todo_user_can( 'todo', 'purge' );
-
-			if ( $cleverness_todo_permission === true ) {
-				$cleverness_todo_purge_nonce = $_REQUEST['_wpnonce'];
-				if ( !wp_verify_nonce( $cleverness_todo_purge_nonce, 'todopurge' ) ) die( 'Security check failed' );
-				$message = cleverness_todo_purge();
-			} else {
-				$message = __( 'You do not have sufficient privileges to edit an item.', 'cleverness-to-do-list' );
-				}
+			$message = CTDL_Lib::delete_all_todos();
 		break;
 
 	} // end switch
+
+	/* Delete To-Do Ajax
+	@todo not working
+	*/
+	function cleverness_delete_todo_callback() {
+		check_ajax_referer( 'cleverness-todo' );
+		$cleverness_todo_permission = CTDL_LIB::check_permission( 'todo', 'delete' );
+
+		if ( $cleverness_todo_permission === true ) {
+			$cleverness_todo_status = CTDL_LIB::delete_todo();
+		} else {
+			$cleverness_todo_status = 2;
+		}
+
+		echo $cleverness_todo_status;
+		die(); // this is required to return a proper result
+	}
 
 	/* Add plugin info to admin footer */
 	function cleverness_todo_admin_footer() {
@@ -119,12 +86,29 @@ function cleverness_todo_loader() {
 		printf( __( "%s plugin | Version %s | by %s | <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org' target='_blank'>Donate</a><br />", 'cleverness-to-do-list' ), $plugin_data['Title'], $plugin_data['Version'], $plugin_data['Author'] );
 	}
 
+	function cleverness_todo_checklist_complete_callback() {
+		check_ajax_referer( 'cleverness-todo' );
+		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'complete' );
+
+		if ( $cleverness_todo_permission === true ) {
+			$cleverness_id = intval( $_POST['cleverness_id'] );
+			$cleverness_status = intval( $_POST['cleverness_status'] );
+
+			$message = CTDL_Lib::complete_todo( $cleverness_id, $cleverness_status );
+		} else {
+			$message = __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
+		}
+		echo $message;
+
+		die(); // this is required to return a proper result
+	}
+
 }
 
 register_activation_hook( __FILE__, 'cleverness_todo_activation' );
 function cleverness_todo_activation() {
-	include_once 'includes/cleverness-to-do-list-functions.php';
-	cleverness_todo_install();
+	include_once 'includes/cleverness-to-do-list-library.class.php';
+	CTDL_Lib::install_plugin();
 }
 
 ?>

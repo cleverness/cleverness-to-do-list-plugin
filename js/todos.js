@@ -1,5 +1,9 @@
 jQuery(document).ready(function($) {
 
+	$(function() {
+		$( "#cleverness_todo_deadline" ).datepicker();
+	});
+
 $('#todo-list tbody tr:visible:even').addClass('alternate');
 
 /* Complete To-Dos */
@@ -35,7 +39,7 @@ $('.delete-todo').live('click', function () {
     	type:'post',
       	url: ajaxurl,
 	  	data: {
-			action: 'cleverness_todo_delete',
+			action: 'cleverness_delete_todo',
 			cleverness_todo_id: $(todotr).attr('id').substr(5),
 			_ajax_nonce: ctdl.NONCE
 			},

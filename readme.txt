@@ -143,6 +143,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Added tabs to Settings page
 * Changed some wording on the Settings page
 * Fixed master list view
+* Added date picker to deadline field
 
 = 2.3 =
 * Moved dashboard widgets settings to the dashboard widget

@@ -270,5 +270,5 @@ function cleverness_todo_display_items($atts) {
 		return $display_todo;
 }
 
-add_shortcode('todolist', 'cleverness_todo_display_items');
+//add_shortcode('todolist', 'cleverness_todo_display_items');
 ?>
