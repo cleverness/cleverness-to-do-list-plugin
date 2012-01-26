@@ -12,9 +12,9 @@ class CTDL_Loader {
 
 	public static function init() {
 
-		CTDL_Lib::check_wp_version();
 		self::$settings = array_merge( get_option( 'cleverness-to-do-list-general' ), get_option( 'cleverness-to-do-list-advanced' ), get_option( 'cleverness-to-do-list-permissions' ) );
 		self::include_files();
+		CTDL_Lib::check_wp_version();
 		self::call_wp_hooks();
 
 		global $ClevernessToDoList;
@@ -28,14 +28,16 @@ class CTDL_Loader {
 	 * @static
 	 */
 	private static function include_files() {
-		include_once( CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-settings.class.php' );
-		include_once( CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-dashboard-widget.php' );
-		include_once( CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-widget.php' );
-		include_once( CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-shortcode.php' );
-		include_once( CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-categories.php' );
-		include_once( CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-help.php' );
-		include_once( CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-functions.php' );
-		include_once( CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-frontend.class.php' );
+		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-settings.class.php';
+		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list.class.php';
+		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-library.class.php';
+		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-frontend.class.php';
+		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-dashboard-widget.php';
+		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-widget.php';
+		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-shortcode.php';
+		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-categories.php';
+		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-help.php';
+		if ( self::$settings['categories'] == 1 ) include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-categories.class.php';
 	}
 
 	/**
@@ -52,6 +54,7 @@ class CTDL_Loader {
 		add_action( 'wp_ajax_cleverness_todo_complete', 'cleverness_todo_checklist_complete_callback' );
 		add_filter( 'plugin_action_links', 'CTDL_Lib::add_settings_link', 10, 2 );
 		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', __CLASS__ . '::add_to_toolbar', 999 );
+		//if ( self::$settings['categories'] ==1 ) add_action( 'admin_init', 'CTDL_Categories::initialize_categories' );
 	}
 
 	/**

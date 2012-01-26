@@ -30,8 +30,6 @@ function cleverness_todo_loader() {
 	define( 'CTDL_STATUS_TABLE', $prefix.'todolist_status' );
 
 	include_once 'includes/cleverness-to-do-list-loader.class.php';
-	include_once 'includes/cleverness-to-do-list.class.php';
-	include_once 'includes/cleverness-to-do-list-library.class.php';
 
 	CTDL_Loader::init();
 

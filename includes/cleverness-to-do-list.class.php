@@ -300,7 +300,7 @@ class ClevernessToDoList {
 			$this->form .= '<tr>
 				<th scope="row"><label for="cleverness_todo_category">'. __('Category', 'cleverness-to-do-list').'</label></th>
 				<td><select name="cleverness_todo_category">';
-					$cats = cleverness_todo_get_cats();
+					$cats = CTDL_Categories::get_categories();
 					foreach ( $cats as $cat ) {
 						if ( isset( $todo_field_data->cat_id ) && $todo_field_data->cat_id == $cat->id ) $selected = ' selected="selected"';
 						$this->form .= sprintf( '<option value="%d"%s>%s</option>', $cat->id, $selected, $cat->name );
@@ -443,7 +443,7 @@ class ClevernessToDoList {
 	 */
 	protected function show_category( $todo_field_data ) {
 		if ( CTDL_Loader::$settings['categories'] == '1' ) {
-			$cat = cleverness_todo_get_cat_name( $todo_field_data->cat_id );
+			$cat = CTDL_Categories::get_category_name( $todo_field_data->cat_id );
 			$this->list .= '<td>';
 			if ( isset( $cat ) ) $this->list .= $cat->name;
 			$this->list .= '</td>';

@@ -28,7 +28,7 @@ function cleverness_todo_dashboard_widget() {
 			if ($result->priority == '2') $priority_class = ' class="todo-low"';
 
 			if ( CTDL_Loader::$settings['categories'] == '1' && $result->cat_id != 0 ) {
-				$cat = cleverness_todo_get_cat_name($result->cat_id);
+				$cat = CTDL_Categories::get_category_name( $result->cat_id );
 				if ( $catid != $result->cat_id  && $cat->name != '' ) echo '<h4>'.$cat->name.'</h4>';
 				$catid = $result->cat_id;
 			}
@@ -101,7 +101,7 @@ function cleverness_todo_dashboard_options() {
 			<select id="cleverness_todo_dashboard_settings[dashboard_cat]" name="cleverness_todo_dashboard_settings[dashboard_cat]">
 		   		<option value="All"<?php if ( 'All' == $options['dashboard_cat'] ) echo ' selected="selected"'; ?>><?php _e( 'All', 'cleverness-to-do-list' ); ?></option>
 				<?php
-				$results = cleverness_todo_get_cats();
+				$results = CTDL_Categories::get_categories();
    				if ( $results ) {
    					foreach ( $results as $result ) { ?>
    						<option value="<?php echo $result->id; ?>"<?php if ( $result->id == $options['dashboard_cat'] ) echo ' selected="selected"'; ?>><?php echo $result->name; ?></option>

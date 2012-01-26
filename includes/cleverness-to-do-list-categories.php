@@ -5,21 +5,21 @@ global $wpdb;
 
 $cleverness_todo_message = '';
 $cleverness_todo_action = '';
-if ( isset($_GET['cleverness_todo_action']) ) $cleverness_todo_action = $_GET['cleverness_todo_action'];
-if ( isset($_POST['cleverness_todo_action']) ) $cleverness_todo_action = $_POST['cleverness_todo_action'];
+if ( isset( $_GET['cleverness_todo_action'] ) ) $cleverness_todo_action = $_GET['cleverness_todo_action'];
+if ( isset( $_POST['cleverness_todo_action'] ) ) $cleverness_todo_action = $_POST['cleverness_todo_action'];
 
 switch($cleverness_todo_action) {
 
 // call the add to category function
 case 'addtodocat':
 	if ( $_POST['cleverness_todo_cat_name'] != '' ) {
-		if ( !wp_verify_nonce($_POST['_todo_add_cat_nonce'], 'todoaddcat') ) die( 'Security check failed' );
-		$cleverness_todo_status = cleverness_todo_insert_cat();
+		if ( !wp_verify_nonce( $_POST['_todo_add_cat_nonce'], 'todoaddcat') ) die( 'Security check failed' );
+		$cleverness_todo_status = CTDL_Categories::insert_category();
 		if ( $cleverness_todo_status != 1 ) {
-			$cleverness_todo_message = __('There was a problem performing that action.', 'cleverness-to-do-list');
+			$cleverness_todo_message = __( 'There was a problem performing that action.', 'cleverness-to-do-list' );
 			}
 	} else {
-		$cleverness_todo_message = __('Category name cannot be blank.', 'cleverness-to-do-list');
+		$cleverness_todo_message = __( 'Category name cannot be blank.', 'cleverness-to-do-list' );
 	}
 	break;
 
@@ -72,7 +72,7 @@ default:
 	</thead>
 	<tbody>
 		<?php
-   		$cleverness_todo_results = cleverness_todo_get_cats();
+   		$cleverness_todo_results = CTDL_Categories::get_categories();
 
    		if ($cleverness_todo_results) {
 	   		foreach ($cleverness_todo_results as $cleverness_todo_result) {
@@ -142,10 +142,10 @@ function cleverness_to_do_get_js_vars() {
 
 /* Get Category Ajax */
 function cleverness_todo_cat_get_callback() {
-	$cleverness_todo_permission = cleverness_todo_user_can( 'category', 'add_cat' );
+	$cleverness_todo_permission = CTDL_Lib::check_permission( 'category', 'add_cat' );
 
 	if ( $cleverness_todo_permission === true ) {
-		$cleverness_todo = cleverness_todo_get_todo_cat();
+		$cleverness_todo = CTDL_Categories::get_category();
 		$cleverness_todo_cat_name = $cleverness_todo->name;
 	} else {
 		$cleverness_todo_status = 2;
@@ -160,10 +160,10 @@ function cleverness_todo_cat_get_callback() {
 /* Edit Category Ajax */
 function cleverness_todo_cat_update_callback() {
 	check_ajax_referer( 'cleverness-todo-cat' );
-	$cleverness_todo_permission = cleverness_todo_user_can('category', 'add_cat');
+	$cleverness_todo_permission = CTDL_Lib::check_permission('category', 'add_cat');
 
 	if ( $cleverness_todo_permission === true ) {
-		$cleverness_todo_status = cleverness_todo_update_cat();
+		$cleverness_todo_status = CTDL_Categories::update_category();
 	} else {
 		$cleverness_todo_status = 2;
 		}
@@ -176,10 +176,10 @@ function cleverness_todo_cat_update_callback() {
 /* Delete Category Ajax */
 function cleverness_todo_cat_delete_callback() {
 	check_ajax_referer( 'cleverness-todo-cat' );
-	$cleverness_todo_permission = cleverness_todo_user_can( 'category', 'add_cat' );
+	$cleverness_todo_permission = CTDL_Lib::check_permission( 'category', 'add_cat' );
 
 	if ( $cleverness_todo_permission === true ) {
-		$cleverness_todo_status = cleverness_todo_delete_cat();
+		$cleverness_todo_status = CTDL_Categories::delete_category();
 	} else {
 		$cleverness_todo_status = 2;
 		}
