@@ -16,6 +16,7 @@ add_action( 'init', 'cleverness_todo_loader' );
 
 function cleverness_todo_loader() {
 	global $wpdb;
+
 	define( 'CTDL_BASENAME', plugin_basename(__FILE__) );
 	define( 'CTDL_PLUGIN_DIR', plugin_dir_path( __FILE__) );
 	define( 'CTDL_PLUGIN_URL', plugins_url('', __FILE__) );
@@ -66,10 +67,10 @@ function cleverness_todo_loader() {
 	*/
 	function cleverness_delete_todo_callback() {
 		check_ajax_referer( 'cleverness-todo' );
-		$cleverness_todo_permission = CTDL_LIB::check_permission( 'todo', 'delete' );
+		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'delete' );
 
 		if ( $cleverness_todo_permission === true ) {
-			$cleverness_todo_status = CTDL_LIB::delete_todo();
+			$cleverness_todo_status = CTDL_Lib::delete_todo();
 		} else {
 			$cleverness_todo_status = 2;
 		}
@@ -109,4 +110,5 @@ function cleverness_todo_activation() {
 	CTDL_Lib::install_plugin();
 }
 
+include_once 'includes/cleverness-to-do-list-widget.class.php';
 ?>

@@ -12,8 +12,8 @@ class CTDL_Lib {
 	public static function get_todo( $id ) {
 		global $wpdb;
 
-		$select = "SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed, status FROM ".CTDL_TODO_TABLE." WHERE id = '%d' LIMIT 1";
-		$result = $wpdb->get_row( $wpdb->prepare( $select, $id ) );
+		$sql = "SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed, status FROM ".CTDL_TODO_TABLE." WHERE id = '%d' LIMIT 1";
+		$result = $wpdb->get_row( $wpdb->prepare( $sql, $id ) );
 		return $result;
 	}
 
@@ -225,8 +225,8 @@ class CTDL_Lib {
 	public static function delete_todo() {
 		global $wpdb;
 
-		$delete = 'DELETE FROM ' . CTDL_TODO_TABLE . ' WHERE id = "%d"';
-		$results = $wpdb->query( $wpdb->prepare( $delete, $_POST['cleverness_todo_id'] ) );
+		$sql = 'DELETE FROM '.CTDL_TODO_TABLE.' WHERE id = "%d"';
+		$results = $wpdb->query( $wpdb->prepare( $sql, $_POST['cleverness_todo_id'] ) );
 		$success = ( $results === FALSE ? 0 : 1 );
 		return $success;
 	}
@@ -242,11 +242,11 @@ class CTDL_Lib {
 			$cleverness_todo_purge_nonce = $_REQUEST['_wpnonce'];
 			if ( !wp_verify_nonce( $cleverness_todo_purge_nonce, 'todopurge' ) ) die( 'Security check failed' );
 			if ( CTDL_Loader::$settings['list_view'] == '0' ) {
-				$purge = "DELETE FROM ".CTDL_TODO_TABLE." WHERE status = '1' AND ( author = '".$userdata->ID."' || assign = '".$userdata->ID."' )";
+				$sql = "DELETE FROM ".CTDL_TODO_TABLE." WHERE status = '1' AND ( author = '".$userdata->ID."' || assign = '".$userdata->ID."' )";
 			} elseif ( CTDL_Loader::$settings['list_view'] == '1' || CTDL_Loader::$settings['list_view'] == '2' ) {
-				$purge = "DELETE FROM ".CTDL_TODO_TABLE." WHERE status = '1'";
+				$sql = "DELETE FROM ".CTDL_TODO_TABLE." WHERE status = '1'";
 			}
-			$results = $wpdb->query( $purge );
+			$results = $wpdb->query( $sql );
 			if ( $results ) {
 				$message = __( 'Completed To-Do items have been deleted.', 'cleverness-to-do-list' );
 			} else {
