@@ -54,8 +54,9 @@ class CTDL_Loader {
 		add_action( 'wp_ajax_cleverness_todo_complete', 'cleverness_todo_checklist_complete_callback' );
 		add_filter( 'plugin_action_links', 'CTDL_Lib::add_settings_link', 10, 2 );
 
+
 		// register Foo_Widget widget
-		add_action( 'widgets_init', create_function( '', 'register_widget("Foo_Widget");' ) );
+		//add_action( 'widgets_init', create_function( '', 'register_widget("Foo_Widget");' ) );
 		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', __CLASS__ . '::add_to_toolbar', 999 );
 		if ( self::$settings['categories'] ==1 ) add_action( 'admin_init', 'CTDL_Categories::initialize_categories' );
 	}
@@ -173,6 +174,69 @@ class CTDL_Loader {
 			'AJAX_URL' => admin_url( 'admin-ajax.php' )
 			);
 	}
+
+	public static function setup_custom_post_type() {
+		register_post_type( 'todo',
+			array(
+				'labels' => array(
+					'name' => __( 'To-Do' ),
+					'singular_name' => __( 'To-Do' )
+				),
+				'public' => true,
+				'has_archive' => true,
+			)
+		);
+	}
+
+	public static function create_taxonomies() {
+
+		$labels = array(
+			'name' => _x( 'Categories', 'taxonomy general name' ),
+			'singular_name' => _x( 'Category', 'taxonomy singular name' ),
+			'search_items' =>  __( 'Search Categories' ),
+			'all_items' => __( 'All Categories' ),
+			'parent_item' => __( 'Parent Category' ),
+			'parent_item_colon' => __( 'Parent Category:' ),
+			'edit_item' => __( 'Edit Category' ),
+			'update_item' => __( 'Update Category' ),
+			'add_new_item' => __( 'Add New Category' ),
+			'new_item_name' => __( 'New Category Name' ),
+		);
+
+		register_taxonomy( 'todocategories', array( 'todo' ), array(
+			'hierarchical' => true,
+			'labels' => $labels, /* NOTICE: Here is where the $labels variable is used */
+			'show_ui' => true,
+			'query_var' => true,
+			'rewrite' => array( 'slug' => 'category' ),
+		));
+
+		$labels = array(
+			'name' => _x( 'Tags', 'taxonomy general name' ),
+			'singular_name' => _x( 'Tag', 'taxonomy singular name' ),
+			'search_items' =>  __( 'Search Tags' ),
+			'popular_items' => __( 'Popular Tags' ),
+			'all_items' => __( 'All Tags' ),
+			'parent_item' => null,
+			'parent_item_colon' => null,
+			'edit_item' => __( 'Edit Tag' ),
+			'update_item' => __( 'Update Tag' ),
+			'add_new_item' => __( 'Add New Tag' ),
+			'new_item_name' => __( 'New Tag Name' ),
+			'separate_items_with_commas' => __( 'Separate tags with commas' ),
+			'add_or_remove_items' => __( 'Add or remove tags' ),
+			'choose_from_most_used' => __( 'Choose from the most used tags' )
+		);
+
+		register_taxonomy( 'todotags', 'todo', array(
+			'hierarchical' => false,
+			'labels' => $labels, /* NOTICE: the $labels variable here */
+			'show_ui' => true,
+			'query_var' => true,
+			'rewrite' => array( 'slug' => 'tags' ),
+		));
+	}
+
 
 }
 ?>

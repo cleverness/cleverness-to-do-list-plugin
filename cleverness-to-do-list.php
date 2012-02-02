@@ -33,6 +33,8 @@ function cleverness_todo_loader() {
 	include_once 'includes/cleverness-to-do-list-loader.class.php';
 
 	CTDL_Loader::init();
+	CTDL_Loader::setup_custom_post_type();
+	CTDL_Loader::create_taxonomies();
 
 	$action = '';
 	if ( isset( $_GET['action'] ) ) $action = $_GET['action'];
@@ -111,4 +113,5 @@ function cleverness_todo_activation() {
 }
 
 include_once 'includes/cleverness-to-do-list-widget.class.php';
+
 ?>

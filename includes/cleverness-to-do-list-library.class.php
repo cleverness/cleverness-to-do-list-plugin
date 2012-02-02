@@ -10,11 +10,35 @@ class CTDL_Lib {
 
 	/* Get to-do list item */
 	public static function get_todo( $id ) {
-		global $wpdb;
+		$post = get_post( $id );
+		return $post;
+	}
 
-		$sql = "SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed, status FROM ".CTDL_TODO_TABLE." WHERE id = '%d' LIMIT 1";
-		$result = $wpdb->get_row( $wpdb->prepare( $sql, $id ) );
-		return $result;
+	public static function test_get_todos( $user, $limit = 0, $status = 0, $cat_id = 0  ) {
+		$args = array(
+			'post_type' => 'todo',
+			'author' => $user,
+			'post_status' => 'publish',
+			'posts_per_page' => -1,
+			'orderby' => 'title',
+			/*http://codex.wordpress.org/Class_Reference/WP_Query
+			 *  'orderby' => 'meta_value', 'meta_key' => 'price'
+			 * 'tax_query' => array(
+				array(
+					'taxonomy' => 'people',
+					'field' => 'slug',
+					'terms' => 'bob'
+				)
+			)
+			'meta_query' => array(
+		array(
+			'key' => 'color',
+			'value' => 'blue',
+			'compare' => 'NOT LIKE'
+		)*/
+		);
+		$results = new WP_Query( $args );
+		return $results;
 	}
 
 	/* Get to-do list items */
@@ -119,41 +143,42 @@ class CTDL_Lib {
 
 	/* Insert new to-do item into the database */
 	public static function insert_todo() {
-		global $wpdb, $current_user;
+		global $current_user;
 
-		if ( $_POST['cleverness_todo_description'] != '' ) {
-			$cleverness_todo_permission = CTDL_LIB::check_permission( 'todo', 'add' );
+		if ( $_POST['cleverness_todo_description'] == '' ) return;
 
-			if ( $cleverness_todo_permission === true ) {
+		$cleverness_todo_permission = CTDL_LIB::check_permission( 'todo', 'add' );
 
-				if ( !wp_verify_nonce( $_REQUEST['todoadd'], 'todoadd' ) ) die( 'Security check failed' );
-				if ( CTDL_Loader::$settings['email_assigned'] == '1' && CTDL_Loader::$settings['assign'] == '0' ) {
-					$message = CTDL_Lib::email_user( $_POST['cleverness_todo_assign'], $_POST['cleverness_todo_deadline'], $_POST['cleverness_todo_category'] );
-				}
+		if ( $cleverness_todo_permission === true ) {
 
-				$results = $wpdb->insert( CTDL_TODO_TABLE, array( 'author'      => $current_user->ID,
-				                                                  'status'      => 0,
-				                                                  'priority'    => $_POST['cleverness_todo_priority'],
-				                                                  'todotext'    => $_POST['cleverness_todo_description'],
-				                                                  'assign'      => $_POST['cleverness_todo_assign'],
-				                                                  'deadline'    => $_POST['cleverness_todo_deadline'],
-				                                                  'progress'    => $_POST['cleverness_todo_progress'],
-				                                                  'cat_id'      => $_POST['cleverness_todo_category'] ) );
-				if ( $results ) {
-					$message = __( 'New To-Do item has been added.', 'cleverness-to-do-list' );
-				} else {
-					$message = __( 'There was a problem adding the item to the database.', 'cleverness-to-do-list' );
-				}
-			} else {
-				$message = __( 'You do not have sufficient privileges to add an item.', 'cleverness-to-do-list' );
+			if ( !wp_verify_nonce( $_REQUEST['todoadd'], 'todoadd' ) ) die( 'Security check failed' );
+
+			if ( CTDL_Loader::$settings['email_assigned'] == '1' && CTDL_Loader::$settings['assign'] == '0' ) {
+				CTDL_Lib::email_user( $_POST['cleverness_todo_assign'], $_POST['cleverness_todo_deadline'], $_POST['cleverness_todo_category'] );
 			}
 
-		} else {
-			$message = __( 'To-Do cannot be blank.', 'cleverness-to-do-list' );
+			$my_post = array(
+				'post_type'        => 'todo',
+				'post_title'       => substr( $_POST['cleverness_todo_description'], 0, 100 ),
+				'post_content'     => $_POST['cleverness_todo_description'],
+				'post_status'      => 'publish',
+				'post_author'      => $current_user->ID,
+				'comment_status'   => 'closed',
+				'ping_status'      => 'closed',
+			);
+
+			$post_id = wp_insert_post( $my_post );
+
+			wp_set_post_terms( $post_id, $_POST['cat'], 'todocategories', false);
+			add_post_meta( $post_id, '_status', 0, true );
+			add_post_meta( $post_id, '_priority', $_POST['cleverness_todo_priority'], true );
+			add_post_meta( $post_id, '_assign', $_POST['cleverness_todo_assign'], true );
+			add_post_meta( $post_id, '_deadline', $_POST['cleverness_todo_deadline'], true );
+			add_post_meta( $post_id, '_progress', $_POST['cleverness_todo_progress'], true );
+
 		}
 
-
-		return $message;
+		return;
 	}
 
 	/* Send an email to assigned user - Category code contributed by Daniel
@@ -197,42 +222,40 @@ class CTDL_Lib {
 
 	/* Update to-do list item */
 	public static function edit_todo() {
-		global $wpdb;
 		$cleverness_todo_permission = CTDL_LIB::check_permission( 'todo', 'edit' );
 
 		if ( $cleverness_todo_permission === true ) {
+
 			if ( !wp_verify_nonce( $_REQUEST['todoupdate'], 'todoupdate' ) ) die( 'Security check failed' );
-			$results = $wpdb->update( CTDL_TODO_TABLE, array( 'priority'     => $_POST['cleverness_todo_priority'],
-			                                                  'todotext'     => $_POST['cleverness_todo_description'],
-			                                                  'assign'       => $_POST['cleverness_todo_assign'],
-			                                                  'deadline'     => $_POST['cleverness_todo_deadline'],
-			                                                  'progress'     => $_POST['cleverness_todo_progress'],
-			                                                  'cat_id'       => $_POST['cleverness_todo_category'] ),
-															   array( 'id' => $_POST['id'] ) );
-			if ( $results ) {
-				$message = __( 'To-Do item has been updated.', 'cleverness-to-do-list' );
-			} else {
-				$message = __( 'There was a problem editing the item.', 'cleverness-to-do-list' );
-			}
-		} else {
-			$message = __( 'You do not have sufficient privileges to edit an item.', 'cleverness-to-do-list' );
+
+			$my_post = array(
+				'ID'            => $_POST['id'],
+				'post_title'    => substr( $_POST['cleverness_todo_description'], 0, 100 ),
+				'post_content'  => $_POST['cleverness_todo_description'],
+			);
+
+			$post_id = wp_update_post( $my_post );
+
+			wp_set_post_terms( $post_id, $_POST['cat'], 'todocategories', false);
+			update_post_meta( $post_id, '_priority', $_POST['cleverness_todo_priority'] );
+			update_post_meta( $post_id, '_assign', $_POST['cleverness_todo_assign'] );
+			update_post_meta( $post_id, '_deadline', $_POST['cleverness_todo_deadline'] );
+			update_post_meta( $post_id, '_progress', $_POST['cleverness_todo_progress'] );
+
 		}
 
-		return $message;
+		return;
 	}
 
 	/* Delete to-do list item */
 	public static function delete_todo() {
-		global $wpdb;
-
-		$sql = 'DELETE FROM '.CTDL_TODO_TABLE.' WHERE id = "%d"';
-		$results = $wpdb->query( $wpdb->prepare( $sql, $_POST['cleverness_todo_id'] ) );
-		$success = ( $results === FALSE ? 0 : 1 );
-		return $success;
+		wp_delete_post( $_POST['cleverness_todo_id'] );
+		return;
 	}
 
 
-	/* Delete all completed to-do list items */
+	/* Delete all completed to-do list items
+	@todo add js confirm */
 	public static function delete_all_todos() {
 		global $wpdb, $userdata;
 
