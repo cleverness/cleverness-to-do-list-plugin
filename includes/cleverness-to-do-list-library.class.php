@@ -248,9 +248,9 @@ class CTDL_Lib {
 	}
 
 	/* Delete to-do list item */
-	public static function delete_todo() {
-		wp_delete_post( $_POST['cleverness_todo_id'] );
-		return;
+	public static function delete_todo( $id ) {
+		wp_delete_post( $id, true );
+		return 1;
 	}
 
 

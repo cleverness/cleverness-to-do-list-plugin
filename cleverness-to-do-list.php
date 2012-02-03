@@ -65,21 +65,23 @@ function cleverness_todo_loader() {
 	} // end switch
 
 	/* Delete To-Do Ajax
-	@todo not working
-	*/
+	   @todo not working; something to do with other functions being in class?
+	   */
 	function cleverness_delete_todo_callback() {
 		check_ajax_referer( 'cleverness-todo' );
 		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'delete' );
 
 		if ( $cleverness_todo_permission === true ) {
-			$cleverness_todo_status = CTDL_Lib::delete_todo();
+			$cleverness_todo_status = CTDL_Lib::delete_todo( $_POST['cleverness_todo_id'] );
 		} else {
-			$cleverness_todo_status = 2;
+			$cleverness_todo_status = -1;
 		}
 
 		echo $cleverness_todo_status;
 		die(); // this is required to return a proper result
 	}
+
+
 
 	/* Add plugin info to admin footer */
 	function cleverness_todo_admin_footer() {
@@ -87,22 +89,7 @@ function cleverness_todo_loader() {
 		printf( __( "%s plugin | Version %s | by %s | <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org' target='_blank'>Donate</a><br />", 'cleverness-to-do-list' ), $plugin_data['Title'], $plugin_data['Version'], $plugin_data['Author'] );
 	}
 
-	function cleverness_todo_checklist_complete_callback() {
-		check_ajax_referer( 'cleverness-todo' );
-		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 
-		if ( $cleverness_todo_permission === true ) {
-			$cleverness_id = intval( $_POST['cleverness_id'] );
-			$cleverness_status = intval( $_POST['cleverness_status'] );
-
-			$message = CTDL_Lib::complete_todo( $cleverness_id, $cleverness_status );
-		} else {
-			$message = __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
-		}
-		echo $message;
-
-		die(); // this is required to return a proper result
-	}
 
 }
 
@@ -113,5 +100,24 @@ function cleverness_todo_activation() {
 }
 
 include_once 'includes/cleverness-to-do-list-widget.class.php';
+
+
+
+function cleverness_todo_checklist_complete_callback() {
+	check_ajax_referer( 'cleverness-todo' );
+	$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'complete' );
+
+	if ( $cleverness_todo_permission === true ) {
+		$cleverness_id = intval( $_POST['cleverness_id'] );
+		$cleverness_status = intval( $_POST['cleverness_status'] );
+
+		$message = CTDL_Lib::complete_todo( $cleverness_id, $cleverness_status );
+	} else {
+		$message = __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
+	}
+	echo $message;
+
+	die(); // this is required to return a proper result
+}
 
 ?>
