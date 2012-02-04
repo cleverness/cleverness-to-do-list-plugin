@@ -28,6 +28,12 @@ $('.edit-todo').live('click', function () {
 		});
 /* end Edit To-Dos */
 
+/* Delete All Todos */
+$('#delete-all-todos').live('click', function () {
+	var confirmed = confirm(ctdl.CONFIRMATION_ALL_MSG);
+	if ( confirmed == false ) return;
+});
+
 /* Delete To-Dos */
 $('.delete-todo').live('click', function () {
 	var confirmed = confirm(ctdl.CONFIRMATION_MSG);

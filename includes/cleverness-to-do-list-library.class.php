@@ -14,12 +14,13 @@ class CTDL_Lib {
 		return $post;
 	}
 
-	public static function test_get_todos( $user, $limit = 0, $status = 0, $cat_id = 0  ) {
+	/* @todo master view needs to get set up */
+	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0  ) {
 		$args = array(
 			'post_type' => 'todo',
 			'author' => $user,
 			'post_status' => 'publish',
-			'posts_per_page' => -1,
+			'posts_per_page' => $limit,
 			'orderby' => 'title',
 			/*http://codex.wordpress.org/Class_Reference/WP_Query
 			 *  'orderby' => 'meta_value', 'meta_key' => 'price'
@@ -29,20 +30,20 @@ class CTDL_Lib {
 					'field' => 'slug',
 					'terms' => 'bob'
 				)
-			)
+			)*/
 			'meta_query' => array(
-		array(
-			'key' => 'color',
-			'value' => 'blue',
-			'compare' => 'NOT LIKE'
-		)*/
+				array(
+					'key' => '_status',
+					'value' => $status,
+				)
+			)
 		);
 		$results = new WP_Query( $args );
 		return $results;
 	}
 
 	/* Get to-do list items */
-	public static function get_todos( $user, $limit = 0, $status = 0, $cat_id = 0 ) {
+	public static function old_get_todos( $user, $limit = 0, $status = 0, $cat_id = 0 ) {
 		global $wpdb;
 
 		$select = 'SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed FROM '.CTDL_TODO_TABLE.' WHERE status = '.absint( $status );
@@ -95,28 +96,36 @@ class CTDL_Lib {
 		return $result;
 	}
 
-	/* Mark to-do list item as completed or uncompleted */
-	public static function complete_todo( $id, $status ) {
-		global $wpdb, $current_user;
+	public static function cleverness_todo_checklist_complete_callback() {
+		check_ajax_referer( 'cleverness-todo' );
+		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 
+		if ( $cleverness_todo_permission === true ) {
+			$cleverness_id = intval( $_POST['cleverness_id'] );
+			$cleverness_status = intval( $_POST['cleverness_status'] );
+
+			$message = CTDL_Lib::complete_todo( $cleverness_id, $cleverness_status );
+		} else {
+			$message = __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
+		}
+		echo $message;
+
+		die(); // this is required to return a proper result
+	}
+
+	/* todo master view needs set up */
+	public static function complete_todo( $id, $status ) {
+		global $current_user;
 		$cleverness_todo_complete_nonce = $_REQUEST['_wpnonce'];
 		if ( !wp_verify_nonce( $cleverness_todo_complete_nonce, 'todocomplete' ) ) die( 'Security check failed' );
 
 		// if individual view, group view with complete capability, or master view with edit capability
-		if ( CTDL_Loader::$settings['list_view'] == '0' ||
-				( CTDL_Loader::$settings['list_view'] == '1' && current_user_can( CTDL_Loader::$settings['complete_capability'] ) ) ||
-				( CTDL_Loader::$settings['list_view'] == '2' && current_user_can( CTDL_Loader::$settings['edit_capability'] ) )
-		) {
-			$results = $wpdb->update( CTDL_TODO_TABLE, array( 'status' => $status ), array( 'id' => $id ) );
+		if ( CTDL_Loader::$settings['list_view'] == '0' || ( CTDL_Loader::$settings['list_view'] == '1' && current_user_can( CTDL_Loader::$settings['complete_capability'] ) )
+			|| ( CTDL_Loader::$settings['list_view'] == '2' && current_user_can( CTDL_Loader::$settings['edit_capability'] ) ) ) {
 
-			if ( $status == 1 ) $status_text = __( 'completed', 'cleverness-to-do-list' );
-			else $status_text = __( 'uncompleted', 'cleverness-to-do-list' );
-			if ( $results ) $message = __('To-Do item has been marked as ', 'cleverness-to-do-list').$status_text.'.';
-			else {
-				$message = __('There was a problem changing the status of the item.', 'cleverness-to-do-list');
-			}
+			update_post_meta( $id, '_status', $status );
+			update_post_meta( $id, '_completed', date( 'Y-m-d' ) );
 
-		// master view - individual
 		} elseif ( CTDL_Loader::$settings['list_view'] == '2' ) {
 			$user = $current_user->ID;
 			$wpdb->get_results( "SELECT * FROM ".CTDL_STATUS_TABLE." WHERE id = $id AND user = $user" );
@@ -128,17 +137,8 @@ class CTDL_Lib {
 				$results = $wpdb->update( CTDL_STATUS_TABLE, array( 'status' => $status ), array( 'id' => $id, 'user' => $user ) );
 			}
 
-			if ( $status == '1' ) $status_text = __( 'completed', 'cleverness-to-do-list' );
-			else $status_text = __( 'uncompleted', 'cleverness-to-do-list' );
-			if ( $results ) $message = __( 'To-Do item has been marked as ', 'cleverness-to-do-list').$status_text.'.';
-			else {
-				$message = __( 'There was a problem changing the status of the item.', 'cleverness-to-do-list' );
-			}
-			// no capability
-		} else {
-			$message = __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
 		}
-		return $message;
+
 	}
 
 	/* Insert new to-do item into the database */
@@ -247,59 +247,78 @@ class CTDL_Lib {
 		return;
 	}
 
+	/* Delete To-Do Ajax */
+	public static function cleverness_delete_todo_callback() {
+		check_ajax_referer( 'cleverness-todo' );
+		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'delete' );
+
+		if ( $cleverness_todo_permission === true ) {
+			$cleverness_todo_status = CTDL_Lib::delete_todo( $_POST['cleverness_todo_id'] );
+		} else {
+			$cleverness_todo_status = -1;
+		}
+
+		echo $cleverness_todo_status;
+		die(); // this is required to return a proper result
+	}
+
 	/* Delete to-do list item */
 	public static function delete_todo( $id ) {
 		wp_delete_post( $id, true );
 		return 1;
 	}
 
-
-	/* Delete all completed to-do list items
-	@todo add js confirm */
+	/* Delete all completed to-do list items */
 	public static function delete_all_todos() {
-		global $wpdb, $userdata;
+		global $userdata;
 
 		$cleverness_todo_permission = CTDL_LIB::check_permission( 'todo', 'purge' );
 
 		if ( $cleverness_todo_permission === true ) {
 			$cleverness_todo_purge_nonce = $_REQUEST['_wpnonce'];
 			if ( !wp_verify_nonce( $cleverness_todo_purge_nonce, 'todopurge' ) ) die( 'Security check failed' );
-			if ( CTDL_Loader::$settings['list_view'] == '0' ) {
-				$sql = "DELETE FROM ".CTDL_TODO_TABLE." WHERE status = '1' AND ( author = '".$userdata->ID."' || assign = '".$userdata->ID."' )";
-			} elseif ( CTDL_Loader::$settings['list_view'] == '1' || CTDL_Loader::$settings['list_view'] == '2' ) {
-				$sql = "DELETE FROM ".CTDL_TODO_TABLE." WHERE status = '1'";
-			}
-			$results = $wpdb->query( $sql );
-			if ( $results ) {
-				$message = __( 'Completed To-Do items have been deleted.', 'cleverness-to-do-list' );
-			} else {
-				$message = __( 'There was a problem removing the completed items.', 'cleverness-to-do-list' );
-			}
-		} else {
-			$message = __( 'You do not have sufficient privileges to edit an item.', 'cleverness-to-do-list' );
-		}
 
-		return $message;
-	}
-	/**
-	 * Checks the WordPress version to make sure the plugin is compatible
-	 * @static
-	 */
-	public static function check_wp_version() {
-		global $wp_version;
-		$exit_msg = __( 'To-Do List requires WordPress 3.3 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please update.</a>', 'cleverness-to-do-list' );
-		if ( version_compare( $wp_version, "3.3", "<" ) ) {
-			exit( $exit_msg );
+			if ( CTDL_Loader::$settings['list_view'] == '0' ) {
+				$args = array(
+					'post_type' => 'todo',
+					'author' => $userdata->ID,
+					'post_status' => 'publish',
+					'meta_query' => array(
+						array(
+							'key' => '_status',
+							'value' => 1,
+						)
+					)
+				);
+
+			} elseif ( CTDL_Loader::$settings['list_view'] == '1' || CTDL_Loader::$settings['list_view'] == '2' ) {
+				$args = array(
+					'post_type' => 'todo',
+					'post_status' => 'publish',
+					'meta_query' => array(
+						array(
+							'key' => '_status',
+							'value' => 1,
+						)
+					)
+				);
+			}
+
+			$todoitems = new WP_Query( $args );
+
+			while ( $todoitems->have_posts() ) : $todoitems->the_post();
+				$id = get_the_ID();
+				wp_delete_post( $id, true );
+			endwhile;
 		}
 	}
 
 	/**
 	 * Set priority, user, url, and action variables
-	 * @param $current_user
-	 * @param $userdata
 	 * @return array
 	 */
-	public static function set_variables( $current_user, $userdata ) {
+	public static function set_variables() {
+		global $current_user, $userdata;
 		$priorities = array( 0 => CTDL_Loader::$settings['priority_0'],
 		                     1 => CTDL_Loader::$settings['priority_1'],
 		                     2 => CTDL_Loader::$settings['priority_2'] );
@@ -366,6 +385,29 @@ class CTDL_Lib {
 		return $pageURL;
 	}
 
+	/**
+	 * Add an Item to the Admin Menu
+	 * @param $wp_toolbar
+	 */
+	public function add_to_toolbar( $wp_toolbar ) {
+		$wp_toolbar->add_node( array(
+			'id'    => 'todolist',
+			'title' => 'To-Do List',
+			'href'  => get_admin_url().'admin.php?page=cleverness-to-do-list'
+		) );
+
+		if ( current_user_can(CTDL_Loader::$settings['add_capability'] ) ) {
+
+			$wp_toolbar->add_node( array(
+				'id'     => 'todolist-add',
+				'title'  => 'Add New To-Do Item',
+				'parent' => 'todolist',
+				'href'   => get_admin_url().'admin.php?page=cleverness-to-do-list#addtodo'
+			) );
+
+		}
+	}
+
 	/* Add Settings link to plugin */
 	public static function add_settings_link( $links, $file ) {
 		static $this_plugin;
@@ -376,6 +418,12 @@ class CTDL_Lib {
 			array_unshift( $links, $settings_link );
 		}
 		return $links;
+	}
+
+	/* Add plugin info to admin footer */
+	public static function cleverness_todo_admin_footer() {
+		$plugin_data = get_plugin_data( CTDL_FILE );
+		printf( __( "%s plugin | Version %s | by %s | <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org' target='_blank'>Donate</a><br />", 'cleverness-to-do-list' ), $plugin_data['Title'], $plugin_data['Version'], $plugin_data['Author'] );
 	}
 
 	/* Create database table and add default options */
@@ -437,7 +485,7 @@ class CTDL_Lib {
 			);
 
 			$advanced_options = array(
-				'date_format'           => 'm-d-Y',
+				'date_format'           => 'm/d/Y',
 				'priority_0'            => __( 'Important', 'cleverness-to-do-list' ),
 				'priority_1'            => __( 'Normal', 'cleverness-to-do-list' ),
 				'priority_2'            => __( 'Low', 'cleverness-to-do-list' ),

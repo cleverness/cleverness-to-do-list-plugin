@@ -4,7 +4,6 @@
  * @author C.M. Kendrick
  * @version 3.0
  * @package cleverness-to-do-list
- * @todo check out $message, see if its being used
  */
 
 class CTDL_Loader {
@@ -12,9 +11,11 @@ class CTDL_Loader {
 
 	public static function init() {
 
+		self::check_wp_version();
 		self::$settings = array_merge( get_option( 'cleverness-to-do-list-general' ), get_option( 'cleverness-to-do-list-advanced' ), get_option( 'cleverness-to-do-list-permissions' ) );
+		self::setup_custom_post_type();
+		self::create_taxonomies();
 		self::include_files();
-		CTDL_Lib::check_wp_version();
 		self::call_wp_hooks();
 
 		global $ClevernessToDoList;
@@ -28,16 +29,17 @@ class CTDL_Loader {
 	 * @static
 	 */
 	private static function include_files() {
-		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-settings.class.php';
-		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list.class.php';
-		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-library.class.php';
-		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-frontend.class.php';
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-settings.class.php';
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list.class.php';
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-library.class.php';
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-frontend.class.php';
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-help.class.php';
+		if ( self::$settings['categories'] == 1 ) include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-categories.class.php';
 
-		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-dashboard-widget.php';
-		//include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-widget.php';
-		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-shortcode.php';
-		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-help.php';
-		if ( self::$settings['categories'] == 1 ) include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-categories.class.php';
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-dashboard-widget.php';
+		//include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-widget.php';
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-shortcode.php';
+
 	}
 
 	/**
@@ -45,20 +47,19 @@ class CTDL_Loader {
 	 * @static
 	 */
 	private static function call_wp_hooks() {
-		add_action( 'init', __CLASS__ . '::load_translation_file' );
-		add_action( 'admin_init', __CLASS__ . '::admin_init' );
-		//add_action( 'widgets_init', 'cleverness_todo_widget' );
-		add_action( 'admin_menu', __CLASS__ . '::create_admin_menu' );
-   		add_action( 'wp_dashboard_setup', 'cleverness_todo_dashboard_setup' );
-		add_action( 'wp_ajax_cleverness_todo_delete', 'cleverness_todo_delete_todo_callback' );
-		add_action( 'wp_ajax_cleverness_todo_complete', 'cleverness_todo_checklist_complete_callback' );
+		add_action( 'init', __CLASS__.'::load_translation_file' );
+		add_action( 'admin_init', __CLASS__.'::admin_init' );
+		add_action( 'admin_menu', __CLASS__.'::create_admin_menu' );
+		add_action( 'wp_ajax_cleverness_delete_todo', 'CTDL_Lib::cleverness_delete_todo_callback' );
+		add_action( 'wp_ajax_cleverness_todo_complete', 'CTDL_Lib::cleverness_todo_checklist_complete_callback' );
 		add_filter( 'plugin_action_links', 'CTDL_Lib::add_settings_link', 10, 2 );
-
-
-		// register Foo_Widget widget
-		//add_action( 'widgets_init', create_function( '', 'register_widget("Foo_Widget");' ) );
-		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', __CLASS__ . '::add_to_toolbar', 999 );
+		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', 'CTDL_Lib::add_to_toolbar', 999 );
 		if ( self::$settings['categories'] ==1 ) add_action( 'admin_init', 'CTDL_Categories::initialize_categories' );
+
+		add_action( 'wp_dashboard_setup', 'cleverness_todo_dashboard_setup' );
+		//add_action( 'widgets_init', 'cleverness_todo_widget' );
+		//add_action( 'widgets_init', create_function( '', 'register_widget("Foo_Widget");' ) );
+
 	}
 
 	/**
@@ -71,13 +72,13 @@ class CTDL_Loader {
    		get_currentuserinfo();
 
         $cleverness_todo_page = add_menu_page( __( 'To-Do List', 'cleverness-to-do-list' ), __( 'To-Do List', 'cleverness-to-do-list' ), self::$settings['view_capability'], 'cleverness-to-do-list',
-		        __CLASS__.'::plugin_page', CTDL_PLUGIN_URL.'/images/cleverness-todo-icon-sm.png' );
+		   __CLASS__.'::plugin_page', CTDL_PLUGIN_URL.'/images/cleverness-todo-icon-sm.png' );
 		if ( self::$settings['categories'] == '1' ) {
 			$cleverness_todo_cat_page = add_submenu_page( 'cleverness-to-do-list', __( 'To-Do List Categories', 'cleverness-to-do-list' ), __( 'Categories', 'cleverness-to-do-list' ),
-				self::$settings['add_cat_capability'], 'cleverness-to-do-list-cats', 'CTDL_Categories::create_category_page' );
-			add_action( "load-$cleverness_todo_cat_page", 'cleverness_todo_help_tab' );
+			self::$settings['add_cat_capability'], 'cleverness-to-do-list-cats', 'CTDL_Categories::create_category_page' );
+			add_action( "load-$cleverness_todo_cat_page", 'CTDL_Help::cleverness_todo_help_tab' );
 		}
-		add_action( "load-$cleverness_todo_page", 'cleverness_todo_help_tab' );
+		add_action( "load-$cleverness_todo_page", 'CTDL_Help::cleverness_todo_help_tab' );
 	}
 
 	/**
@@ -92,34 +93,11 @@ class CTDL_Loader {
 	}
 
 	/**
-	 * Add an Item to the Admin Menu
-	 * @param $wp_toolbar
-	 */
-	public function add_to_toolbar( $wp_toolbar ) {
-		$wp_toolbar->add_node( array(
-			'id'    => 'todolist',
-			'title' => 'To-Do List',
-			'href'  => get_admin_url().'admin.php?page=cleverness-to-do-list'
-		) );
-
-		if ( current_user_can(self::$settings['add_capability'] ) ) {
-
-		$wp_toolbar->add_node( array(
-			'id'     => 'todolist-add',
-			'title'  => 'Add New To-Do Item',
-			'parent' => 'todolist',
-			'href'   => get_admin_url() . 'admin.php?page=cleverness-to-do-list#addtodo'
-		) );
-
-		}
-	}
-
-	/**
 	 * Loads translation files
 	 * @static
 	 */
 	public static function load_translation_file() {
-		$plugin_path = CTDL_BASENAME .'/lang';
+		$plugin_path = CTDL_BASENAME.'/lang';
 		load_plugin_textdomain( 'cleverness-to-do-list', '', $plugin_path );
 	}
 
@@ -133,7 +111,7 @@ class CTDL_Loader {
     	if ( file_exists( $cleverness_style_file ) ) {
    			wp_register_style( 'cleverness_todo_style_sheet', $cleverness_style_url );
     		wp_enqueue_style( 'cleverness_todo_style_sheet' );
-        	}
+        }
 	}
 
 	/**
@@ -144,7 +122,7 @@ class CTDL_Loader {
 		wp_enqueue_script( 'cleverness_todo_js' );
 		wp_enqueue_script( 'jquery-color' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_enqueue_style('jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-classic.css');
+		wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-classic.css' );
 		wp_localize_script( 'cleverness_todo_js', 'ctdl', CTDL_Loader::get_js_vars() );
     }
 
@@ -166,10 +144,11 @@ class CTDL_Loader {
 	 */
 	public static function get_js_vars() {
 		return array(
-			'SUCCESS_MSG' => __( 'To-Do Deleted.', 'cleverness-to-do-list'),
+			'SUCCESS_MSG' => __( 'To-Do Deleted.', 'cleverness-to-do-list' ),
 			'ERROR_MSG' => __( 'There was a problem performing that action.', 'cleverness-to-do-list' ),
 			'PERMISSION_MSG' => __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' ),
 			'CONFIRMATION_MSG' => __( "You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
+			'CONFIRMATION_ALL_MSG' => __( "You are about to permanently delete all completed items. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 			'NONCE' => wp_create_nonce( 'cleverness-todo' ),
 			'AJAX_URL' => admin_url( 'admin-ajax.php' )
 			);
@@ -205,7 +184,7 @@ class CTDL_Loader {
 
 		register_taxonomy( 'todocategories', array( 'todo' ), array(
 			'hierarchical' => true,
-			'labels' => $labels, /* NOTICE: Here is where the $labels variable is used */
+			'labels' => $labels,
 			'show_ui' => true,
 			'query_var' => true,
 			'rewrite' => array( 'slug' => 'category' ),
@@ -230,13 +209,24 @@ class CTDL_Loader {
 
 		register_taxonomy( 'todotags', 'todo', array(
 			'hierarchical' => false,
-			'labels' => $labels, /* NOTICE: the $labels variable here */
+			'labels' => $labels,
 			'show_ui' => true,
 			'query_var' => true,
 			'rewrite' => array( 'slug' => 'tags' ),
 		));
 	}
 
+	/**
+	 * Checks the WordPress version to make sure the plugin is compatible
+	 * @static
+	 */
+	public static function check_wp_version() {
+		global $wp_version;
+		$exit_msg = __( 'To-Do List requires WordPress 3.3 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please update.</a>', 'cleverness-to-do-list' );
+		if ( version_compare( $wp_version, "3.3", "<" ) ) {
+			exit( $exit_msg );
+		}
+	}
 
 }
 ?>

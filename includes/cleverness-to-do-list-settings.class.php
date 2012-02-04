@@ -165,7 +165,7 @@ class ClevernessToDoSettings {
 
 	function date_format_option() { ?>
 		<input class="small-text" type="text" name="<?php echo $this->advanced_key; ?>[date_format]" value="<?php if ( $this->advanced_settings['date_format'] != '' ) echo $this->advanced_settings['date_format']; else
-			echo 'm-d-Y';
+			echo 'm/d/Y';
 			?>"	/><br />
 		<a href="http://codex.wordpress.org/Formatting_Date_and_Time"><?php _e( 'Documentation on Date Formatting', 'cleverness-to-do-list' ); ?></a>
 	<?php }
@@ -272,7 +272,7 @@ class ClevernessToDoSettings {
 		global $cleverness_todo_settings_page;
 		$cleverness_todo_settings_page = add_submenu_page( 'cleverness-to-do-list', __( 'To-Do List Settings', 'cleverness-to-do-list' ), __( 'Settings', 'cleverness-to-do-list' ), 'manage_options',
 			'cleverness-to-do-list-settings', array( &$this, 'plugin_options_page' ) );
-		add_action( "load-$cleverness_todo_settings_page", 'cleverness_todo_help_tab' );
+		add_action( "load-$cleverness_todo_settings_page", 'CTDL_Help::cleverness_todo_help_tab' );
 	}
 
 	/*
@@ -294,7 +294,7 @@ class ClevernessToDoSettings {
 		</form>
 	</div>
 	<?php
-	add_action( 'in_admin_footer', 'cleverness_todo_admin_footer');
+	add_action( 'in_admin_footer', 'CTDL_Lib::cleverness_todo_admin_footer');
 	}
 
 	/*

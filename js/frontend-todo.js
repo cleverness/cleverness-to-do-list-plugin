@@ -32,7 +32,7 @@ $('.delete-todo').live('click', function (e) {
     	type:'post',
       	url: ctdl.AJAX_URL,
 	  	data: {
-			action: 'cleverness_todo_delete',
+			action: 'cleverness_delete_todo',
 			cleverness_todo_id: $(todotr).attr('id').substr(5),
 			_ajax_nonce: ctdl.NONCE
 			},

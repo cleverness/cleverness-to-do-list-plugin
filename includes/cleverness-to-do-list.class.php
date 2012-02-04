@@ -5,6 +5,7 @@
  * @version 3.0
  * @package cleverness-to-do-list
  */
+
 class ClevernessToDoList {
 	protected $cat_id = '';
 	public $list = '';
@@ -16,21 +17,13 @@ class ClevernessToDoList {
 
 	/**
 	 * Display a to-do list
-	 * @todo break out into smaller functions
 	 */
 	public function display() {
-		global $userdata, $current_user;
-		get_currentuserinfo();
-
-		list( $priorities, $user, $url, $action ) = CTDL_Lib::set_variables( $current_user, $userdata );
+		list( $priorities, $user, $url, $action ) = CTDL_Lib::set_variables();
 
 		if ( is_admin() ) {
 			$this->list .= '<div class="wrap"><div class="icon32"><img src="'.CTDL_PLUGIN_URL.'/images/cleverness-todo-icon.png" alt="" /></div> <h2>'.__('To-Do List', 'cleverness-to-do-list').'</h2>';
 		}
-
-		//if ( isset( $message ) ) {
-			$this->list .= '<div id="message" class="updated fade"><p>'.$message.'</p></div>';
-			//}
 
 		// get the existing to-do data and show the edit form if editing a to-do item
 		if ( $action == 'edit-todo' ) {
@@ -39,57 +32,46 @@ class ClevernessToDoList {
 		}
 
 		// otherwise, display the list of to-do items
-
 		if ( is_admin() ) $this->list .= '<h3>'.__( 'To-Do Items', 'cleverness-to-do-list' );
-
 		if ( current_user_can( CTDL_Loader::$settings['add_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 			$this->list .= ' (<a href="#addtodo">'.__( 'Add New Item', 'cleverness-to-do-list' ).'</a>)';
 		 	}
-
 		if ( is_admin() ) $this->list .= '</h3>';
 
 		$this->list .= '<table id="todo-list" class="todo-table widefat">';
-
 		$this->show_table_headings();
 
-		// get uncompleted to-do items
-		$results = CTDL_Lib::test_get_todos( $user, 0, 0 );
+		$todo_items = CTDL_Lib::get_todos( $user, 0, 0 );
 
-		if ( $results ) {
-			$this->show_todo_list_items( $results, $priorities, $url );
+		if ( $todo_items->have_posts() ) {
+			$this->show_todo_list_items( $todo_items, $priorities, $url );
 		} else {
-			/* if there are no to-do items, display this message */
 			$this->list .= '<tr><td>'.__( 'No items to do.', 'cleverness-to-do-list' ).'</td></tr>';
 			}
 
 		$this->list .= '</table>';
 
-		/* Show completed items */
+		/* Show completed items in admin */
 		if ( is_admin() ) {
 			$this->list .= '<h3>'.__( 'Completed Items', 'cleverness-to-do-list' );
-
-		if ( current_user_can( CTDL_Loader::$settings['purge_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
-			$cleverness_todo_purge_nonce = wp_create_nonce( 'todopurge' );
-			$this->list .= ' (<a href="admin.php?page=cleverness-to-do-list&amp;action=purgetodo&_wpnonce='.$cleverness_todo_purge_nonce.'">'.__('Delete All', 'cleverness-to-do-list').'</a>)';
+			if ( current_user_can( CTDL_Loader::$settings['purge_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
+				$cleverness_todo_purge_nonce = wp_create_nonce( 'todopurge' );
+				$this->list .= ' (<a id="delete-all-todos" href="admin.php?page=cleverness-to-do-list&amp;action=purgetodo&_wpnonce='.$cleverness_todo_purge_nonce.'">'.__('Delete All', 'cleverness-to-do-list').'</a>)';
 		 	}
+			if ( is_admin() ) $this->list .= '</h3>';
 
-		if ( is_admin() ) $this->list .= '</h3>';
+			$this->list .= '<table id="todo-list-completed" class="todo-table widefat">';
+			$this->show_table_headings( 1 );
 
-		$this->list .= '<table id="todo-list-completed" class="todo-table widefat">';
+			$todo_items = CTDL_Lib::get_todos( $user, 0, 1 );
 
-		$this->show_table_headings( 1 );
+			if ( $todo_items->have_posts() ) {
+				$this->show_todo_list_items( $todo_items, $priorities, $url, 1 );
+			} else {
+				$this->list .= '<tr><td>'.__( 'No completed items.', 'cleverness-to-do-list' ).'</td></tr>';
+				}
 
-		// get completed to-do items
-		$results = CTDL_Lib::get_todos( $user, 0, 1 );
-
-		if ( $results ) {
-			$this->show_todo_list_items( $results, $priorities, $url, 1 );
-		} else {
-			/* if there are no to-do items, display this message */
-			$this->list .= '<tr><td>'.__( 'No items to do.', 'cleverness-to-do-list' ).'</td></tr>';
-			}
-
-		$this->list .= '</table>';
+			$this->list .= '</table>';
 		}
 
 		$this->list .= $this->create_new_todo_form();
@@ -97,19 +79,18 @@ class ClevernessToDoList {
 		if ( is_admin() ) $this->list .= '</div>';
 
 		wp_reset_postdata();
-
 	}
 
 	/**
 	 * Generate the To-Do List
-	 * @param $todoitems
+	 * @param $todo_items
 	 * @param $priorities
 	 * @param $url
 	 * @param $completed
 	 */
-	protected function show_todo_list_items( $todoitems, $priorities, $url, $completed = 0 ) {
+	protected function show_todo_list_items( $todo_items, $priorities, $url, $completed = 0 ) {
 
-		while ( $todoitems->have_posts() ) : $todoitems->the_post();
+		while ( $todo_items->have_posts() ) : $todo_items->the_post();
 			$id = get_the_ID();
 			$priority = get_post_meta( $id, '_priority', true );
 			$priority_class = '';
@@ -142,32 +123,31 @@ class ClevernessToDoList {
 		$result = CTDL_Lib::get_todo( $id );
 		$this->list .= $this->create_edit_todo_form( $result, $url );
 		if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list';
-		$this->list .= '<p><a href="' . $url . '">' . __( '&laquo; Return to To-Do List', 'cleverness-to-do-list' ) . '</a></p>';
+		$this->list .= '<p><a href="'.$url.'">&laquo; '.__( 'Return to To-Do List', 'cleverness-to-do-list' ).'</a></p>';
 	}
 
 	/**
 	 * Creates the HTML for the form used to edit a to-do item
-	 * @param $todoitem Existing to-do item values
+	 * @param $todo_item Existing to-do item values
 	 * @param string $url The URL the form should be submitted to
 	 * @return string Form HTML
 	 */
-	protected function create_edit_todo_form( $todoitem, $url ) {
-			$id = $todoitem->ID;
+	protected function create_edit_todo_form( $todo_item, $url ) {
+			$id = $todo_item->ID;
 			if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list'; else $url = strtok( $url, "?" );
 			$this->form = '';
 
 			if ( is_admin() ) $this->form .= '<h3>'.__( 'Edit To-Do Item', 'cleverness-to-do-list' ).'</h3>';
 
-    	    $this->form .= '<form name="edittodo" id="edittodo" action="'.$url.'" method="post">
-	  		    <table class="todo-form form-table">';
+    	    $this->form .= '<form name="edittodo" id="edittodo" action="'.$url.'" method="post"><table class="todo-form form-table">';
 			$this->create_priority_field( get_post_meta( $id, '_priority', true ) );
 			$this->create_assign_field( get_post_meta( $id, '_assign', true ) );
 			$this->create_deadline_field( get_post_meta( $id, '_deadline', true ) );
 			$this->create_progress_field( get_post_meta( $id, '_progress', true ) );
 			$this->create_category_field( get_the_terms( $id, 'todocategories' ) );
-			$this->create_todo_text_field( $todoitem->post_content );
+			$this->create_todo_text_field( $todo_item->post_content );
 			$this->form .= '</table>'.wp_nonce_field( 'todoupdate', 'todoupdate', true, false ).'<input type="hidden" name="action" value="updatetodo" />
-        	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'. __( 'Edit To-Do Item', 'cleverness-to-do-list' ).'" /></p>
+        	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.__( 'Edit To-Do Item', 'cleverness-to-do-list' ).'" /></p>
 				<input type="hidden" name="id" value="'. absint( $id ).'" />';
 			$this->form .= '</form>';
 
@@ -192,7 +172,7 @@ class ClevernessToDoList {
 			$this->create_category_field();
 			$this->create_todo_text_field();
 			$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
-        	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'. __( 'Add To-Do Item', 'cleverness-to-do-list' ).'" /></p>';
+        	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'.__( 'Add To-Do Item', 'cleverness-to-do-list' ).'" /></p>';
 		$this->form .= '</form>';
 
 		return $this->form;
@@ -206,7 +186,7 @@ class ClevernessToDoList {
 	protected function create_priority_field( $priority = NULL ) {
 		$selected = '';
 		$this->form .= '<tr>
-		  		<th scope="row"><label for="cleverness_todo_priority">'.__( 'Priority', 'cleverness-to-do-list' ).'</label></th>
+		  	<th scope="row"><label for="cleverness_todo_priority">'.__( 'Priority', 'cleverness-to-do-list' ).'</label></th>
 		  		<td>
         			<select name="cleverness_todo_priority">';
 					if ( isset( $priority ) ) $selected = ( $priority == 0 ? ' selected = "selected"' : '' );
@@ -223,7 +203,7 @@ class ClevernessToDoList {
         			$this->form .= '</select>
 		  		</td>
 			</tr>';
-		}
+	}
 
 	/**
 	 * Creates the HTML for the Assign to Use Field
@@ -257,8 +237,8 @@ class ClevernessToDoList {
 					$this->form .= '</select>
 				</td>
 			</tr>';
-			}
 		}
+	}
 
 	/**
 	 * Creates the HTML for the Deadline Field
@@ -271,8 +251,8 @@ class ClevernessToDoList {
 				<th scope="row"><label for="cleverness_todo_deadline">%s</label></th>
 				<td><input type="text" name="cleverness_todo_deadline" id="cleverness_todo_deadline" value="%s" /></td>
 			</tr>', __( 'Deadline', 'cleverness-to-do-list' ), $value );
-			}
 		}
+	}
 
 	/**
 	 * Creates the HTML for the Progress Field
@@ -292,8 +272,8 @@ class ClevernessToDoList {
 				}
 				$this->form .= '</select></td>
 			</tr>';
-			}
 		}
+	}
 
 	/**
 	 * Creates the HTML for the Category Field
@@ -309,20 +289,19 @@ class ClevernessToDoList {
 
 	/**
 	 * Creates the HTML for the To-Do Text Field
-	 * @param array $todotext Existing field data
+	 * @param array $todo_text Existing field data
 	 */
-	protected function create_todo_text_field( $todotext = NULL ) {
-		$text = ( isset( $todotext ) ? stripslashes( esc_html( $todotext, 1) ) : '' );
+	protected function create_todo_text_field( $todo_text = NULL ) {
+		$text = ( isset( $todo_text ) ? stripslashes( esc_html( $todo_text, 1) ) : '' );
 		$this->form .= sprintf( '<tr>
         	<th scope="row" valign="top"><label for="cleverness_todo_description">%s</label></th>
         	<td><textarea name="cleverness_todo_description" rows="5" cols="50" id="the_editor">%s</textarea></td>
 			</tr>', __( 'To-Do', 'cleverness-to-do-list' ), $text );
-		}
+	}
 
 	/**
 	 * Creates the HTML for the To-Do List Table Headings
 	 * @param $completed
-	 * @todo get rid of long assign if statement
 	 */
 	protected function show_table_headings( $completed = 0 ) {
 		$this->list .= '<thead><tr>';
@@ -331,7 +310,7 @@ class ClevernessToDoList {
 		$this->list .= '<th>'.__( 'Item', 'cleverness-to-do-list' ).'</th>';
 	  	$this->list .= '<th>'.__( 'Priority', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['assign'] == 0  && (CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0
-			&& ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) || (CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1)
+			&& ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) || ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1 )
 			&& CTDL_Loader::$settings['assign'] == 0) $this->list .= '<th>'.__( 'Assigned To', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th>'.__('Deadline', 'cleverness-to-do-list').'</th>';
 		if ( $completed == 1 && CTDL_Loader::$settings['show_completed_date'] == 1) $this->list .= '<th>'.__('Completed', 'cleverness-to-do-list').'</th>';
@@ -368,17 +347,17 @@ class ClevernessToDoList {
 			$cleverness_todo_complete_nonce = wp_create_nonce( 'todocomplete' );
 			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="'.$cleverness_todo_complete_nonce.'" />';
 			if ( !is_admin() ) $this->list .= '</td>';
-			}
 		}
+	}
 
 	/**
 	 * Show the To-Do Text
-	 * @param string $todotext
+	 * @param string $todo_text
 	 */
-	protected function show_todo_text( $todotext ) {
+	protected function show_todo_text( $todo_text ) {
 		if ( !is_admin() ) $this->list .= '<td>'; else $this->list .= '&nbsp;';
-		$this->list .= stripslashes( $todotext ).'</td>';
-		}
+		$this->list .= stripslashes( $todo_text ).'</td>';
+	}
 
 	/**
 	 * Show the Edit To-Do Link
@@ -404,7 +383,7 @@ class ClevernessToDoList {
 			}
 	  	if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' )
 			$this->list .= '<td>'.$edit.'</td>';
-		}
+	}
 
 	/**
 	 * Show the Priority Level of a To-Do Item
@@ -413,7 +392,7 @@ class ClevernessToDoList {
 	 */
 	protected function show_priority( $the_priority, $priority ) {
 		$this->list .= sprintf( '<td>%s</td>', $priority[$the_priority] );
-		}
+	}
 
 	/**
 	 * Show the User that a To-Do Item is Assigned To
@@ -427,9 +406,9 @@ class ClevernessToDoList {
 				$this->list .= '<td>'.$assign_user->display_name.'</td>';
 			} else {
 				$this->list .= '<td></td>';
-				}
 			}
-   		}
+		}
+   	}
 
 	/**
 	 * Show the Category that a To-Do Item is In
@@ -444,8 +423,8 @@ class ClevernessToDoList {
 				}
 			}
 			$this->list .= '</td>';
-			}
 		}
+	}
 
 	/**
 	 * Show Who Added a To-Do Item
@@ -454,8 +433,8 @@ class ClevernessToDoList {
 	protected function show_addedby( $author ) {
 		if ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 ) {
 			$this->list .= '<td>'.$author.'</td>';
-			}
 		}
+	}
 
 	/**
 	 * Show the Deadline for a To-Do Item
@@ -464,20 +443,20 @@ class ClevernessToDoList {
 	protected function show_deadline( $deadline ) {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) {
 			$this->list .= ( $deadline != '' ? sprintf( '<td>%s</td>', $deadline ) : '<td></td>' );
-			}
 		}
+	}
 
 	/**
 	 * Show the Date that a To-Do Item was Completed
-	 * @param array $todo_field_data
+	 * @param string $completed
 	 */
-	protected function show_completed( $todo_field_data ) {
-			if ( CTDL_Loader::$settings['show_completed_date'] && $todo_field_data->completed != '0000-00-00 00:00:00' ) {
-				$date = '';
-				$date = date( CTDL_Loader::$settings['date_format'], strtotime( $todo_field_data->completed ) );
-				$this->list .= '<td>'.$date.'</td>';
-				}
-		}
+	protected function show_completed( $completed ) {
+		if ( CTDL_Loader::$settings['show_completed_date'] && $completed != '0000-00-00 00:00:00' ) {
+			$date = '';
+			$date = date( CTDL_Loader::$settings['date_format'], strtotime( $completed ) );
+			$this->list .= '<td>'.$date.'</td>';
+			}
+	}
 
 	/**
 	 * Show the Progress of a To-Do Item
@@ -486,8 +465,8 @@ class ClevernessToDoList {
 	protected function show_progress( $progress) {
 		if ( CTDL_Loader::$settings['show_progress'] == 1 ) {
 			$this->list .= ( $progress != '' ? sprintf( '<td>%d%%</td>', $progress ) : '<td></td>' );
-			}
 		}
+	}
 
 	/**
 	 * Set Up JavaScript and Ajax Variables
@@ -500,6 +479,7 @@ class ClevernessToDoList {
 		'ERROR_MSG' => __( 'There was a problem performing that action.', 'cleverness-to-do-list' ),
 		'PERMISSION_MSG' => __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' ),
 		'CONFIRMATION_MSG' => __( "You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
+		'CONFIRMATION_ALL_MSG' => __( "You are about to permanently delete all completed items. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 		'NONCE' => wp_create_nonce( 'cleverness-todo' ),
 		'AJAX_URL' => admin_url( 'admin-ajax.php' )
 		);
