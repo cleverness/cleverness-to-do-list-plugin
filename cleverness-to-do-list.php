@@ -49,10 +49,14 @@ function cleverness_todo_loader() {
 			break;
 
 		case 'completetodo':
+			$cleverness_todo_complete_nonce = $_REQUEST['_wpnonce'];
+			if ( !wp_verify_nonce( $cleverness_todo_complete_nonce, 'todocomplete' ) ) die( 'Security check failed' );
 			CTDL_LIb::complete_todo( absint( $_GET['id'] ), 1 );
 			break;
 
 		case 'uncompletetodo':
+			$cleverness_todo_complete_nonce = $_REQUEST['_wpnonce'];
+			if ( !wp_verify_nonce( $cleverness_todo_complete_nonce, 'todocomplete' ) ) die( 'Security check failed' );
 			CTDL_LIb::complete_todo( absint( $_GET['id'] ), 0 );
 			break;
 

@@ -36,7 +36,7 @@ class CTDL_Loader {
 		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-help.class.php';
 		if ( self::$settings['categories'] == 1 ) include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-categories.class.php';
 
-		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-dashboard-widget.php';
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-dashboard-widget.class.php';
 		//include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-widget.php';
 		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-shortcode.php';
 
@@ -50,13 +50,14 @@ class CTDL_Loader {
 		add_action( 'init', __CLASS__.'::load_translation_file' );
 		add_action( 'admin_init', __CLASS__.'::admin_init' );
 		add_action( 'admin_menu', __CLASS__.'::create_admin_menu' );
-		add_action( 'wp_ajax_cleverness_delete_todo', 'CTDL_Lib::cleverness_delete_todo_callback' );
-		add_action( 'wp_ajax_cleverness_todo_complete', 'CTDL_Lib::cleverness_todo_checklist_complete_callback' );
+		add_action( 'wp_ajax_cleverness_delete_todo', 'CTDL_Lib::delete_todo_callback' );
+		add_action( 'wp_ajax_cleverness_todo_complete', 'CTDL_Lib::complete_todo_callback' );
 		add_filter( 'plugin_action_links', 'CTDL_Lib::add_settings_link', 10, 2 );
 		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', 'CTDL_Lib::add_to_toolbar', 999 );
 		if ( self::$settings['categories'] ==1 ) add_action( 'admin_init', 'CTDL_Categories::initialize_categories' );
 
-		add_action( 'wp_dashboard_setup', 'cleverness_todo_dashboard_setup' );
+		add_action( 'wp_dashboard_setup', 'CTDL_Dashboard_Widget::dashboard_setup' );
+		add_action( 'admin_init', 'CTDL_Dashboard_Widget::dashboard_init' );
 		//add_action( 'widgets_init', 'cleverness_todo_widget' );
 		//add_action( 'widgets_init', create_function( '', 'register_widget("Foo_Widget");' ) );
 

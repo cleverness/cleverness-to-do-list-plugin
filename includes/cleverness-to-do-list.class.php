@@ -283,7 +283,7 @@ class ClevernessToDoList {
 		if ( CTDL_Loader::$settings['categories'] == '1' ) {
 			$cat_id = ( $cat_id != NULL ? $cat_id[0]->term_id : 0 );
 			$this->form .= '<tr><th scope="row"><label for="cleverness_todo_category">'.__( 'Category', 'cleverness-to-do-list' ).'</label></th><td>'.
-				wp_dropdown_categories( 'taxonomy=todocategories&echo=0&orderby=name&hide_empty=0&show_option_none=None&selected='.$cat_id ).'</td></tr>';
+				wp_dropdown_categories( 'taxonomy=todocategories&echo=0&orderby=name&hide_empty=0&show_option_none='.__( 'None', 'cleverness-to-do-list' ).'&selected='.$cat_id ).'</td></tr>';
 		}
 	}
 

@@ -122,14 +122,14 @@ class ClevernessToDoSettings {
 
 	function sort_order_option() { ?>
 		<select name="<?php echo $this->general_key; ?>[sort_order]">
-			<option value="id"<?php if ( $this->general_settings['sort_order'] == 'id' ) echo ' selected="selected"'; ?>><?php _e( 'ID', 'cleverness-to-do-list' ); ?></option>
-			<option value="todotext"<?php if ( $this->general_settings['sort_order'] == 'todotext' ) echo ' selected="selected"'; ?>><?php _e( 'Alphabetical', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-			<option value="deadline"<?php if ( $this->general_settings['sort_order'] == 'deadline' ) echo ' selected="selected"'; ?>><?php _e( 'Deadline', 'cleverness-to-do-list' ); ?></option>
-			<option value="progress"<?php if ( $this->general_settings['sort_order'] == 'progress' ) echo ' selected="selected"'; ?>><?php _e( 'Progress', 'cleverness-to-do-list' ); ?></option>
+			<option value="ID"<?php if ( $this->general_settings['sort_order'] == 'ID' ) echo ' selected="selected"'; ?>><?php _e( 'ID', 'cleverness-to-do-list' ); ?></option>
+			<option value="title"<?php if ( $this->general_settings['sort_order'] == 'title' ) echo ' selected="selected"'; ?>><?php _e( 'Alphabetical', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="_deadline"<?php if ( $this->general_settings['sort_order'] == '_deadline' ) echo ' selected="selected"'; ?>><?php _e( 'Deadline', 'cleverness-to-do-list' ); ?></option>
+			<option value="_progress"<?php if ( $this->general_settings['sort_order'] == '_progress' ) echo ' selected="selected"'; ?>><?php _e( 'Progress', 'cleverness-to-do-list' ); ?></option>
 			<option value="cat_id"<?php if ( $this->general_settings['sort_order'] == 'cat_id' ) echo ' selected="selected"'; ?>><?php _e( 'Category', 'cleverness-to-do-list' ); ?></option>
-			<option value="assign"<?php if ( $this->general_settings['sort_order'] == 'assign' ) echo ' selected="selected"'; ?>><?php _e( 'Assigned User', 'cleverness-to-do-list' ); ?></option>
+			<option value="_assign"<?php if ( $this->general_settings['sort_order'] == '_assign' ) echo ' selected="selected"'; ?>><?php _e( 'Assigned User', 'cleverness-to-do-list' ); ?></option>
 		</select>
-		<span class="description"><?php _e( 'Items are first sorted by priority', 'cleverness-to-do-list' ); ?></span>
+		<span class="description"><?php _e( 'Items are first sorted by priority when ordered by ID, Alphabetical, or Category', 'cleverness-to-do-list' ); ?></span>
 	<?php }
 
 	function admin_bar_option() {

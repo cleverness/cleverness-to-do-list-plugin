@@ -14,30 +14,54 @@ class CTDL_Lib {
 		return $post;
 	}
 
-	/* @todo master view needs to get set up */
+	/*
+ * @todo order by category, priority, sort order
+	 * @todo orderby variable not working
+	 * @todo master view needs to get set up */
 	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0  ) {
-		$args = array(
-			'post_type' => 'todo',
-			'author' => $user,
-			'post_status' => 'publish',
-			'posts_per_page' => $limit,
-			'orderby' => 'title',
-			/*http://codex.wordpress.org/Class_Reference/WP_Query
-			 *  'orderby' => 'meta_value', 'meta_key' => 'price'
-			 * 'tax_query' => array(
-				array(
-					'taxonomy' => 'people',
-					'field' => 'slug',
-					'terms' => 'bob'
+		if ( CTDL_Loader::$settings['sort_order'] == '_deadline' || CTDL_Loader::$settings['sort_order'] == '_progress' || CTDL_Loader::$settings['sort_order'] == '_assign' ) {
+			$orderby = "'meta_value title', 'meta_key' => '".CTDL_Loader::$settings['sort_order']."'";
+		} else {
+			$orderby = "'meta_value ".CTDL_Loader::$settings['sort_order']." title', 'meta_key' => '_priority'";
+		}
+
+		if ( $cat_id != 0 ) {
+			$args = array(
+				'post_type' => 'todo',
+				'author' => $user,
+				'post_status' => 'publish',
+				'posts_per_page' => $limit,
+				'orderby' => 'meta_value '.CTDL_Loader::$settings['sort_order'].' title', 'meta_key' => '_priority',
+			    'tax_query' => array(
+				 array(
+					 'taxonomy' => 'todocategories',
+					 'field' => 'id',
+					 'terms' => $cat_id
+				 ) ),
+				'meta_query' => array(
+					array(
+						'key' => '_status',
+						'value' => $status,
+					)
 				)
-			)*/
-			'meta_query' => array(
-				array(
-					'key' => '_status',
-					'value' => $status,
+			);
+		} else {
+			$args = array(
+				'post_type' => 'todo',
+				'author' => $user,
+				'post_status' => 'publish',
+				'posts_per_page' => $limit,
+				'orderby' => 'meta_value '.CTDL_Loader::$settings['sort_order'].' title', 'meta_key' => '_priority',
+				'order' => 'ASC',
+				'meta_query' => array(
+					array(
+						'key' => '_status',
+						'value' => $status,
+					)
 				)
-			)
-		);
+			);
+		}
+
 		$results = new WP_Query( $args );
 		return $results;
 	}
@@ -96,7 +120,7 @@ class CTDL_Lib {
 		return $result;
 	}
 
-	public static function cleverness_todo_checklist_complete_callback() {
+	public static function complete_todo_callback() {
 		check_ajax_referer( 'cleverness-todo' );
 		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 
@@ -116,8 +140,6 @@ class CTDL_Lib {
 	/* todo master view needs set up */
 	public static function complete_todo( $id, $status ) {
 		global $current_user;
-		$cleverness_todo_complete_nonce = $_REQUEST['_wpnonce'];
-		if ( !wp_verify_nonce( $cleverness_todo_complete_nonce, 'todocomplete' ) ) die( 'Security check failed' );
 
 		// if individual view, group view with complete capability, or master view with edit capability
 		if ( CTDL_Loader::$settings['list_view'] == '0' || ( CTDL_Loader::$settings['list_view'] == '1' && current_user_can( CTDL_Loader::$settings['complete_capability'] ) )
@@ -248,7 +270,7 @@ class CTDL_Lib {
 	}
 
 	/* Delete To-Do Ajax */
-	public static function cleverness_delete_todo_callback() {
+	public static function delete_todo_callback() {
 		check_ajax_referer( 'cleverness-todo' );
 		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'delete' );
 
@@ -480,7 +502,7 @@ class CTDL_Lib {
 				'show_completed_date'   => '0',
 				'show_deadline'         => '0',
 				'show_progress'         => '0',
-				'sort_order'            => 'id',
+				'sort_order'            => 'ID',
 				'admin_bar'             => '1'
 			);
 
