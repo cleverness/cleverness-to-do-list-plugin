@@ -136,6 +136,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Changelog ==
 = 3.0 =
+* Converted rest of the code to classes
+* Converted custom database tables to custom post type
+* Added option to show all items in Widget
 * Added To-Do List menu to Admin Bar (with option to remove in Settings)
 * Renamed cleverness-to-do-list-options.php to cleverness-to-do-list-settings.php
 * Divided settings into three sections

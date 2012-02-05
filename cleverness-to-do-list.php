@@ -77,4 +77,5 @@ function cleverness_todo_activation() {
 // @todo can it be moved?
 include_once 'includes/cleverness-to-do-list-widget.class.php';
 
+
 ?>

@@ -21,6 +21,10 @@ class CTDL_Loader {
 		global $ClevernessToDoList;
         $ClevernessToDoList = new ClevernessToDoList();
 		new ClevernessToDoSettings();
+		if ( !is_admin() ) {
+			new CTDL_Frontend_Admin;
+			new CTDL_Frontend_Checklist;
+		}
 
 	}
 
@@ -34,10 +38,10 @@ class CTDL_Loader {
 		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-library.class.php';
 		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-frontend.class.php';
 		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-help.class.php';
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-dashboard-widget.class.php';
 		if ( self::$settings['categories'] == 1 ) include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-categories.class.php';
 
-		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-dashboard-widget.class.php';
-		//include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-widget.php';
+
 		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-shortcode.php';
 
 	}
@@ -58,8 +62,6 @@ class CTDL_Loader {
 
 		add_action( 'wp_dashboard_setup', 'CTDL_Dashboard_Widget::dashboard_setup' );
 		add_action( 'admin_init', 'CTDL_Dashboard_Widget::dashboard_init' );
-		//add_action( 'widgets_init', 'cleverness_todo_widget' );
-		//add_action( 'widgets_init', create_function( '', 'register_widget("Foo_Widget");' ) );
 
 	}
 

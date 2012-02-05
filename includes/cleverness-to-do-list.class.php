@@ -354,7 +354,7 @@ class ClevernessToDoList {
 	 * Show the To-Do Text
 	 * @param string $todo_text
 	 */
-	protected function show_todo_text( $todo_text ) {
+	public function show_todo_text( $todo_text ) {
 		if ( !is_admin() ) $this->list .= '<td>'; else $this->list .= '&nbsp;';
 		$this->list .= stripslashes( $todo_text ).'</td>';
 	}
@@ -390,7 +390,7 @@ class ClevernessToDoList {
 	 * @param int $the_priority
 	 * @param array $priority
 	 */
-	protected function show_priority( $the_priority, $priority ) {
+	public function show_priority( $the_priority, $priority ) {
 		$this->list .= sprintf( '<td>%s</td>', $priority[$the_priority] );
 	}
 
@@ -398,7 +398,7 @@ class ClevernessToDoList {
 	 * Show the User that a To-Do Item is Assigned To
 	 * @param int $assign
 	 */
-	protected function show_assigned( $assign ) {
+	public function show_assigned( $assign ) {
 		if ( ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
 		( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1) && CTDL_Loader::$settings['assign'] == 0 ) {
 			if ( $assign != '-1' && $assign != '' && $assign != 0 ) {
@@ -414,7 +414,7 @@ class ClevernessToDoList {
 	 * Show the Category that a To-Do Item is In
 	 * @param array $categories
 	 */
-	protected function show_category( $categories ) {
+	public function show_category( $categories ) {
 		if ( CTDL_Loader::$settings['categories'] == '1' ) {
 			$this->list .= '<td>';
 			if ( $categories != NULL ) {
@@ -430,7 +430,7 @@ class ClevernessToDoList {
 	 * Show Who Added a To-Do Item
 	 * @param int $author
 	 */
-	protected function show_addedby( $author ) {
+	public function show_addedby( $author ) {
 		if ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 ) {
 			$this->list .= '<td>'.$author.'</td>';
 		}
@@ -440,7 +440,7 @@ class ClevernessToDoList {
 	 * Show the Deadline for a To-Do Item
 	 * @param string $deadline
 	 */
-	protected function show_deadline( $deadline ) {
+	public function show_deadline( $deadline ) {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) {
 			$this->list .= ( $deadline != '' ? sprintf( '<td>%s</td>', $deadline ) : '<td></td>' );
 		}
@@ -450,7 +450,7 @@ class ClevernessToDoList {
 	 * Show the Date that a To-Do Item was Completed
 	 * @param string $completed
 	 */
-	protected function show_completed( $completed ) {
+	public function show_completed( $completed ) {
 		if ( CTDL_Loader::$settings['show_completed_date'] && $completed != '0000-00-00 00:00:00' ) {
 			$date = '';
 			$date = date( CTDL_Loader::$settings['date_format'], strtotime( $completed ) );
@@ -462,7 +462,7 @@ class ClevernessToDoList {
 	 * Show the Progress of a To-Do Item
 	 * @param int $progress
 	 */
-	protected function show_progress( $progress) {
+	public function show_progress( $progress) {
 		if ( CTDL_Loader::$settings['show_progress'] == 1 ) {
 			$this->list .= ( $progress != '' ? sprintf( '<td>%d%%</td>', $progress ) : '<td></td>' );
 		}

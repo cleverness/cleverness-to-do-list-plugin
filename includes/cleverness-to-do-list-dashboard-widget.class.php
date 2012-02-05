@@ -37,9 +37,8 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 					$cats = get_the_terms( $id, 'todocategories' );
 					if ( $cats != NULL ) {
 						foreach( $cats as $category ) {
-							if ( $catid != $category->id ) echo '<h4>'.$category->name.'</h4>';
-							//$catid = $category->ID;
-							//echo $category->ID;
+							if ( $catid != $category->term_id ) $ClevernessToDoList->list .= '<h4>'.$category->name.'</h4>';
+							$catid = $category->term_id;
 						}
 					}
 				}
