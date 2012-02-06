@@ -180,7 +180,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			if ( $deadline == 1 ) $this->show_deadline( get_post_meta( $id, '_deadline', true ) );
 			if ( $progress == 1 ) $this->show_progress( get_post_meta( $id, '_progress', true ) );
 			if ( $categories == 1 ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
-			if ( $addedby == 1 ) $this->show_addedby( get_the_author() );
+			if ( $addedby == 1 ) $this->show_addedby( get_the_author(), $user );
 			if ( $editlink == 1 ) $this->show_edit_link( $id, $url );
 			$this->list .= '</p>';
 		endwhile;
