@@ -4,48 +4,55 @@
  * @package cleverness-to-do-list
  * @author C.M. Kendrick
  * @version 3.0
- * @todo convert to todocategories taxonomy
- * @todo add meta value for privacy, sort order
+ * @todo add meta value for sort order and enable sorting
  */
 
 class CTDL_Categories {
 
 	/* Get to-do category name */
-	public static function get_category_name( $cat_id ) {
-		$category = get_term( $cat_id, 'todocategories' );
+	public static function get_category_name( $category_id ) {
+		$category = get_term( $category_id, 'todocategories' );
 		return $category;
 	}
 
-	/* Get a to-do list category */
+	/* Get a specific to-do list category */
 	public static function get_category() {
 		$category = get_term( $_POST['cleverness_todo_cat_id'], 'todocategories' );
 		return $category;
 	}
 
-	/* Get to-do list categories */
+	/* Get all to-do list categories */
 	public static function get_categories() {
 		$categories = get_terms( 'todocategories', '&hide_empty=0' );
 		return $categories;
 	}
 
-	/* Insert new to-do category into the database */
+	/* Insert new to-do list category into the database */
 	public static function insert_category() {
 		$term = wp_insert_term( $_POST['cleverness_todo_cat_name'], 'todocategories' );
-		$id = $term['term_id'];
-		$options = get_option( 'cleverness_todo_categories' );
-		$options["category_$id"] = $_POST['cleverness_todo_cat_visibility'];
-		update_option( "cleverness_todo_categories", $options );
-		return 1;
+		if ( !is_wp_error( $term ) ) {
+			$category_id = $term['term_id'];
+			$options = get_option( 'cleverness_todo_categories' );
+			$options["category_$category_id"] = $_POST['cleverness_todo_cat_visibility'];
+			update_option( "cleverness_todo_categories", $options );
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 	/* Update to-do list category */
 	public static function update_category() {
-		$id = absint( $_POST['cleverness_todo_cat_id'] );
-		wp_update_term( $id, 'todocategories', array( 'name' => $_POST['cleverness_todo_cat_name'] ) );
-		$options = get_option( 'cleverness_todo_categories' );
-		$options["category_$id"] = $_POST['cleverness_todo_cat_visibility'];
-		update_option( "cleverness_todo_categories", $options );
-		return 1;
+		$category_id = absint( $_POST['cleverness_todo_cat_id'] );
+		$term = wp_update_term( $category_id, 'todocategories', array( 'name' => $_POST['cleverness_todo_cat_name'] ) );
+		if ( !is_wp_error( $term ) ) {
+			$options = get_option( 'cleverness_todo_categories' );
+			$options["category_$category_id"] = $_POST['cleverness_todo_cat_visibility'];
+			update_option( "cleverness_todo_categories", $options );
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 	/* Delete to-do list category */
@@ -54,51 +61,40 @@ class CTDL_Categories {
 		return 1;
 	}
 
-	/* Get Category Ajax */
+	/* Get a specific to-do list category using ajax */
 	public static function get_category_callback() {
-		$cleverness_todo_permission = CTDL_Lib::check_permission( 'category', 'add_cat' );
+		$permission = CTDL_Lib::check_permission( 'category', 'add_cat' );
 
-		if ( $cleverness_todo_permission === true ) {
+		if ( $permission === true ) {
 			$cleverness_todo = CTDL_Categories::get_category();
-			$id = $cleverness_todo->term_id;
+			$category_id = $cleverness_todo->term_id;
 			$visibility = get_option( 'cleverness_todo_categories' );
-			$visibility = ( $visibility["category_$id"] != '' ? $visibility["category_$id"] : '0' );
+			$visibility = ( $visibility["category_$category_id"] != '' ? $visibility["category_$category_id"] : '0' );
 			echo json_encode( array( 'cleverness_todo_cat_name' => $cleverness_todo->name, 'cleverness_todo_cat_visibility' => $visibility ) );
 		}
 
 		die(); // this is required to return a proper result
 	}
 
-	/* Update Category Ajax */
+	/* Update a to-do list category using ajax */
 	public static function update_category_callback() {
 		check_ajax_referer( 'cleverness-todo-cat' );
-		$cleverness_todo_permission = CTDL_Lib::check_permission( 'category', 'add_cat' );
-
-		if ( $cleverness_todo_permission === true ) {
-			$cleverness_todo_status = CTDL_Categories::update_category();
-		} else {
-			$cleverness_todo_status = 2;
-		}
-
-		echo $cleverness_todo_status;
+		$permission = CTDL_Lib::check_permission( 'category', 'add_cat' );
+		$status = ( $permission === true ? CTDL_Categories::update_category() : 2 );
+		echo $status;
 		die(); // this is required to return a proper result
 	}
 
-	/* Delete Category Ajax */
+	/* Delete a to-do list category using ajax */
 	public static function delete_category_callback() {
 		check_ajax_referer( 'cleverness-todo-cat' );
-		$cleverness_todo_permission = CTDL_Lib::check_permission( 'category', 'add_cat' );
-
-		if ( $cleverness_todo_permission === true ) {
-			$cleverness_todo_status = CTDL_Categories::delete_category();
-		} else {
-			$cleverness_todo_status = 2;
-		}
-
-		echo $cleverness_todo_status;
+		$permission = CTDL_Lib::check_permission( 'category', 'add_cat' );
+		$status = ( $permission === true ? CTDL_Categories::delete_category() : 2 );
+		echo $status;
 		die(); // this is required to return a proper result
 	}
 
+	/* Create the main category page */
 	public static function create_category_page() {
 		$cleverness_todo_message = '';
 		$cleverness_todo_action = '';
@@ -110,8 +106,8 @@ class CTDL_Categories {
 			case 'addtodocat':
 				if ( $_POST['cleverness_todo_cat_name'] != '' ) {
 					if ( !wp_verify_nonce( $_POST['_todo_add_cat_nonce'], 'todoaddcat') ) die( 'Security check failed' );
-					$cleverness_todo_status = CTDL_Categories::insert_category();
-					if ( $cleverness_todo_status != 1 ) {
+					$status = CTDL_Categories::insert_category();
+					if ( $status != 1 ) {
 						$cleverness_todo_message = __( 'There was a problem performing that action.', 'cleverness-to-do-list' );
 					}
 				} else {
@@ -124,11 +120,11 @@ class CTDL_Categories {
 		} // end switch
 
 		?>
-		<div class="wrap">
+	<div class="wrap">
 		<div class="icon32"><img src="<?php echo CTDL_PLUGIN_URL; ?>/images/cleverness-todo-icon.png" alt="" /></div>
 		<h2><?php _e( 'To-Do List Categories', 'cleverness-to-do-list' ); ?></h2>
 
-		<div id="message"><?php if ( $cleverness_todo_message != '' ) echo '<p class="error below-h2">'.$cleverness_todo_message.'</p>'; ?></div>
+		<?php if ( $cleverness_todo_message != '' ) echo '<div id="message" class="error below-h2"><p>'.$cleverness_todo_message.'</p></div>'; ?>
 
 		<h3><?php _e( 'Add New Category', 'cleverness-to-do-list' ); ?></h3>
 		<form name="addtodocat" id="addtodocat" action="" method="post">
@@ -173,24 +169,24 @@ class CTDL_Categories {
 
 				if ( $categories ) {
 					foreach ( $categories as $category ) {
-						$id = $category->term_id;
+						$category_id = $category->term_id;
 						$visibility = get_option( 'cleverness_todo_categories' );
-						$visibility = ( $visibility["category_$id"] != '' ? $visibility["category_$id"] : '0' );
+						$visibility = ( $visibility["category_$category_id"] != '' ? $visibility["category_$category_id"] : '0' );
 						?>
-						<tr id="<?php echo $id; ?>">
-							<td><?php echo $id; ?></td>
+						<tr id="<?php echo $category_id; ?>">
+							<td><?php echo $category_id; ?></td>
 							<td class="row-title"><?php echo esc_attr( $category->name ); ?></td>
 							<td><?php if ( $visibility == '0' ) {
-									echo __( 'Public', 'cleverness-to-do-list' );
-								} else if ( $visibility == '1' ) {
-									echo __( 'Private', 'cleverness-to-do-list' );
+								echo __( 'Public', 'cleverness-to-do-list' );
+							} else if ( $visibility == '1' ) {
+								echo __( 'Private', 'cleverness-to-do-list' );
 							} ?></td>
 							<td>
 								<input class="edit-todo button-secondary" type="button" value="<?php _e( 'Edit' ); ?>" />
 								<input class="delete-todo button-secondary" type="button" value="<?php _e( 'Delete' ); ?>" />
 							</td>
 						</tr>
-						<?php } } ?>
+				<?php } } ?>
 			</tbody>
 			<tfoot>
 			<tr>
@@ -202,8 +198,8 @@ class CTDL_Categories {
 			</tfoot>
 		</table>
 
-		</div>
-		<?php
+	</div>
+	<?php
 	}
 
 	public static function initialize_categories() {

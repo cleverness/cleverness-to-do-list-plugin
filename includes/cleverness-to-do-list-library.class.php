@@ -122,13 +122,10 @@ class CTDL_Lib {
 
 	public static function complete_todo_callback() {
 		check_ajax_referer( 'cleverness-todo' );
-		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'complete' );
+		$permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 
-		if ( $cleverness_todo_permission === true ) {
-			$cleverness_id = intval( $_POST['cleverness_id'] );
-			$cleverness_status = intval( $_POST['cleverness_status'] );
-
-			$message = CTDL_Lib::complete_todo( $cleverness_id, $cleverness_status );
+		if ( $permission === true ) {
+			$message = CTDL_Lib::complete_todo( intval( $_POST['cleverness_id'] ), intval( $_POST['cleverness_status'] ) );
 		} else {
 			$message = __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
 		}
@@ -169,9 +166,9 @@ class CTDL_Lib {
 
 		if ( $_POST['cleverness_todo_description'] == '' ) return;
 
-		$cleverness_todo_permission = CTDL_LIB::check_permission( 'todo', 'add' );
+		$permission = CTDL_LIB::check_permission( 'todo', 'add' );
 
-		if ( $cleverness_todo_permission === true ) {
+		if ( $permission === true ) {
 
 			if ( !wp_verify_nonce( $_REQUEST['todoadd'], 'todoadd' ) ) die( 'Security check failed' );
 
@@ -244,9 +241,9 @@ class CTDL_Lib {
 
 	/* Update to-do list item */
 	public static function edit_todo() {
-		$cleverness_todo_permission = CTDL_LIB::check_permission( 'todo', 'edit' );
+		$permission = CTDL_LIB::check_permission( 'todo', 'edit' );
 
-		if ( $cleverness_todo_permission === true ) {
+		if ( $permission === true ) {
 
 			if ( !wp_verify_nonce( $_REQUEST['todoupdate'], 'todoupdate' ) ) die( 'Security check failed' );
 
@@ -272,15 +269,9 @@ class CTDL_Lib {
 	/* Delete To-Do Ajax */
 	public static function delete_todo_callback() {
 		check_ajax_referer( 'cleverness-todo' );
-		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'delete' );
-
-		if ( $cleverness_todo_permission === true ) {
-			$cleverness_todo_status = CTDL_Lib::delete_todo( $_POST['cleverness_todo_id'] );
-		} else {
-			$cleverness_todo_status = -1;
-		}
-
-		echo $cleverness_todo_status;
+		$permission = CTDL_Lib::check_permission( 'todo', 'delete' );
+		$status = ( $permission === true ? CTDL_Lib::delete_todo( $_POST['cleverness_todo_id'] ) : -1 );
+		echo $status;
 		die(); // this is required to return a proper result
 	}
 
@@ -294,9 +285,9 @@ class CTDL_Lib {
 	public static function delete_all_todos() {
 		global $userdata;
 
-		$cleverness_todo_permission = CTDL_LIB::check_permission( 'todo', 'purge' );
+		$permission = CTDL_LIB::check_permission( 'todo', 'purge' );
 
-		if ( $cleverness_todo_permission === true ) {
+		if ( $permission === true ) {
 			$cleverness_todo_purge_nonce = $_REQUEST['_wpnonce'];
 			if ( !wp_verify_nonce( $cleverness_todo_purge_nonce, 'todopurge' ) ) die( 'Security check failed' );
 
@@ -326,9 +317,9 @@ class CTDL_Lib {
 				);
 			}
 
-			$todoitems = new WP_Query( $args );
+			$todo_items = new WP_Query( $args );
 
-			while ( $todoitems->have_posts() ) : $todoitems->the_post();
+			while ( $todo_items->have_posts() ) : $todo_items->the_post();
 				$id = get_the_ID();
 				wp_delete_post( $id, true );
 			endwhile;
@@ -448,7 +439,8 @@ class CTDL_Lib {
 		printf( __( "%s plugin | Version %s | by %s | <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org' target='_blank'>Donate</a><br />", 'cleverness-to-do-list' ), $plugin_data['Title'], $plugin_data['Version'], $plugin_data['Author'] );
 	}
 
-	/* Create database table and add default options */
+	/* Create database table and add default options
+	@todo remove table setup, convert existing items and categories to CPTs, and delete tables */
 	public static function install_plugin () {
 		global $wpdb, $userdata;
 		get_currentuserinfo();

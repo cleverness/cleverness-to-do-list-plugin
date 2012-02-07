@@ -21,9 +21,7 @@ class ClevernessToDoList {
 	public function display() {
 		list( $priorities, $user, $url, $action ) = CTDL_Lib::set_variables();
 
-		if ( is_admin() ) {
-			$this->list .= '<div class="wrap"><div class="icon32"><img src="'.CTDL_PLUGIN_URL.'/images/cleverness-todo-icon.png" alt="" /></div> <h2>'.__('To-Do List', 'cleverness-to-do-list').'</h2>';
-		}
+		if ( is_admin() ) $this->list .= '<div class="wrap"><div class="icon32"><img src="'.CTDL_PLUGIN_URL.'/images/cleverness-todo-icon.png" alt="" /></div> <h2>'.__('To-Do List', 'cleverness-to-do-list').'</h2>';
 
 		// get the existing to-do data and show the edit form if editing a to-do item
 		if ( $action == 'edit-todo' ) {
@@ -97,7 +95,7 @@ class ClevernessToDoList {
 			if ( $priority == '0' ) $priority_class = ' class="todo-important"';
 			if ( $priority == '2' ) $priority_class = ' class="todo-low"';
 
-			$this->list .= '<tr id="todo-'.$id.'"' . $priority_class . '>';
+			$this->list .= '<tr id="todo-'.$id.'"'.$priority_class.'>';
 			$this->show_id( $id );
 			$this->show_checkbox( $id, $completed );
 			$this->show_todo_text( get_the_content() );
@@ -120,8 +118,8 @@ class ClevernessToDoList {
 	 */
 	protected function edit_todo_item( $url ) {
 		$id = absint( $_GET['id'] );
-		$result = CTDL_Lib::get_todo( $id );
-		$this->list .= $this->create_edit_todo_form( $result, $url );
+		$todo_item = CTDL_Lib::get_todo( $id );
+		$this->list .= $this->create_edit_todo_form( $todo_item, $url );
 		if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list';
 		$this->list .= '<p><a href="'.$url.'">&laquo; '.__( 'Return to To-Do List', 'cleverness-to-do-list' ).'</a></p>';
 	}
@@ -187,8 +185,8 @@ class ClevernessToDoList {
 		$selected = '';
 		$this->form .= '<tr>
 		  	<th scope="row"><label for="cleverness_todo_priority">'.__( 'Priority', 'cleverness-to-do-list' ).'</label></th>
-		  		<td>
-        			<select name="cleverness_todo_priority">';
+		  	<td>
+        		<select name="cleverness_todo_priority">';
 					if ( isset( $priority ) ) $selected = ( $priority == 0 ? ' selected = "selected"' : '' );
 					$this->form .= sprintf( '<option value="0"%s>%s</option>', $selected, CTDL_Loader::$settings['priority_0'] );
 					if ( isset( $priority ) ) {
@@ -200,8 +198,8 @@ class ClevernessToDoList {
 					$selected = '';
 					if ( isset( $priority ) ) $selected = ( $priority == 2 ? ' selected' : '' );
 					$this->form .= sprintf( '<option value="2"%s>%s</option>', $selected, CTDL_Loader::$settings['priority_2'] );
-        			$this->form .= '</select>
-		  		</td>
+        		$this->form .= '</select>
+		  	</td>
 			</tr>';
 	}
 
@@ -292,7 +290,7 @@ class ClevernessToDoList {
 	 * @param array $todo_text Existing field data
 	 */
 	protected function create_todo_text_field( $todo_text = NULL ) {
-		$text = ( isset( $todo_text ) ? stripslashes( esc_html( $todo_text, 1) ) : '' );
+		$text = ( isset( $todo_text ) ? stripslashes( esc_html( $todo_text, 1 ) ) : '' );
 		$this->form .= sprintf( '<tr>
         	<th scope="row" valign="top"><label for="cleverness_todo_description">%s</label></th>
         	<td><textarea name="cleverness_todo_description" rows="5" cols="50" id="the_editor">%s</textarea></td>
@@ -337,8 +335,8 @@ class ClevernessToDoList {
 	 * @param boolean $completed
 	 */
 	protected function show_checkbox( $id, $completed = NULL ) {
-		$cleverness_todo_permission = CTDL_LIb::check_permission( 'todo', 'complete' );
-		if ( $cleverness_todo_permission === true ) {
+		$permission = CTDL_LIb::check_permission( 'todo', 'complete' );
+		if ( $permission === true ) {
 			if ( $completed == 1 ) {
 				$this->list .= sprintf( '<td><input type="checkbox" id="cltd-%d" class="todo-checkbox completed" checked="checked" />', $id );
 			} else {
