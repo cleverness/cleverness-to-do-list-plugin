@@ -1,5 +1,9 @@
 jQuery(document).ready(function($) {
 
+	$(function() {
+		$( "#cleverness_todo_deadline" ).datepicker();
+	});
+
 	$('.todo-checkbox').click(function () {
 		var status = 1;
 		var id = $(this).attr('id').substr(5);

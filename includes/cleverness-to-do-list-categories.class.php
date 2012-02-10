@@ -12,7 +12,7 @@ class CTDL_Categories {
 	/* Get to-do category name */
 	public static function get_category_name( $category_id ) {
 		$category = get_term( $category_id, 'todocategories' );
-		return $category;
+		return $category->name;
 	}
 
 	/* Get a specific to-do list category */

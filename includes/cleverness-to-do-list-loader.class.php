@@ -23,8 +23,10 @@ class CTDL_Loader {
 		if ( is_admin() ) {
 			new ClevernessToDoSettings();
 		} else {
+			/* @todo try to get the only when using shortcode code working in frontend class */
 			new CTDL_Frontend_Admin;
 			new CTDL_Frontend_Checklist;
+			new CTDL_Frontend_List;
 		}
 
 	}
@@ -162,6 +164,27 @@ class CTDL_Loader {
 			);
 	}
 
+	/**
+	 * Add the JavaScript Files for the To-Do List
+	 */
+	public static function frontend_checklist_init() {
+		wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL.'/js/frontend-todo.js', '', 1.0, true );
+		add_action( 'wp_enqueue_scripts', __CLASS__.'::frontend_checklist_add_js' );
+	}
+
+	/**
+	 * Enqueue and Localize JavaScript
+	 */
+	public static function frontend_checklist_add_js() {
+		wp_enqueue_script( 'jquery' );
+		wp_enqueue_script( 'jquery-ui-datepicker' );
+		wp_enqueue_script( 'jquery-color' );
+		wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-classic.css' );
+		wp_enqueue_script( 'cleverness_todo_checklist_complete_js' );
+		wp_localize_script( 'cleverness_todo_checklist_complete_js', 'ctdl', CTDL_Loader::get_js_vars() );
+	}
+
+
 	public static function setup_custom_post_type() {
 		register_post_type( 'todo',
 			array(
@@ -169,8 +192,10 @@ class CTDL_Loader {
 					'name' => __( 'To-Do' ),
 					'singular_name' => __( 'To-Do' )
 				),
-				'public' => true,
-				'has_archive' => true,
+				'public' => false,
+				'has_archive' => false,
+				'rewrite' => false,
+				'query_var' => false,
 			)
 		);
 	}

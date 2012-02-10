@@ -309,13 +309,13 @@ class ClevernessToDoList {
 	  	$this->list .= '<th>'.__( 'Priority', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['assign'] == 0  && (CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0
 			&& ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) || ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1 )
-			&& CTDL_Loader::$settings['assign'] == 0) $this->list .= '<th>'.__( 'Assigned To', 'cleverness-to-do-list' ).'</th>';
-		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th>'.__('Deadline', 'cleverness-to-do-list').'</th>';
-		if ( $completed == 1 && CTDL_Loader::$settings['show_completed_date'] == 1) $this->list .= '<th>'.__('Completed', 'cleverness-to-do-list').'</th>';
-		if ( CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th>'.__('Progress', 'cleverness-to-do-list').'</th>';
-		if ( CTDL_Loader::$settings['categories'] == 1 ) $this->list .= '<th>'.__('Category', 'cleverness-to-do-list').'</th>';
-		if ( CTDL_Loader::$settings['list_view'] == 1  && CTDL_Loader::$settings['todo_author'] == 0 ) $this->list .= '<th>'.__('Added By', 'cleverness-to-do-list').'</th>';
-		if ( current_user_can(CTDL_Loader::$settings['edit_capability']) || CTDL_Loader::$settings['list_view'] == 0 ) $this->list .= '<th>'.__('Action', 'cleverness-to-do-list').'</th>';
+			&& CTDL_Loader::$settings['assign'] == 0 ) $this->list .= '<th>'.__( 'Assigned To', 'cleverness-to-do-list' ).'</th>';
+		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th>'.__( 'Deadline', 'cleverness-to-do-list' ).'</th>';
+		if ( $completed == 1 && CTDL_Loader::$settings['show_completed_date'] == 1) $this->list .= '<th>'.__('Completed', 'cleverness-to-do-list' ).'</th>';
+		if ( CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th>'.__( 'Progress', 'cleverness-to-do-list' ).'</th>';
+		if ( CTDL_Loader::$settings['categories'] == 1 ) $this->list .= '<th>'.__( 'Category', 'cleverness-to-do-list' ).'</th>';
+		if ( CTDL_Loader::$settings['list_view'] == 1  && CTDL_Loader::$settings['todo_author'] == 0 ) $this->list .= '<th>'.__ ('Added By', 'cleverness-to-do-list' ).'</th>';
+		if ( current_user_can(CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) $this->list .= '<th>'.__( 'Action', 'cleverness-to-do-list' ).'</th>';
     	$this->list .= '</tr></thead>';
 	}
 
@@ -465,45 +465,6 @@ class ClevernessToDoList {
 			$this->list .= ( $progress != '' ? sprintf( '<td>%d%%</td>', $progress ) : '<td></td>' );
 		}
 	}
-
-	/**
-	 * Set Up JavaScript and Ajax Variables
-	 * @return array
-	 * TODO: move to loader or lib file
-	 */
-	public function cleverness_todo_checklist_get_js_vars() {
-		return array(
-		'SUCCESS_MSG' => __( 'To-Do Deleted.', 'cleverness-to-do-list' ),
-		'ERROR_MSG' => __( 'There was a problem performing that action.', 'cleverness-to-do-list' ),
-		'PERMISSION_MSG' => __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' ),
-		'CONFIRMATION_MSG' => __( "You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
-		'CONFIRMATION_ALL_MSG' => __( "You are about to permanently delete all completed items. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
-		'NONCE' => wp_create_nonce( 'cleverness-todo' ),
-		'AJAX_URL' => admin_url( 'admin-ajax.php' )
-		);
-	}
-
-	/**
-	 * Add the JavaScript Files for the To-Do List
-	 *  TODO: move to loader or lib file
-	 */
-	public function cleverness_todo_checklist_init() {
-		wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL.'/js/frontend-todo.js', '', 1.0, true );
-		add_action( 'wp_enqueue_scripts', array( &$this, 'cleverness_todo_checklist_add_js' ) );
-	}
-
-	/**
-	 * Enqueue and Localize JavaScript
-	 * TODO: move to loader or lib file
-	 */
-	public function cleverness_todo_checklist_add_js() {
-		wp_enqueue_script( 'jquery' );
-		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_enqueue_script( 'jquery-color' );
-		wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-classic.css' );
-		wp_enqueue_script( 'cleverness_todo_checklist_complete_js' );
-		wp_localize_script( 'cleverness_todo_checklist_complete_js', 'ctdl', $this->cleverness_todo_checklist_get_js_vars() );
-    }
 
 } // end class
 ?>
