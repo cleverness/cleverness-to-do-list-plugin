@@ -4,6 +4,7 @@
  * @author C.M. Kendrick
  * @version 3.0
  * @package cleverness-to-do-list
+ * @todo check to see if all strings are translatable
  */
 
 class ClevernessToDoList {

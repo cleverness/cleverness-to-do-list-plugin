@@ -21,7 +21,7 @@ class CTDL_Loader {
 		global $ClevernessToDoList;
         $ClevernessToDoList = new ClevernessToDoList();
 		if ( is_admin() ) {
-			new ClevernessToDoSettings();
+			new CTDL_Settings();
 		} else {
 			/* @todo try to get the only when using shortcode code working in frontend class */
 			new CTDL_Frontend_Admin;
@@ -46,7 +46,6 @@ class CTDL_Loader {
 			include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-dashboard-widget.class.php';
 		} else {
 			include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-frontend.class.php';
-			include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-shortcode.php';
 		}
 
 	}

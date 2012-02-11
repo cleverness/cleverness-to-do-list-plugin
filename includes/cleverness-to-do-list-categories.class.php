@@ -1,33 +1,55 @@
 <?php
 /**
- * Categories class
+ * Cleverness To-Do List Plugin Categories
+ * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @author C.M. Kendrick
  * @version 3.0
  * @todo add meta value for sort order and enable sorting
  */
 
+/**
+ * Categories class
+ * @package cleverness-to-do-list
+ * @subpackage includes
+ */
 class CTDL_Categories {
 
-	/* Get to-do category name */
+	/**
+	 * Get to-do category name
+	 * @static
+	 * @param int $category_id
+	 * @return mixed
+	 */
 	public static function get_category_name( $category_id ) {
 		$category = get_term( $category_id, 'todocategories' );
 		return $category->name;
 	}
 
-	/* Get a specific to-do list category */
+	/**
+	 * Get a specific to-do list category
+	 * @static
+	 * @return mixed|null|WP_Error
+	 */
 	public static function get_category() {
 		$category = get_term( $_POST['cleverness_todo_cat_id'], 'todocategories' );
 		return $category;
 	}
 
-	/* Get all to-do list categories */
+	/**
+	 * Get all to-do list categories
+	 * @static
+	 * @return array|WP_Error
+	 */
 	public static function get_categories() {
 		$categories = get_terms( 'todocategories', '&hide_empty=0' );
 		return $categories;
 	}
 
-	/* Insert new to-do list category into the database */
+	/**
+	 * Add a new to-do list category to the taxonomy
+	 * @static
+	 * @return int
+	 */
 	public static function insert_category() {
 		$term = wp_insert_term( $_POST['cleverness_todo_cat_name'], 'todocategories' );
 		if ( !is_wp_error( $term ) ) {
@@ -41,7 +63,11 @@ class CTDL_Categories {
 		}
 	}
 
-	/* Update to-do list category */
+	/**
+	 * Update to-do list category
+	 * @static
+	 * @return int
+	 */
 	public static function update_category() {
 		$category_id = absint( $_POST['cleverness_todo_cat_id'] );
 		$term = wp_update_term( $category_id, 'todocategories', array( 'name' => $_POST['cleverness_todo_cat_name'] ) );
@@ -55,13 +81,20 @@ class CTDL_Categories {
 		}
 	}
 
-	/* Delete to-do list category */
+	/**
+	 * Delete to-do list category
+	 * @static
+	 * @return int
+	 */
 	public static function delete_category() {
 		wp_delete_term( $_POST['cleverness_todo_cat_id'], 'todocategories' );
 		return 1;
 	}
 
-	/* Get a specific to-do list category using ajax */
+	/**
+	 * Get a specific to-do list category using ajax
+	 * @static
+	 */
 	public static function get_category_callback() {
 		$permission = CTDL_Lib::check_permission( 'category', 'add_cat' );
 
@@ -76,7 +109,10 @@ class CTDL_Categories {
 		die(); // this is required to return a proper result
 	}
 
-	/* Update a to-do list category using ajax */
+	/**
+	 * Update a to-do list category using ajax
+	 * @static
+	 */
 	public static function update_category_callback() {
 		check_ajax_referer( 'cleverness-todo-cat' );
 		$permission = CTDL_Lib::check_permission( 'category', 'add_cat' );
@@ -85,7 +121,10 @@ class CTDL_Categories {
 		die(); // this is required to return a proper result
 	}
 
-	/* Delete a to-do list category using ajax */
+	/**
+	 * Delete a to-do list category using ajax
+	 * @static
+	 */
 	public static function delete_category_callback() {
 		check_ajax_referer( 'cleverness-todo-cat' );
 		$permission = CTDL_Lib::check_permission( 'category', 'add_cat' );
@@ -94,7 +133,10 @@ class CTDL_Categories {
 		die(); // this is required to return a proper result
 	}
 
-	/* Create the main category page */
+	/**
+	 * Create the category management page
+	 * @static
+	 */
 	public static function create_category_page() {
 		$cleverness_todo_message = '';
 		$cleverness_todo_action = '';
@@ -202,6 +244,10 @@ class CTDL_Categories {
 	<?php
 	}
 
+	/**
+	 * Set up the category page actions
+	 * @static
+	 */
 	public static function initialize_categories() {
 		global $cleverness_todo_cat_page;
 
@@ -212,12 +258,21 @@ class CTDL_Categories {
 		add_action( 'wp_ajax_cleverness_todo_cat_delete', __CLASS__.'::delete_category_callback' );
 	}
 
+	/**
+	 * Add Javascript to the category page
+	 * @static
+	 */
 	public static function add_category_js() {
 		wp_enqueue_script( 'cleverness_todo_category_js' );
 		wp_enqueue_script( 'jquery-color' );
-		wp_localize_script( 'cleverness_todo_category_js', 'cltdcat', CTDL_Categories::get_js_vars() );
+		wp_localize_script( 'cleverness_todo_category_js', 'ctdlcat', CTDL_Categories::get_js_vars() );
 	}
 
+	/**
+	 * Localize the category Javascript variables
+	 * @static
+	 * @return array
+	 */
 	public static function get_js_vars() {
 		return array(
 			'SUCCESS_MSG'       => __( 'Category Deleted.', 'cleverness-to-do-list' ),

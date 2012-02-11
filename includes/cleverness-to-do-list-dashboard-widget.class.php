@@ -1,9 +1,20 @@
 <?php
-/* Display Dashboard Widget
-@todo make class non-static
-@todo fix category title in widget
-*/
+/**
+ * Cleverness To-Do List Plugin Dashboard Widget
+ *
+ * Creates the help tabs and displays the help content
+ * @author C.M. Kendrick <cindy@cleverness.org>
+ * @package cleverness-to-do-list
+ * @version 3.0
+ * @todo make class non-static
+ * @todo fix category title in widget
+ */
 
+/**
+ * Dashboard widget class
+ * @package cleverness-to-do-list
+ * @subpackage includes
+ */
 class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	public static $dashboard_settings;
 

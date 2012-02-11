@@ -1,8 +1,20 @@
 <?php
-/* Creates a page to manage the To-Do List settings
-Settings Class Basis from http://theme.fm/2011/10/how-to-create-tabs-with-the-settings-api-in-wordpress-2590/ */
+/**
+ * Cleverness To-Do List Plugin Settings
+ *
+ * Creates the settings and page to manage the plugin settings
+ * @author C.M. Kendrick <cindy@cleverness.org>
+ * @package cleverness-to-do-list
+ * @version 3.0
+ */
 
-class ClevernessToDoSettings {
+/**
+ * Settings class, based on class from link
+ * @package cleverness-to-do-list
+ * @subpackage includes
+ * @link http://theme.fm/2011/10/how-to-create-tabs-with-the-settings-api-in-wordpress-2590/
+*/
+class CTDL_Settings {
 	private $general_key = 'cleverness-to-do-list-general';
 	private $advanced_key = 'cleverness-to-do-list-advanced';
 	private $permissions_key = 'cleverness-to-do-list-permissions';
@@ -12,11 +24,6 @@ class ClevernessToDoSettings {
 	private $advanced_settings = array();
 	private $permission_settings = array();
 
-	/*
-		 * Fired during plugins_loaded (very very early),
-		 * so don't miss-use this, only actions and filters,
-		 * current ones speak for themselves.
-		 */
 	function __construct() {
 		add_action( 'admin_init', array( &$this, 'load_settings' ) );
 		add_action( 'admin_init', array( &$this, 'register_general_settings' ) );
@@ -54,10 +61,6 @@ class ClevernessToDoSettings {
 		echo '</em>';
 	}
 
-	/*
-		 * Registers the general settings via the Settings API,
-		 * appends the setting to the tabs array of the object.
-		 */
 	function register_general_settings() {
 		$this->plugin_tabs[$this->general_key] = 'To-Do List Settings';
 
@@ -75,8 +78,8 @@ class ClevernessToDoSettings {
 
 	function categories_option() { ?>
 		<select name="<?php echo $this->general_key; ?>[categories]">
-			<option value="0"<?php if ( $this->general_settings['categories'] == '0' ) echo ' selected="selected"'; ?>><?php _e('Disable', 'cleverness-to-do-list'); ?>&nbsp;</option>
-			<option value="1"<?php if ( $this->general_settings['categories'] == '1' ) echo ' selected="selected"'; ?>><?php _e('Enable', 'cleverness-to-do-list'); ?></option>
+			<option value="0"<?php if ( $this->general_settings['categories'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'Disable', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="1"<?php if ( $this->general_settings['categories'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Enable', 'cleverness-to-do-list' ); ?></option>
 		</select>
 	<?php }
 
@@ -294,7 +297,7 @@ class ClevernessToDoSettings {
 		</form>
 	</div>
 	<?php
-	add_action( 'in_admin_footer', 'CTDL_Lib::cleverness_todo_admin_footer');
+	add_action( 'in_admin_footer', 'CTDL_Lib::cleverness_todo_admin_footer' );
 	}
 
 	/*
@@ -310,7 +313,7 @@ class ClevernessToDoSettings {
 		echo '<h2 class="nav-tab-wrapper">';
 		foreach ( $this->plugin_tabs as $tab_key => $tab_caption ) {
 			$active = $current_tab == $tab_key ? 'nav-tab-active' : '';
-			echo '<a class="nav-tab ' . $active . '" href="?page=' . $this->plugin_key . '&tab=' . $tab_key . '">' . $tab_caption . '</a>';
+			echo '<a class="nav-tab '.$active.'" href="?page='.$this->plugin_key.'&amp;tab='.$tab_key.'">'.$tab_caption.'</a>';
 		}
 		echo '</h2>';
 	}
