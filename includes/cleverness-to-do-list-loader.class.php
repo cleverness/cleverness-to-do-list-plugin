@@ -4,6 +4,7 @@
  * @author C.M. Kendrick
  * @version 3.0
  * @package cleverness-to-do-list
+ * @todo global $ClevernessTodoList needed?
  */
 
 class CTDL_Loader {
@@ -22,6 +23,7 @@ class CTDL_Loader {
         $ClevernessToDoList = new ClevernessToDoList();
 		if ( is_admin() ) {
 			new CTDL_Settings();
+			new CTDL_Dashboard_Widget();
 		} else {
 			/* @todo try to get the only when using shortcode code working in frontend class */
 			new CTDL_Frontend_Admin;
@@ -64,9 +66,6 @@ class CTDL_Loader {
 			add_filter( 'plugin_action_links', 'CTDL_Lib::add_settings_link', 10, 2 );
 			if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', 'CTDL_Lib::add_to_toolbar', 999 );
 			if ( self::$settings['categories'] ==1 ) add_action( 'admin_init', 'CTDL_Categories::initialize_categories' );
-
-			add_action( 'wp_dashboard_setup', 'CTDL_Dashboard_Widget::dashboard_setup' );
-			add_action( 'admin_init', 'CTDL_Dashboard_Widget::dashboard_init' );
 		}
 
 	}

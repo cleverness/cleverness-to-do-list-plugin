@@ -17,7 +17,6 @@ class CTDL_Lib {
 	/*
  * @todo order by category, priority, sort order
 	 * @todo orderby variable not working
-	 * @todo orderby category not working
 	 * @todo master view needs to get set up */
 	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0  ) {
 		if ( CTDL_Loader::$settings['sort_order'] == '_deadline' || CTDL_Loader::$settings['sort_order'] == '_progress' || CTDL_Loader::$settings['sort_order'] == '_assign' ) {
@@ -47,33 +46,6 @@ class CTDL_Lib {
 				)
 			);
 			$results = new WP_Query( $args );
-
-		} elseif ( CTDL_Loader::$settings['categories'] == '1' && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $cat_id == 0 ) {
-
-			$categories = CTDL_Categories::get_categories();
-
-			foreach ( $categories as $category) {
-				$args = array(
-					'post_type' => 'todo',
-					'author' => $user,
-					'post_status' => 'publish',
-					'posts_per_page' => $limit,
-					'orderby' => $orderby,
-					'tax_query' => array(
-						array(
-							'taxonomy' => 'todocategories',
-							'field' => 'id',
-							'terms' => $category->term_id
-						) ),
-					'meta_query' => array(
-						array(
-							'key' => '_status',
-							'value' => $status,
-						)
-					)
-				);
-				$results = new WP_Query( $args );
-			}
 
 		} else {
 			$args = array(
