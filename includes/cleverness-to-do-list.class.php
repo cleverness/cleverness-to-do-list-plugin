@@ -1,12 +1,20 @@
 <?php
 /**
+ * Cleverness To-Do List Plugin Main Class
+ *
  * The main to-do list class
- * @author C.M. Kendrick
- * @version 3.0
+ * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
+ * @version 3.0
  * @todo check to see if all strings are translatable
  */
 
+/**
+ * Main class
+ * @package cleverness-to-do-list
+ * @subpackage includes
+ * @todo sorting by cateogires, uncategorized items are not displayed; same from widget, dashboard widget, and frontend
+ */
 class ClevernessToDoList {
 	protected $cat_id = '';
 	public $list = '';
@@ -75,15 +83,18 @@ class ClevernessToDoList {
 	 * @param $url
 	 * @param int $completed
 	 * @param int $cat_id
+	 * @todo items in categories are being duplicated
 	 */
 	protected function loop_through_todos( $user, $priorities, $url, $completed = 0, $cat_id = 0 ) {
 		if ( CTDL_Loader::$settings['categories'] == '1' && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $cat_id == 0 ) {
 
 			$categories = CTDL_Categories::get_categories();
+			array_unshift( $categories, NULL );
 			$items = 0;
 
 			foreach ( $categories as $category) {
-				$todo_items = CTDL_Lib::get_todos( $user, 0, $completed, $category->term_id );
+				$category_id = ( is_object( $category ) ? $category->term_id : 0 );
+				$todo_items = CTDL_Lib::get_todos( $user, 0, $completed, $category_id );
 
 				if ( $todo_items->have_posts() ) {
 					$this->show_todo_list_items( $todo_items, $priorities, $url, $completed );

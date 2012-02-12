@@ -8,12 +8,22 @@ Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list/
 */
 
-/*
-Based on the to-do plugin by Abstract Dimensions with a patch by WordPress by Example.
-*/
+/**
+ * Cleverness To-Do List Plugin Main File
+ *
+ * This plugin was based on the to-do plugin by Abstract Dimensions with a patch by WordPress by Example.
+ * @author C.M. Kendrick <cindy@cleverness.org>
+ * @package cleverness-to-do-list
+ * @version 3.0
+ */
 
 add_action( 'init', 'cleverness_todo_loader' );
+register_activation_hook( __FILE__, 'cleverness_todo_activation' );
+include_once 'includes/cleverness-to-do-list-widget.class.php';
 
+/**
+ * Define constants and load the plugin
+ */
 function cleverness_todo_loader() {
 	global $wpdb;
 
@@ -64,17 +74,16 @@ function cleverness_todo_loader() {
 			CTDL_Lib::delete_all_todos();
 			break;
 
-	} // end switch
+	}
 
 }
 
-register_activation_hook( __FILE__, 'cleverness_todo_activation' );
+/**
+ * Install plugin on plugin activation
+ */
 function cleverness_todo_activation() {
 	include_once 'includes/cleverness-to-do-list-library.class.php';
 	CTDL_Lib::install_plugin();
 }
-
-// @todo can it be moved?
-include_once 'includes/cleverness-to-do-list-widget.class.php';
 
 ?>

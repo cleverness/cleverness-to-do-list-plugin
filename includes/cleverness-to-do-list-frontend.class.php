@@ -1,6 +1,18 @@
 <?php
-/* Allows administration of items on front-end*/
+/**
+ * Cleverness To-Do List Plugin Frontend Class
+ *
+ * Allows administration of items on front-end
+ * @author C.M. Kendrick <cindy@cleverness.org>
+ * @package cleverness-to-do-list
+ * @version 3.0
+ */
 
+/**
+ * Frontend class
+ * @package cleverness-to-do-list
+ * @subpackage includes
+ */
 class CTDL_Frontend_Admin extends ClevernessToDoList {
 	protected $atts;
 
@@ -540,10 +552,7 @@ function has_cleverness_todo_shortcode( $posts ) {
     }
 
     if ( $cleverness_todo_shortcode_found ) {
-		new ClevernessToDoFrontEndChecklist();
-		$CTDL_Frontend_Admin = new CTDL_Frontend_Admin();
-		echo 'adflgjkadlsgjadlgkjasldgjaslgdjlasg';
-	    new ClevernessToDoFrontEndList();
+	    new CTDL_Frontend_Admin;
 	}
     return $posts;
 }

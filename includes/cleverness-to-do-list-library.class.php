@@ -1,11 +1,18 @@
 <?php
 /**
+ * Cleverness To-Do List Plugin Library
+ *
  * Library of functions for the To-Do List
- * @author C.M. Kendrick
- * @version 3.0
+ * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
+ * @version 3.0
  */
 
+/**
+ * Library class
+ * @package cleverness-to-do-list
+ * @subpackage includes
+ */
 class CTDL_Lib {
 
 	/* Get to-do list item */
@@ -14,15 +21,14 @@ class CTDL_Lib {
 		return $post;
 	}
 
-	/*
- * @todo order by category, priority, sort order
-	 * @todo orderby variable not working
-	 * @todo master view needs to get set up */
+	/* @todo group view and master view needs to get set up */
 	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0  ) {
 		if ( CTDL_Loader::$settings['sort_order'] == '_deadline' || CTDL_Loader::$settings['sort_order'] == '_progress' || CTDL_Loader::$settings['sort_order'] == '_assign' ) {
-			$orderby = "'meta_value title', 'meta_key' => '".CTDL_Loader::$settings['sort_order']."'";
+			$orderby = 'meta_value title';
+			$metakey = CTDL_Loader::$settings['sort_order'];
 		} else {
-			$orderby = "'meta_value ".CTDL_Loader::$settings['sort_order']." title', 'meta_key' => '_priority'";
+			$orderby = 'meta_value '.CTDL_Loader::$settings['sort_order'].' title';
+			$metakey = '_priority';
 		}
 
 		if ( $cat_id != 0 ) {
@@ -54,6 +60,7 @@ class CTDL_Lib {
 				'post_status' => 'publish',
 				'posts_per_page' => $limit,
 				'orderby' => $orderby,
+				'meta_key' => $metakey,
 				'order' => 'ASC',
 				'meta_query' => array(
 					array(
@@ -392,8 +399,8 @@ class CTDL_Lib {
 		if ( isset( $_SERVER["HTTPS"] ) && $_SERVER["HTTPS"] == "on" ) { $pageURL .= "s"; }
 		$pageURL .= "://";
 		if ( $_SERVER["SERVER_PORT"] != "80" ) {
-			//$pageURL .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
-			$pageURL .= $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
+			$pageURL .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+			//$pageURL .= $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
 		} else {
 			$pageURL .= $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
 		}
