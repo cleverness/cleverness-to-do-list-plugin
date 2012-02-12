@@ -6,6 +6,7 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.0
+ * @todo don't show category if private
  */
 
 /**

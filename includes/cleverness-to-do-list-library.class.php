@@ -21,53 +21,89 @@ class CTDL_Lib {
 		return $post;
 	}
 
-	/* @todo group view and master view needs to get set up */
+	/* @todo master view not working yet */
 	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0  ) {
+
+		/* Sort Order */
+		// if sort order is deadline, progress, or assigned user, order by that first
 		if ( CTDL_Loader::$settings['sort_order'] == '_deadline' || CTDL_Loader::$settings['sort_order'] == '_progress' || CTDL_Loader::$settings['sort_order'] == '_assign' ) {
 			$orderby = 'meta_value title';
 			$metakey = CTDL_Loader::$settings['sort_order'];
+		// otherwise, order first by priority
 		} else {
 			$orderby = 'meta_value '.CTDL_Loader::$settings['sort_order'].' title';
 			$metakey = '_priority';
 		}
 
+		/* Author */
+		if ( CTDL_Loader::$settings['list_view'] == 0 ) {
+			$author = $user;
+		} else {
+			$author = NULL;
+		}
+
+		/* View Settings */
+		// In Group View, Show Only Tasks Assigned to That User when Set
+		if ( CTDL_Loader::$settings['list_view'] == '1' && CTDL_Loader::$settings['show_only_assigned'] == '0' && ( !current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) {
+			$metaquery = array(
+				array(
+					'key'   => '_status',
+					'value' => $status,
+				),
+				array (
+					'key'   => '_assign',
+					'value' => $user,
+				)
+			);
+		// Master view with No Editing Capabilities
+		} elseif ( CTDL_Loader::$settings['list_view'] == '2' && !current_user_can( CTDL_Loader::$settings['edit_capability'] ) ) {
+			$metaquery = array(
+				array(
+					'key'   => '_status',
+					'value' => $status,
+				),
+				array(
+					'key'   => '_user_'.$user.'_status',
+					'value' => $status,
+				),
+			);
+		} else {
+			$metaquery = array(
+				array(
+					'key'   => '_status',
+					'value' => $status,
+				) );
+		}
+
+		// if a category id has been defined
 		if ( $cat_id != 0 ) {
 			$args = array(
-				'post_type' => 'todo',
-				'author' => $user,
-				'post_status' => 'publish',
+				'post_type'      => 'todo',
+				'author'         => $author,
+				'post_status'    => 'publish',
 				'posts_per_page' => $limit,
-				'orderby' => $orderby,
-				'tax_query' => array(
-					array(
-						'taxonomy' => 'todocategories',
-						'field' => 'id',
-						'terms' => $cat_id
-					) ),
-				'meta_query' => array(
-					array(
-						'key' => '_status',
-						'value' => $status,
-					)
-				)
+				'orderby'        => $orderby,
+				'tax_query'      => array(
+										array(
+											'taxonomy' => 'todocategories',
+											'field' => 'id',
+											'terms' => $cat_id
+										) ),
+				'meta_query'     => $metaquery
 			);
 			$results = new WP_Query( $args );
 
+		// if no category id has been defined
 		} else {
 			$args = array(
-				'post_type' => 'todo',
-				'author' => $user,
-				'post_status' => 'publish',
+				'post_type'      => 'todo',
+				'author'         => $author,
+				'post_status'    => 'publish',
 				'posts_per_page' => $limit,
-				'orderby' => $orderby,
-				'meta_key' => $metakey,
-				'order' => 'ASC',
-				'meta_query' => array(
-					array(
-						'key' => '_status',
-						'value' => $status,
-					)
-				)
+				'orderby'        => $orderby,
+				'meta_key'       => $metakey,
+				'order'          => 'ASC',
+				'meta_query'     => $metaquery,
 			);
 			$results = new WP_Query( $args );
 		}
@@ -81,25 +117,9 @@ class CTDL_Lib {
 
 		$select = 'SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed FROM '.CTDL_TODO_TABLE.' WHERE status = '.absint( $status );
 
-		// individual view
-		if ( CTDL_Loader::$settings['list_view'] == '0' ) {
-			if ( CTDL_Loader::$settings['assign'] == '0' )
-				$select .= $wpdb->prepare( " AND ( author = %d || assign = %d )", $user, $user );
-			else
-				$select .= $wpdb->prepare( " AND author = %d", $user );
-		}
 
-		// group view - show only assigned - show all assigned
-		elseif ( CTDL_Loader::$settings['list_view'] == '1' && CTDL_Loader::$settings['show_only_assigned'] == '0' && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) )
-			$select = $select;
-		// group view - show only assigned
-		elseif ( CTDL_Loader::$settings['list_view'] == '1' && CTDL_Loader::$settings['show_only_assigned'] == '0' )
-			$select .= $wpdb->prepare( " AND assign = %d", $user );
-		// group view - show all
-		elseif ( CTDL_Loader::$settings['list_view'] == '1' )
-			$select = $select;
 		// master view with edit capablities
-		elseif ( CTDL_Loader::$settings['list_view'] == '2' && current_user_can( CTDL_Loader::$settings['edit_capability'] ) )
+		if ( CTDL_Loader::$settings['list_view'] == '2' && current_user_can( CTDL_Loader::$settings['edit_capability'] ) )
 			$select = $select;
 		// master view
 		elseif ( CTDL_Loader::$settings['list_view'] == '2' ) {
@@ -110,12 +130,6 @@ class CTDL_Lib {
 			}
 		}
 
-		if ( $cat_id != 1 ) {
-			// show only one category
-			if ( CTDL_Loader::$settings['categories'] == '1' && $cat_id != 'All' ) {
-				$select .= $wpdb->prepare( " AND cat_id = %d ", $cat_id );
-			}
-		}
 
 		// order by sort order - no categories
 		if ( CTDL_Loader::$settings['categories'] == '0' )
@@ -154,15 +168,14 @@ class CTDL_Lib {
 			update_post_meta( $id, '_status', $status );
 			update_post_meta( $id, '_completed', date( 'Y-m-d' ) );
 
+		// else if master view with no edit capability
 		} elseif ( CTDL_Loader::$settings['list_view'] == '2' ) {
 			$user = $current_user->ID;
-			$wpdb->get_results( "SELECT * FROM ".CTDL_STATUS_TABLE." WHERE id = $id AND user = $user" );
-			$num = $wpdb->num_rows;
 
-			if ( $num == 0 ) {
-				$results = $wpdb->insert( CTDL_STATUS_TABLE, array( 'id' => $id, 'status' => $status, 'user' => $user ) );
-			} else {
-				$results = $wpdb->update( CTDL_STATUS_TABLE, array( 'status' => $status ), array( 'id' => $id, 'user' => $user ) );
+			update_post_meta( $id, '_user_'.$user.'_status', $status );
+
+			if ( $status == 1 ) {
+				update_post_meta( $id, '_user_'.$user.'_completed', date( 'Y-m-d' ));
 			}
 
 		}
@@ -414,7 +427,7 @@ class CTDL_Lib {
 	public function add_to_toolbar( $wp_toolbar ) {
 		$wp_toolbar->add_node( array(
 			'id'    => 'todolist',
-			'title' => 'To-Do List',
+			'title' => __( 'To-Do List', 'cleverness-to-do-list' ),
 			'href'  => get_admin_url().'admin.php?page=cleverness-to-do-list'
 		) );
 
@@ -422,7 +435,7 @@ class CTDL_Lib {
 
 			$wp_toolbar->add_node( array(
 				'id'     => 'todolist-add',
-				'title'  => 'Add New To-Do Item',
+				'title'  => __( 'Add New To-Do Item', 'cleverness-to-do-list' ),
 				'parent' => 'todolist',
 				'href'   => get_admin_url().'admin.php?page=cleverness-to-do-list#addtodo'
 			) );

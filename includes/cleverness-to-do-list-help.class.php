@@ -12,6 +12,7 @@
  * Help tabs class
  * @package cleverness-to-do-list
  * @subpackage includes
+ * @todo restrict viewing to users with appropriate permissions
  */
 class CTDL_Help {
 

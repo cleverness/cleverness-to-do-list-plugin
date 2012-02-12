@@ -6,6 +6,7 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.0
+ * @todo don't show category if private
  */
 
 /**
@@ -16,7 +17,7 @@
 class CTDL_Widget extends WP_Widget {
 
 	function __construct() {
-		parent::WP_Widget( 'cleverness-to-do-widget', 'To-Do List', array( 'description' => __( 'Displays To-Do List Items', 'cleverness-to-do-list' ) ) );
+		parent::WP_Widget( 'cleverness-to-do-widget', __( 'To-Do List', 'cleverness-to-do-list' ), array( 'description' => __( 'Displays To-Do List Items', 'cleverness-to-do-list' ) ) );
 	}
 
 	/**

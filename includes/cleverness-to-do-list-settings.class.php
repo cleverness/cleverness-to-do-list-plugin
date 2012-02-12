@@ -62,7 +62,7 @@ class CTDL_Settings {
 	}
 
 	function register_general_settings() {
-		$this->plugin_tabs[$this->general_key] = 'To-Do List Settings';
+		$this->plugin_tabs[$this->general_key] = __( 'To-Do List Settings', 'cleverness-to-do-list' );
 
 		register_setting( $this->general_key, $this->general_key );
 		add_settings_section( 'section_general', __( 'To-Do List Settings', 'cleverness-to-do-list' ), array( &$this, 'section_general_desc' ), $this->general_key );
@@ -145,7 +145,7 @@ class CTDL_Settings {
 	}
 
 	function register_advanced_settings() {
-		$this->plugin_tabs[$this->advanced_key] = 'Advanced Settings';
+		$this->plugin_tabs[$this->advanced_key] = __( 'Advanced Settings', 'cleverness-to-do-list' );
 
 		register_setting( $this->advanced_key, $this->advanced_key );
 		add_settings_section( 'section_advanced', __( 'To-Do List Advanced Settings', 'cleverness-to-do-list' ), array( &$this, 'section_advanced_desc' ), $this->advanced_key );
@@ -245,7 +245,7 @@ class CTDL_Settings {
 	}
 
 	function register_permission_settings() {
-		$this->plugin_tabs[$this->permissions_key] = 'User Permissions';
+		$this->plugin_tabs[$this->permissions_key] = __( 'User Permissions', 'cleverness-to-do-list' );
 
 		register_setting( $this->permissions_key, $this->permissions_key );
 		add_settings_section( 'section_permission', __( 'To-Do List User Permissions for Group and Master List Types', 'cleverness-to-do-list' ), array( &$this, 'section_permission_desc' ), $this->permissions_key );

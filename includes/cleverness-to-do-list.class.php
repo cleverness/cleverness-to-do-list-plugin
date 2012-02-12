@@ -6,14 +6,14 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.0
- * @todo check to see if all strings are translatable
+ * @todo completed js not striping
  */
 
 /**
  * Main class
  * @package cleverness-to-do-list
  * @subpackage includes
- * @todo sorting by cateogires, uncategorized items are not displayed; same from widget, dashboard widget, and frontend
+ * @todo sorting by categories, uncategorized items are not displayed; same from widget, dashboard widget, and frontend
  */
 class ClevernessToDoList {
 	protected $cat_id = '';
@@ -83,7 +83,6 @@ class ClevernessToDoList {
 	 * @param $url
 	 * @param int $completed
 	 * @param int $cat_id
-	 * @todo items in categories are being duplicated
 	 */
 	protected function loop_through_todos( $user, $priorities, $url, $completed = 0, $cat_id = 0 ) {
 		if ( CTDL_Loader::$settings['categories'] == '1' && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $cat_id == 0 ) {
@@ -112,7 +111,7 @@ class ClevernessToDoList {
 			$todo_items = CTDL_Lib::get_todos( $user, 0, $completed );
 
 			if ( $todo_items->have_posts() ) {
-				$this->show_todo_list_items( $todo_items, $priorities, $url );
+				$this->show_todo_list_items( $todo_items, $priorities, $url, $completed );
 			} else {
 				if ( $completed == 0 ) {
 					$this->list .= '<tr><td>' . __( 'No items to do.', 'cleverness-to-do-list' ) . '</td></tr>';
@@ -129,6 +128,7 @@ class ClevernessToDoList {
 	 * @param $priorities
 	 * @param $url
 	 * @param $completed
+	 * @todo completed date not showing
 	 */
 	protected function show_todo_list_items( $todo_items, $priorities, $url, $completed = 0 ) {
 
