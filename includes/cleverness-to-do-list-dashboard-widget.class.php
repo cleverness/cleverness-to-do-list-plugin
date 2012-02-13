@@ -60,15 +60,23 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 
 			$categories = CTDL_Categories::get_categories();
 			$items = 0;
+			$posts_to_exclude = 0;
 
 			foreach ( $categories as $category ) {
 				$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
-					$this->show_todo_list_items( $todo_items, 0, $cat_id );
+					$posts_to_exclude = $this->show_todo_list_items( $todo_items, 0, $cat_id );
 					$items = 1;
 				}
 			}
+
+			$todo_items = CTDL_Lib::get_todos( $user, 0, 0, 0, $posts_to_exclude );
+			if ( $todo_items->have_posts() ) {
+				$this->show_todo_list_items( $todo_items, 0 );
+				$items = 1;
+			}
+
 			if ( $items == 0 ) {
 				$this->list .= '<tr><td>' . __( 'No items to do.', 'cleverness-to-do-list' ) . '</td></tr>';
 			}
@@ -89,6 +97,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	 * @param $todo_items
 	 * @param int $completed
 	 * @param int $cat_id
+	 * @return array $posts_to_exclude
 	 */
 	protected function show_todo_list_items( $todo_items, $completed = 0, $cat_id = 0 ) {
 		$catid = '';
@@ -96,6 +105,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
 
 			$id = get_the_ID();
+			$posts_to_exclude[] = $id;
 			$priority = get_post_meta( $id, '_priority', true );
 			$priority_class = '';
 			if ( $priority == '0' ) $priority_class = ' class="todo-important"';
@@ -146,6 +156,8 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 
 			$this->list .= '</span></p>';
 		endwhile;
+
+		return $posts_to_exclude;
 
 	}
 

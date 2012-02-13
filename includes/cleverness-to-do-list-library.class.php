@@ -21,9 +21,9 @@ class CTDL_Lib {
 		return $post;
 	}
 
-	/* @todo master view not working yet */
-	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0  ) {
-
+	/* @todo to_exclude for categories not working */
+	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0, $to_exclude = '' ) {
+		var_dump($to_exclude);
 		/* Sort Order */
 		// if sort order is deadline, progress, or assigned user, order by that first
 		if ( CTDL_Loader::$settings['sort_order'] == '_deadline' || CTDL_Loader::$settings['sort_order'] == '_progress' || CTDL_Loader::$settings['sort_order'] == '_assign' ) {
@@ -57,16 +57,45 @@ class CTDL_Lib {
 			);
 		// Master view with No Editing Capabilities
 		} elseif ( CTDL_Loader::$settings['list_view'] == '2' && !current_user_can( CTDL_Loader::$settings['edit_capability'] ) ) {
-			$metaquery = array(
-				array(
-					'key'   => '_status',
-					'value' => $status,
-				),
-				array(
-					'key'   => '_user_'.$user.'_status',
-					'value' => $status,
-				),
-			);
+
+			if ( $status == 0 ) {
+				// first get all the posts where _user_USERID_status = 1 and put them into an array
+				// then exclude those items from the query where you get all the posts that have status = 0
+				$posts_to_exclude_args = array(
+					'post_type'      => 'todo',
+					'author'         => $author,
+					'post_status'    => 'publish',
+					'meta_query'     => array(
+											array(
+												'key' => '_user_'.$user.'_status',
+												'value' => 1,
+											) )
+					);
+				$posts_to_exclude = new WP_Query( $posts_to_exclude_args );
+				$to_exclude = array();
+				while ( $posts_to_exclude->have_posts() ) : $posts_to_exclude->the_post();
+					$to_exclude[] = get_the_ID();
+				endwhile;
+
+				$metaquery = array(
+					array(
+						'key'   => '_status',
+						'value' => 0,
+					)
+				);
+			} elseif ( $status == 1 ) {
+				$metaquery = array(
+					array(
+						'key'   => '_status',
+						'value' => 0,
+					),
+					array(
+						'key'   => '_user_'.$user.'_status',
+						'value' => 1,
+					)
+				);
+			}
+
 		} else {
 			$metaquery = array(
 				array(
@@ -83,6 +112,7 @@ class CTDL_Lib {
 				'post_status'    => 'publish',
 				'posts_per_page' => $limit,
 				'orderby'        => $orderby,
+				'post__not_in'   => $to_exclude,
 				'tax_query'      => array(
 										array(
 											'taxonomy' => 'todocategories',
@@ -104,43 +134,12 @@ class CTDL_Lib {
 				'meta_key'       => $metakey,
 				'order'          => 'ASC',
 				'meta_query'     => $metaquery,
+				'post_not_in'    => $to_exclude,
 			);
 			$results = new WP_Query( $args );
 		}
 
 		return $results;
-	}
-
-	/* Get to-do list items */
-	public static function old_get_todos( $user, $limit = 0, $status = 0, $cat_id = 0 ) {
-		global $wpdb;
-
-		$select = 'SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed FROM '.CTDL_TODO_TABLE.' WHERE status = '.absint( $status );
-
-
-		// master view with edit capablities
-		if ( CTDL_Loader::$settings['list_view'] == '2' && current_user_can( CTDL_Loader::$settings['edit_capability'] ) )
-			$select = $select;
-		// master view
-		elseif ( CTDL_Loader::$settings['list_view'] == '2' ) {
-			if ($status == 0 ) {
-				$select .= $wpdb->prepare( " AND ( id = ANY ( SELECT id FROM ".CTDL_STATUS_TABLE." WHERE user = %d AND status = 0) OR id NOT IN( SELECT id FROM ".CTDL_STATUS_TABLE." WHERE user = %d AND status = 1 ) )", $user, $user );
-			} elseif ( $status == 1 ) {
-				$select = $wpdb->prepare( " SELECT id, author, priority, todotext, assign, progress, deadline, cat_id, completed FROM ".CTDL_TODO_TABLE." LEFT OUTER JOIN ".CTDL_STATUS_TABLE." USING (id) WHERE ( ".CTDL_STATUS_TABLE.".status = 1 AND ".CTDL_STATUS_TABLE.".user = %d )", $user );
-			}
-		}
-
-
-		// order by sort order - no categories
-		if ( CTDL_Loader::$settings['categories'] == '0' )
-			$select .= $wpdb->prepare( " ORDER BY priority, %s", CTDL_Loader::$settings['sort_order'] );
-		// order by categories then sort order
-		else
-			$select .= $wpdb->prepare( " ORDER BY cat_id, priority, %s", CTDL_Loader::$settings['sort_order'] );
-		if ( $limit != 0 ) $select .= $wpdb->prepare( "  LIMIT %d", $limit );
-		$result = $wpdb->get_results( $select, OBJECT_K );
-
-		return $result;
 	}
 
 	public static function complete_todo_callback() {
@@ -157,7 +156,6 @@ class CTDL_Lib {
 		die(); // this is required to return a proper result
 	}
 
-	/* todo master view needs set up */
 	public static function complete_todo( $id, $status ) {
 		global $current_user;
 

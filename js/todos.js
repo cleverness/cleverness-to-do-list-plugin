@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
 		$( "#cleverness_todo_deadline" ).datepicker();
 	});
 
-$('#todo-list tbody tr:visible:even').addClass('alternate');
+$('.todo-table tbody tr:visible:even').addClass('alternate');
 
 /* Complete To-Dos */
 $('.todo-checkbox').click(function () {

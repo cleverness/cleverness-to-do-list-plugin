@@ -48,6 +48,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 	 * @param $priorities
 	 * @param $url
 	 * @param $completed
+	 * @return array $posts_to_exclude
 	 */
 	public function show_todo_list_items( $todo_items, $priorities, $url, $completed = 0 ) {
 		extract( shortcode_atts( array(
@@ -62,6 +63,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
 			$id = get_the_ID();
+			$posts_to_exclude[] = $id;
 			$the_priority = get_post_meta( $id, '_priority', true );
 			$priority_class = '';
 			if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
@@ -79,6 +81,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			if ( $editlink == 1 ) $this->show_edit_link( $id, $url );
 			$this->list .= '</tr>';
 		endwhile;
+
+		return $posts_to_exclude;
 
 	}
 

@@ -6,14 +6,12 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.0
- * @todo completed js not striping
  */
 
 /**
  * Main class
  * @package cleverness-to-do-list
  * @subpackage includes
- * @todo sorting by categories, uncategorized items are not displayed; same from widget, dashboard widget, and frontend
  */
 class ClevernessToDoList {
 	protected $cat_id = '';
@@ -88,18 +86,24 @@ class ClevernessToDoList {
 		if ( CTDL_Loader::$settings['categories'] == '1' && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $cat_id == 0 ) {
 
 			$categories = CTDL_Categories::get_categories();
-			array_unshift( $categories, NULL );
 			$items = 0;
+			$posts_to_exclude = array();
 
 			foreach ( $categories as $category) {
-				$category_id = ( is_object( $category ) ? $category->term_id : 0 );
-				$todo_items = CTDL_Lib::get_todos( $user, 0, $completed, $category_id );
+				$todo_items = CTDL_Lib::get_todos( $user, 0, $completed, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
-					$this->show_todo_list_items( $todo_items, $priorities, $url, $completed );
+					$posts_to_exclude = $this->show_todo_list_items( $todo_items, $priorities, $url, $completed );
 					$items = 1;
 				}
 			}
+
+			$todo_items = CTDL_Lib::get_todos( $user, 0, $completed, 0, $posts_to_exclude );
+			if ( $todo_items->have_posts() ) {
+				$this->show_todo_list_items( $todo_items, $priorities, $url, $completed );
+				$items = 1;
+			}
+
 			if ( $items == 0 ) {
 				if ( $completed == 0 ) {
 					$this->list .= '<tr><td>' . __( 'No items to do.', 'cleverness-to-do-list' ) . '</td></tr>';
@@ -128,12 +132,13 @@ class ClevernessToDoList {
 	 * @param $priorities
 	 * @param $url
 	 * @param $completed
-	 * @todo completed date not showing
+	 * @return array $posts_to_exclude
 	 */
 	protected function show_todo_list_items( $todo_items, $priorities, $url, $completed = 0 ) {
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
 			$id = get_the_ID();
+			$posts_to_exclude[] = $id;
 			$priority = get_post_meta( $id, '_priority', true );
 			$priority_class = '';
 			if ( $priority == '0' ) $priority_class = ' class="todo-important"';
@@ -153,6 +158,8 @@ class ClevernessToDoList {
 			$this->show_edit_link( $id, $url );
 			$this->list .= '</tr>';
 		endwhile;
+
+		return $posts_to_exclude;
 
 	}
 
