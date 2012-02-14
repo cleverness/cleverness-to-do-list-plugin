@@ -21,9 +21,8 @@ class CTDL_Lib {
 		return $post;
 	}
 
-	/* @todo to_exclude for categories not working */
-	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0, $to_exclude = '' ) {
-		var_dump($to_exclude);
+	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0, $to_exclude = array() ) {
+
 		/* Sort Order */
 		// if sort order is deadline, progress, or assigned user, order by that first
 		if ( CTDL_Loader::$settings['sort_order'] == '_deadline' || CTDL_Loader::$settings['sort_order'] == '_progress' || CTDL_Loader::$settings['sort_order'] == '_assign' ) {
@@ -72,7 +71,6 @@ class CTDL_Lib {
 											) )
 					);
 				$posts_to_exclude = new WP_Query( $posts_to_exclude_args );
-				$to_exclude = array();
 				while ( $posts_to_exclude->have_posts() ) : $posts_to_exclude->the_post();
 					$to_exclude[] = get_the_ID();
 				endwhile;
@@ -112,6 +110,7 @@ class CTDL_Lib {
 				'post_status'    => 'publish',
 				'posts_per_page' => $limit,
 				'orderby'        => $orderby,
+				'order'          => 'ASC',
 				'post__not_in'   => $to_exclude,
 				'tax_query'      => array(
 										array(
@@ -134,7 +133,7 @@ class CTDL_Lib {
 				'meta_key'       => $metakey,
 				'order'          => 'ASC',
 				'meta_query'     => $metaquery,
-				'post_not_in'    => $to_exclude,
+				'post__not_in'   => $to_exclude,
 			);
 			$results = new WP_Query( $args );
 		}
@@ -368,20 +367,13 @@ class CTDL_Lib {
 		switch ( $type ) {
 			case 'category':
 				// check if categories are enabled and the user has the capability or the list view is individual
-				if ( CTDL_Loader::$settings['categories'] == '1' && ( current_user_can( CTDL_Loader::$settings[$action.'_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) ) {
-					return true;
-				} else {
-					return false;
-				}
+				$permission = ( CTDL_Loader::$settings['categories'] == '1' && ( current_user_can( CTDL_Loader::$settings[$action.'_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) ? true : false );
 				break;
 			case 'todo':
-				if ( current_user_can( CTDL_Loader::$settings[$action.'_capability'] ) ) {
-					return true;
-				} else {
-					return false;
-				}
+				$permission = ( current_user_can( CTDL_Loader::$settings[$action.'_capability'] ) ? true : false );
 				break;
 		}
+		return $permission;
 	}
 
 	/**

@@ -58,14 +58,15 @@ class CTDL_Widget extends WP_Widget {
 			while ( $todo_items->have_posts() ) : $todo_items->the_post();
 				$id = get_the_ID();
 
-				/* @todo categories not showing up right */
+				/* @todo category titles not all showing up */
 				if ( CTDL_Loader::$settings['categories'] == '1' && $category == '0' ) {
 					$cats = get_the_terms( $id, 'todocategories' );
 					if ( $cats != NULL ) {
 						foreach( $cats as $category ) {
-							if ( $cat_id != $category->term_id )
+							if ( $cat_id != $category->term_id ) {
 								$ClevernessToDoList->list .= '</ol><h4>'.$category->name.'</h4><ol>';
-							$cat_id = $category->term_id;
+								$cat_id = $category->term_id;
+							}
 						}
 					}
 				}
@@ -81,7 +82,7 @@ class CTDL_Widget extends WP_Widget {
 					$ClevernessToDoList->show_deadline( get_post_meta( $id, '_deadline', true ) );
 					$ClevernessToDoList->list .= '</span>';
 				}
-				if ( $assignedto == 1 && get_post_meta( $id, '_assign', true ) != -1 ) {
+				if ( $assignedto == 1 && CTDL_Loader::$settings['list_view'] != '2' && get_post_meta( $id, '_assign', true ) != -1 ) {
 					$ClevernessToDoList->list .= '<br /><span class="assigned">'.__('Assigned to ', 'cleverness-to-do-list');
 					$ClevernessToDoList->show_assigned( get_post_meta( $id, '_assign', true ) );
 					$ClevernessToDoList->list .= '</span>';

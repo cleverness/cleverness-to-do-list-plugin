@@ -60,13 +60,13 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 
 			$categories = CTDL_Categories::get_categories();
 			$items = 0;
-			$posts_to_exclude = 0;
+			$posts_to_exclude = array();
 
 			foreach ( $categories as $category ) {
 				$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
-					$posts_to_exclude = $this->show_todo_list_items( $todo_items, 0, $cat_id );
+					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, 0, $cat_id ) );
 					$items = 1;
 				}
 			}

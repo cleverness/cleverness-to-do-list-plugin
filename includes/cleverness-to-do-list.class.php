@@ -93,7 +93,7 @@ class ClevernessToDoList {
 				$todo_items = CTDL_Lib::get_todos( $user, 0, $completed, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
-					$posts_to_exclude = $this->show_todo_list_items( $todo_items, $priorities, $url, $completed );
+					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $priorities, $url, $completed ) );
 					$items = 1;
 				}
 			}
@@ -106,7 +106,7 @@ class ClevernessToDoList {
 
 			if ( $items == 0 ) {
 				if ( $completed == 0 ) {
-					$this->list .= '<tr><td>' . __( 'No items to do.', 'cleverness-to-do-list' ) . '</td></tr>';
+					$this->list .= '<tr><td>'.__( 'No items to do.', 'cleverness-to-do-list' ).'</td></tr>';
 				} else {
 					$this->list .= '<tr><td>'.__( 'No completed items.', 'cleverness-to-do-list' ).'</td></tr>';
 				}
@@ -118,7 +118,7 @@ class ClevernessToDoList {
 				$this->show_todo_list_items( $todo_items, $priorities, $url, $completed );
 			} else {
 				if ( $completed == 0 ) {
-					$this->list .= '<tr><td>' . __( 'No items to do.', 'cleverness-to-do-list' ) . '</td></tr>';
+					$this->list .= '<tr><td>'.__( 'No items to do.', 'cleverness-to-do-list' ).'</td></tr>';
 				} else {
 					$this->list .= '<tr><td>'.__( 'No completed items.', 'cleverness-to-do-list' ).'</td></tr>';
 				}

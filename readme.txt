@@ -130,8 +130,8 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Screenshots ==
 
-1. Dashboard Widget - Individual Setting
-2. To-Do List Page - Group Setting with Assign Tasks on
+1. Dashboard Widget 
+2. To-Do List Page - Deadline, Progress, and Categories Enabled
 3. Settings Page
 
 == Changelog ==
