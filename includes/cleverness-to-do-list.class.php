@@ -55,7 +55,7 @@ class ClevernessToDoList {
 			$this->list .= '<h3>'.__( 'Completed Items', 'cleverness-to-do-list' );
 			if ( current_user_can( CTDL_Loader::$settings['purge_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 				$cleverness_todo_purge_nonce = wp_create_nonce( 'todopurge' );
-				$this->list .= ' (<a id="delete-all-todos" href="admin.php?page=cleverness-to-do-list&amp;action=purgetodo&_wpnonce='.$cleverness_todo_purge_nonce.'">'.__('Delete All', 'cleverness-to-do-list').'</a>)';
+				$this->list .= ' (<a id="delete-all-todos" href="admin.php?page=cleverness-to-do-list&amp;action=purgetodo&_wpnonce='.esc_attr( $cleverness_todo_purge_nonce ).'">'.__('Delete All', 'cleverness-to-do-list').'</a>)';
 		 	}
 			if ( is_admin() ) $this->list .= '</h3>';
 
@@ -144,7 +144,7 @@ class ClevernessToDoList {
 			if ( $priority == '0' ) $priority_class = ' class="todo-important"';
 			if ( $priority == '2' ) $priority_class = ' class="todo-low"';
 
-			$this->list .= '<tr id="todo-'.$id.'"'.$priority_class.'>';
+			$this->list .= '<tr id="todo-'.esc_attr( $id ).'"'.$priority_class.'>';
 			$this->show_id( $id );
 			$this->show_checkbox( $id, $completed );
 			$this->show_todo_text( get_the_content() );
@@ -299,7 +299,7 @@ class ClevernessToDoList {
 			$this->form .= sprintf( '<tr>
 				<th scope="row"><label for="cleverness_todo_deadline">%s</label></th>
 				<td><input type="text" name="cleverness_todo_deadline" id="cleverness_todo_deadline" value="%s" /></td>
-			</tr>', __( 'Deadline', 'cleverness-to-do-list' ), $value );
+			</tr>', __( 'Deadline', 'cleverness-to-do-list' ), esc_attr( $value ) );
 		}
 	}
 
@@ -376,7 +376,7 @@ class ClevernessToDoList {
 	 */
 	protected function show_id( $id ) {
 		if ( CTDL_Loader::$settings['show_id'] == 1 ) {
-			$this->list .= ( $id != '' ? sprintf( '<td>%s</td>', $id ) : '<td></td>' );
+			$this->list .= ( $id != '' ? sprintf( '<td>%s</td>', esc_attr( $id ) ) : '<td></td>' );
 		}
 	}
 
@@ -389,12 +389,12 @@ class ClevernessToDoList {
 		$permission = CTDL_LIb::check_permission( 'todo', 'complete' );
 		if ( $permission === true ) {
 			if ( $completed == 1 ) {
-				$this->list .= sprintf( '<td><input type="checkbox" id="cltd-%d" class="todo-checkbox completed" checked="checked" />', $id );
+				$this->list .= sprintf( '<td><input type="checkbox" id="cltd-%d" class="todo-checkbox completed" checked="checked" />', esc_attr( $id ) );
 			} else {
-				$this->list .= sprintf( '<td><input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted"/>', $id );
+				$this->list .= sprintf( '<td><input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted"/>', esc_attr( $id ) );
 			}
 			$cleverness_todo_complete_nonce = wp_create_nonce( 'todocomplete' );
-			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="'.$cleverness_todo_complete_nonce.'" />';
+			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="'.esc_attr( $cleverness_todo_complete_nonce ).'" />';
 			if ( !is_admin() ) $this->list .= '</td>';
 		}
 	}
@@ -440,7 +440,7 @@ class ClevernessToDoList {
 	 * @param array $priority
 	 */
 	public function show_priority( $the_priority, $priority ) {
-		$this->list .= sprintf( '<td>%s</td>', $priority[$the_priority] );
+		$this->list .= sprintf( '<td>%s</td>', esc_attr( $priority[$the_priority] ) );
 	}
 
 	/**
@@ -452,7 +452,7 @@ class ClevernessToDoList {
 		( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1) && CTDL_Loader::$settings['assign'] == 0 ) {
 			if ( $assign != '-1' && $assign != '' && $assign != 0 ) {
 				$assign_user = get_userdata( $assign );
-				$this->list .= '<td>'.$assign_user->display_name.'</td>';
+				$this->list .= '<td>'.esc_attr( $assign_user->display_name ).'</td>';
 			} else {
 				$this->list .= '<td></td>';
 			}
@@ -468,7 +468,7 @@ class ClevernessToDoList {
 			$this->list .= '<td>';
 			if ( $categories != NULL ) {
 				foreach( $categories as $category ) {
-					$this->list .= $category->name;
+					$this->list .= esc_attr( $category->name );
 				}
 			}
 			$this->list .= '</td>';
@@ -481,7 +481,7 @@ class ClevernessToDoList {
 	 */
 	public function show_addedby( $author ) {
 		if ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 ) {
-			$this->list .= '<td>'.$author.'</td>';
+			$this->list .= '<td>'.esc_attr( $author ).'</td>';
 		}
 	}
 
@@ -491,7 +491,7 @@ class ClevernessToDoList {
 	 */
 	public function show_deadline( $deadline ) {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) {
-			$this->list .= ( $deadline != '' ? sprintf( '<td>%s</td>', $deadline ) : '<td></td>' );
+			$this->list .= ( $deadline != '' ? sprintf( '<td>%s</td>', esc_attr( $deadline ) ) : '<td></td>' );
 		}
 	}
 
@@ -503,7 +503,7 @@ class ClevernessToDoList {
 		if ( CTDL_Loader::$settings['show_completed_date'] && $completed != '0000-00-00 00:00:00' ) {
 			$date = '';
 			$date = date( CTDL_Loader::$settings['date_format'], strtotime( $completed ) );
-			$this->list .= '<td>'.$date.'</td>';
+			$this->list .= '<td>'.esc_attr( $date ).'</td>';
 			}
 	}
 
@@ -513,7 +513,7 @@ class ClevernessToDoList {
 	 */
 	public function show_progress( $progress) {
 		if ( CTDL_Loader::$settings['show_progress'] == 1 ) {
-			$this->list .= ( $progress != '' ? sprintf( '<td>%d%%</td>', $progress ) : '<td></td>' );
+			$this->list .= ( $progress != '' ? sprintf( '<td>%d%%</td>', esc_attr( $progress ) ) : '<td></td>' );
 		}
 	}
 

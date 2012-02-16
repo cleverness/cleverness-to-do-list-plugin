@@ -115,7 +115,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 				$cats = get_the_terms( $id, 'todocategories' );
 				if ( $cats != NULL ) {
 					foreach( $cats as $category ) {
-						if ( $catid != $category->term_id ) $this->list .= '<h4>'.$category->name.'</h4>';
+						if ( $catid != $category->term_id ) $this->list .= '<h4>'.esc_attr( $category->name ).'</h4>';
 						$catid = $category->term_id;
 					}
 				}
@@ -152,7 +152,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			}
 
 			if ( current_user_can( CTDL_Loader::$settings['edit_capability']) || CTDL_Loader::$settings['list_view'] == '0' )
-				$this->list .= ' <small>(<a href="admin.php?page=cleverness-to-do-list&amp;action=edit-todo&amp;id='.$id.'">'.__( 'Edit', 'cleverness-to-do-list' ).'</a>)</small>';
+				$this->list .= ' <small>(<a href="admin.php?page=cleverness-to-do-list&amp;action=edit-todo&amp;id='.esc_attr( $id ).'">'.__( 'Edit', 'cleverness-to-do-list' ).'</a>)</small>';
 
 			$this->list .= '</span></p>';
 		endwhile;

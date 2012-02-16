@@ -17,7 +17,7 @@ class CTDL_Lib {
 
 	/* Get to-do list item */
 	public static function get_todo( $id ) {
-		$post = get_post( $id );
+		$post = get_post( absint( $id ) );
 		return $post;
 	}
 
@@ -146,7 +146,7 @@ class CTDL_Lib {
 		$permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 
 		if ( $permission === true ) {
-			$message = CTDL_Lib::complete_todo( intval( $_POST['cleverness_id'] ), intval( $_POST['cleverness_status'] ) );
+			$message = CTDL_Lib::complete_todo( absint( $_POST['cleverness_id'] ), absint( $_POST['cleverness_status'] ) );
 		} else {
 			$message = __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
 		}
@@ -169,10 +169,10 @@ class CTDL_Lib {
 		} elseif ( CTDL_Loader::$settings['list_view'] == '2' ) {
 			$user = $current_user->ID;
 
-			update_post_meta( $id, '_user_'.$user.'_status', $status );
+			update_post_meta( absint( $id ), '_user_'.$user.'_status', $status );
 
 			if ( $status == 1 ) {
-				update_post_meta( $id, '_user_'.$user.'_completed', date( 'Y-m-d' ));
+				update_post_meta( absint( $id ), '_user_'.$user.'_completed', date( 'Y-m-d' ));
 			}
 
 		}
@@ -267,7 +267,7 @@ class CTDL_Lib {
 			if ( !wp_verify_nonce( $_REQUEST['todoupdate'], 'todoupdate' ) ) die( 'Security check failed' );
 
 			$my_post = array(
-				'ID'            => $_POST['id'],
+				'ID'            => absint( $_POST['id'] ),
 				'post_title'    => substr( $_POST['cleverness_todo_description'], 0, 100 ),
 				'post_content'  => $_POST['cleverness_todo_description'],
 			);
@@ -289,14 +289,14 @@ class CTDL_Lib {
 	public static function delete_todo_callback() {
 		check_ajax_referer( 'cleverness-todo' );
 		$permission = CTDL_Lib::check_permission( 'todo', 'delete' );
-		$status = ( $permission === true ? CTDL_Lib::delete_todo( $_POST['cleverness_todo_id'] ) : -1 );
+		$status = ( $permission === true ? CTDL_Lib::delete_todo( absint( $_POST['cleverness_todo_id'] ) ) : -1 );
 		echo $status;
 		die(); // this is required to return a proper result
 	}
 
 	/* Delete to-do list item */
 	public static function delete_todo( $id ) {
-		wp_delete_post( $id, true );
+		wp_delete_post( absint( $id ), true );
 		return 1;
 	}
 
@@ -340,7 +340,7 @@ class CTDL_Lib {
 
 			while ( $todo_items->have_posts() ) : $todo_items->the_post();
 				$id = get_the_ID();
-				wp_delete_post( $id, true );
+				wp_delete_post( absint( $id ), true );
 			endwhile;
 		}
 	}
@@ -452,53 +452,35 @@ class CTDL_Lib {
 	}
 
 	/* Create database table and add default options
-	@todo remove table setup, convert existing items and categories to CPTs, and delete tables */
+	@todo plugin generating unexpected action during activation for upgrading
+	@todo test new activation
+	*/
 	public static function install_plugin () {
-		global $wpdb, $userdata;
+		global $wpdb, $current_user;;
 		get_currentuserinfo();
+		$cleverness_todo_db_version = '3.0';
 
-		$cleverness_todo_db_version = '1.9';
-		if ( !function_exists( 'is_plugin_active_for_network' ) ) require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-		if ( is_plugin_active_for_network( __FILE__ ) ) {
-			$prefix = $wpdb->base_prefix;
-		} else {
-			$prefix = $wpdb->prefix;
-		}
+		$installed_ver = get_option( 'cleverness_todo_db_version' );
 
-		$table_name         = $prefix.'todolist';
-		$cat_table_name     = $prefix.'todolist_cats';
-		$status_table_name  = $prefix.'todolist_status';
+		if ( $installed_ver == NULL ) {
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) {
-			$sql = "CREATE TABLE ".$table_name." (
-	            id bigint(20) UNIQUE NOT NULL AUTO_INCREMENT,
-	            author bigint(20) NOT NULL,
-	            status tinyint(1) DEFAULT '0' NOT NULL,
-	            priority tinyint(1) NOT NULL,
-                todotext text NOT NULL,
-		        assign int(10) NOT NULL,
-		        progress int(3) NOT NULL,
-		        deadline varchar(30) NOT NULL,
-		        completed timestamp NOT NULL,
-		        cat_id bigint(20) NOT NULL
-	            );";
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-			dbDelta( $sql );
-			$sql2 = "CREATE TABLE ".$cat_table_name." (
-	            id bigint(20) UNIQUE NOT NULL AUTO_INCREMENT,
-	            name varchar(100),
-	            visibility tinyint(1) DEFAULT '0' NOT NULL
-	            );";
-			dbDelta( $sql2 );
-			$sql3 = "CREATE TABLE ".$status_table_name." (
-		        id bigint(20),
-		        user bigint(20) NOT NULL,
-	            status tinyint(1) DEFAULT '0' NOT NULL
-	            );";
-			dbDelta( $sql3 );
-			$welcome_text = __( 'Add your first To-Do List item', 'cleverness-to-do-list' );
-			$results = $wpdb->insert( $table_name, array( 'author' => $userdata->ID, 'status' => 0, 'priority' => 1, 'todotext' => $welcome_text ) );
+			// add first post
+			$first_post = __( 'Add your first To-Do List item', 'cleverness-to-do-list' );
 
+			$my_post = array(
+				'post_type'        => 'todo',
+				'post_title'       => substr( $first_post, 0, 100 ),
+				'post_content'     => $first_post,
+				'post_status'      => 'publish',
+				'post_author'      => $current_user->ID,
+				'comment_status'   => 'closed',
+				'ping_status'      => 'closed',
+			);
+
+			$post_id = wp_insert_post( $my_post );
+			add_post_meta( $post_id, '_status', 0, true );
+
+			// add default options
 			$general_options = array(
 				'categories'            => '0',
 				'list_view'             => '0',
@@ -541,32 +523,107 @@ class CTDL_Lib {
 			add_option( 'cleverness-to-do-list-advanced', $advanced_options );
 			add_option( 'cleverness-to-do-list-permissions', $permissions_options );
 			add_option( 'cleverness_todo_db_version', $cleverness_todo_db_version );
-		}
 
-		$installed_ver = get_option( 'cleverness_todo_db_version' );
+		} elseif ( $installed_ver != $cleverness_todo_db_version ) {
 
-		if( $installed_ver != $cleverness_todo_db_version ) {
-
-			if ( !function_exists( 'maybe_create_table' ) ) {
-				require_once( ABSPATH . 'wp-admin/install-helper.php' );
+			if ( !function_exists( 'is_plugin_active_for_network' ) ) require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+			if ( is_plugin_active_for_network( __FILE__ ) ) {
+				$prefix = $wpdb->base_prefix;
+			} else {
+				$prefix = $wpdb->prefix;
 			}
 
-			maybe_add_column( $table_name, 'assign', "ALTER TABLE `$table_name` ADD `assign` int(10) NOT NULL;" );
-			maybe_add_column( $table_name, 'deadline', "ALTER TABLE `$table_name` ADD `deadline` varchar(30) NOT NULL;" );
-			maybe_add_column( $table_name, 'progress', "ALTER TABLE `$table_name` ADD `progress` int(3) NOT NULL;" );
-			maybe_add_column( $table_name, 'completed', "ALTER TABLE `$table_name` ADD `completed` timestamp NOT NULL;" );
-			maybe_add_column( $table_name, 'cat_id', "ALTER TABLE `$table_name` ADD `cat_id` bigint(20) NOT NULL;" );
-			maybe_create_table( $cat_table_name, "CREATE TABLE ".$cat_table_name." (
-	            id bigint(20) UNIQUE NOT NULL AUTO_INCREMENT,
-	            name varchar(100),
-	            sort tinyint(3) DEFAULT '0' NOT NULL,
-	            visibility tinyint(1) DEFAULT '0' NOT NULL
-	            );");
-			maybe_create_table( $status_table_name, "CREATE TABLE ".$status_table_name." (
-	            id bigint(20),
-	            user bigint(20) NOT NULL,
-	            status tinyint(1) DEFAULT '0' NOT NULL
-	            );");
+			$table_name         = $prefix.'todolist';
+			$cat_table_name     = $prefix.'todolist_cats';
+			$status_table_name  = $prefix.'todolist_status';
+
+			if ( $wpdb->get_var( "SHOW TABLES LIKE '$cat_table_name'" ) == $cat_table_name ) {
+
+				$labels = array(
+					'name' => _x( 'Categories', 'taxonomy general name' ),
+					'singular_name' => _x( 'Category', 'taxonomy singular name' ),
+					'search_items' =>  __( 'Search Categories' ),
+					'all_items' => __( 'All Categories' ),
+					'parent_item' => __( 'Parent Category' ),
+					'parent_item_colon' => __( 'Parent Category:' ),
+					'edit_item' => __( 'Edit Category' ),
+					'update_item' => __( 'Update Category' ),
+					'add_new_item' => __( 'Add New Category' ),
+					'new_item_name' => __( 'New Category Name' ),
+				);
+
+				register_taxonomy( 'todocategories', array( 'todo' ), array(
+					'hierarchical' => true,
+					'labels' => $labels,
+					'show_ui' => true,
+					'query_var' => true,
+					'rewrite' => array( 'slug' => 'category' ),
+				) );
+
+				$cats = $wpdb->get_results( "SELECT * FROM $cat_table_name" );
+
+				if ( !empty( $cats ) ) {
+
+					foreach ( $cats as $cat ) {
+						$term = wp_insert_term( $cat->name, 'todocategories' );
+						if ( !is_wp_error( $term ) ) {
+							$category_id = $term['term_id'];
+							$options = get_option( 'cleverness_todo_categories' );
+							$options["category_$category_id"] = $cat->visibility;
+							update_option( "cleverness_todo_categories", $options );
+						}
+					}
+
+				}
+
+			}
+
+			if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) == $table_name ) {
+
+				$todos = $wpdb->get_results( "SELECT * FROM $table_name" );
+
+				if ( !empty( $todos ) ) {
+
+					foreach ( $todos as $todo ) {
+
+						$post['post_type']      = 'todo';
+						$post['post_title']     = substr( $todo->todotext, 0, 100 );
+						$post['post_content']   = $todo->todotext;
+						$post['post_parent']    = 0;
+						$post['post_author']    = $todo->author;
+						$post['post_status']    = 'publish';
+						$post['comment_status'] = 'closed';
+						$post['ping_status']    = 'closed';
+
+						$post_id = wp_insert_post( $post );
+
+						add_post_meta( $post_id, '_status', $todo->status, true );
+						add_post_meta( $post_id, '_priority', $todo->priority, true );
+						add_post_meta( $post_id, '_assign', $todo->assign, true );
+						add_post_meta( $post_id, '_deadline', $todo->deadline, true );
+						add_post_meta( $post_id, '_progress', $todo->progress, true );
+						add_post_meta( $post_id, '_completed', $todo->completed, true );
+
+						// add any master view statuses
+						$statuses = $wpdb->get_results( "SELECT * FROM $status_table_name WHERE 'id' = $todo->id" );
+
+						foreach ( $statuses as $status ) {
+							update_post_meta( absint( $post_id ), '_user_'.$status->user.'_status', $status->status );
+						}
+
+						// add category if set
+						if ( $todo->cat_id != 0 ) {
+							$sql = "SELECT name FROM ".$cat_table_name." WHERE id = '".$todo->cat_id."' LIMIT 1";
+							$category_name = $wpdb->get_row( $sql );
+							$category = get_term_by( 'name', $category_name->name, 'todocategories' );
+							wp_set_post_terms( $post_id, $category->term_id, 'todocategories', false );
+						}
+
+					}
+
+				}
+
+			}
 
 			$the_options = get_option( 'cleverness_todo_settings' );
 			if ( $the_options['categories'] == '' ) $the_options['categories'] = '0';

@@ -31,7 +31,7 @@ class CTDL_Categories {
 	 * @return mixed|null|WP_Error
 	 */
 	public static function get_category() {
-		$category = get_term( $_POST['cleverness_todo_cat_id'], 'todocategories' );
+		$category = get_term( absint( $_POST['cleverness_todo_cat_id'] ), 'todocategories' );
 		return $category;
 	}
 
@@ -73,7 +73,7 @@ class CTDL_Categories {
 		$term = wp_update_term( $category_id, 'todocategories', array( 'name' => $_POST['cleverness_todo_cat_name'] ) );
 		if ( !is_wp_error( $term ) ) {
 			$options = get_option( 'cleverness_todo_categories' );
-			$options["category_$category_id"] = $_POST['cleverness_todo_cat_visibility'];
+			$options["category_$category_id"] = absint( $_POST['cleverness_todo_cat_visibility'] );
 			update_option( "cleverness_todo_categories", $options );
 			return 1;
 		} else {
@@ -87,7 +87,7 @@ class CTDL_Categories {
 	 * @return int
 	 */
 	public static function delete_category() {
-		wp_delete_term( $_POST['cleverness_todo_cat_id'], 'todocategories' );
+		wp_delete_term( absint( $_POST['cleverness_todo_cat_id'] ), 'todocategories' );
 		return 1;
 	}
 

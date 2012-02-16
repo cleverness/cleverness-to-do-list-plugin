@@ -1,9 +1,9 @@
-=== Plugin Name ===
+=== Cleverness To-Do List ===
 Contributors: elusivelight
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy%40cleverness%2eorg
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org
 Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list
-Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments
+Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.3
 Tested up to: 3.3
 Stable tag: 3.0
@@ -14,11 +14,11 @@ Integrates a very customizable, multi-featured to-do list.
 
 This plugin provides users with a to-do list feature.
 
-You can configure the plugin to have private to-do lists for each user, for all users to share a to-do list, or a master list with individual completing of items. The shared to-do list has a variety of settings
-available. You can assign to-do items to a specific user (includes a setting to email a new to-do item to the assigned user) and have only those to-do items assigned viewable to a user. You can also assign different
+You can configure the plugin to have private to-do lists for each user, to have all users share a to-do list, or to have a master list with individual completion of items. The shared to-do list has a variety of settings
+available. You can assign to-do items to a specific user (includes a setting to email a new to-do item to the assigned user) and optionally have those items only viewable by that user. You can also assign different
 permission levels using capabilities. There are also settings to show deadline and progress fields. Category support is included as well as front-end administration.
 
-A new menu item is added to the backend to manage your list and it is also listed on a dashboard widget.
+A new menu item is added to the backend to manage your list and the to-do list is also listed on a dashboard widget.
 
 A sidebar widget is available as well as shortcode to display the to-do list items on your site.
 
@@ -28,7 +28,7 @@ There are two shortcodes for front-end administration of the list. Management of
 
 == Installation ==
 
-1. Upload the folder /cleverness-to-do-list/ to the '/wp-content/plugins/' directory
+1. Upload the folder `/cleverness-to-do-list/` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Configure the settings on the Settings page under the To-Do List menu
 
@@ -44,12 +44,8 @@ You should have received a copy of the GNU General Public License along with thi
 
 == Frequently Asked Questions ==
 
-= I upgraded and the new tables or fields haven't been added to the database =
-If you did not do the automatic upgrade from the Plugins page, make sure you deactivate and then activate the plugin. The database changes are done on activation.
-
-= I enabled categories and now my items don't show up on the dashboard, sidebar, or using the shortcode. =
-(This had been fixed in several areas of the plugin. If you encounter it, please report it.)
-This is because the items have not yet been assigned a category. Once you edit the item and select a category, they will appear.
+= I upgraded and all my to-do items are gone =
+If you did not do the automatic upgrade from the Plugins page, make sure you deactivate and then activate the plugin. Your to-do list items should be converted to the new format once you activate the plugin.
 
 = What is the shortcode to display items in a post or page? =
 [todolist]
@@ -130,7 +126,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Screenshots ==
 
-1. Dashboard Widget 
+1. Dashboard Widget
 2. To-Do List Page - Deadline, Progress, and Categories Enabled
 3. Settings Page
 
@@ -301,7 +297,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 == Upgrade Notice ==
 
 = 3.0 =
-Code rewrite continued
+Major code rewrite and custom tables were converted to custom post types.
 
 = 2.3 =
 Code rewrite and front-end administration
@@ -407,7 +403,7 @@ Major changes to plugin
 
 This plugin was originally from Abstract Dimensions (site no longer available) with a patch to display the list in the dashboard by WordPress by Example (site also no longer available). It was abandoned prior to WordPress 2.7.
 
-Icon from http://www.iconfinder.com/icondetails/30045/32/list_shopping_list_todo_todo_list_icon
+Icon by [Hylke Bons](http://www.iconfinder.com/icondetails/30045/32/list_shopping_list_todo_todo_list_icon)
 
 Spanish translation by [Ricardo](http://yabocs.avytes.com/)
 

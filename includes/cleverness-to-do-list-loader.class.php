@@ -223,7 +223,7 @@ class CTDL_Loader {
 			'show_ui' => true,
 			'query_var' => true,
 			'rewrite' => array( 'slug' => 'category' ),
-		));
+		) );
 
 	}
 

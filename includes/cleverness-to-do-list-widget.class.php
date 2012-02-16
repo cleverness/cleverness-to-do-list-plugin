@@ -64,7 +64,7 @@ class CTDL_Widget extends WP_Widget {
 					if ( $cats != NULL ) {
 						foreach( $cats as $category ) {
 							if ( $cat_id != $category->term_id ) {
-								$ClevernessToDoList->list .= '</ol><h4>'.$category->name.'</h4><ol>';
+								$ClevernessToDoList->list .= '</ol><h4>'.esc_attr( $category->name ).'</h4><ol>';
 								$cat_id = $category->term_id;
 							}
 						}

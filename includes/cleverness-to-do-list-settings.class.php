@@ -13,6 +13,7 @@
  * @package cleverness-to-do-list
  * @subpackage includes
  * @link http://theme.fm/2011/10/how-to-create-tabs-with-the-settings-api-in-wordpress-2590/
+ * @todo add a delete old tables option
 */
 class CTDL_Settings {
 	private $general_key = 'cleverness-to-do-list-general';
