@@ -5,11 +5,13 @@ if ( !defined( 'ABSPATH') && !defined( 'WP_UNINSTALL_PLUGIN' ) )
 if ( current_user_can('delete_plugins') ) {
 /* @todo delete posts? */
 	delete_option( 'cleverness_todo_settings' );
-	delete_option( 'cleverness_todo_db_version' );
 	delete_option( 'atd_db_version' );
-	delete_option( 'cleverness-to-do-list-general' );
-	delete_option( 'cleverness-to-do-list-advanced' );
-	delete_option( 'cleverness-to-do-list-permissions' );
+	delete_option( 'CTDL_db_version' );
+	delete_option( 'CTDL_general' );
+	delete_option( 'CTDL_advanced' );
+	delete_option( 'CTDL_permissions' );
+	delete_option( 'CTDL_categories' );
+	delete_option( 'CTDL_dashboard_settings' );
 
   	global $wpdb;
   	$thetable = $wpdb->prefix."todolist";

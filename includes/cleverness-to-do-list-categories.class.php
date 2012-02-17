@@ -54,9 +54,9 @@ class CTDL_Categories {
 		$term = wp_insert_term( $_POST['cleverness_todo_cat_name'], 'todocategories' );
 		if ( !is_wp_error( $term ) ) {
 			$category_id = $term['term_id'];
-			$options = get_option( 'cleverness_todo_categories' );
+			$options = get_option( 'CTDL_categories' );
 			$options["category_$category_id"] = $_POST['cleverness_todo_cat_visibility'];
-			update_option( "cleverness_todo_categories", $options );
+			update_option( 'CTDL_categories', $options );
 			return 1;
 		} else {
 			return 0;
@@ -72,9 +72,9 @@ class CTDL_Categories {
 		$category_id = absint( $_POST['cleverness_todo_cat_id'] );
 		$term = wp_update_term( $category_id, 'todocategories', array( 'name' => $_POST['cleverness_todo_cat_name'] ) );
 		if ( !is_wp_error( $term ) ) {
-			$options = get_option( 'cleverness_todo_categories' );
+			$options = get_option( 'CTDL_categories' );
 			$options["category_$category_id"] = absint( $_POST['cleverness_todo_cat_visibility'] );
-			update_option( "cleverness_todo_categories", $options );
+			update_option( 'CTDL_categories', $options );
 			return 1;
 		} else {
 			return 0;
@@ -101,7 +101,7 @@ class CTDL_Categories {
 		if ( $permission === true ) {
 			$cleverness_todo = CTDL_Categories::get_category();
 			$category_id = $cleverness_todo->term_id;
-			$visibility = get_option( 'cleverness_todo_categories' );
+			$visibility = get_option( 'CTDL_categories' );
 			$visibility = ( $visibility["category_$category_id"] != '' ? $visibility["category_$category_id"] : '0' );
 			echo json_encode( array( 'cleverness_todo_cat_name' => $cleverness_todo->name, 'cleverness_todo_cat_visibility' => $visibility ) );
 		}
@@ -212,7 +212,7 @@ class CTDL_Categories {
 				if ( $categories ) {
 					foreach ( $categories as $category ) {
 						$category_id = $category->term_id;
-						$visibility = get_option( 'cleverness_todo_categories' );
+						$visibility = get_option( 'CTDL_categories' );
 						$visibility = ( $visibility["category_$category_id"] != '' ? $visibility["category_$category_id"] : '0' );
 						?>
 						<tr id="<?php echo $category_id; ?>">

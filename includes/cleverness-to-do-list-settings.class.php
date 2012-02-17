@@ -16,9 +16,9 @@
  * @todo add a delete old tables option
 */
 class CTDL_Settings {
-	private $general_key = 'cleverness-to-do-list-general';
-	private $advanced_key = 'cleverness-to-do-list-advanced';
-	private $permissions_key = 'cleverness-to-do-list-permissions';
+	private $general_key = 'CTDL_general';
+	private $advanced_key = 'CTDL_advanced';
+	private $permissions_key = 'CTDL_permissions';
 	private $plugin_key = 'cleverness-to-do-list-settings';
 	private $plugin_tabs = array();
 	private $general_settings = array();

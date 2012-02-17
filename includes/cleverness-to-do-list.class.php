@@ -90,7 +90,7 @@ class ClevernessToDoList {
 			$posts_to_exclude = array();
 
 			foreach ( $categories as $category) {
-				$todo_items = CTDL_Lib::get_todos( $user, 0, $completed, $category->term_id );
+				$todo_items = CTDL_Lib::get_todos( $user, -1, $completed, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
 					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $priorities, $url, $completed ) );
@@ -98,7 +98,7 @@ class ClevernessToDoList {
 				}
 			}
 
-			$todo_items = CTDL_Lib::get_todos( $user, 0, $completed, 0, $posts_to_exclude );
+			$todo_items = CTDL_Lib::get_todos( $user, -1, $completed, 0, $posts_to_exclude );
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items, $priorities, $url, $completed );
 				$items = 1;
@@ -112,7 +112,7 @@ class ClevernessToDoList {
 				}
 			}
 		} else {
-			$todo_items = CTDL_Lib::get_todos( $user, 0, $completed );
+			$todo_items = CTDL_Lib::get_todos( $user, -1, $completed );
 
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items, $priorities, $url, $completed );

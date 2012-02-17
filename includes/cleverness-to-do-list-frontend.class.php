@@ -196,7 +196,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 
 		} else {
 
-			$todo_items = CTDL_Lib::get_todos( $user, 0, 0, $categories );
+			$todo_items = CTDL_Lib::get_todos( $user, -1, 0, $categories );
 			if ( $todo_items->have_posts() ) {
 
 				while ( $todo_items->have_posts() ) : $todo_items->the_post();
@@ -326,7 +326,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 		$user = CTDL_Lib::get_user_id( $current_user, $userdata );
 
 		// get to-do items
-		$todo_items = CTDL_Lib::get_todos( $user, 0, 0, $category );
+		$todo_items = CTDL_Lib::get_todos( $user, -1, 0, $category );
 
 		if ( $todo_items->have_posts() ) {
 
@@ -393,7 +393,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 		if ( $completed == 'show' ) {
 			wp_reset_postdata();
 			// get to-do items
-			$todo_items = CTDL_Lib::get_todos( $user, 0, 1, $category );
+			$todo_items = CTDL_Lib::get_todos( $user, -1, 1, $category );
 
 			if ( $todo_items->have_posts() ) {
 

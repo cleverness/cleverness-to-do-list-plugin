@@ -207,12 +207,27 @@ class CTDL_Lib {
 
 			$post_id = wp_insert_post( $my_post );
 
-			wp_set_post_terms( $post_id, $_POST['cat'], 'todocategories', false);
+			if ( isset( $_POST['cat'] ) ) wp_set_post_terms( $post_id, absint( $_POST['cat'] ), 'todocategories', false);
 			add_post_meta( $post_id, '_status', 0, true );
 			add_post_meta( $post_id, '_priority', $_POST['cleverness_todo_priority'], true );
-			add_post_meta( $post_id, '_assign', $_POST['cleverness_todo_assign'], true );
-			add_post_meta( $post_id, '_deadline', $_POST['cleverness_todo_deadline'], true );
-			add_post_meta( $post_id, '_progress', $_POST['cleverness_todo_progress'], true );
+			if ( isset( $_POST['cleverness_todo_assign'] ) ) {
+				$assign = esc_attr( $_POST['cleverness_todo_assign'] );
+			} else {
+				$assign = -1;
+			}
+			add_post_meta( $post_id, '_assign', $assign, true );
+			if ( isset( $_POST['cleverness_todo_deadline'] ) ) {
+				$deadline = esc_attr( $_POST['cleverness_todo_deadline'] );
+			} else {
+				$deadline = '';
+			}
+			add_post_meta( $post_id, '_deadline', $deadline, true );
+			if ( isset( $_POST['cleverness_todo_progress'] ) ) {
+				$progress = int( $_POST['cleverness_todo_progress'] );
+			} else {
+				$progress = 0;
+			}
+			add_post_meta( $post_id, '_progress', $progress, true );
 
 		}
 
@@ -274,11 +289,11 @@ class CTDL_Lib {
 
 			$post_id = wp_update_post( $my_post );
 
-			wp_set_post_terms( $post_id, $_POST['cat'], 'todocategories', false);
-			update_post_meta( $post_id, '_priority', $_POST['cleverness_todo_priority'] );
-			update_post_meta( $post_id, '_assign', $_POST['cleverness_todo_assign'] );
-			update_post_meta( $post_id, '_deadline', $_POST['cleverness_todo_deadline'] );
-			update_post_meta( $post_id, '_progress', $_POST['cleverness_todo_progress'] );
+			if ( isset( $_POST['cat'] ) ) wp_set_post_terms( $post_id, absint( $_POST['cat'] ), 'todocategories', false);
+			if ( isset( $_POST['cleverness_todo_priority'] ) ) update_post_meta( $post_id, '_priority', esc_attr( $_POST['cleverness_todo_priority'] ) );
+			if ( isset( $_POST['cleverness_todo_assign'] ) ) update_post_meta( $post_id, '_assign', esc_attr( $_POST['cleverness_todo_assign'] ) );
+			if ( isset( $_POST['cleverness_todo_deadline'] ) ) update_post_meta( $post_id, '_deadline', esc_attr( $_POST['cleverness_todo_deadline'] ) );
+			if ( isset( $_POST['cleverness_todo_progress'] ) ) update_post_meta( $post_id, '_progress', int( $_POST['cleverness_todo_progress'] ) );
 
 		}
 
@@ -315,6 +330,7 @@ class CTDL_Lib {
 					'post_type' => 'todo',
 					'author' => $userdata->ID,
 					'post_status' => 'publish',
+					'posts_per_page' => -1,
 					'meta_query' => array(
 						array(
 							'key' => '_status',
@@ -327,6 +343,7 @@ class CTDL_Lib {
 				$args = array(
 					'post_type' => 'todo',
 					'post_status' => 'publish',
+					'posts_per_page' => -1,
 					'meta_query' => array(
 						array(
 							'key' => '_status',
@@ -452,17 +469,25 @@ class CTDL_Lib {
 	}
 
 	/* Create database table and add default options
-	@todo plugin generating unexpected action during activation for upgrading
-	@todo test new activation
+	@todo plugin generating unexpected output during activation for upgrading
 	*/
 	public static function install_plugin () {
 		global $wpdb, $current_user;;
 		get_currentuserinfo();
 		$cleverness_todo_db_version = '3.0';
+		include_once plugin_dir_path( __FILE__ ).'/cleverness-to-do-list-loader.class.php';
 
-		$installed_ver = get_option( 'cleverness_todo_db_version' );
+		CTDL_Loader::create_taxonomies();
 
-		if ( $installed_ver == NULL ) {
+		if ( get_option( 'CTDL_db_version' ) ) {
+			$installed_ver = get_option( 'CTDL_db_version' );
+		} elseif ( get_option( 'cleverness_todo_db_version') ) {
+			$installed_ver = get_option( 'cleverness_todo_db_version' );
+		} else {
+			$installed_ver = 0;
+		}
+
+		if ( $installed_ver == 0 ) {
 
 			// add first post
 			$first_post = __( 'Add your first To-Do List item', 'cleverness-to-do-list' );
@@ -479,6 +504,10 @@ class CTDL_Lib {
 
 			$post_id = wp_insert_post( $my_post );
 			add_post_meta( $post_id, '_status', 0, true );
+			add_post_meta( $post_id, '_priority', 1, true );
+			add_post_meta( $post_id, '_assign', -1, true );
+			add_post_meta( $post_id, '_deadline', '', true );
+			add_post_meta( $post_id, '_progress', 0, true );
 
 			// add default options
 			$general_options = array(
@@ -519,10 +548,10 @@ class CTDL_Lib {
 				'add_cat_capability'           => 'manage_options',
 			);
 
-			add_option( 'cleverness-to-do-list-general', $general_options );
-			add_option( 'cleverness-to-do-list-advanced', $advanced_options );
-			add_option( 'cleverness-to-do-list-permissions', $permissions_options );
-			add_option( 'cleverness_todo_db_version', $cleverness_todo_db_version );
+			add_option( 'CTDL_general', $general_options );
+			add_option( 'CTDL_advanced', $advanced_options );
+			add_option( 'CTDL_permissions', $permissions_options );
+			add_option( 'CTDL_db_version', $cleverness_todo_db_version );
 
 		} elseif ( $installed_ver != $cleverness_todo_db_version ) {
 
@@ -539,27 +568,6 @@ class CTDL_Lib {
 
 			if ( $wpdb->get_var( "SHOW TABLES LIKE '$cat_table_name'" ) == $cat_table_name ) {
 
-				$labels = array(
-					'name' => _x( 'Categories', 'taxonomy general name' ),
-					'singular_name' => _x( 'Category', 'taxonomy singular name' ),
-					'search_items' =>  __( 'Search Categories' ),
-					'all_items' => __( 'All Categories' ),
-					'parent_item' => __( 'Parent Category' ),
-					'parent_item_colon' => __( 'Parent Category:' ),
-					'edit_item' => __( 'Edit Category' ),
-					'update_item' => __( 'Update Category' ),
-					'add_new_item' => __( 'Add New Category' ),
-					'new_item_name' => __( 'New Category Name' ),
-				);
-
-				register_taxonomy( 'todocategories', array( 'todo' ), array(
-					'hierarchical' => true,
-					'labels' => $labels,
-					'show_ui' => true,
-					'query_var' => true,
-					'rewrite' => array( 'slug' => 'category' ),
-				) );
-
 				$cats = $wpdb->get_results( "SELECT * FROM $cat_table_name" );
 
 				if ( !empty( $cats ) ) {
@@ -568,9 +576,9 @@ class CTDL_Lib {
 						$term = wp_insert_term( $cat->name, 'todocategories' );
 						if ( !is_wp_error( $term ) ) {
 							$category_id = $term['term_id'];
-							$options = get_option( 'cleverness_todo_categories' );
+							$options = get_option( 'CTDL_categories' );
 							$options["category_$category_id"] = $cat->visibility;
-							update_option( "cleverness_todo_categories", $options );
+							update_option( "CTDL_categories", $options );
 						}
 					}
 
@@ -672,12 +680,12 @@ class CTDL_Lib {
 				'add_cat_capability'           => $the_options['add_cat_capability'],
 			);
 
-			add_option( 'cleverness-to-do-list-general', $general_options );
-			add_option( 'cleverness-to-do-list-advanced', $advanced_options );
-			add_option( 'cleverness-to-do-list-permissions', $permissions_options );
-
-			update_option( 'cleverness_todo_db_version', $cleverness_todo_db_version );
+			add_option( 'CTDL_general', $general_options );
+			add_option( 'CTDL_advanced', $advanced_options );
+			add_option( 'CTDL_permissions', $permissions_options );
+			update_option( 'CTDL_db_version', $cleverness_todo_db_version );
 			delete_option( 'atd_db_version' );
+			delete_option( 'cleverness_todo_db_version' );
 			delete_option( 'cleverness_todo_settings' );
 		}
 	}

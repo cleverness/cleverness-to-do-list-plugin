@@ -19,7 +19,7 @@ class CTDL_Loader {
 	public static function init() {
 
 		self::check_wp_version();
-		self::$settings = array_merge( get_option( 'cleverness-to-do-list-general' ), get_option( 'cleverness-to-do-list-advanced' ), get_option( 'cleverness-to-do-list-permissions' ) );
+		self::$settings = array_merge( get_option( 'CTDL_general' ), get_option( 'CTDL_advanced' ), get_option( 'CTDL_permissions' ) );
 		self::setup_custom_post_type();
 		self::create_taxonomies();
 		self::include_files();

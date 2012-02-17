@@ -6,6 +6,7 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.0
+ * @todo  deadline showing even if blank
  */
 
 /**
@@ -81,7 +82,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 				$this->list .= '<tr><td>' . __( 'No items to do.', 'cleverness-to-do-list' ) . '</td></tr>';
 			}
 		} else {
-			$todo_items = CTDL_Lib::get_todos( $user, 0, 0, $cat_id );
+			$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $cat_id );
 
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items );
@@ -133,7 +134,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 					$this->list .= ']</small>';
 				}
 			}
-			if ( $this->dashboard_settings['show_dashboard_deadline'] == '1' && get_post_meta( $id, '_deadline', true ) != '' ) {
+			if ( $this->dashboard_settings['show_dashboard_deadline'] == '1' && get_post_meta( $id, '_deadline' ) != '' ) {
 				$this->list .=  ' <small>['.__( 'Deadline:', 'cleverness-to-do-list' );
 				$this->show_deadline( get_post_meta( $id, '_deadline', true ) );
 				$this->list .= ']</small>';
@@ -165,13 +166,12 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	 * Dashboard Widget Options
 	 */
 	public function dashboard_options() {
-		$cleverness_todo_dashboard_settings = $this->dashboard_settings;
 		if ( isset( $_POST['cleverness_todo_dashboard_settings'] ) ) {
 			$cleverness_todo_dashboard_settings = $_POST['cleverness_todo_dashboard_settings'];
-			update_option( 'cleverness_todo_dashboard_settings', $cleverness_todo_dashboard_settings );
+			update_option( 'CTDL_dashboard_settings', $cleverness_todo_dashboard_settings );
 		}
    	    settings_fields( 'cleverness-todo-dashboard-settings-group' );
- 	    $options = get_option( 'cleverness_todo_dashboard_settings' );
+ 	    $options = get_option( 'CTDL_dashboard_settings' );
 		$cat_id = $options['dashboard_cat'];
 		?>
 		<fieldset>
@@ -213,7 +213,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	public function dashboard_setup() {
 		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'view' );
 		if ( $cleverness_todo_permission === true ) {
-			$this->dashboard_settings = get_option( 'cleverness_todo_dashboard_settings' );
+			$this->dashboard_settings = get_option( 'CTDL_dashboard_settings' );
 			wp_add_dashboard_widget( 'cleverness_todo', __(  'To-Do List', 'cleverness-to-do-list' ).' <a href="admin.php?page=cleverness-to-do-list">'. __( '&raquo;', 'cleverness-to-do-list' ).'</a>', array( &$this, 'dashboard_widget' ), array( &$this, 'dashboard_options' ) );
 			}
 		}
