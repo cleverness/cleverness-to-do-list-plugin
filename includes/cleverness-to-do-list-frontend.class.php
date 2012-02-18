@@ -7,6 +7,7 @@
  * @package cleverness-to-do-list
  * @version 3.0
  * @todo don't show category if private
+ * @todo check html validation for all parameters
  */
 
 /**
@@ -124,11 +125,13 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	protected $atts;
 	protected $cat_id;
+	public $add_script;
 
 	public function __construct() {
 		add_shortcode( 'todochecklist', array( &$this, 'display_checklist' ) );
 		parent::__construct();
-		CTDL_Loader::frontend_checklist_init();
+		//add_action( 'wp_head', 'CTDL_Loader::frontend_checklist_init' );
+		add_action( 'wp_footer', 'CTDL_Loader::frontend_checklist_add_js' );
 		}
 
 	public function display_checklist( $atts ) {
@@ -157,6 +160,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 		), $this->atts ) );
 		global $userdata, $current_user;
 		get_currentuserinfo();
+		$this->add_script = true;
+		$layout = 'list';
 
 		$priority = array( 0 => CTDL_Loader::$settings['priority_0'] , 1 => CTDL_Loader::$settings['priority_1'], 2 => CTDL_Loader::$settings['priority_2'] );
 		$user = CTDL_Lib::get_user_id( $current_user, $userdata );
@@ -209,7 +214,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 					$this->show_category_headings ( get_the_terms( $id, 'todocategories' ), $this->cat_id );
 
 					$this->list .= '<p id="todo-'.esc_attr( $id ).'" class="todo-list">';
-					$this->show_checkbox( $id );
+					$this->show_checkbox( $id, '', $layout );
 					$this->show_todo_text( get_the_content(), $priority_class  );
 					if ( $priority == 1 ) $this->show_priority( $the_priority, $priorities );
 					if ( $assigned == 1 ) $this->show_assigned( get_post_meta( $id, '_assign', true ) );
@@ -290,7 +295,6 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 	public function __construct() {
 		add_shortcode( 'todolist', array( &$this, 'display_list' ) );
 		parent::__construct();
-		CTDL_Loader::frontend_checklist_init();
 	}
 
 	public function display_list( $atts ) {
@@ -542,25 +546,27 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 
 }
 
-/*todo not working */
 function has_cleverness_todo_shortcode( $posts ) {
-    if ( empty( $posts ) )
-        return $posts;
+	if ( empty( $posts ) )
+		return $posts;
 
-    $cleverness_todo_shortcode_found = false;
+	$cleverness_todo_shortcode_found = false;
 
-    foreach ( $posts as $post ) {
-        if ( stripos( $post->post_content, '[todoadmin' ) || stripos( $post->post_content, '[todochecklist' ) || stripos( $post->post_content, '[todolist' ) ) {
-            $cleverness_todo_shortcode_found = true;
-            break;
-        }
-    }
-
-    if ( $cleverness_todo_shortcode_found ) {
-	    new CTDL_Frontend_Admin;
+	foreach ( $posts as $post ) {
+		//if ( stripos( $post->post_content, '[todoadmin' ) || stripos( $post->post_content, '[todochecklist' ) || stripos( $post->post_content, '[todolist' ) ) {
+		if ( stripos( $post->post_content, '[todochecklist' ) ) {
+			$cleverness_todo_shortcode_found = true;
+			break;
+		}
 	}
-    return $posts;
+
+	if ( $cleverness_todo_shortcode_found ) {
+
+	}
+	return $posts;
 }
 
 add_action( 'the_posts', 'has_cleverness_todo_shortcode' );
+
+
 ?>

@@ -222,7 +222,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	 * Add scripts and styles to dashboard widget
 	 */
 	public function dashboard_init() {
-		wp_register_script( 'cleverness_todo_dashboard_complete_js', CTDL_PLUGIN_URL.'/js/complete-todo.js', '', 1.0, true );
+		wp_register_script( 'cleverness_todo_dashboard_complete_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-dashboard-widget.js', '', 1.0, true );
 		add_action( 'admin_print_scripts-index.php',  array( &$this, 'dashboard_add_js' ) );
 		add_action( 'wp_ajax_cleverness_todo_dashboard_complete', 'CTDL_Lib::complete_todo_callback' );
 		add_action( 'admin_print_styles-index.php', 'CTDL_Loader::add_admin_css' );

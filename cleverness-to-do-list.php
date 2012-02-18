@@ -25,21 +25,11 @@ include_once 'includes/cleverness-to-do-list-widget.class.php';
  * Define constants and load the plugin
  */
 function cleverness_todo_loader() {
-	global $wpdb;
 
 	define( 'CTDL_FILE', __FILE__ );
 	define( 'CTDL_BASENAME', plugin_basename( __FILE__ ) );
 	define( 'CTDL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 	define( 'CTDL_PLUGIN_URL', plugins_url( '', __FILE__ ) );
-	if ( !function_exists( 'is_plugin_active_for_network' ) ) require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-	if ( is_plugin_active_for_network( CTDL_BASENAME ) ) {
-		$prefix = $wpdb->base_prefix;
-	} else {
-		$prefix = $wpdb->prefix;
-	}
-	define( 'CTDL_TODO_TABLE', $prefix.'todolist' );
-	define( 'CTDL_CATS_TABLE', $prefix.'todolist_cats' );
-	define( 'CTDL_STATUS_TABLE', $prefix.'todolist_status' );
 
 	include_once 'includes/cleverness-to-do-list-loader.class.php';
 	CTDL_Loader::init();
@@ -85,5 +75,7 @@ function cleverness_todo_activation() {
 	include_once 'includes/cleverness-to-do-list-library.class.php';
 	CTDL_Lib::install_plugin();
 }
+
+
 
 ?>

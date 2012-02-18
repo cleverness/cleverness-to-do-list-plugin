@@ -223,7 +223,7 @@ class CTDL_Lib {
 			}
 			add_post_meta( $post_id, '_deadline', $deadline, true );
 			if ( isset( $_POST['cleverness_todo_progress'] ) ) {
-				$progress = int( $_POST['cleverness_todo_progress'] );
+				$progress = absint( $_POST['cleverness_todo_progress'] );
 			} else {
 				$progress = 0;
 			}
@@ -390,6 +390,7 @@ class CTDL_Lib {
 				$permission = ( current_user_can( CTDL_Loader::$settings[$action.'_capability'] ) ? true : false );
 				break;
 		}
+
 		return $permission;
 	}
 

@@ -6,6 +6,7 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.0
+ * @todo category showing id not name
  */
 
 /**
@@ -384,28 +385,32 @@ class ClevernessToDoList {
 	 * Create the HTML to show a To-Do List Checkbox
 	 * @param int $id
 	 * @param boolean $completed
+	 * @param string $layout
 	 */
-	protected function show_checkbox( $id, $completed = NULL ) {
+	protected function show_checkbox( $id, $completed = NULL, $layout = 'table' ) {
 		$permission = CTDL_LIb::check_permission( 'todo', 'complete' );
 		if ( $permission === true ) {
+			if ( $layout == 'table' ) $this->list .= '<td>';
 			if ( $completed == 1 ) {
-				$this->list .= sprintf( '<td><input type="checkbox" id="cltd-%d" class="todo-checkbox completed" checked="checked" />', esc_attr( $id ) );
+				$this->list .= sprintf( '<input type="checkbox" id="cltd-%d" class="todo-checkbox completed" checked="checked" />', esc_attr( $id ) );
 			} else {
-				$this->list .= sprintf( '<td><input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted"/>', esc_attr( $id ) );
+				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted"/>', esc_attr( $id ) );
 			}
 			$cleverness_todo_complete_nonce = wp_create_nonce( 'todocomplete' );
 			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="'.esc_attr( $cleverness_todo_complete_nonce ).'" />';
-			if ( !is_admin() ) $this->list .= '</td>';
+			if ( !is_admin() && $layout == 'table' ) $this->list .= '</td>';
 		}
 	}
 
 	/**
 	 * Show the To-Do Text
 	 * @param string $todo_text
+	 * @param string $layout
 	 */
-	public function show_todo_text( $todo_text ) {
-		if ( !is_admin() ) $this->list .= '<td>'; else $this->list .= '&nbsp;';
-		$this->list .= stripslashes( $todo_text ).'</td>';
+	public function show_todo_text( $todo_text, $layout = 'table' ) {
+		if ( !is_admin() && $layout == 'table' ) $this->list .= '<td>'; else $this->list .= '&nbsp;';
+		$this->list .= stripslashes( $todo_text );
+		if ( $layout == 'table' ) $this->list = '</td>';
 	}
 
 	/**
@@ -446,15 +451,20 @@ class ClevernessToDoList {
 	/**
 	 * Show the User that a To-Do Item is Assigned To
 	 * @param int $assign
+	 * @param string $layout
 	 */
-	public function show_assigned( $assign ) {
+	public function show_assigned( $assign, $layout = 'table' ) {
 		if ( ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
 		( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1) && CTDL_Loader::$settings['assign'] == 0 ) {
 			if ( $assign != '-1' && $assign != '' && $assign != 0 ) {
 				$assign_user = get_userdata( $assign );
-				$this->list .= '<td>'.esc_attr( $assign_user->display_name ).'</td>';
+				if ( $layout == 'table' ) {
+					$this->list .= '<td>'.esc_attr( $assign_user->display_name ).'</td>';
+				} else {
+					$this->list .= esc_attr( $assign_user->display_name );
+				}
 			} else {
-				$this->list .= '<td></td>';
+				if ( $layout == 'table' ) $this->list .= '<td></td>';
 			}
 		}
    	}
@@ -488,10 +498,16 @@ class ClevernessToDoList {
 	/**
 	 * Show the Deadline for a To-Do Item
 	 * @param string $deadline
+	 * @param string $layout
 	 */
-	public function show_deadline( $deadline ) {
+	public function show_deadline( $deadline, $layout = 'table' ) {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) {
-			$this->list .= ( $deadline != '' ? sprintf( '<td>%s</td>', esc_attr( $deadline ) ) : '<td></td>' );
+			if ( $layout == 'table' ) {
+				$this->list .= ( $deadline != '' ? sprintf( '<td>%s</td>', esc_attr( $deadline ) ) : '<td></td>' );
+			} else {
+				$this->list .= ( $deadline != '' ? sprintf( '%s', esc_attr( $deadline ) ) : '' );
+			}
+
 		}
 	}
 
@@ -510,10 +526,16 @@ class ClevernessToDoList {
 	/**
 	 * Show the Progress of a To-Do Item
 	 * @param int $progress
+	 * @param string $layout
 	 */
-	public function show_progress( $progress) {
+	public function show_progress( $progress, $layout = 'table' ) {
 		if ( CTDL_Loader::$settings['show_progress'] == 1 ) {
-			$this->list .= ( $progress != '' ? sprintf( '<td>%d%%</td>', esc_attr( $progress ) ) : '<td></td>' );
+			if ( $layout == 'table' ) {
+				$this->list .= ( $progress != '' ? sprintf( '<td>%d%%</td>', esc_attr( $progress ) ) : '<td></td>' );
+			} else {
+				$this->list .= ( $progress != '' ? sprintf( '%d%%', esc_attr( $progress ) ) : '' );
+			}
+
 		}
 	}
 

@@ -7,6 +7,7 @@
  * @package cleverness-to-do-list
  * @version 3.0
  * @todo don't show category if private
+ * @todo add option to check off items
  */
 
 /**
@@ -37,6 +38,7 @@ class CTDL_Widget extends WP_Widget {
 		$progress   = $instance['progress'];
 		$category   = $instance['category'];
 		$cat_id     = '';
+		$layout     = 'list';
 
 		if ( CTDL_Loader::$settings['list_view'] == '2' ) {
 			$user = $current_user->ID;
@@ -72,19 +74,19 @@ class CTDL_Widget extends WP_Widget {
 				}
 
 				$ClevernessToDoList->list .= '<li>';
-				$ClevernessToDoList->show_todo_text( get_the_content() );
+				$ClevernessToDoList->show_todo_text( get_the_content(), $layout );
 				if ( $progress == 1  && get_post_meta( $id, '_progress', true ) != '' ) {
 					$ClevernessToDoList->list .= ' - ';
-					$ClevernessToDoList->show_progress( get_post_meta( $id, '_progress', true ) );
+					$ClevernessToDoList->show_progress( get_post_meta( $id, '_progress', true ), $layout );
 				}
 				if ( $deadline == 1 && get_post_meta( $id, '_deadline', true ) != '' ) {
 					$ClevernessToDoList->list .= '<br /><span class="deadline">'.__('Deadline: ', 'cleverness-to-do-list');
-					$ClevernessToDoList->show_deadline( get_post_meta( $id, '_deadline', true ) );
+					$ClevernessToDoList->show_deadline( get_post_meta( $id, '_deadline', true ), $layout );
 					$ClevernessToDoList->list .= '</span>';
 				}
 				if ( $assignedto == 1 && CTDL_Loader::$settings['list_view'] != '2' && get_post_meta( $id, '_assign', true ) != -1 ) {
 					$ClevernessToDoList->list .= '<br /><span class="assigned">'.__('Assigned to ', 'cleverness-to-do-list');
-					$ClevernessToDoList->show_assigned( get_post_meta( $id, '_assign', true ) );
+					$ClevernessToDoList->show_assigned( get_post_meta( $id, '_assign', true ), $layout );
 					$ClevernessToDoList->list .= '</span>';
 				}
 				$ClevernessToDoList->list .= '</li>';
