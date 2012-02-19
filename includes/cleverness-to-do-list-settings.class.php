@@ -51,6 +51,11 @@ class CTDL_Settings {
 		_e( 'Configure these settings to be able to assign to-do items to other users.', 'cleverness-to-do-list' );
 	}
 
+	function section_advanced_db_desc() {
+		_e( 'If you have recently upgraded and your to-do items are all visible, you can delete the custom database tables since they are no longer used.', 'cleverness-to-do-list' );
+	}
+
+
 	function section_permission_desc() {
 		_e( 'You should chose the highest level capabilities that the users you want to be able to preform that action will have.', 'cleverness-to-do-list' );
 		echo '<br />';
@@ -165,6 +170,7 @@ class CTDL_Settings {
 		add_settings_field( 'email_subject', __( 'Subject Field for Emails Sent to User', 'cleverness-to-do-list' ), array( &$this, 'email_subject_option' ), $this->advanced_key,
 			'section_advanced_assign' );
 		add_settings_field( 'email_text', __( 'Text in Emails Sent to User', 'cleverness-to-do-list' ), array( &$this, 'email_text_option' ), $this->advanced_key, 'section_advanced_assign' );
+		add_settings_section( 'section_advanced_database', __( 'Remove Database Tables', 'cleverness-to-do-list' ), array( &$this, 'section_advanced_db_desc' ), $this->advanced_key );
 	}
 
 	function date_format_option() { ?>
@@ -294,6 +300,7 @@ class CTDL_Settings {
 			<?php wp_nonce_field( 'update-options' ); ?>
 			<?php settings_fields( $tab ); ?>
 			<?php do_settings_sections( $tab ); ?>
+			<?php if ( $tab == $this->advanced_key ) $this->show_delete_tables_button(); ?>
 			<?php submit_button(); ?>
 		</form>
 	</div>
@@ -317,6 +324,10 @@ class CTDL_Settings {
 			echo '<a class="nav-tab '.$active.'" href="?page='.$this->plugin_key.'&amp;tab='.$tab_key.'">'.$tab_caption.'</a>';
 		}
 		echo '</h2>';
+	}
+
+	function show_delete_tables_button() {
+		echo '<p><a class="button-secondary" href="#" title="'.__( 'Delete Tables' ).'>" id="delete-tables">'.__( 'Delete Tables' ).'</a></p>';
 	}
 
 }

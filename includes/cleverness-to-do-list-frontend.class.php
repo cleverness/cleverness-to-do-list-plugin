@@ -7,7 +7,6 @@
  * @package cleverness-to-do-list
  * @version 3.0
  * @todo don't show category if private
- * @todo check html validation for all parameters
  */
 
 /**
@@ -17,11 +16,13 @@
  */
 class CTDL_Frontend_Admin extends ClevernessToDoList {
 	protected $atts;
+	public $add_script;
 
 	public function __construct() {
 		add_shortcode( 'todoadmin', array ( &$this, 'display_admin' ) ) ;
 		parent::__construct();
-		CTDL_Loader::frontend_checklist_init();
+		add_action( 'wp_footer', 'CTDL_Loader::frontend_checklist_init' );
+		add_action( 'wp_footer', 'CTDL_Loader::frontend_checklist_add_js' );
 		}
 
 	public function display_admin( $atts ) {
@@ -29,6 +30,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			'title' => '',
 		), $atts ) );
 		$this->atts = $atts;
+		$this->add_script = true;
 
 		if ( $title != '' ) {
 			$this->list .= '<h3>'.$title.'</h3>';
@@ -130,7 +132,6 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	public function __construct() {
 		add_shortcode( 'todochecklist', array( &$this, 'display_checklist' ) );
 		parent::__construct();
-		//add_action( 'wp_head', 'CTDL_Loader::frontend_checklist_init' );
 		add_action( 'wp_footer', 'CTDL_Loader::frontend_checklist_add_js' );
 		}
 
@@ -289,6 +290,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 
 }
 
+/* @todo h4 in list causes validation error */
 class CTDL_Frontend_List extends ClevernessToDoList {
 	protected $atts;
 
@@ -545,28 +547,5 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 	}
 
 }
-
-function has_cleverness_todo_shortcode( $posts ) {
-	if ( empty( $posts ) )
-		return $posts;
-
-	$cleverness_todo_shortcode_found = false;
-
-	foreach ( $posts as $post ) {
-		//if ( stripos( $post->post_content, '[todoadmin' ) || stripos( $post->post_content, '[todochecklist' ) || stripos( $post->post_content, '[todolist' ) ) {
-		if ( stripos( $post->post_content, '[todochecklist' ) ) {
-			$cleverness_todo_shortcode_found = true;
-			break;
-		}
-	}
-
-	if ( $cleverness_todo_shortcode_found ) {
-
-	}
-	return $posts;
-}
-
-add_action( 'the_posts', 'has_cleverness_todo_shortcode' );
-
 
 ?>

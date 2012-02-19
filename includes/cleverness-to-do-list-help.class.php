@@ -12,7 +12,6 @@
  * Help tabs class
  * @package cleverness-to-do-list
  * @subpackage includes
- * @todo restrict viewing to users with appropriate permissions
  */
 class CTDL_Help {
 
@@ -49,11 +48,13 @@ class CTDL_Help {
 		'callback'	  => __CLASS__.'::cleverness_todo_faqs_help',
 		) );
 
-		$screen->add_help_tab( array(
-		'id'          => 'cleverness_todo_list_permissions_tab',
-		'title'       => __( 'User Permissions' ),
-		'callback'	  => __CLASS__.'::cleverness_todo_permissions_help',
-		) );
+		if ( current_user_can( 'manage_options' ) ) {
+			$screen->add_help_tab( array(
+			'id'          => 'cleverness_todo_list_permissions_tab',
+			'title'       => __( 'User Permissions' ),
+			'callback'	  => __CLASS__.'::cleverness_todo_permissions_help',
+			) );
+		}
 
 		$screen->set_help_sidebar( $cleverness_todo_help_sidebar );
 
@@ -76,11 +77,8 @@ class CTDL_Help {
 	public static function cleverness_todo_faqs_help() { ?>
 		<h3><?php _e( 'Frequently Asked Questions', 'cleverness-to-do-list' ); ?></h3>
 
-		<p><strong><?php _e( 'I upgraded and the new tables or fields were not added to the database', 'cleverness-to-do-list' ); ?></strong><br/>
-		<?php _e( 'If you did not do the automatic upgrade from the Plugins page, make sure you deactivate and then activate the plugin. The database changes are done on activation. ', 'cleverness - to -do-list' ); ?></p>
-
-		<p><strong><?php _e( 'I enabled categories and now my items do not show up on the dashboard, sidebar, or using the shortcode.', 'cleverness-to-do-list' ); ?></strong><br/>
-		<?php _e( '(This had been fixed in several areas of the plugin. If you encounter it, please report it.) This is because the items have not yet been assigned a category. Once you edit the item and select a category, they will appear.', 'cleverness-to-do-list' ); ?></p>
+		<p><strong><?php _e( 'I upgraded and all my to-do items are gone', 'cleverness-to-do-list' ); ?></strong><br/>
+		<?php _e( 'If you did not do the automatic upgrade from the Plugins page, make sure you deactivate and then activate the plugin. Your to-do list items should be converted to the new format once you activate the plugin.', 'cleverness - to -do-list' ); ?></p>
 
 		<p><strong><?php _e( 'What should I do if I find a bug?', 'cleverness-to-do-list' ); ?></strong><br/>
 		<?php _e( 'Visit the plugin website and leave a comment or contact me.', 'cleverness-to-do-list' ); ?><br/>

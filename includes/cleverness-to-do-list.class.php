@@ -6,7 +6,6 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.0
- * @todo category showing id not name
  */
 
 /**
@@ -68,7 +67,7 @@ class ClevernessToDoList {
 			$this->list .= '</table>';
 		}
 
-		$this->list .= $this->create_new_todo_form();
+		$this->list .= $this->create_new_todo_form( $url );
 
 		if ( is_admin() ) $this->list .= '</div>';
 
@@ -206,14 +205,15 @@ class ClevernessToDoList {
 
 	/**
 	 * Creates the HTML form to add a new to-do item
+	 * @param string $url
 	 * @return string Form HTML
 	 */
-	protected function create_new_todo_form() {
+	protected function create_new_todo_form( $url ) {
 		if ( current_user_can( CTDL_Loader::$settings['add_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 
    	 	$this->form = '<h3>'.__( 'Add New To-Do Item', 'cleverness-to-do-list' ).'</h3>';
 
-    	$this->form .= '<form name="addtodo" id="addtodo" action="" method="post">
+    	$this->form .= '<form name="addtodo" id="addtodo" action="'.$url.'" method="post">
 	  		<table class="todo-form form-table">';
 			$this->create_priority_field();
 			$this->create_assign_field();
@@ -238,7 +238,7 @@ class ClevernessToDoList {
 		$this->form .= '<tr>
 		  	<th scope="row"><label for="cleverness_todo_priority">'.__( 'Priority', 'cleverness-to-do-list' ).'</label></th>
 		  	<td>
-        		<select name="cleverness_todo_priority">';
+        		<select id="cleverness_todo_priority" name="cleverness_todo_priority">';
 					if ( isset( $priority ) ) $selected = ( $priority == 0 ? ' selected = "selected"' : '' );
 					$this->form .= sprintf( '<option value="0"%s>%s</option>', $selected, CTDL_Loader::$settings['priority_0'] );
 					if ( isset( $priority ) ) {
@@ -312,7 +312,7 @@ class ClevernessToDoList {
 		if ( CTDL_Loader::$settings['show_progress'] == '1' ) {
 			$this->form .= '<tr>
 				<th scope="row"><label for="cleverness_todo_progress">'.__( 'Progress', 'cleverness-to-do-list' ).'</label></th>
-				<td><select name="cleverness_todo_progress">';
+				<td><select id="cleverness_todo_progress" name="cleverness_todo_progress">';
 				$i = 0;
 				while ( $i <= 100 ) {
 					$this->form .= '<option value="'.$i.'"';
@@ -332,7 +332,7 @@ class ClevernessToDoList {
 	protected function create_category_field( $cat_id = NULL ) {
 		if ( CTDL_Loader::$settings['categories'] == '1' ) {
 			$cat_id = ( $cat_id != NULL ? $cat_id[0]->term_id : 0 );
-			$this->form .= '<tr><th scope="row"><label for="cleverness_todo_category">'.__( 'Category', 'cleverness-to-do-list' ).'</label></th><td>'.
+			$this->form .= '<tr><th scope="row"><label for="cat">'.__( 'Category', 'cleverness-to-do-list' ).'</label></th><td>'.
 				wp_dropdown_categories( 'taxonomy=todocategories&echo=0&orderby=name&hide_empty=0&show_option_none='.__( 'None', 'cleverness-to-do-list' ).'&selected='.$cat_id ).'</td></tr>';
 		}
 	}
@@ -344,8 +344,8 @@ class ClevernessToDoList {
 	protected function create_todo_text_field( $todo_text = NULL ) {
 		$text = ( isset( $todo_text ) ? stripslashes( esc_html( $todo_text, 1 ) ) : '' );
 		$this->form .= sprintf( '<tr>
-        	<th scope="row" valign="top"><label for="cleverness_todo_description">%s</label></th>
-        	<td><textarea name="cleverness_todo_description" rows="5" cols="50" id="the_editor">%s</textarea></td>
+        	<th scope="row"><label for="cleverness_todo_description">%s</label></th>
+        	<td><textarea id="cleverness_todo_description" name="cleverness_todo_description" rows="5" cols="50">%s</textarea></td>
 			</tr>', __( 'To-Do', 'cleverness-to-do-list' ), $text );
 	}
 
@@ -408,9 +408,13 @@ class ClevernessToDoList {
 	 * @param string $layout
 	 */
 	public function show_todo_text( $todo_text, $layout = 'table' ) {
-		if ( !is_admin() && $layout == 'table' ) $this->list .= '<td>'; else $this->list .= '&nbsp;';
+		if ( !is_admin() && $layout == 'table' ) {
+			$this->list .= '<td>';
+		} else {
+			$this->list .= '&nbsp;';
+		}
 		$this->list .= stripslashes( $todo_text );
-		if ( $layout == 'table' ) $this->list = '</td>';
+		if ( $layout == 'table' ) $this->list .= '</td>';
 	}
 
 	/**

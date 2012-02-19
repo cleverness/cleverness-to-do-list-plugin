@@ -28,11 +28,17 @@ $('.edit-todo').live('click', function () {
 		});
 /* end Edit To-Dos */
 
-/* Delete All Todos */
-$('#delete-all-todos').live('click', function () {
-	var confirmed = confirm(ctdl.CONFIRMATION_ALL_MSG);
+/* Delete Tables */
+$('#delete-tables').live( 'click', function () {
+	var confirmed = confirm( ctdl.CONFIRMATION_DEL_TABLES_MSG );
 	if ( confirmed == false ) return;
-});
+} );
+
+/* Delete All Todos */
+$('#delete-all-todos').live( 'click', function () {
+	var confirmed = confirm( ctdl.CONFIRMATION_ALL_MSG );
+	if ( confirmed == false ) return;
+} );
 
 /* Delete To-Dos */
 $('.delete-todo').live('click', function () {

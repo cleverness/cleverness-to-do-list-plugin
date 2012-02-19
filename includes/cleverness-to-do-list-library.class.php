@@ -293,7 +293,7 @@ class CTDL_Lib {
 			if ( isset( $_POST['cleverness_todo_priority'] ) ) update_post_meta( $post_id, '_priority', esc_attr( $_POST['cleverness_todo_priority'] ) );
 			if ( isset( $_POST['cleverness_todo_assign'] ) ) update_post_meta( $post_id, '_assign', esc_attr( $_POST['cleverness_todo_assign'] ) );
 			if ( isset( $_POST['cleverness_todo_deadline'] ) ) update_post_meta( $post_id, '_deadline', esc_attr( $_POST['cleverness_todo_deadline'] ) );
-			if ( isset( $_POST['cleverness_todo_progress'] ) ) update_post_meta( $post_id, '_progress', int( $_POST['cleverness_todo_progress'] ) );
+			if ( isset( $_POST['cleverness_todo_progress'] ) ) update_post_meta( $post_id, '_progress', absint( $_POST['cleverness_todo_progress'] ) );
 
 		}
 

@@ -76,6 +76,4 @@ function cleverness_todo_activation() {
 	CTDL_Lib::install_plugin();
 }
 
-
-
 ?>

@@ -25,17 +25,15 @@ class CTDL_Loader {
 		self::include_files();
 		self::call_wp_hooks();
 
-		global $ClevernessToDoList, $CTDL_Frontend_Checklist;
+		global $ClevernessToDoList, $CTDL_Frontend_Checklist, $CTDL_Frontend_Admin;
         $ClevernessToDoList = new ClevernessToDoList();
 		if ( is_admin() ) {
 			new CTDL_Settings();
 			new CTDL_Dashboard_Widget();
 		} else {
-			/* @todo try to do only when using shortcode code in frontend class so js is not on every page */
-			//new CTDL_Frontend_Admin;
+			$CTDL_Frontend_Admin = new CTDL_Frontend_Admin;
 			$CTDL_Frontend_Checklist = new CTDL_Frontend_Checklist;
 			new CTDL_Frontend_List;
-
 		}
 
 	}
@@ -75,7 +73,7 @@ class CTDL_Loader {
 		);
 
 		register_taxonomy( 'todocategories', array( 'todo' ), array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'labels' => $labels,
 			'show_ui' => false,
 			'query_var' => false,
@@ -206,6 +204,7 @@ class CTDL_Loader {
 			'PERMISSION_MSG' => __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' ),
 			'CONFIRMATION_MSG' => __( "You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 			'CONFIRMATION_ALL_MSG' => __( "You are about to permanently delete all completed items. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
+			'CONFIRMATION_DEL_TABLES_MSG' => __( "You are about to permanently delete database tables. This cannot be undone. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 			'NONCE' => wp_create_nonce( 'cleverness-todo' ),
 			'AJAX_URL' => admin_url( 'admin-ajax.php' )
 		);
@@ -215,8 +214,8 @@ class CTDL_Loader {
 	 * Add the Files for the To-Do List frontend
 	 */
 	public static function frontend_checklist_init() {
-		global $CTDL_Frontend_Checklist;
-		if ( ! $CTDL_Frontend_Checklist->add_script )
+		global $CTDL_Frontend_Admin;
+		if ( ! $CTDL_Frontend_Admin->add_script )
 			return;
 
 		wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-classic.css' );
@@ -227,8 +226,8 @@ class CTDL_Loader {
 	 * Enqueue and Localize JavaScript for the To-Do List frontend
 	 */
 	public static function frontend_checklist_add_js() {
-		global $CTDL_Frontend_Checklist;
-		if ( ! $CTDL_Frontend_Checklist->add_script )
+		global $CTDL_Frontend_Checklist, $CTDL_Frontend_Admin;
+		if ( !$CTDL_Frontend_Checklist->add_script && !$CTDL_Frontend_Admin->add_script )
 			return;
 
 		wp_enqueue_script( 'jquery' );
