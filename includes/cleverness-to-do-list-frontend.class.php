@@ -123,7 +123,6 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 
 }
 
-/* @todo when completing, don't remove item via js, just check the box for single completed item */
 class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	protected $atts;
 	protected $cat_id;
@@ -182,11 +181,9 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
 			if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
 
-			$this->show_category_headings ( get_the_terms( $id, 'todocategories' ), $this->cat_id );
-
 			$this->list .= '<p id="todo-'.esc_attr( $id ).'" class="todo-list">';
 			$completed = ( $todoid != '' && get_post_meta( $id, '_status', true ) == 1 ? 1 : 0 );
-			$this->show_checkbox( $id, $completed );
+			$this->show_checkbox( $id, $completed, $layout, ' single' );
 			$this->show_todo_text( $post->post_content, $priority_class  );
 			if ( $priority == 1 ) $this->show_priority( $the_priority, $priorities );
 			if ( $assigned == 1 ) $this->show_assigned( get_post_meta( $id, '_assign', true ) );

@@ -363,6 +363,31 @@ class CTDL_Lib {
 	}
 
 	/**
+	 * Delete old custom database tables
+	 * @todo show confirmation of deletion
+	 * @static
+	 */
+	public static function delete_tables() {
+		global $wpdb;
+
+		$cleverness_todo_complete_nonce = $_REQUEST['_wpnonce'];
+		if ( !wp_verify_nonce( $cleverness_todo_complete_nonce, 'tododeletetables' ) ) die( 'Security check failed' );
+		if ( !function_exists( 'is_plugin_active_for_network' ) ) require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		if ( is_plugin_active_for_network( __FILE__ ) ) {
+			$prefix = $wpdb->base_prefix;
+		} else {
+			$prefix = $wpdb->prefix;
+		}
+
+		$thetable = $prefix."todolist";
+		$wpdb->query( "DROP TABLE IF EXISTS $thetable" );
+		$thecattable = $prefix."todolist_cats";
+		$wpdb->query( "DROP TABLE IF EXISTS $thecattable" );
+		$thestatustable = $prefix."todolist_status";
+		$wpdb->query( "DROP TABLE IF EXISTS $thestatustable" );
+	}
+
+	/**
 	 * Set priority, user, url, and action variables
 	 * @return array
 	 */
@@ -469,9 +494,7 @@ class CTDL_Lib {
 		printf( __( "%s plugin | Version %s | by %s | <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org' target='_blank'>Donate</a><br />", 'cleverness-to-do-list' ), $plugin_data['Title'], $plugin_data['Version'], $plugin_data['Author'] );
 	}
 
-	/* Create database table and add default options
-	@todo plugin generating unexpected output during activation for upgrading
-	*/
+	/* Create database table and add default options */
 	public static function install_plugin () {
 		global $wpdb, $current_user;;
 		get_currentuserinfo();
@@ -634,60 +657,62 @@ class CTDL_Lib {
 
 			}
 
-			$the_options = get_option( 'cleverness_todo_settings' );
-			if ( $the_options['categories'] == '' ) $the_options['categories'] = '0';
-			if ( $the_options['sort_order'] == '' ) $the_options['sort_order'] = 'id';
-			if ( $the_options['add_cat_capability'] == '' ) $the_options['add_cat_capability'] = 'manage_options';
-			if ( $the_options['dashboard_cat'] == '' ) $the_options['dashboard_cat'] = 'All';
-			if ( $the_options['email_text'] == '' ) $the_options['email_text'] = __( 'The following item has been assigned to you.', 'cleverness-to-do-list' );
-			if ( $the_options['email_subject'] == '' ) $the_options['email_subject'] = __( 'A to-do list item has been assigned to you', 'cleverness-to-do-list' );
-			if ( $the_options['email_from'] == '' ) $the_options['email_from'] = html_entity_decode( get_bloginfo( 'name' ) );
+			if ( get_option( 'cleverness_todo_settings' ) ) {
+				$the_options = get_option( 'cleverness_todo_settings' );
+				if ( $the_options['categories'] == '' ) $the_options['categories'] = '0';
+				if ( $the_options['sort_order'] == '' ) $the_options['sort_order'] = 'id';
+				if ( $the_options['add_cat_capability'] == '' ) $the_options['add_cat_capability'] = 'manage_options';
+				if ( $the_options['dashboard_cat'] == '' ) $the_options['dashboard_cat'] = 'All';
+				if ( $the_options['email_text'] == '' ) $the_options['email_text'] = __( 'The following item has been assigned to you.', 'cleverness-to-do-list' );
+				if ( $the_options['email_subject'] == '' ) $the_options['email_subject'] = __( 'A to-do list item has been assigned to you', 'cleverness-to-do-list' );
+				if ( $the_options['email_from'] == '' ) $the_options['email_from'] = html_entity_decode( get_bloginfo( 'name' ) );
 
-			$general_options = array(
-				'categories'            => $the_options['categories'],
-				'list_view'             => $the_options['list_view'],
-				'todo_author'           => $the_options['todo_author'],
-				'show_completed_date'   => $the_options['show_completed_date'],
-				'show_deadline'         => $the_options['show_deadline'],
-				'show_progress'         => $the_options['show_progress'],
-				'sort_order'            => $the_options['sort_order'],
-				'admin_bar'             => '1'
-			);
+				$general_options = array(
+					'categories'            => $the_options['categories'],
+					'list_view'             => $the_options['list_view'],
+					'todo_author'           => $the_options['todo_author'],
+					'show_completed_date'   => $the_options['show_completed_date'],
+					'show_deadline'         => $the_options['show_deadline'],
+					'show_progress'         => $the_options['show_progress'],
+					'sort_order'            => $the_options['sort_order'],
+					'admin_bar'             => '1'
+				);
 
-			$advanced_options = array(
-				'date_format'           => $the_options['date_format'],
-				'priority_0'            => $the_options['priority_0'],
-				'priority_1'            => $the_options['priority_1'],
-				'priority_2'            => $the_options['priority_2'],
-				'assign'                => $the_options['assign'],
-				'show_only_assigned'    => $the_options['show_only_assigned'],
-				'user_roles'            => $the_options['user_roles'],
-				'email_assigned'        => $the_options['email_assigned'],
-				'email_from'            => $the_options['email_from'],
-				'email_subject'         => $the_options['email_subject'],
-				'email_text'            => $the_options['email_text'],
-				'show_id'               => '0',
-			);
+				$advanced_options = array(
+					'date_format'           => $the_options['date_format'],
+					'priority_0'            => $the_options['priority_0'],
+					'priority_1'            => $the_options['priority_1'],
+					'priority_2'            => $the_options['priority_2'],
+					'assign'                => $the_options['assign'],
+					'show_only_assigned'    => $the_options['show_only_assigned'],
+					'user_roles'            => $the_options['user_roles'],
+					'email_assigned'        => $the_options['email_assigned'],
+					'email_from'            => $the_options['email_from'],
+					'email_subject'         => $the_options['email_subject'],
+					'email_text'            => $the_options['email_text'],
+					'show_id'               => '0',
+				);
 
-			$permissions_options = array(
-				'view_capability'              => $the_options['view_capability'],
-				'add_capability'               => $the_options['add_capability'],
-				'edit_capability'              => $the_options['edit_capability'],
-				'delete_capability'            => $the_options['delete_capability'],
-				'purge_capability'             => $the_options['purge_capability'],
-				'complete_capability'          => $the_options['complete_capability'],
-				'assign_capability'            => $the_options['assign_capability'],
-				'view_all_assigned_capability' => $the_options['view_all_assigned_capability'],
-				'add_cat_capability'           => $the_options['add_cat_capability'],
-			);
+				$permissions_options = array(
+					'view_capability'              => $the_options['view_capability'],
+					'add_capability'               => $the_options['add_capability'],
+					'edit_capability'              => $the_options['edit_capability'],
+					'delete_capability'            => $the_options['delete_capability'],
+					'purge_capability'             => $the_options['purge_capability'],
+					'complete_capability'          => $the_options['complete_capability'],
+					'assign_capability'            => $the_options['assign_capability'],
+					'view_all_assigned_capability' => $the_options['view_all_assigned_capability'],
+					'add_cat_capability'           => $the_options['add_cat_capability'],
+				);
 
-			add_option( 'CTDL_general', $general_options );
-			add_option( 'CTDL_advanced', $advanced_options );
-			add_option( 'CTDL_permissions', $permissions_options );
-			update_option( 'CTDL_db_version', $cleverness_todo_db_version );
-			delete_option( 'atd_db_version' );
-			delete_option( 'cleverness_todo_db_version' );
-			delete_option( 'cleverness_todo_settings' );
+				update_option( 'CTDL_general', $general_options );
+				update_option( 'CTDL_advanced', $advanced_options );
+				update_option( 'CTDL_permissions', $permissions_options );
+				update_option( 'CTDL_db_version', $cleverness_todo_db_version );
+				delete_option( 'atd_db_version' );
+				delete_option( 'cleverness_todo_db_version' );
+				delete_option( 'cleverness_todo_settings' );
+			}
 		}
 	}
 

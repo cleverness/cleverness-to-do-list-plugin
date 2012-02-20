@@ -128,6 +128,7 @@ class CTDL_Help {
 			<li><strong>categories</strong> &#8211; <?php _e( 'default is hide (0). Use 1 to show', 'cleverness-to-do-list' ); ?>.</li>
 			<li><strong>addedby</strong> &#8211; <?php _e( 'default is hide (0). Use 1 to show', 'cleverness-to-do-list' ); ?>.</li>
 			<li><strong>editlink</strong> &#8211; <?php _e( 'default is hide (0). Use 1 to show', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>todoid</strong> &#8211; <?php _e( 'default is blank (""). Use the ID of the to-do item to display just one item', 'cleverness-to-do-list' ); ?>.</li>
 		</ul>
 		<p><strong><?php _e( 'Example:', 'cleverness-to-do-list' ); ?></strong><br/>
 		<?php _e( 'Set the title to "My To-Do List" and show the deadline and the category.', 'cleverness-to-do-list' ); ?><br/>

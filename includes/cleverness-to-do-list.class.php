@@ -211,6 +211,8 @@ class ClevernessToDoList {
 	protected function create_new_todo_form( $url ) {
 		if ( current_user_can( CTDL_Loader::$settings['add_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 
+		if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list';
+
    	 	$this->form = '<h3>'.__( 'Add New To-Do Item', 'cleverness-to-do-list' ).'</h3>';
 
     	$this->form .= '<form name="addtodo" id="addtodo" action="'.$url.'" method="post">
@@ -386,15 +388,16 @@ class ClevernessToDoList {
 	 * @param int $id
 	 * @param boolean $completed
 	 * @param string $layout
+	 * @param string $single
 	 */
-	protected function show_checkbox( $id, $completed = NULL, $layout = 'table' ) {
+	protected function show_checkbox( $id, $completed = NULL, $layout = 'table', $single = '' ) {
 		$permission = CTDL_LIb::check_permission( 'todo', 'complete' );
 		if ( $permission === true ) {
 			if ( $layout == 'table' ) $this->list .= '<td>';
 			if ( $completed == 1 ) {
-				$this->list .= sprintf( '<input type="checkbox" id="cltd-%d" class="todo-checkbox completed" checked="checked" />', esc_attr( $id ) );
+				$this->list .= sprintf( '<input type="checkbox" id="cltd-%d" class="todo-checkbox completed'.$single.'" checked="checked" />', esc_attr( $id ) );
 			} else {
-				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted"/>', esc_attr( $id ) );
+				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted'.$single.'"/>', esc_attr( $id ) );
 			}
 			$cleverness_todo_complete_nonce = wp_create_nonce( 'todocomplete' );
 			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="'.esc_attr( $cleverness_todo_complete_nonce ).'" />';

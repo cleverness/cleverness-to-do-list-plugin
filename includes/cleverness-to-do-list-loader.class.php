@@ -161,9 +161,10 @@ class CTDL_Loader {
 	 * @static
 	 */
 	public static function admin_init() {
-		global $cleverness_todo_page;
+		global $cleverness_todo_page, $cleverness_todo_settings_page ;
 		add_action( 'admin_print_styles-' . $cleverness_todo_page, __CLASS__.'::add_admin_css' );
 		add_action( 'admin_print_scripts-' . $cleverness_todo_page, __CLASS__.'::add_admin_js' );
+		add_action( 'admin_print_scripts-' . $cleverness_todo_settings_page, __CLASS__.'::add_admin_js' );
 	}
 
 	/**

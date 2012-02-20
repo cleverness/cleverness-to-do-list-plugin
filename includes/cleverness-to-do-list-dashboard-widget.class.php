@@ -6,7 +6,6 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.0
- * @todo  deadline showing even if blank
  */
 
 /**
@@ -134,7 +133,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 					$this->list .= ']</small>';
 				}
 			}
-			if ( $this->dashboard_settings['show_dashboard_deadline'] == '1' && get_post_meta( $id, '_deadline' ) != '' ) {
+			if ( $this->dashboard_settings['show_dashboard_deadline'] == '1' && get_post_meta( $id, '_deadline', true ) != NULL ) {
 				$this->list .=  ' <small>['.__( 'Deadline:', 'cleverness-to-do-list' );
 				$this->show_deadline( get_post_meta( $id, '_deadline', true ) );
 				$this->list .= ']</small>';

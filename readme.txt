@@ -82,6 +82,7 @@ The options are:
 * **categories** - default is hide (0). Use 1 to show.
 * **addedby** - default is hide (0). Use 1 to show.
 * **editlink** - default is hide (0). Use 1 to show.
+* **todoid** - default is blank (""). Use the ID of the to-do item to display just one item.
 
 Example:
 

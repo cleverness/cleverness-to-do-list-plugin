@@ -13,7 +13,6 @@
  * @package cleverness-to-do-list
  * @subpackage includes
  * @link http://theme.fm/2011/10/how-to-create-tabs-with-the-settings-api-in-wordpress-2590/
- * @todo add a delete old tables option
 */
 class CTDL_Settings {
 	private $general_key = 'CTDL_general';
@@ -327,7 +326,9 @@ class CTDL_Settings {
 	}
 
 	function show_delete_tables_button() {
-		echo '<p><a class="button-secondary" href="#" title="'.__( 'Delete Tables' ).'>" id="delete-tables">'.__( 'Delete Tables' ).'</a></p>';
+		$cleverness_todo_delete_tables_nonce = wp_create_nonce( 'tododeletetables' );
+		$url = get_admin_url().'admin.php?page=cleverness-to-do-list-settings&amp;&tab=CTDL_advanced&amp;action=deletetables&_wpnonce='.esc_attr( $cleverness_todo_delete_tables_nonce );
+		echo '<p><a class="button-secondary" href="'.$url.'" title="'.__( 'Delete Tables' ).'>" id="delete-tables">'.__( 'Delete Tables' ).'</a></p>';
 	}
 
 }

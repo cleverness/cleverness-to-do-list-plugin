@@ -1,20 +1,19 @@
-jQuery(document).ready(function($) {
+jQuery( document ).ready( function( $ ) {
 
-	$('.todo-checkbox').click(function () {
-		var status = 1;
-		var id = $(this).attr('id').substr(5);
+	$( '.todo-checkbox' ).click( function () {
+		var id = $( this ).attr( 'id' ).substr( 5 );
 		var todoid = '#todo-' + id;
-		//if ($(this).prop('checked') == false ) status = 0;
 
 		var data = {
 		action: 'cleverness_todo_dashboard_complete',
 		cleverness_id: id,
-		cleverness_status: status,
+		cleverness_status: 1,
 		_ajax_nonce: ctdl.NONCE
 		};
 
-		jQuery.post(ctdl.AJAX_URL, data, function(response) {
-			$(todoid).fadeOut();
-			});
-	});
-});
+		jQuery.post( ctdl.AJAX_URL, data, function( response ) {
+			$( todoid ).fadeOut();
+			} );
+	} );
+
+} );

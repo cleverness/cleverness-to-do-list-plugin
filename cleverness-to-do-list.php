@@ -64,6 +64,10 @@ function cleverness_todo_loader() {
 			CTDL_Lib::delete_all_todos();
 			break;
 
+		case 'deletetables':
+			CTDL_Lib::delete_tables();
+			break;
+
 	}
 
 }
