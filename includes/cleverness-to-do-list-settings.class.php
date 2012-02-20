@@ -165,6 +165,7 @@ class CTDL_Settings {
 			'section_advanced_assign' );
 		add_settings_field( 'user_roles', __( 'User Roles Allowed', 'cleverness-to-do-list' ), array( &$this, 'user_roles_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_assigned', __( 'Email Assigned To-Do Items to User', 'cleverness-to-do-list' ), array( &$this, 'email_assigned_option' ), $this->advanced_key, 'section_advanced_assign' );
+		add_settings_field( 'email_category', __( 'Add Category to Subject', 'cleverness-to-do-list' ), array( &$this, 'email_category_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_from', __( 'From Field for Emails Sent to User', 'cleverness-to-do-list' ), array( &$this, 'email_from_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_subject', __( 'Subject Field for Emails Sent to User', 'cleverness-to-do-list' ), array( &$this, 'email_subject_option' ), $this->advanced_key,
 			'section_advanced_assign' );
@@ -232,6 +233,15 @@ class CTDL_Settings {
 			<option value="0"<?php if ( $this->advanced_settings['email_assigned'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
 			<option value="1"<?php if ( $this->advanced_settings['email_assigned'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
 		</select>
+	<?php
+	}
+
+	function email_category_option() { ?>
+		<select name="<?php echo $this->advanced_key; ?>[email_category]">
+			<option value="0"<?php if ( $this->advanced_settings['email_category'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="1"<?php if ( $this->advanced_settings['email_category'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
+		</select>
+		<span class="description"><?php _e( 'If categories are enabled.', 'cleverness-to-do-list' ); ?></span>
 	<?php
 	}
 

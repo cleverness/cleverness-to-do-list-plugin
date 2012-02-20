@@ -192,7 +192,7 @@ class CTDL_Lib {
 			if ( !wp_verify_nonce( $_REQUEST['todoadd'], 'todoadd' ) ) die( 'Security check failed' );
 
 			if ( CTDL_Loader::$settings['email_assigned'] == '1' && CTDL_Loader::$settings['assign'] == '0' ) {
-				CTDL_Lib::email_user( $_POST['cleverness_todo_assign'], $_POST['cleverness_todo_deadline'], $_POST['cleverness_todo_category'] );
+				CTDL_Lib::email_user( $_POST['cleverness_todo_assign'], $_POST['cleverness_todo_deadline'], $_POST['cat'] );
 			}
 
 			$my_post = array(
@@ -234,26 +234,26 @@ class CTDL_Lib {
 		return;
 	}
 
-	/* Send an email to assigned user - Category code contributed by Daniel
+	/* Send an email to assigned user
 	TODO: test email function
-	TODO: make category an option
 	*/
-	protected static function email_user($assign, $deadline, $category) {
+	protected static function email_user( $assign, $deadline, $category ) {
 
 		$priority = esc_attr( $_POST['cleverness_todo_priority'] );
 		$todotext = esc_html( $_POST['cleverness_todo_description'] );
 		$priority_array = array (0 => CTDL_Loader::$settings['priority_0'] , 1 => CTDL_Loader::$settings['priority_1'], 2 => CTDL_Loader::$settings['priority_2'] );
-		get_currentuserinfo();
 
-		if ( current_user_can( CTDL_Loader::$settings['assign_capability']) && $assign != '' && $assign != '-1' && $assign != '0' ) {
-			$headers = 'From: '.CTDL_Loader::$settings['email_from'].' <'.get_bloginfo('admin_email').'>' . "\r\n\\";
-			//$categoryobj = cleverness_todo_get_cat_name($category);
-			//$categoryname = $categoryobj->name;
-			//$subject = $cleverness_todo_option['email_subject'].' '.$categoryname; // MAKE CATEGORY NAME OPTION
+		if ( current_user_can( CTDL_Loader::$settings['assign_capability'] ) && $assign != '' && $assign != '-1' && $assign != '0' ) {
+			$headers = 'From: '.CTDL_Loader::$settings['email_from'].' <'.get_bloginfo( 'admin_email' ).'>' . "\r\n\\";
 			$subject = CTDL_Loader::$settings['email_subject'];
+			if ( CTDL_Loader::$settings['email_category'] == 1 ) {
+				$category_name = CTDL_Categories::get_category_name( $category );
+				$subject .= ' - '.$category_name;
+			}
 			$assign_user = get_userdata( $assign );
 			$email = $assign_user->user_email;
 			$email_message = CTDL_Loader::$settings['email_text'];
+			$email_message .= "\r\n".__( 'Priority', 'cleverness-to-do-list' ).': '.$priority_array[$priority]."\r\n";
 			$email_message .= "\r\n".$todotext."\r\n";
 			if ( $deadline != '' )
 				$email_message .= __( 'Deadline:', 'cleverness-to-do-list' ).' '.$deadline."\r\n";
@@ -261,11 +261,6 @@ class CTDL_Lib {
 				$message = __( 'A email has been sent to the assigned user.', 'cleverness-to-do-list' ).'<br /><br />';
 			else
 				$message = __( 'The email failed to send to the assigned user.', 'cleverness-to-do-list' );
-			$message .= '<br />
-			To: '.$email.'<br />
-			Subject: '.$subject.'<br />
-			Message: '.$message.'<br />
-			Headers: '.$headers.'<br /><br />';
 			return $message;
 		} else {
 			$message = __( 'No email has been sent.', 'cleverness-to-do-list' ).'<br /><br />';
@@ -557,6 +552,7 @@ class CTDL_Lib {
 				'email_from'            => html_entity_decode( get_bloginfo( 'name' ) ),
 				'email_subject'         => __( 'A to-do list item has been assigned to you', 'cleverness-to-do-list' ),
 				'email_text'            => __( 'The following item has been assigned to you.', 'cleverness-to-do-list' ),
+				'email_category'        => 1,
 				'show_id'               => '0',
 			);
 
@@ -690,6 +686,7 @@ class CTDL_Lib {
 					'email_from'            => $the_options['email_from'],
 					'email_subject'         => $the_options['email_subject'],
 					'email_text'            => $the_options['email_text'],
+					'email_category'        => 1,
 					'show_id'               => '0',
 				);
 
