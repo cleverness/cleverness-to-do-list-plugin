@@ -413,7 +413,7 @@ class ClevernessToDoList {
 	public function show_todo_text( $todo_text, $layout = 'table' ) {
 		if ( !is_admin() && $layout == 'table' ) {
 			$this->list .= '<td>';
-		} else {
+		} elseif ( is_admin() ) {
 			$this->list .= '&nbsp;';
 		}
 		$this->list .= stripslashes( $todo_text );
@@ -495,10 +495,15 @@ class ClevernessToDoList {
 	/**
 	 * Show Who Added a To-Do Item
 	 * @param int $author
+	 * @param string $layout
 	 */
-	public function show_addedby( $author ) {
+	public function show_addedby( $author, $layout = 'table' ) {
 		if ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 ) {
-			$this->list .= '<td>'.esc_attr( $author ).'</td>';
+			if ( $layout == 'table' ) {
+				$this->list .= '<td>'.esc_attr( $author ).'</td>';
+			} else {
+				$this->list .= esc_attr( $author );
+			}
 		}
 	}
 
@@ -514,20 +519,24 @@ class ClevernessToDoList {
 			} else {
 				$this->list .= ( $deadline != '' ? sprintf( '%s', esc_attr( $deadline ) ) : '' );
 			}
-
 		}
 	}
 
 	/**
 	 * Show the Date that a To-Do Item was Completed
 	 * @param string $completed
+	 * @param string $layout
 	 */
-	public function show_completed( $completed ) {
+	public function show_completed( $completed, $layout = 'table' ) {
 		if ( CTDL_Loader::$settings['show_completed_date'] && $completed != '0000-00-00 00:00:00' ) {
 			$date = '';
 			$date = date( CTDL_Loader::$settings['date_format'], strtotime( $completed ) );
-			$this->list .= '<td>'.esc_attr( $date ).'</td>';
+			if ( $layout == 'table' ) {
+				$this->list .= '<td>'.esc_attr( $date ).'</td>';
+			} else {
+				$this->list .= esc_attr( $date );
 			}
+		}
 	}
 
 	/**

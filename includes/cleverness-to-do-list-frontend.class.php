@@ -92,7 +92,6 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 	/**
 	 * Creates the HTML for the To-Do List Table Headings
 	 * @param $completed
-	 * @todo get rid of long assign if statement
 	 */
 	protected function show_table_headings( $completed = 0 ) {
 		extract( shortcode_atts( array(
@@ -154,7 +153,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			'assigned'   => 0,
 			'deadline'   => 0,
 			'progress'   => 0,
-			'categories' => 0,
+			'category'   => 0,
 			'addedby'    => 0,
 			'todoid'     => ''
 		), $this->atts ) );
@@ -163,8 +162,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 		$this->add_script = true;
 		$layout = 'list';
 
-		$priority = array( 0 => CTDL_Loader::$settings['priority_0'] , 1 => CTDL_Loader::$settings['priority_1'], 2 => CTDL_Loader::$settings['priority_2'] );
-		$user = CTDL_Lib::get_user_id( $current_user, $userdata );
+		list( $priorities, $user, $url, $action ) = CTDL_Lib::set_variables();
 
 		if ( $title != '') {
 			$this->list .= '<h3>'.$title.'</h3>';
@@ -182,7 +180,11 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
 
 			$this->list .= '<p id="todo-'.esc_attr( $id ).'" class="todo-list">';
-			$completed = ( $todoid != '' && get_post_meta( $id, '_status', true ) == 1 ? 1 : 0 );
+			if ( CTDL_Loader::$settings['list_view'] == 2 ) {
+				$completed = ( $todoid != '' && get_post_meta( $id, '_user_'.$current_user->ID.'_status', true ) == 1 ? 1 : 0 );
+			} else {
+				$completed = ( $todoid != '' && get_post_meta( $id, '_status', true ) == 1 ? 1 : 0 );
+			}
 			$this->show_checkbox( $id, $completed, $layout, ' single' );
 			$this->show_todo_text( $post->post_content, $priority_class  );
 			if ( $priority == 1 ) $this->show_priority( $the_priority, $priorities );
@@ -199,37 +201,57 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 
 		} else {
 
-			$todo_items = CTDL_Lib::get_todos( $user, -1, 0, $categories );
-			if ( $todo_items->have_posts() ) {
-
-				while ( $todo_items->have_posts() ) : $todo_items->the_post();
-					$id = get_the_ID();
-					$the_priority = get_post_meta( $id, '_priority', true );
-					$priority_class = '';
-					if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
-					if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
-
-					$this->show_category_headings ( get_the_terms( $id, 'todocategories' ), $this->cat_id );
-
-					$this->list .= '<p id="todo-'.esc_attr( $id ).'" class="todo-list">';
-					$this->show_checkbox( $id, '', $layout );
-					$this->show_todo_text( get_the_content(), $priority_class  );
-					if ( $priority == 1 ) $this->show_priority( $the_priority, $priorities );
-					if ( $assigned == 1 ) $this->show_assigned( get_post_meta( $id, '_assign', true ) );
-					if ( $deadline == 1 ) $this->show_deadline( get_post_meta( $id, '_deadline', true ) );
-					if ( $progress == 1 ) $this->show_progress( get_post_meta( $id, '_progress', true ) );
-					if ( $addedby == 1 ) $this->show_addedby( get_the_author() );
-					$this->list .= '</p>';
-				endwhile;
-
-			} else {
-				/* if there are no to-do items, display this message */
-				$this->list .= '<p>'.__( 'No items to do.', 'cleverness-to-do-list' ).'</p>';
-			}
+			$this->loop_through_todos( $user, $priorities, $url, 0, $category );
 
 		}
 
 		wp_reset_postdata();
+
+	}
+
+	/**
+	 * Generate the To-Do List
+	 * @param $todo_items
+	 * @param $priorities
+	 * @param $url
+	 * @param $completed
+	 * @return array $posts_to_exclude
+	 */
+	protected function show_todo_list_items( $todo_items, $priorities, $url, $completed = 0 ) {
+		extract( shortcode_atts( array(
+			'title'      => '',
+			'priority'   => 0,
+			'assigned'   => 0,
+			'deadline'   => 0,
+			'progress'   => 0,
+			'category'   => 0,
+			'addedby'    => 0,
+			'todoid'     => ''
+		), $this->atts ) );
+
+		while ( $todo_items->have_posts() ) : $todo_items->the_post();
+			$id = get_the_ID();
+			$posts_to_exclude[] = $id;
+			$the_priority = get_post_meta( $id, '_priority', true );
+			$priority_class = '';
+			if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
+			if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
+
+			$this->show_category_headings ( get_the_terms( $id, 'todocategories' ), $this->cat_id );
+
+			$this->list .= '<p id="todo-'.esc_attr( $id ).'" class="todo-list'.$priority_class.'">';
+			$this->show_checkbox( $id, '', 'list' );
+			$this->list .= ' ';
+			$this->show_todo_text( get_the_content(), 'list' );
+			if ( $priority == 1 ) $this->show_priority( $the_priority, $priorities );
+			if ( $assigned == 1 ) $this->show_assigned( get_post_meta( $id, '_assign', true ) );
+			if ( $deadline == 1 ) $this->show_deadline( get_post_meta( $id, '_deadline', true ) );
+			if ( $progress == 1 ) $this->show_progress( get_post_meta( $id, '_progress', true ) );
+			if ( $addedby == 1 ) $this->show_addedby( get_the_author() );
+			$this->list .= '</p>';
+		endwhile;
+
+		return $posts_to_exclude;
 
 	}
 
@@ -245,11 +267,6 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			}
 		}
 	}
-
-	/* show to-do item, wrapped in a span with the priority class */
-	public function show_todo_text( $todo_text, $priority_class ) {
-		$this->list .= ' <span'.$priority_class.'>'.$todo_text.'</span>';
-		}
 
 	/* show who the to-do item was assigned to, if defined */
 	public function show_assigned( $assign ) {
@@ -287,7 +304,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 
 }
 
-/* @todo h4 in list causes validation error */
+/* @todo not ordering by category when enabled */
 class CTDL_Frontend_List extends ClevernessToDoList {
 	protected $atts;
 
@@ -321,146 +338,121 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 		), $this->atts ) );
 
 		if ( $category == 'all' ) $category = '0';
+		list( $priority, $user, $url, $action ) = CTDL_Lib::set_variables();
 
-		global $userdata, $current_user;
-		get_currentuserinfo();
+		if ( $type == 'table' ) {
 
-		$priority = array( 0 => CTDL_Loader::$settings['priority_0'] , 1 => CTDL_Loader::$settings['priority_1'], 2 => CTDL_Loader::$settings['priority_2'] );
-		$user = CTDL_Lib::get_user_id( $current_user, $userdata );
+			$this->list .= '<table id="todo-list" class="todo-table">';
+			if ( $title != '' ) $this->list .= '<caption>'.$title.'</caption>';
+			$this->show_table_headings();
 
-		// get to-do items
-		$todo_items = CTDL_Lib::get_todos( $user, -1, 0, $category );
+			$this->loop_through_todos( $user, $priority, $url, 0, $category );
 
-		if ( $todo_items->have_posts() ) {
+			$this->list .= '</table>';
+
+		} elseif ( $type == 'list' ) {
+
+			if ( $title != '') {
+				$this->list .= '<h3>'.$title.'</h3>';
+			}
+			$this->list .= '<'.$list_type.'>';
+
+			$this->loop_through_todos( $user, $priority, $url, 0, $category );
+
+			$this->list .= '</'.$list_type.'>';
+
+		}
+
+		if ( $completed == 'show' ) {
+
+			wp_reset_postdata();
 
 			if ( $type == 'table' ) {
 
 				$this->list .= '<table id="todo-list" class="todo-table">';
-				if ( $title != '' ) $this->list .= '<caption>'.$title.'</caption>';
-				$this->show_table_headings();
+				if ( $completed_title != '' ) $this->list .= '<caption>'.$completed_title.'</caption>';
+				$this->show_table_headings( 1 );
 
-				while ( $todo_items->have_posts() ) : $todo_items->the_post();
-					$id = get_the_ID();
-					$the_priority = get_post_meta( $id, '_priority', true );
-					$priority_class = '';
-					if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
-					if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
-
-					$this->list .= '<tr id="todo-'.$id.'"'.$priority_class.'>';
-					parent::show_todo_text( get_the_content(), $priority_class  );
-					if ( $priorities == 'show' ) parent::show_priority( $the_priority, $priority );
-					if ( $assigned == 'show' ) parent::show_assigned( get_post_meta( $id, '_assign', true ) );
-					if ( $deadline == 'show' ) parent::show_deadline( get_post_meta( $id, '_deadline', true ) );
-					if ( $progress == 'show' ) parent::show_progress( get_post_meta( $id, '_progress', true ) );
-					if ( $category == 0 ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
-					if ( $addedby == 'show' ) parent::show_addedby( get_the_author() );
-					$this->list .= '</tr>';
-				endwhile;
+				$this->loop_through_todos( $user, $priority, $url, 1, $category );
 
 				$this->list .= '</table>';
 
 			} elseif ( $type == 'list' ) {
 
-				if ( $title != '') {
-					$this->list .= '<h3>'.$title.'</h3>';
+				if ( $completed_title != '') {
+					$this->list .= '<h3>'.$completed_title.'</h3>';
 				}
+
 				$this->list .= '<'.$list_type.'>';
 
-				while ( $todo_items->have_posts() ) : $todo_items->the_post();
-					$id = get_the_ID();
-					$the_priority = get_post_meta( $id, '_priority', true );
-					$priority_class = '';
-					if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
-					if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
-
-					$this->show_category_headings ( get_the_terms( $id, 'todocategories' ), $this->cat_id );
-
-					$this->list .= '<li>';
-					$this->show_todo_text( get_the_content(), $priority_class  );
-					if ( $priority == 'show' ) $this->show_priority( $the_priority, $priorities );
-					if ( $assigned == 'show' ) $this->show_assigned( get_post_meta( $id, '_assign', true ) );
-					if ( $deadline == 'show' ) $this->show_deadline( get_post_meta( $id, '_deadline', true ) );
-					if ( $progress == 'show' ) $this->show_progress( get_post_meta( $id, '_progress', true ) );
-					if ( $addedby == 'show' ) $this->show_addedby( get_the_author() );
-					$this->list .= '</li>';
-				endwhile;
+				$this->loop_through_todos( $user, $priority, $url, 1, $category );
 
 				$this->list .= '</'.$list_type.'>';
-			}
-
-		} else {
-			/* if there are no to-do items, display this message */
-			$this->list .= '<p>'.__( 'No items to do.', 'cleverness-to-do-list' ).'</p>';
-		}
-
-		if ( $completed == 'show' ) {
-			wp_reset_postdata();
-			// get to-do items
-			$todo_items = CTDL_Lib::get_todos( $user, -1, 1, $category );
-
-			if ( $todo_items->have_posts() ) {
-
-				if ( $type == 'table' ) {
-
-					$this->list .= '<table id="todo-list" class="todo-table">';
-					if ( $completed_title != '' ) $this->list .= '<caption>'.$completed_title.'</caption>';
-					$this->show_table_headings( 1 );
-
-					while ( $todo_items->have_posts() ) : $todo_items->the_post();
-						$id = get_the_ID();
-						$the_priority = get_post_meta( $id, '_priority', true );
-						$priority_class = '';
-						if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
-						if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
-
-						$this->list .= '<tr id="todo-'.$id.'"'.$priority_class.'>';
-						parent::show_todo_text( get_the_content(), $priority_class  );
-						if ( $priorities == 'show' ) parent::show_priority( $the_priority, $priority );
-						if ( $assigned == 'show' ) parent::show_assigned( get_post_meta( $id, '_assign', true ) );
-						if ( $deadline == 'show' ) parent::show_deadline( get_post_meta( $id, '_deadline', true ) );
-						parent::show_completed( get_post_meta( $id, '_completed', true ) );
-						if ( $progress == 'show' ) parent::show_progress( get_post_meta( $id, '_progress', true ) );
-						if ( $category == 0 ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
-						if ( $addedby == 'show' ) parent::show_addedby( get_the_author() );
-						$this->list .= '</tr>';
-					endwhile;
-
-					$this->list .= '</table>';
-
-				} elseif ( $type == 'list' ) {
-					if ( $completed_title != '') {
-						$this->list .= '<h3>'.$completed_title.'</h3>';
-					}
-					$this->list .= '<'.$list_type.'>';
-
-					while ( $todo_items->have_posts() ) : $todo_items->the_post();
-						$id = get_the_ID();
-						$the_priority = get_post_meta( $id, '_priority', true );
-						$priority_class = '';
-						if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
-						if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
-
-						$this->show_category_headings ( get_the_terms( $id, 'todocategories' ), $this->cat_id );
-
-						$this->list .= '<li>';
-						$this->show_todo_text( get_the_content(), $priority_class  );
-						if ( $priority == 'show'  ) $this->show_priority( $the_priority, $priorities );
-						if ( $assigned == 'show'  ) $this->show_assigned( get_post_meta( $id, '_assign', true ) );
-						if ( $deadline == 'show'  ) $this->show_deadline( get_post_meta( $id, '_deadline', true ) );
-						$this->list .= ' - ';
-						$this->show_completed( get_post_meta( $id, '_completed', true ) );
-						if ( $progress == 'show'  ) $this->show_progress( get_post_meta( $id, '_progress', true ) );
-						if ( $addedby == 'show'  ) $this->show_addedby( get_the_author() );
-						$this->list .= '</li>';
-					endwhile;
-
-					$this->list .= '</'.$list_type.'>';
-				}
 
 			}
+
 		}
 
 		wp_reset_postdata();
+	}
+	/**
+	 * Generate the To-Do List
+	 * @param $todo_items
+	 * @param $priority
+	 * @param $url
+	 * @param $completed
+	 * @return array $posts_to_exclude
+	 */
+	protected function show_todo_list_items( $todo_items, $priority, $url, $completed = 0 ) {
+		extract( shortcode_atts( array(
+			'title'             => '',
+			'type'              => 'list',
+			'priorities'        => 'show',
+			'assigned'          => 'show',
+			'deadline'          => 'show',
+			'progress'          => 'show',
+			'addedby'           => 'show',
+			'completed'         => '',
+			'completed_title'   => '',
+			'list_type'         => 'ol',
+			'category'          => '0'
+		), $this->atts ) );
+
+		while ( $todo_items->have_posts() ) : $todo_items->the_post();
+			$id = get_the_ID();
+			$posts_to_exclude[] = $id;
+			$the_priority = get_post_meta( $id, '_priority', true );
+			$priority_class = '';
+			if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
+			if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
+
+			if ( $type == 'list' ) $this->show_category_headings ( get_the_terms( $id, 'todocategories' ), $list_type );
+
+			if ( $type == 'table' ) {
+				$this->list .= '<tr id="todo-'.esc_attr( $id ).'"'.$priority_class.'>';
+			} else {
+				$this->list .= '<li'.$priority_class.'>';
+			}
+
+			$this->show_todo_text( get_the_content(), $type );
+			if ( $priorities == 'show' && $type == 'table' ) $this->show_priority( $the_priority, $priority );
+			if ( $assigned == 'show' ) $this->show_assigned( get_post_meta( $id, '_assign', true ), $type );
+			if ( $deadline == 'show' ) $this->show_deadline( get_post_meta( $id, '_deadline', true ), $type );
+			if ( $completed == 1 && $type == 'list' ) $this->list .= ' - ';
+			if ( $completed == 1 ) $this->show_completed( get_post_meta( $id, '_completed', true ), $type );
+			if ( $progress == 'show' ) $this->show_progress( get_post_meta( $id, '_progress', true ), $type );
+			if ( $category == 0  && $type == 'table' ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
+			if ( $addedby == 'show' ) $this->show_addedby( get_the_author(), $type );
+
+			if ( $type == 'table' ) {
+				$this->list .= '</tr>';
+			} else {
+				$this->list .= '</li>';
+			}
+		endwhile;
+
+		return $posts_to_exclude;
+
 	}
 
 	/**
@@ -492,54 +484,72 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 	}
 
 	/* show category heading only if it's the first item from that category */
-	protected function show_category_headings( $categories ) {
+	protected function show_category_headings( $categories, $list_type ) {
 		if ( CTDL_Loader::$settings['categories'] == '1' && $categories != false ) {
 			foreach ( $categories as $category ) {
 				$cat = CTDL_Categories::get_category_name( $category->term_id );
 				if ( $this->cat_id != $category->term_id  && $cat != '' ) {
-					$this->list .= '<h4>'.esc_attr( $cat ).'</h4>';
+					$this->list .= '</'.$list_type.'><h4>'.esc_attr( $cat ).'</h4><'.$list_type.'>';
 					$this->cat_id = $category->term_id;
 				}
 			}
 		}
 	}
 
-	/* show to-do item, wrapped in a span with the priority class */
-	public function show_todo_text( $todo_text, $priority_class ) {
-		$this->list .= ' <span'.$priority_class.'>'.stripslashes( $todo_text ).'</span>';
-	}
-
 	/* show who the to-do item was assigned to, if defined */
-	public function show_assigned( $assign ) {
+	public function show_assigned( $assign, $layout ) {
 		if ( ( CTDL_Loader::$settings['list_view'] == '1' && CTDL_Loader::$settings['show_only_assigned'] == '0' && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
 				( CTDL_Loader::$settings['list_view'] == '1' && CTDL_Loader::$settings['show_only_assigned'] == '1' ) && CTDL_Loader::$settings['assign'] == '0' ) {
 			$assign_user = '';
 			if ( $assign != '-1' && $assign != '' && $assign != '0' ) {
 				$assign_user = get_userdata( $assign );
-				$this->list .= ' - '.__( 'assigned to', 'cleverness-to-do-list' ).' '.esc_attr( $assign_user->display_name );
+				if ( $layout == 'table' ) {
+					$this->list .= '<td>'.esc_attr( $assign_user->display_name ).'</td>';
+				} else {
+					$this->list .= ' - '.__( 'assigned to', 'cleverness-to-do-list' ).' '.esc_attr( $assign_user->display_name );
+				}
+			} else {
+				if ( $layout == 'table' ) $this->list .= '<td></td>';
 			}
 		}
 	}
 
 	/* show who added the to-do item */
-	public function show_addedby( $author ) {
+	public function show_addedby( $author, $layout ) {
 		if ( CTDL_Loader::$settings['list_view'] == '1' && CTDL_Loader::$settings['todo_author'] == '0' ) {
 			if ( $author != '0' ) {
-				$this->list .= ' - '.__( 'added by', 'cleverness-to-do-list' ).' '.esc_attr( $author );
+				if ( $layout == 'table' ) {
+					$this->list .= '<td>'.esc_attr( $author ).'</td>';
+				} else {
+					$this->list .= ' - '.__( 'added by', 'cleverness-to-do-list' ).' '.esc_attr( $author );
+				}
 			}
 		}
 	}
 
 	/* show the deadline for the to-do item */
-	public function show_deadline( $deadline ) {
-		if ( CTDL_Loader::$settings['show_deadline'] == '1' && $deadline != '' )
-			$this->list .= ' - '.__( 'Deadline:', 'cleverness-to-do-list' ).' '.esc_attr( $deadline );
+	public function show_deadline( $deadline, $layout ) {
+		if ( CTDL_Loader::$settings['show_deadline'] == '1' && $deadline != '' ) {
+			if ( $layout == 'table' ) {
+				$this->list .= ( $deadline != '' ? sprintf( '<td>%s</td>', esc_attr( $deadline ) ) : '<td></td>' );
+			} else {
+				$this->list .= ' - '.__( 'Deadline:', 'cleverness-to-do-list' ).' '.esc_attr( $deadline );
+			}
+		} elseif ( $layout == 'table' ) {
+				$this->list .= '<td></td>';
+			}
 	}
 
 	/* show the progress of the to-do item */
-	public function show_progress( $progress ) {
+	public function show_progress( $progress, $layout ) {
 		if ( CTDL_Loader::$settings['show_progress'] == '1' && $progress != '' ) {
-			$this->list .= ' - '.esc_attr( $progress ).'%';
+			if ( $layout == 'table' ) {
+				$this->list .= ( $progress != '' ? sprintf( '<td>%d%%</td>', esc_attr( $progress ) ) : '<td></td>' );
+			} else {
+				$this->list .= ' - '.esc_attr( $progress ).'%';
+			}
+		} elseif ( $layout == 'table' ) {
+			$this->list .= '<td></td>';
 		}
 	}
 

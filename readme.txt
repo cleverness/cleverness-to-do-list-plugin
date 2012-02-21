@@ -79,7 +79,7 @@ The options are:
 * **assigned** - default is hide (0). Use 1 to show.
 * **deadline** - default is hide (0). Use 1 to show.
 * **progress** - default is hide (0). Use 1 to show.
-* **categories** - default is hide (0). Use 1 to show.
+* **category** - default is all categories (0). Use the category ID to show a specific category.
 * **addedby** - default is hide (0). Use 1 to show.
 * **editlink** - default is hide (0). Use 1 to show.
 * **todoid** - default is blank (""). Use the ID of the to-do item to display just one item.

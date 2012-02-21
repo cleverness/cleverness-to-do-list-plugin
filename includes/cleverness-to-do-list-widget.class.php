@@ -6,7 +6,7 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.0
- * @todo items aren't all showing with categories enabled
+ * @todo items aren't all showing with categories enabled due to limit and category visibility
  * @todo add option to check off items
  */
 
