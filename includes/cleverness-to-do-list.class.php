@@ -88,12 +88,18 @@ class ClevernessToDoList {
 			$categories = CTDL_Categories::get_categories();
 			$items = 0;
 			$posts_to_exclude = array();
+			$visible = 0;
 
 			foreach ( $categories as $category) {
+				if ( !is_admin() ) {
+					$visibility = get_option( 'CTDL_categories' );
+					$visible = $visibility["category_$category->term_id"];
+				}
+
 				$todo_items = CTDL_Lib::get_todos( $user, -1, $completed, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
-					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $priorities, $url, $completed ) );
+					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $priorities, $url, $completed, $visible ) );
 					$items = 1;
 				}
 			}
@@ -128,35 +134,39 @@ class ClevernessToDoList {
 
 	/**
 	 * Generate the To-Do List
-	 * @param $todo_items
-	 * @param $priorities
-	 * @param $url
-	 * @param $completed
+	 * @param object $todo_items
+	 * @param array $priorities
+	 * @param string $url
+	 * @param int $completed
+	 * @param int $visible
 	 * @return array $posts_to_exclude
 	 */
-	protected function show_todo_list_items( $todo_items, $priorities, $url, $completed = 0 ) {
+	protected function show_todo_list_items( $todo_items, $priorities, $url, $completed = 0, $visible = 0 ) {
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
 			$id = get_the_ID();
 			$posts_to_exclude[] = $id;
-			$priority = get_post_meta( $id, '_priority', true );
-			$priority_class = '';
-			if ( $priority == '0' ) $priority_class = ' class="todo-important"';
-			if ( $priority == '2' ) $priority_class = ' class="todo-low"';
 
-			$this->list .= '<tr id="todo-'.esc_attr( $id ).'"'.$priority_class.'>';
-			$this->show_id( $id );
-			$this->show_checkbox( $id, $completed );
-			$this->show_todo_text( get_the_content() );
-			$this->show_priority( $priority, $priorities );
-			$this->show_assigned( get_post_meta( $id, '_assign', true ) );
-			$this->show_deadline( get_post_meta( $id, '_deadline', true ) );
-			if ( $completed == 1 ) $this->show_completed( get_post_meta( $id, '_completed', true ) );
-			$this->show_progress( get_post_meta( $id, '_progress', true ) );
-			$this->show_category( get_the_terms( $id, 'todocategories' ) );
-			$this->show_addedby( get_the_author() );
-			$this->show_edit_link( $id, $url );
-			$this->list .= '</tr>';
+			if ( $visible == 0 ) {
+				$priority = get_post_meta( $id, '_priority', true );
+				$priority_class = '';
+				if ( $priority == '0' ) $priority_class = ' class="todo-important"';
+				if ( $priority == '2' ) $priority_class = ' class="todo-low"';
+
+				$this->list .= '<tr id="todo-'.esc_attr( $id ).'"'.$priority_class.'>';
+				$this->show_id( $id );
+				$this->show_checkbox( $id, $completed );
+				$this->show_todo_text( get_the_content() );
+				$this->show_priority( $priority, $priorities );
+				$this->show_assigned( get_post_meta( $id, '_assign', true ) );
+				$this->show_deadline( get_post_meta( $id, '_deadline', true ) );
+				if ( $completed == 1 ) $this->show_completed( get_post_meta( $id, '_completed', true ) );
+				$this->show_progress( get_post_meta( $id, '_progress', true ) );
+				$this->show_category( get_the_terms( $id, 'todocategories' ) );
+				$this->show_addedby( get_the_author() );
+				$this->show_edit_link( $id, $url );
+				$this->list .= '</tr>';
+			}
 		endwhile;
 
 		return $posts_to_exclude;

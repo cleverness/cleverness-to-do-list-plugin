@@ -8,6 +8,7 @@
  * @version 3.0
  * @todo items aren't all showing with categories enabled due to limit and category visibility
  * @todo add option to check off items
+ * @todo need to add the category sorting and loop_through_todos
  */
 
 /**
