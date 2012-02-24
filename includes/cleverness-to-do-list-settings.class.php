@@ -51,7 +51,10 @@ class CTDL_Settings {
 	}
 
 	function section_advanced_db_desc() {
-		_e( 'If you have recently upgraded and your to-do items are all visible, you can delete the custom database tables since they are no longer used.', 'cleverness-to-do-list' );
+		_e( 'If you have recently upgraded and your to-do items are all still visible, you can delete the custom database tables since they are no longer used.', 'cleverness-to-do-list' );
+		echo '<br /><em>';
+		_e( 'Please note that there is no confirmation that the tables were deleted. This page will just refresh.', 'cleverness-to-do-list' );
+		echo '</em>';
 	}
 
 

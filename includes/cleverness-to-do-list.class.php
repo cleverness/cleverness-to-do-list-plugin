@@ -87,12 +87,12 @@ class ClevernessToDoList {
 
 			$categories = CTDL_Categories::get_categories();
 			$items = 0;
-			$posts_to_exclude = array();
 			$visible = 0;
+			$posts_to_exclude = array();
+			$visibility = get_option( 'CTDL_categories' );
 
 			foreach ( $categories as $category) {
 				if ( !is_admin() ) {
-					$visibility = get_option( 'CTDL_categories' );
 					$visible = $visibility["category_$category->term_id"];
 				}
 
@@ -117,7 +117,9 @@ class ClevernessToDoList {
 					$this->list .= '<tr><td>'.__( 'No completed items.', 'cleverness-to-do-list' ).'</td></tr>';
 				}
 			}
+
 		} else {
+
 			$todo_items = CTDL_Lib::get_todos( $user, -1, $completed );
 
 			if ( $todo_items->have_posts() ) {
@@ -129,6 +131,7 @@ class ClevernessToDoList {
 					$this->list .= '<tr><td>'.__( 'No completed items.', 'cleverness-to-do-list' ).'</td></tr>';
 				}
 			}
+
 		}
 	}
 
@@ -187,7 +190,7 @@ class ClevernessToDoList {
 
 	/**
 	 * Creates the HTML for the form used to edit a to-do item
-	 * @param $todo_item Existing to-do item values
+	 * @param $todo_item
 	 * @param string $url The URL the form should be submitted to
 	 * @return string Form HTML
 	 */
@@ -221,23 +224,25 @@ class ClevernessToDoList {
 	protected function create_new_todo_form( $url ) {
 		if ( current_user_can( CTDL_Loader::$settings['add_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 
-		if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list';
+			if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list';
 
-   	 	$this->form = '<h3>'.__( 'Add New To-Do Item', 'cleverness-to-do-list' ).'</h3>';
+   	 	    $this->form = '<h3>'.__( 'Add New To-Do Item', 'cleverness-to-do-list' ).'</h3>';
 
-    	$this->form .= '<form name="addtodo" id="addtodo" action="'.$url.'" method="post">
-	  		<table class="todo-form form-table">';
-			$this->create_priority_field();
-			$this->create_assign_field();
-			$this->create_deadline_field();
-			$this->create_progress_field();
-			$this->create_category_field();
-			$this->create_todo_text_field();
-			$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
-        	<p class="submit"><input type="submit" name="submit" class="button-primary" value="'.__( 'Add To-Do Item', 'cleverness-to-do-list' ).'" /></p>';
-		$this->form .= '</form>';
+    	    $this->form .= '<form name="addtodo" id="addtodo" action="'.$url.'" method="post">
+	  		    <table class="todo-form form-table">';
+				$this->create_priority_field();
+				$this->create_assign_field();
+				$this->create_deadline_field();
+				$this->create_progress_field();
+				$this->create_category_field();
+				$this->create_todo_text_field();
+				$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
+        	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.__( 'Add To-Do Item', 'cleverness-to-do-list' ).'" /></p>';
+			$this->form .= '</form>';
 
-		return $this->form;
+			return $this->form;
+		} else {
+			return '';
 		}
 	}
 
@@ -405,7 +410,7 @@ class ClevernessToDoList {
 		if ( $permission === true ) {
 			if ( $layout == 'table' ) $this->list .= '<td>';
 			if ( $completed == 1 ) {
-				$this->list .= sprintf( '<input type="checkbox" id="cltd-%d" class="todo-checkbox completed'.$single.'" checked="checked" />', esc_attr( $id ) );
+				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox completed'.$single.'" checked="checked" />', esc_attr( $id ) );
 			} else {
 				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted'.$single.'"/>', esc_attr( $id ) );
 			}
@@ -539,8 +544,7 @@ class ClevernessToDoList {
 	 */
 	public function show_completed( $completed, $layout = 'table' ) {
 		if ( CTDL_Loader::$settings['show_completed_date'] && $completed != '0000-00-00 00:00:00' ) {
-			$date = '';
-			$date = date( CTDL_Loader::$settings['date_format'], strtotime( $completed ) );
+			$date = ( isset( $completed ) ? date( CTDL_Loader::$settings['date_format'], strtotime( $completed ) ) : '' );
 			if ( $layout == 'table' ) {
 				$this->list .= '<td>'.esc_attr( $date ).'</td>';
 			} else {
