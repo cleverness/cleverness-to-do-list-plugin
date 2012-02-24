@@ -407,7 +407,7 @@ class CTDL_Lib {
 				$permission = ( CTDL_Loader::$settings['categories'] == '1' && ( current_user_can( CTDL_Loader::$settings[$action.'_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) ? true : false );
 				break;
 			case 'todo':
-				$permission = ( current_user_can( CTDL_Loader::$settings[$action.'_capability'] ) ? true : false );
+				$permission = ( current_user_can( CTDL_Loader::$settings[$action.'_capability'] || CTDL_Loader::$settings['list_view'] == '0' ) ? true : false || CTDL_Loader::$settings['list_view'] == '0' );
 				break;
 		}
 
@@ -450,18 +450,19 @@ class CTDL_Lib {
 
 	/**
 	 * Add an Item to the Admin Menu
-	 * @param $wp_toolbar
+	 * @param $wp_admin_bar
 	 */
-	public function add_to_toolbar( $wp_toolbar ) {
-		$wp_toolbar->add_node( array(
+	public function add_to_toolbar( $wp_admin_bar ) {
+		$wp_admin_bar->add_node( array(
 			'id'    => 'todolist',
 			'title' => __( 'To-Do List', 'cleverness-to-do-list' ),
-			'href'  => get_admin_url().'admin.php?page=cleverness-to-do-list'
+			'href'  => get_admin_url().'admin.php?page=cleverness-to-do-list',
+			'parent' => false
 		) );
 
-		if ( current_user_can(CTDL_Loader::$settings['add_capability'] ) ) {
+		if ( current_user_can( CTDL_Loader::$settings['add_capability'] ) ) {
 
-			$wp_toolbar->add_node( array(
+			$wp_admin_bar->add_node( array(
 				'id'     => 'todolist-add',
 				'title'  => __( 'Add New To-Do Item', 'cleverness-to-do-list' ),
 				'parent' => 'todolist',
@@ -633,10 +634,10 @@ class CTDL_Lib {
 						add_post_meta( $post_id, '_completed', $todo->completed, true );
 
 						// add any master view statuses
-						$statuses = $wpdb->get_results( "SELECT * FROM $status_table_name WHERE 'id' = $todo->id" );
+						$statuses = $wpdb->get_results( "SELECT * FROM $status_table_name WHERE id = '$todo->id'" );
 
 						foreach ( $statuses as $status ) {
-							update_post_meta( absint( $post_id ), '_user_'.$status->user.'_status', $status->status );
+							add_post_meta( $post_id, '_user_'.$status->user.'_status', $status->status );
 						}
 
 						// add category if set
@@ -671,7 +672,7 @@ class CTDL_Lib {
 					'show_deadline'         => $the_options['show_deadline'],
 					'show_progress'         => $the_options['show_progress'],
 					'sort_order'            => $the_options['sort_order'],
-					'admin_bar'             => '1'
+					'admin_bar'             => 1
 				);
 
 				$advanced_options = array(
@@ -687,7 +688,7 @@ class CTDL_Lib {
 					'email_subject'         => $the_options['email_subject'],
 					'email_text'            => $the_options['email_text'],
 					'email_category'        => 1,
-					'show_id'               => '0',
+					'show_id'               => 0,
 				);
 
 				$permissions_options = array(
@@ -701,6 +702,18 @@ class CTDL_Lib {
 					'view_all_assigned_capability' => $the_options['view_all_assigned_capability'],
 					'add_cat_capability'           => $the_options['add_cat_capability'],
 				);
+
+				if ( $general_options['sort_order'] == 'todotext' ) {
+					$general_options['sort_order'] = 'title';
+				} elseif ( $general_options['sort_order'] == 'id' ) {
+					$general_options['sort_order'] = 'ID';
+				} elseif ( $general_options['sort_order'] == 'deadline' ) {
+					$general_options['sort_order'] = '_deadline';
+				} elseif ( $general_options['sort_order'] == 'progress' ) {
+					$general_options['sort_order'] = '_progress';
+				} elseif ( $general_options['sort_order'] == 'assign' ) {
+					$general_options['sort_order'] = '_assign';
+				}
 
 				update_option( 'CTDL_general', $general_options );
 				update_option( 'CTDL_advanced', $advanced_options );

@@ -476,8 +476,8 @@ class ClevernessToDoList {
 	 * @param string $layout
 	 */
 	public function show_assigned( $assign, $layout = 'table' ) {
-		if ( ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
-		( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1) && CTDL_Loader::$settings['assign'] == 0 ) {
+		if ( ( ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
+		( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1) ) && CTDL_Loader::$settings['assign'] == 0 ) {
 			if ( $assign != '-1' && $assign != '' && $assign != 0 ) {
 				$assign_user = get_userdata( $assign );
 				if ( $layout == 'table' ) {

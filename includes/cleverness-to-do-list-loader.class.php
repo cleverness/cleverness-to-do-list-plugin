@@ -109,7 +109,7 @@ class CTDL_Loader {
 		add_action( 'init', __CLASS__.'::load_translation_file' );
 		add_action( 'wp_ajax_cleverness_delete_todo', 'CTDL_Lib::delete_todo_callback' );
 		add_action( 'wp_ajax_cleverness_todo_complete', 'CTDL_Lib::complete_todo_callback' );
-		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', 'CTDL_Lib::add_to_toolbar', 999 );
+		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', array( 'CTDL_Lib', 'add_to_toolbar' ), 999 );
 		if ( is_admin() ) {
 			add_action( 'admin_init', __CLASS__.'::admin_init' );
 			add_action( 'admin_menu', __CLASS__.'::create_admin_menu' );
