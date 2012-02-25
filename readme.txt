@@ -8,7 +8,7 @@ Requires at least: 3.3
 Tested up to: 3.3.1
 Stable tag: 3.0
 
-Integrates a very customizable, multi-featured to-do list.
+Integrates a customizable, multi-featured to-do list.
 
 == Description ==
 
