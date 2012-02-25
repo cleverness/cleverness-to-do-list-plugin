@@ -406,7 +406,7 @@ class ClevernessToDoList {
 	 * @param string $single
 	 */
 	protected function show_checkbox( $id, $completed = NULL, $layout = 'table', $single = '' ) {
-		$permission = CTDL_LIb::check_permission( 'todo', 'complete' );
+		$permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 		if ( $permission === true ) {
 			if ( $layout == 'table' ) $this->list .= '<td>';
 			if ( $completed == 1 ) {

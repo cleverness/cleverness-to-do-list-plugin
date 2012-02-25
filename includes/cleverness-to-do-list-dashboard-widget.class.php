@@ -213,7 +213,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'view' );
 		if ( $cleverness_todo_permission === true ) {
 			$this->dashboard_settings = get_option( 'CTDL_dashboard_settings' );
-			wp_add_dashboard_widget( 'cleverness_todo', __(  'To-Do List', 'cleverness-to-do-list' ).' <a href="admin.php?page=cleverness-to-do-list">'. __( '&raquo;', 'cleverness-to-do-list' ).'</a>', array( &$this, 'dashboard_widget' ), array( &$this, 'dashboard_options' ) );
+			wp_add_dashboard_widget( 'cleverness_todo', __(  'To-Do List', 'cleverness-to-do-list' ).' <a href="admin.php?page=cleverness-to-do-list">&raquo;</a>', array( &$this, 'dashboard_widget' ), array( &$this, 'dashboard_options' ) );
 			}
 		}
 

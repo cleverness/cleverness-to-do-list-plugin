@@ -5,7 +5,7 @@ Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.3
-Tested up to: 3.3
+Tested up to: 3.3.1
 Stable tag: 3.0
 
 Integrates a very customizable, multi-featured to-do list.

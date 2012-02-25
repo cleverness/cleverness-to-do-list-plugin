@@ -123,7 +123,7 @@ class CTDL_Loader {
 	 * @static
 	 */
 	public static function load_translation_file() {
-		$plugin_path = CTDL_BASENAME.'/lang';
+		$plugin_path = CTDL_BASENAME.'/languages';
 		load_plugin_textdomain( 'cleverness-to-do-list', '', $plugin_path );
 	}
 
