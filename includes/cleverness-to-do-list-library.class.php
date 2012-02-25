@@ -486,7 +486,7 @@ class CTDL_Lib {
 	public static function install_plugin () {
 		global $wpdb, $current_user;
 		get_currentuserinfo();
-		$cleverness_todo_db_version = '3.0';
+		$cleverness_todo_db_version = '3.1';
 		include_once plugin_dir_path( __FILE__ ).'/cleverness-to-do-list-loader.class.php';
 
 		CTDL_Loader::create_taxonomies();
@@ -569,7 +569,7 @@ class CTDL_Lib {
 		} elseif ( $installed_ver != $cleverness_todo_db_version ) {
 
 			if ( !function_exists( 'is_plugin_active_for_network' ) ) require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-			if ( is_plugin_active_for_network( __FILE__ ) ) {
+			if ( is_plugin_active_for_network( CTDL_FILE ) ) {
 				$prefix = $wpdb->base_prefix;
 			} else {
 				$prefix = $wpdb->prefix;
