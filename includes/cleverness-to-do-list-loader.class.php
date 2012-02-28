@@ -5,7 +5,7 @@
  * Loads the plugin
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.0
+ * @version 3.0.3
  */
 
 /**
@@ -19,10 +19,15 @@ class CTDL_Loader {
 	public static function init() {
 
 		self::check_wp_version();
-		self::$settings = array_merge( get_option( 'CTDL_general' ), get_option( 'CTDL_advanced' ), get_option( 'CTDL_permissions' ) );
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-library.class.php';
+		self::check_plugin_version();
+		$general_options = ( get_option( 'CTDL_general' ) ? get_option( 'CTDL_general' ) : array() );
+		$advanced_options = ( get_option( 'CTDL_advanced' ) ? get_option( 'CTDL_advanced' ) : array() );
+		$permissions_options = ( get_option( 'CTDL_permissions' ) ? get_option( 'CTDL_permissions' ) : array() );
+		self::$settings = array_merge( $general_options, $advanced_options, $permissions_options );
+		self::include_files();
 		self::setup_custom_post_type();
 		self::create_taxonomies();
-		self::include_files();
 		self::call_wp_hooks();
 
 		global $ClevernessToDoList, $CTDL_Frontend_Checklist, $CTDL_Frontend_Admin;
@@ -50,6 +55,28 @@ class CTDL_Loader {
 		}
 	}
 
+	/**
+	 * Check the plugins version against the stored plugin database version and upgrade plugin if needed
+	 * @static
+	 * @since 3.0.3
+	 */
+	public static function check_plugin_version() {
+		if ( get_option( 'CTDL_db_version' ) ) {
+			$installed_ver = get_option( 'CTDL_db_version' );
+		} else {
+			$installed_ver = 0;
+		}
+
+		if ( CTDL_DB_VERSION != $installed_ver ) {
+			CTDL_Lib::install_plugin();
+		}
+	}
+
+	/**
+	 * Set up custom post types
+	 * @static
+	 * @since 3.0
+	 */
 	public static function setup_custom_post_type() {
 		register_post_type( 'todo',
 			array(
@@ -65,8 +92,12 @@ class CTDL_Loader {
 		);
 	}
 
+	/**
+	 * Setup categories
+	 * @static
+	 * @since 3.0
+	 */
 	public static function create_taxonomies() {
-
 		$labels = array(
 			'name' => _x( 'Categories', 'taxonomy general name' ),
 			'singular_name' => _x( 'Category', 'taxonomy singular name' ),
@@ -79,7 +110,6 @@ class CTDL_Loader {
 			'query_var' => false,
 			'rewrite' => false,
 		) );
-
 	}
 
 	/**
@@ -89,7 +119,6 @@ class CTDL_Loader {
 	private static function include_files() {
 
 		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list.class.php';
-		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-library.class.php';
 		if ( self::$settings['categories'] == 1 ) include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-categories.class.php';
 		if ( is_admin() ) {
 			include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-settings.class.php';

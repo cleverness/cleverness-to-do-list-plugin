@@ -5,7 +5,7 @@
  * Library of functions for the To-Do List
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.0
+ * @version 3.0.2
  */
 
 /**
@@ -486,14 +486,15 @@ class CTDL_Lib {
 	public static function install_plugin () {
 		global $wpdb, $current_user;
 		get_currentuserinfo();
-		$cleverness_todo_db_version = '3.1';
+		$cleverness_todo_db_version = '3.0.2';
 		include_once plugin_dir_path( __FILE__ ).'/cleverness-to-do-list-loader.class.php';
 
+		CTDL_Loader::setup_custom_post_type();
 		CTDL_Loader::create_taxonomies();
 
 		if ( get_option( 'CTDL_db_version' ) ) {
 			$installed_ver = get_option( 'CTDL_db_version' );
-		} elseif ( get_option( 'cleverness_todo_db_version') ) {
+		} elseif ( get_option( 'cleverness_todo_db_version' ) ) {
 			$installed_ver = get_option( 'cleverness_todo_db_version' );
 		} else {
 			$installed_ver = 0;

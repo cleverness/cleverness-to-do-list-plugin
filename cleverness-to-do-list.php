@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Cleverness To-Do List
-Version: 3.0.1
+Version: 3.0.3
 Description: Manage to-do list items on a individual or group basis with categories. Includes a dashboard widget and a sidebar widget.
 Author: C.M. Kendrick
 Author URI: http://cleverness.org
@@ -14,7 +14,7 @@ Plugin URI: http://cleverness.org/plugins/to-do-list/
  * This plugin was based on the to-do plugin by Abstract Dimensions with a patch by WordPress by Example.
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.0
+ * @version 3.0.3
  */
 
 add_action( 'init', 'cleverness_todo_loader' );
@@ -30,6 +30,7 @@ function cleverness_todo_loader() {
 	define( 'CTDL_BASENAME', plugin_basename( __FILE__ ) );
 	define( 'CTDL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 	define( 'CTDL_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+	define( 'CTDL_DB_VERSION', '3.0.3' );
 
 	include_once 'includes/cleverness-to-do-list-loader.class.php';
 	CTDL_Loader::init();
@@ -76,6 +77,7 @@ function cleverness_todo_loader() {
  * Install plugin on plugin activation
  */
 function cleverness_todo_activation() {
+	define( 'CTDL_FILE', __FILE__ );
 	include_once 'includes/cleverness-to-do-list-library.class.php';
 	CTDL_Lib::install_plugin();
 }
