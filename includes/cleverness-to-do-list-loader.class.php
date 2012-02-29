@@ -5,7 +5,7 @@
  * Loads the plugin
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.0.4
+ * @version 3.0.6
  */
 
 /**
@@ -19,7 +19,7 @@ class CTDL_Loader {
 	public static function init() {
 
 		self::check_wp_version();
-		self::check_plugin_version();
+		//self::check_plugin_version();
 		$general_options = ( get_option( 'CTDL_general' ) ? get_option( 'CTDL_general' ) : array() );
 		$advanced_options = ( get_option( 'CTDL_advanced' ) ? get_option( 'CTDL_advanced' ) : array() );
 		$permissions_options = ( get_option( 'CTDL_permissions' ) ? get_option( 'CTDL_permissions' ) : array() );
@@ -68,7 +68,7 @@ class CTDL_Loader {
 
 		if ( CTDL_DB_VERSION != $installed_ver ) {
 
-			if ( CTDL_PLUGIN_VERSION != '3.0.4' && $installed_ver != '3.1' ) cleverness_todo_activation();
+			if ( CTDL_PLUGIN_VERSION != '3.0.6' && ( $installed_ver != '3.0' || $installed_ver != '3.1' || $installed_ver != '3.0.2' || $installed_ver != '3.0.3' ) ) cleverness_todo_activation();
 		}
 	}
 
