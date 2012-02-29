@@ -5,7 +5,7 @@
  * Loads the plugin
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.0.3
+ * @version 3.0.4
  */
 
 /**
@@ -19,7 +19,6 @@ class CTDL_Loader {
 	public static function init() {
 
 		self::check_wp_version();
-		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-library.class.php';
 		self::check_plugin_version();
 		$general_options = ( get_option( 'CTDL_general' ) ? get_option( 'CTDL_general' ) : array() );
 		$advanced_options = ( get_option( 'CTDL_advanced' ) ? get_option( 'CTDL_advanced' ) : array() );
@@ -68,7 +67,8 @@ class CTDL_Loader {
 		}
 
 		if ( CTDL_DB_VERSION != $installed_ver ) {
-			CTDL_Lib::install_plugin();
+
+			if ( CTDL_PLUGIN_VERSION != '3.0.4' && $installed_ver != '3.1' ) cleverness_todo_activation();
 		}
 	}
 
@@ -117,7 +117,7 @@ class CTDL_Loader {
 	 * @static
 	 */
 	private static function include_files() {
-
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-library.class.php';
 		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list.class.php';
 		if ( self::$settings['categories'] == 1 ) include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-categories.class.php';
 		if ( is_admin() ) {
@@ -127,7 +127,6 @@ class CTDL_Loader {
 		} else {
 			include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-frontend.class.php';
 		}
-
 	}
 
 	/**

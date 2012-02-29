@@ -486,7 +486,7 @@ class CTDL_Lib {
 	public static function install_plugin () {
 		global $wpdb, $current_user;
 		get_currentuserinfo();
-		$cleverness_todo_db_version = '3.0.2';
+		$cleverness_todo_db_version = '3.0.3'; // also update in main file
 		include_once plugin_dir_path( __FILE__ ).'/cleverness-to-do-list-loader.class.php';
 
 		CTDL_Loader::setup_custom_post_type();
@@ -711,11 +711,12 @@ class CTDL_Lib {
 				update_option( 'CTDL_general', $general_options );
 				update_option( 'CTDL_advanced', $advanced_options );
 				update_option( 'CTDL_permissions', $permissions_options );
-				update_option( 'CTDL_db_version', $cleverness_todo_db_version );
 				delete_option( 'atd_db_version' );
 				delete_option( 'cleverness_todo_db_version' );
 				delete_option( 'cleverness_todo_settings' );
 			}
+
+			update_option( 'CTDL_db_version', $cleverness_todo_db_version );
 		}
 	}
 
