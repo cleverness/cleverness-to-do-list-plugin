@@ -209,24 +209,13 @@ class CTDL_Lib {
 
 			if ( isset( $_POST['cat'] ) ) wp_set_post_terms( $post_id, absint( $_POST['cat'] ), 'todocategories', false);
 			add_post_meta( $post_id, '_status', 0, true );
-			add_post_meta( $post_id, '_priority', $_POST['cleverness_todo_priority'], true );
-			if ( isset( $_POST['cleverness_todo_assign'] ) ) {
-				$assign = esc_attr( $_POST['cleverness_todo_assign'] );
-			} else {
-				$assign = -1;
-			}
+			$priority = ( isset( $_POST['cleverness_todo_priority'] ) ? absint( $_POST['cleverness_todo_priority'] ) : 1 );
+			add_post_meta( $post_id, '_priority', $priority, true );
+			$assign = ( isset( $_POST['cleverness_todo_assign'] ) ? esc_attr( $_POST['cleverness_todo_assign'] ) : -1 );
 			add_post_meta( $post_id, '_assign', $assign, true );
-			if ( isset( $_POST['cleverness_todo_deadline'] ) ) {
-				$deadline = esc_attr( $_POST['cleverness_todo_deadline'] );
-			} else {
-				$deadline = '';
-			}
+			$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ? esc_attr( $_POST['cleverness_todo_deadline'] ) : '' );
 			add_post_meta( $post_id, '_deadline', $deadline, true );
-			if ( isset( $_POST['cleverness_todo_progress'] ) ) {
-				$progress = absint( $_POST['cleverness_todo_progress'] );
-			} else {
-				$progress = 0;
-			}
+			$progress = ( isset( $_POST['cleverness_todo_progress'] ) ? absint( $_POST['cleverness_todo_progress'] ) : 0 );
 			add_post_meta( $post_id, '_progress', $progress, true );
 
 		}
@@ -551,7 +540,7 @@ class CTDL_Lib {
 
 				self::set_options( $installed_version );
 
-				// update db version to current versiondsad
+				// update db version to current versions
 				update_option( 'CTDL_db_version', CTDL_DB_VERSION );
 
 			}

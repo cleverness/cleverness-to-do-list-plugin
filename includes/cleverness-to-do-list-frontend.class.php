@@ -12,6 +12,7 @@
  * Frontend class for to-do list administration
  * @package cleverness-to-do-list
  * @subpackage includes
+ * @todo adding and editing items not working - something with urls
  */
 class CTDL_Frontend_Admin extends ClevernessToDoList {
 	protected $atts;
@@ -109,7 +110,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 	 * Creates the HTML for the To-Do List Table Headings
 	 * @param $completed
 	 */
-	protected function show_table_headings( $completed = 0 ) {
+	public function show_table_headings( $completed = 0 ) {
 		extract( shortcode_atts( array(
 			'priority'   => 0,
 			'assigned'   => 0,
@@ -141,6 +142,90 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		/** @var $editlink int */
 		if ( $editlink == 1 && current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) $this->list .= '<th>' . __( 'Action', 'cleverness-to-do-list' ) . '</th>';
 		$this->list .= '</tr></thead>';
+	}
+
+	/**
+	 * Creates the HTML for the form used to edit a to-do item
+	 * @param $todo_item
+	 * @param string $url The URL the form should be submitted to
+	 * @return string Form HTML
+	 */
+	public function create_edit_todo_form( $todo_item, $url ) {
+		extract( shortcode_atts( array(
+			'priority'   => 0,
+			'assigned'   => 0,
+			'deadline'   => 0,
+			'progress'   => 0,
+			'categories' => 0,
+			'addedby'    => 0,
+			'editlink'   => 1
+		), $this->atts ) );
+
+		$id = $todo_item->ID;
+		$url = strtok( $url, "?" );
+		$this->form = '';
+
+		$this->form .= '<form name="edittodo" id="edittodo" action="'.$url.'" method="post"><table class="todo-form form-table">';
+		/** @var $priority int */
+		if ( $priority == 1 ) $this->create_priority_field( get_post_meta( $id, '_priority', true ) );
+		/** @var $assigned int */
+		if ( $assigned == 1 ) $this->create_assign_field( get_post_meta( $id, '_assign', true ) );
+		/** @var $deadline int */
+		if ( $deadline == 1 ) $this->create_deadline_field( get_post_meta( $id, '_deadline', true ) );
+		/** @var $progress int */
+		if ( $progress == 1 ) $this->create_progress_field( get_post_meta( $id, '_progress', true ) );
+		/** @var $categories int */
+		if ( $categories == 1 ) $this->create_category_field( get_the_terms( $id, 'todocategories' ) );
+		$this->create_todo_text_field( $todo_item->post_content );
+		$this->form .= '</table>'.wp_nonce_field( 'todoupdate', 'todoupdate', true, false ).'<input type="hidden" name="action" value="updatetodo" />
+        	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.__( 'Edit To-Do Item', 'cleverness-to-do-list' ).'" /></p>
+				<input type="hidden" name="id" value="'. absint( $id ).'" />';
+		$this->form .= '</form>';
+
+		return $this->form;
+	}
+
+	/**
+	 * Creates the HTML form to add a new to-do item
+	 * @param string $url
+	 * @return string Form HTML
+	 */
+	protected function create_new_todo_form( $url ) {
+		if ( current_user_can( CTDL_Loader::$settings['add_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
+
+			extract( shortcode_atts( array(
+				'priority'   => 0,
+				'assigned'   => 0,
+				'deadline'   => 0,
+				'progress'   => 0,
+				'categories' => 0,
+				'addedby'    => 0,
+				'editlink'   => 1
+			), $this->atts ) );
+
+			$this->form = '<h3>'.__( 'Add New To-Do Item', 'cleverness-to-do-list' ).'</h3>';
+
+			$this->form .= '<form name="addtodo" id="addtodo" action="'.$url.'" method="post">
+	  		    <table class="todo-form form-table">';
+			/** @var $priority int */
+			if ( $priority == 1 ) $this->create_priority_field();
+			/** @var $assigned int */
+			if ( $assigned == 1 ) $this->create_assign_field();
+			/** @var $deadline int */
+			if ( $deadline == 1 ) $this->create_deadline_field();
+			/** @var $progress int */
+			if ( $progress == 1 ) $this->create_progress_field();
+			/** @var $categories int */
+			if ( $categories == 1 ) $this->create_category_field();
+			$this->create_todo_text_field();
+			$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
+        	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.__( 'Add To-Do Item', 'cleverness-to-do-list' ).'" /></p>';
+			$this->form .= '</form>';
+
+			return $this->form;
+		} else {
+			return '';
+		}
 	}
 
 }

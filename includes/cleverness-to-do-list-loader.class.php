@@ -134,7 +134,6 @@ class CTDL_Loader {
 	 * @static
 	 */
 	private static function call_wp_hooks() {
-		add_action( 'init', __CLASS__.'::load_translation_file' );
 		add_action( 'wp_ajax_cleverness_delete_todo', 'CTDL_Lib::delete_todo_callback' );
 		add_action( 'wp_ajax_cleverness_todo_complete', 'CTDL_Lib::complete_todo_callback' );
 		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', array( 'CTDL_Lib', 'add_to_toolbar' ), 999 );
@@ -144,15 +143,6 @@ class CTDL_Loader {
 			add_filter( 'plugin_action_links', 'CTDL_Lib::add_settings_link', 10, 2 );
 			if ( self::$settings['categories'] ==1 ) add_action( 'admin_init', 'CTDL_Categories::initialize_categories' );
 		}
-	}
-
-	/**
-	 * Loads translation files
-	 * @static
-	 */
-	public static function load_translation_file() {
-		$plugin_path = CTDL_BASENAME.'/languages';
-		load_plugin_textdomain( 'cleverness-to-do-list', '', $plugin_path );
 	}
 
 	/**

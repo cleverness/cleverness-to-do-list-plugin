@@ -133,6 +133,10 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Changelog ==
 
+= 3.0.7 =
+* Fixed translations not loading
+* Changed plugin activation set-up
+
 = 3.0.6 =
 * Removed code that was causing the duplicated to-dos (it was the code for checking to see if the plugin database version matched the one stored in an option)
 
@@ -315,6 +319,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Fixed to work in WordPress 2.8
 
 == Upgrade Notice ==
+
+= 3.0.7 =
+Bug fix
 
 = 3.0.6 =
 Bug fix

@@ -14,7 +14,7 @@ Plugin URI: http://cleverness.org/plugins/to-do-list/
  * This plugin was based on the to-do plugin by Abstract Dimensions with a patch by WordPress by Example.
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.0.4
+ * @version 3.0.7
  */
 
 add_action( 'init', 'cleverness_todo_loader' );
@@ -27,11 +27,13 @@ include_once 'includes/cleverness-to-do-list-widget.class.php';
 function cleverness_todo_loader() {
 
 	define( 'CTDL_DB_VERSION', '3.0.3' ); // also update in cleverness_todo_activation
-	define( 'CTDL_PLUGIN_VERSION', '3.0.6' );
+	define( 'CTDL_PLUGIN_VERSION', '3.0.7' );
 	define( 'CTDL_FILE', __FILE__ );
 	define( 'CTDL_BASENAME', plugin_basename( __FILE__ ) );
 	define( 'CTDL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 	define( 'CTDL_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+	$plugin_path = plugin_basename( dirname( __FILE__ ) .'/languages' );
+	load_plugin_textdomain( 'cleverness-to-do-list', '', $plugin_path );
 
 	include_once 'includes/cleverness-to-do-list-loader.class.php';
 	CTDL_Loader::init();
