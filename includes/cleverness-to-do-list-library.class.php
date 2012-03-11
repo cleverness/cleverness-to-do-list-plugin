@@ -551,7 +551,7 @@ class CTDL_Lib {
 
 				self::set_options( $installed_version );
 
-				// update db version to current version
+				// update db version to current versiondsad
 				update_option( 'CTDL_db_version', CTDL_DB_VERSION );
 
 			}
