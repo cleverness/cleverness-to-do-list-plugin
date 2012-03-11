@@ -137,6 +137,7 @@ class CTDL_Help {
 		<hr/>
 
 		<h4><?php _e( 'Display a To-Do List Administration Area', 'cleverness-to-do-list' ); ?></h4>
+		<p><em>This features only works with permalinks enabled.</em></p>
 		<p><strong>&#91;todoadmin&#93;</strong></p>
 
 		<ul>

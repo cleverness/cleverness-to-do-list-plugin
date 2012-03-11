@@ -12,7 +12,6 @@
  * Frontend class for to-do list administration
  * @package cleverness-to-do-list
  * @subpackage includes
- * @todo adding and editing items not working - something with urls
  */
 class CTDL_Frontend_Admin extends ClevernessToDoList {
 	protected $atts;

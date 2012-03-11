@@ -91,6 +91,7 @@ Set the title to "My To-Do List" and show the deadline and the category.
 [todoadmin title="My To-Do List" deadline=1 categories=1]
 
 = What is the shortcode to display the administration page in the front-end? =
+Permalinks must be enabled on the site to be able to use this feature.
 [todoadmin]
 
 The options are:
@@ -136,6 +137,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 = 3.0.7 =
 * Fixed translations not loading
 * Changed plugin activation set-up
+* Fixed issues with fields that should be hidden appearing when using the todoadmin shortcode
 
 = 3.0.6 =
 * Removed code that was causing the duplicated to-dos (it was the code for checking to see if the plugin database version matched the one stored in an option)
