@@ -134,7 +134,10 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Changelog ==
 
-= 3.0.7 =
+= 3.1 =
+* Added button under Settings to delete all to-do items
+* Added setting to show who assigned the to-do item in email
+* Fixed master view not showing only assigned items
 * Fixed translations not loading
 * Changed plugin activation set-up
 * Fixed issues with fields that should be hidden appearing when using the todoadmin shortcode
@@ -322,8 +325,8 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Upgrade Notice ==
 
-= 3.0.7 =
-Bug fix
+= 3.1 =
+Bug fix, new features
 
 = 3.0.6 =
 Bug fix

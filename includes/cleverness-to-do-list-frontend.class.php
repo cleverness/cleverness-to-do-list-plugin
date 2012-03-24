@@ -75,10 +75,9 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			$posts_to_exclude[] = $id;
 
 			if ( $visible == 0 ) {
-				$the_priority = get_post_meta( $id, '_priority', true );
-				$priority_class = '';
-				if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
-				if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
+				list( $the_priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
+
+				$priority_class = CTDL_Lib::set_priority_class( $the_priority );
 
 				$this->list .= '<tr id="todo-'.esc_attr( $id ).'"' . $priority_class . '>';
 				$this->show_checkbox( $id, $completed );
@@ -87,11 +86,11 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 				/** @var $priority int */
 				if ( $priority == 1 ) $this->show_priority( $the_priority, $priorities );
 				/** @var $assigned int */
-				if ( $assigned == 1 ) $this->show_assigned( get_post_meta( $id, '_assign', true ) );
+				if ( $assigned == 1 ) $this->show_assigned( $assign_meta );
 				/** @var $deadline int */
-				if ( $deadline == 1 ) $this->show_deadline( get_post_meta( $id, '_deadline', true ) );
+				if ( $deadline == 1 ) $this->show_deadline( $deadline_meta );
 				/** @var $progress int */
-				if ( $progress == 1 ) $this->show_progress( get_post_meta( $id, '_progress', true ) );
+				if ( $progress == 1 ) $this->show_progress( $progress_meta );
 				/** @var $categories int */
 				if ( $categories == 1 ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
 				/** @var $addedby int */
@@ -359,10 +358,9 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			$posts_to_exclude[] = $id;
 
 			if ( $visible == 0 ) {
-				$the_priority = get_post_meta( $id, '_priority', true );
-				$priority_class = '';
-				if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
-				if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
+				list( $the_priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
+
+				$priority_class = CTDL_Lib::set_priority_class( $the_priority );
 
 				$this->show_category_headings ( get_the_terms( $id, 'todocategories' ), $this->cat_id );
 
@@ -373,11 +371,11 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 				/** @var $priority int */
 				if ( $priority == 1 ) $this->show_priority( $the_priority, $priorities );
 				/** @var $assigned int */
-				if ( $assigned == 1 ) $this->show_assigned( get_post_meta( $id, '_assign', true ) );
+				if ( $assigned == 1 ) $this->show_assigned( $assign_meta );
 				/** @var $deadline int */
-				if ( $deadline == 1 ) $this->show_deadline( get_post_meta( $id, '_deadline', true ) );
+				if ( $deadline == 1 ) $this->show_deadline( $deadline_meta );
 				/** @var $progress int */
-				if ( $progress == 1 ) $this->show_progress( get_post_meta( $id, '_progress', true ) );
+				if ( $progress == 1 ) $this->show_progress( $progress_meta );
 				/** @var $addedby int */
 				if ( $addedby == 1 ) $this->show_addedby( get_the_author() );
 				$this->list .= '</p>';
@@ -583,10 +581,9 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 			$posts_to_exclude[] = $id;
 
 			if ( $visible == 0 ) {
-				$the_priority = get_post_meta( $id, '_priority', true );
-				$priority_class = '';
-				if ( $the_priority == '0' ) $priority_class = ' class="todo-important"';
-				if ( $the_priority == '2' ) $priority_class = ' class="todo-low"';
+				list( $the_priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
+
+				$priority_class = CTDL_Lib::set_priority_class( $the_priority );
 
 				/** @var $type string */
 				if ( $type == 'list' ) {
@@ -604,13 +601,13 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				/** @var $priorities string */
 				if ( $priorities == 'show' && $type == 'table' ) $this->show_priority( $the_priority, $priority );
 				/** @var $assigned string */
-				if ( $assigned == 'show' ) $this->show_assigned( get_post_meta( $id, '_assign', true ), $type );
+				if ( $assigned == 'show' ) $this->show_assigned( $assign_meta, $type );
 				/** @var $deadline string */
-				if ( $deadline == 'show' ) $this->show_deadline( get_post_meta( $id, '_deadline', true ), $type );
+				if ( $deadline == 'show' ) $this->show_deadline( $deadline_meta, $type );
 				if ( $completed == 1 && $type == 'list' ) $this->list .= ' - ';
-				if ( $completed == 1 ) $this->show_completed( get_post_meta( $id, '_completed', true ), $type );
+				if ( $completed == 1 ) $this->show_completed( $completed_meta, $type );
 				/** @var $progress string */
-				if ( $progress == 'show' ) $this->show_progress( get_post_meta( $id, '_progress', true ), $type );
+				if ( $progress == 'show' ) $this->show_progress( $progress_meta, $type );
 				/** @var $category string */
 				if ( $category == 0  && $type == 'table' ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
 				/** @var $addedby string */

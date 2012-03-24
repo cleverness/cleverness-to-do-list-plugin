@@ -125,6 +125,10 @@ class CTDL_Widget extends WP_Widget {
 			$posts_to_exclude[] = $id;
 			$visible = 0;
 
+			list( $priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
+
+			$priority_class = CTDL_Lib::set_priority_class( $priority );
+
 			if ( CTDL_Loader::$settings['categories'] == '1' && $category == '0' ) {
 				$cats = get_the_terms( $id, 'todocategories' );
 				if ( $cats != NULL ) {
@@ -140,20 +144,20 @@ class CTDL_Widget extends WP_Widget {
 
 			if ( $visible == 0 ) {
 
-				$ClevernessToDoList->list .= '<li>';
+				$ClevernessToDoList->list .= '<li class="'.$priority_class.'">';
 				$ClevernessToDoList->show_todo_text( get_the_content(), $layout );
-				if ( $progress == 1  && get_post_meta( $id, '_progress', true ) != '' ) {
+				if ( $progress == 1  && $progress_meta != '' ) {
 					$ClevernessToDoList->list .= ' - ';
-					$ClevernessToDoList->show_progress( get_post_meta( $id, '_progress', true ), $layout );
+					$ClevernessToDoList->show_progress( $progress_meta, $layout );
 				}
-				if ( $deadline == 1 && get_post_meta( $id, '_deadline', true ) != '' ) {
-					$ClevernessToDoList->list .= '<br /><span class="deadline">'.__('Deadline: ', 'cleverness-to-do-list');
-					$ClevernessToDoList->show_deadline( get_post_meta( $id, '_deadline', true ), $layout );
+				if ( $deadline == 1 && $deadline_meta != '' ) {
+					$ClevernessToDoList->list .= '<br /><span class="deadline">'.__( 'Deadline: ', 'cleverness-to-do-list' );
+					$ClevernessToDoList->show_deadline( $deadline_meta, $layout );
 					$ClevernessToDoList->list .= '</span>';
 				}
-				if ( $assigned_to == 1 && CTDL_Loader::$settings['list_view'] != '2' && get_post_meta( $id, '_assign', true ) != -1 ) {
-					$ClevernessToDoList->list .= '<br /><span class="assigned">'.__('Assigned to ', 'cleverness-to-do-list');
-					$ClevernessToDoList->show_assigned( get_post_meta( $id, '_assign', true ), $layout );
+				if ( $assigned_to == 1 && CTDL_Loader::$settings['list_view'] != '2' && $assign_meta != -1 ) {
+					$ClevernessToDoList->list .= '<br /><span class="assigned">'.__( 'Assigned to ', 'cleverness-to-do-list' );
+					$ClevernessToDoList->show_assigned( $assign_meta, $layout );
 					$ClevernessToDoList->list .= '</span>';
 				}
 				$ClevernessToDoList->list .= '</li>';

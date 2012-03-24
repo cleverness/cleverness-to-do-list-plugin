@@ -106,10 +106,9 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 
 			$id = get_the_ID();
 			$posts_to_exclude[] = $id;
-			$priority = get_post_meta( $id, '_priority', true );
-			$priority_class = '';
-			if ( $priority == '0' ) $priority_class = ' class="todo-important"';
-			if ( $priority == '2' ) $priority_class = ' class="todo-low"';
+			list( $priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
+
+			$priority_class = CTDL_Lib::set_priority_class( $priority );
 
 			if ( CTDL_Loader::$settings['categories'] == '1' && $cat_id != 1 ) {
 				$cats = get_the_terms( $id, 'todocategories' );
@@ -126,21 +125,21 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			$this->show_todo_text( get_the_content() );
 			if ( ( CTDL_Loader::$settings['list_view'] == '1' && CTDL_Loader::$settings['show_only_assigned'] == '0' && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||  ( CTDL_Loader::$settings['list_view'] == '1' && CTDL_Loader::$settings['show_only_assigned'] == '1') && CTDL_Loader::$settings['assign'] == '0' ) {
 				$assign_user = '';
-				if ( get_post_meta( $id, '_assign', true ) != '-1' && get_post_meta( $id, '_assign', true ) != '' && get_post_meta( $id, '_assign', true ) != '0') {
-					$assign_user = get_userdata( get_post_meta( $id, '_assign', true ) );
+				if ( $assign_meta != '-1' && $assign_meta != '0') {
+					$assign_user = get_userdata( $assign_meta );
 					$this->list .= ' <small>['.__( 'assigned to', 'cleverness-to-do-list' ).' ';
-					$this->show_assigned( get_post_meta( $id, '_assign', true ) );
+					$this->show_assigned( $assign_meta );
 					$this->list .= ']</small>';
 				}
 			}
-			if ( $this->dashboard_settings['show_dashboard_deadline'] == '1' && get_post_meta( $id, '_deadline', true ) != NULL ) {
+			if ( $this->dashboard_settings['show_dashboard_deadline'] == '1' && $deadline_meta != '' ) {
 				$this->list .=  ' <small>['.__( 'Deadline:', 'cleverness-to-do-list' );
-				$this->show_deadline( get_post_meta( $id, '_deadline', true ) );
+				$this->show_deadline( $deadline_meta );
 				$this->list .= ']</small>';
 			}
-			if ( CTDL_Loader::$settings['show_progress'] == '1' && get_post_meta( $id, '_progress', true ) != '' ) {
+			if ( CTDL_Loader::$settings['show_progress'] == '1' && $progress_meta != '' ) {
 				$this->list .= ' <small>[';
-				$this->show_progress( get_post_meta( $id, '_progress', true ) );
+				$this->show_progress( $progress_meta );
 				$this->list .= ']</small>';
 			}
 			if ( CTDL_Loader::$settings['list_view'] == '1' && $this->dashboard_settings['dashboard_author'] == '0' ) {

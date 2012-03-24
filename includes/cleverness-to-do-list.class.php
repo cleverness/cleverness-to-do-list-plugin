@@ -40,7 +40,7 @@ class ClevernessToDoList {
 		if ( is_admin() ) $this->list .= '<h3>'.__( 'To-Do Items', 'cleverness-to-do-list' );
 		if ( current_user_can( CTDL_Loader::$settings['add_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 			$this->list .= ' (<a href="#addtodo">'.__( 'Add New Item', 'cleverness-to-do-list' ).'</a>)';
-		 	}
+		}
 		if ( is_admin() ) $this->list .= '</h3>';
 
 		$this->list .= '<table id="todo-list" class="todo-table widefat">';
@@ -52,6 +52,7 @@ class ClevernessToDoList {
 
 		/* Show completed items in admin */
 		if ( is_admin() ) {
+			wp_reset_postdata();
 			$this->list .= '<h3>'.__( 'Completed Items', 'cleverness-to-do-list' );
 			if ( current_user_can( CTDL_Loader::$settings['purge_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 				$cleverness_todo_purge_nonce = wp_create_nonce( 'todopurge' );
@@ -83,6 +84,7 @@ class ClevernessToDoList {
 	 * @param int $cat_id
 	 */
 	protected function loop_through_todos( $user, $priorities, $url, $completed = 0, $cat_id = 0 ) {
+		// if categories are enabled and sort order is set to cat id and we're not getting todos for a specific category
 		if ( CTDL_Loader::$settings['categories'] == '1' && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $cat_id == 0 ) {
 
 			$categories = CTDL_Categories::get_categories();
@@ -151,20 +153,19 @@ class ClevernessToDoList {
 			$posts_to_exclude[] = $id;
 
 			if ( $visible == 0 ) {
-				$priority = get_post_meta( $id, '_priority', true );
-				$priority_class = '';
-				if ( $priority == '0' ) $priority_class = ' class="todo-important"';
-				if ( $priority == '2' ) $priority_class = ' class="todo-low"';
+				list( $priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
+
+				$priority_class = CTDL_Lib::set_priority_class( $priority );
 
 				$this->list .= '<tr id="todo-'.esc_attr( $id ).'"'.$priority_class.'>';
 				$this->show_id( $id );
 				$this->show_checkbox( $id, $completed );
 				$this->show_todo_text( get_the_content() );
 				$this->show_priority( $priority, $priorities );
-				$this->show_assigned( get_post_meta( $id, '_assign', true ) );
-				$this->show_deadline( get_post_meta( $id, '_deadline', true ) );
-				if ( $completed == 1 ) $this->show_completed( get_post_meta( $id, '_completed', true ) );
-				$this->show_progress( get_post_meta( $id, '_progress', true ) );
+				$this->show_assigned( $assign_meta );
+				$this->show_deadline( $deadline_meta );
+				if ( $completed == 1 ) $this->show_completed( $completed_meta );
+				$this->show_progress( $progress_meta );
 				$this->show_category( get_the_terms( $id, 'todocategories' ) );
 				$this->show_addedby( get_the_author() );
 				$this->show_edit_link( $id, $url );

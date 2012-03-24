@@ -36,7 +36,7 @@ jQuery( document ).ready( function( $ ) {
 
 	/* Delete All Todos */
 	$( '#delete-all-todos' ).live( 'click', function () {
-		var confirmed = confirm( ctdl.CONFIRMATION_ALL_MSG );
+		var confirmed = confirm( ctdl.CONFIRMATION_DELETE_ALL_MSG );
 		if ( confirmed == false ) return;
 	} );
 

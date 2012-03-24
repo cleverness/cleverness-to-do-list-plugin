@@ -223,6 +223,7 @@ class CTDL_Loader {
 			'PERMISSION_MSG' => __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' ),
 			'CONFIRMATION_MSG' => __( "You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 			'CONFIRMATION_ALL_MSG' => __( "You are about to permanently delete all completed items. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
+			'CONFIRMATION_DELETE_ALL_MSG' => __( "You are about to permanently delete all to-do items. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 			'CONFIRMATION_DEL_TABLES_MSG' => __( "You are about to permanently delete database tables. This cannot be undone. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 			'NONCE' => wp_create_nonce( 'cleverness-todo' ),
 			'AJAX_URL' => admin_url( 'admin-ajax.php' )

@@ -13,7 +13,8 @@
  * @package cleverness-to-do-list
  * @subpackage includes
  * @link http://theme.fm/2011/10/how-to-create-tabs-with-the-settings-api-in-wordpress-2590/
- * @todo add delete todos button.. delete duplicates button?
+ * @todo delete duplicates button?
+ * @todo add import/export feature for to-dos
 */
 class CTDL_Settings {
 	private $general_key = 'CTDL_general';
@@ -52,10 +53,11 @@ class CTDL_Settings {
 	}
 
 	function section_advanced_db_desc() {
-		_e( 'If you have recently upgraded and your to-do items are all still visible, you can delete the custom database tables since they are no longer used.', 'cleverness-to-do-list' );
+		_e( 'If you have recently upgraded and your to-do items are all still visible, you can delete the custom database tables since they are no longer used. You can also delete all your to-do items here.', 'cleverness-to-do-list' );
 		echo '<br /><em>';
-		_e( 'Please note that there is no confirmation that the tables were deleted. This page will just refresh.', 'cleverness-to-do-list' );
+		_e( 'Please note that there is no confirmation that the tables or items were deleted. This page will just refresh.', 'cleverness-to-do-list' );
 		echo '</em>';
+		echo '<br /><strong>'.__( 'These actions cannot be undone. Please be sure you want to proceed. It is advised that you back up your database first.', 'cleverness-to-do-list' ).'</strong>';
 	}
 
 
@@ -170,11 +172,12 @@ class CTDL_Settings {
 		add_settings_field( 'user_roles', __( 'User Roles Allowed', 'cleverness-to-do-list' ), array( &$this, 'user_roles_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_assigned', __( 'Email Assigned To-Do Items to User', 'cleverness-to-do-list' ), array( &$this, 'email_assigned_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_category', __( 'Add Category to Subject', 'cleverness-to-do-list' ), array( &$this, 'email_category_option' ), $this->advanced_key, 'section_advanced_assign' );
+		add_settings_field( 'email_show_assigned_by', __( 'Show Who Assigned the To-Do Item in Email', 'cleverness-to-do-list' ), array( &$this, 'email_show_assigned_by_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_from', __( 'From Field for Emails Sent to User', 'cleverness-to-do-list' ), array( &$this, 'email_from_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_subject', __( 'Subject Field for Emails Sent to User', 'cleverness-to-do-list' ), array( &$this, 'email_subject_option' ), $this->advanced_key,
 			'section_advanced_assign' );
 		add_settings_field( 'email_text', __( 'Text in Emails Sent to User', 'cleverness-to-do-list' ), array( &$this, 'email_text_option' ), $this->advanced_key, 'section_advanced_assign' );
-		add_settings_section( 'section_advanced_database', __( 'Remove Database Tables', 'cleverness-to-do-list' ), array( &$this, 'section_advanced_db_desc' ), $this->advanced_key );
+		add_settings_section( 'section_advanced_database', __( 'Database Cleanup', 'cleverness-to-do-list' ), array( &$this, 'section_advanced_db_desc' ), $this->advanced_key );
 	}
 
 	function date_format_option() { ?>
@@ -249,6 +252,14 @@ class CTDL_Settings {
 	<?php
 	}
 
+	function email_show_assigned_by_option() { ?>
+	<select name="<?php echo $this->advanced_key; ?>[email_show_assigned_by]">
+		<option value="0"<?php if ( $this->advanced_settings['email_show_assigned_by'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+		<option value="1"<?php if ( $this->advanced_settings['email_show_assigned_by'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
+	</select>
+	<?php
+	}
+
 	function email_from_option() { ?>
 		<input class="regular-text" type="text" name="<?php echo $this->advanced_key; ?>[email_from]" value="<?php echo $this->advanced_settings['email_from']; ?>" />
 	<?php
@@ -313,7 +324,10 @@ class CTDL_Settings {
 			<?php wp_nonce_field( 'update-options' ); ?>
 			<?php settings_fields( $tab ); ?>
 			<?php do_settings_sections( $tab ); ?>
-			<?php if ( $tab == $this->advanced_key ) $this->show_delete_tables_button(); ?>
+			<?php if ( $tab == $this->advanced_key ) {
+				$this->show_delete_tables_button();
+				$this->show_delete_todos_button();
+			} ?>
 			<?php submit_button(); ?>
 		</form>
 	</div>
@@ -342,7 +356,13 @@ class CTDL_Settings {
 	function show_delete_tables_button() {
 		$cleverness_todo_delete_tables_nonce = wp_create_nonce( 'tododeletetables' );
 		$url = get_admin_url().'admin.php?page=cleverness-to-do-list-settings&amp;&tab=CTDL_advanced&amp;action=deletetables&_wpnonce='.esc_attr( $cleverness_todo_delete_tables_nonce );
-		echo '<p><a class="button-secondary" href="'.$url.'" title="'.__( 'Delete Tables' ).'>" id="delete-tables">'.__( 'Delete Tables' ).'</a></p>';
+		echo '<p><a class="button-secondary" href="'.$url.'" title="'.__( 'Delete Tables', 'cleverness-to-do-list' ).'>" id="delete-tables">'.__( 'Delete Tables', 'cleverness-to-do-list' ).'</a></p>';
+	}
+
+	function show_delete_todos_button() {
+		$cleverness_todo_delete_todos_nonce = wp_create_nonce( 'tododeletetodos' );
+		$url = get_admin_url().'admin.php?page=cleverness-to-do-list-settings&amp;&tab=CTDL_advanced&amp;action=deletealltodos&_wpnonce='.esc_attr( $cleverness_todo_delete_todos_nonce );
+		echo '<p><a class="button-secondary" href="'.$url.'" title="'.__( 'Delete All To-Do Items', 'cleverness-to-do-list' ).'>" id="delete-all-todos">'.__( 'Delete All To-Do Items', 'cleverness-to-do-list' ).'</a></p>';
 	}
 
 }
