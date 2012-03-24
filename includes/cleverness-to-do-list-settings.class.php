@@ -14,7 +14,6 @@
  * @subpackage includes
  * @link http://theme.fm/2011/10/how-to-create-tabs-with-the-settings-api-in-wordpress-2590/
  * @todo delete duplicates button?
- * @todo add import/export feature for to-dos
 */
 class CTDL_Settings {
 	private $general_key = 'CTDL_general';
