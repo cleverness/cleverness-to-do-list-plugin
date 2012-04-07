@@ -59,6 +59,7 @@ Several options are available:
 * **deadline** - default is *show*. Use a blank value to hide.
 * **progress** - default is *show*. Use a blank value to hide.
 * **addedby** - default is *show*. Use a blank value to hide.
+* **date** - default is hide (0). Use 1 to show.
 * **completed** - default is blank. Set to *show* to display completed items.
 * **completed_title** - default is no title.
 * **list_type** - default is *ol* (ordered list). Use *ul* to show an unordered list.
@@ -81,6 +82,7 @@ The options are:
 * **progress** - default is hide (0). Use 1 to show.
 * **category** - default is all categories (0). Use the category ID to show a specific category.
 * **addedby** - default is hide (0). Use 1 to show.
+* **date** - default is hide (0). Use 1 to show.
 * **editlink** - default is hide (0). Use 1 to show.
 * **todoid** - default is blank (""). Use the ID of the to-do item to display just one item.
 
@@ -102,6 +104,7 @@ The options are:
 * **progress** - default is hide (0). Use 1 to show.
 * **categories** - default is hide (0). Use 1 to show.
 * **addedby** - default is hide (0). Use 1 to show.
+* **date** - default is hide (0). Use 1 to show.
 * **editlink** - default is show (1). Use 0 to hide.
 
 Example:
@@ -135,11 +138,14 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 == Changelog ==
 
 = 3.1 =
+* Lowered the number of database calls when showing to-do items
+* Added option to show date to-do item was added
 * Added button under Settings to delete all to-do items
 * Added setting to show who assigned the to-do item in email
 * Fixed master view not showing only assigned items
 * Fixed translations not loading
 * Changed plugin activation set-up
+* Changed the field order in the display table
 * Fixed issues with fields that should be hidden appearing when using the todoadmin shortcode
 
 = 3.0.6 =

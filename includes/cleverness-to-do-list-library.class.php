@@ -24,8 +24,12 @@ class CTDL_Lib {
 	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0, $to_exclude = array() ) {
 
 		/* Sort Order */
-		// if sort order is deadline, progress, or assigned user, order by that first
-		if ( CTDL_Loader::$settings['sort_order'] == '_deadline' || CTDL_Loader::$settings['sort_order'] == '_progress' || CTDL_Loader::$settings['sort_order'] == '_assign' ) {
+		// if sort_order is post_date, order by that first
+		if ( CTDL_Loader::$settings['sort_order'] == 'post_date' ) {
+			$orderby = 'post_date';
+			$metakey = '';
+		// if sort order is deadline, progress, or assigned user, order by that
+		} elseif ( CTDL_Loader::$settings['sort_order'] == '_deadline' || CTDL_Loader::$settings['sort_order'] == '_progress' || CTDL_Loader::$settings['sort_order'] == '_assign' ) {
 			$orderby = 'meta_value title';
 			$metakey = CTDL_Loader::$settings['sort_order'];
 		// otherwise, order first by priority
@@ -382,7 +386,6 @@ class CTDL_Lib {
 
 	/**
 	 * Delete old custom database tables
-	 * @todo show confirmation of deletion
 	 * @static
 	 */
 	public static function delete_tables() {
@@ -631,14 +634,14 @@ class CTDL_Lib {
 		if ( $version == 0 ) {
 			// add default options
 			$general_options = array(
-				'categories'            => '0',
-				'list_view'             => '0',
-				'todo_author'           => '0',
-				'show_completed_date'   => '0',
-				'show_deadline'         => '0',
-				'show_progress'         => '0',
+				'categories'            => 0,
+				'list_view'             => 0,
+				'todo_author'           => 0,
+				'show_completed_date'   => 0,
+				'show_deadline'         => 0,
+				'show_progress'         => 0,
 				'sort_order'            => 'ID',
-				'admin_bar'             => '1'
+				'admin_bar'             => 1
 			);
 
 			$advanced_options = array(
@@ -646,16 +649,17 @@ class CTDL_Lib {
 				'priority_0'                => __( 'Important', 'cleverness-to-do-list' ),
 				'priority_1'                => __( 'Normal', 'cleverness-to-do-list' ),
 				'priority_2'                => __( 'Low', 'cleverness-to-do-list' ),
-				'assign'                    => '1',
-				'show_only_assigned'        => '1',
-				'user_roles'             => 'contributor, author, editor, administrator',
-				'email_assigned'            => '0',
+				'assign'                    => 1,
+				'show_only_assigned'        => 1,
+				'user_roles'                => 'contributor, author, editor, administrator',
+				'email_assigned'            => 0,
 				'email_from'                => html_entity_decode( get_bloginfo( 'name' ) ),
 				'email_subject'             => __( 'A to-do list item has been assigned to you', 'cleverness-to-do-list' ),
 				'email_text'                => __( 'The following item has been assigned to you:', 'cleverness-to-do-list' ),
 				'email_category'            => 1,
 				'email_show_assigned_by'    => 0,
-				'show_id'                   => '0',
+				'show_id'                   => 0,
+				'show_date_added'         => 0,
 			);
 
 			$permissions_options = array(
@@ -749,6 +753,7 @@ class CTDL_Lib {
 			} elseif ( $version < 3.1 ) {
 				$advanced_options = get_option( 'CTDL_advanced' );
 				$advanced_options['email_show_assigned_by'] = 0;
+				$advanced_options['show_date_added'] = 0;
 				update_option( 'CTDL_advanced', $advanced_options );
 			}
 

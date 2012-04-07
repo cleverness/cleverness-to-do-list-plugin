@@ -13,7 +13,6 @@
  * @package cleverness-to-do-list
  * @subpackage includes
  * @link http://theme.fm/2011/10/how-to-create-tabs-with-the-settings-api-in-wordpress-2590/
- * @todo delete duplicates button?
 */
 class CTDL_Settings {
 	private $general_key = 'CTDL_general';
@@ -40,23 +39,23 @@ class CTDL_Settings {
 	}
 
 	function section_general_desc() {
-		_e( 'Category support is turned off by default. If you would like to organize your to-do list into categories, enable it here.', 'cleverness-to-do-list' );
 	}
 
 	function section_advanced_desc() {
+		echo '<strong>';
 		_e( 'Customize the To-Do List', 'cleverness-to-do-list' );
+		echo '</strong>';
 	}
 
 	function section_advanced_assign_desc() {
+		echo '<strong>';
 		_e( 'Configure these settings to be able to assign to-do items to other users.', 'cleverness-to-do-list' );
+		echo '</strong>';
 	}
 
 	function section_advanced_db_desc() {
 		_e( 'If you have recently upgraded and your to-do items are all still visible, you can delete the custom database tables since they are no longer used. You can also delete all your to-do items here.', 'cleverness-to-do-list' );
-		echo '<br /><em>';
-		_e( 'Please note that there is no confirmation that the tables or items were deleted. This page will just refresh.', 'cleverness-to-do-list' );
-		echo '</em>';
-		echo '<br /><strong>'.__( 'These actions cannot be undone. Please be sure you want to proceed. It is advised that you back up your database first.', 'cleverness-to-do-list' ).'</strong>';
+		echo '<br /><strong><em>'.__( 'These actions cannot be undone. Please be sure you want to proceed. It is advised that you back up your database first.', 'cleverness-to-do-list' ).'</em></strong>';
 	}
 
 
@@ -88,16 +87,18 @@ class CTDL_Settings {
 
 	function categories_option() { ?>
 		<select name="<?php echo $this->general_key; ?>[categories]">
-			<option value="0"<?php if ( $this->general_settings['categories'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'Disable', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-			<option value="1"<?php if ( $this->general_settings['categories'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Enable', 'cleverness-to-do-list' ); ?></option>
+			<option value="0"<?php if ( $this->general_settings['categories'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'Disabled', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="1"<?php if ( $this->general_settings['categories'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Enabled', 'cleverness-to-do-list' ); ?></option>
 		</select>
-	<?php }
+		<span class="description"><?php _e( 'If you would like to organize your to-do list into categories, enable it here.', 'cleverness-to-do-list' ); ?></span>
+	<?php
+	}
 
 	function list_view_option() { ?>
 		<select name="<?php echo $this->general_key; ?>[list_view]">
-			<option value="0"<?php if ( $this->general_settings['list_view'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'Individual', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-			<option value="1"<?php if ( $this->general_settings['list_view'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Group', 'cleverness-to-do-list' ); ?></option>
-			<option value="2"<?php if ( $this->general_settings['list_view'] == '2' ) echo ' selected="selected"'; ?>><?php _e( 'Master', 'cleverness-to-do-list' ); ?></option>
+			<option value="0"<?php if ( $this->general_settings['list_view'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'Individual', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="1"<?php if ( $this->general_settings['list_view'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Group', 'cleverness-to-do-list' ); ?></option>
+			<option value="2"<?php if ( $this->general_settings['list_view'] == 2 ) echo ' selected="selected"'; ?>><?php _e( 'Master', 'cleverness-to-do-list' ); ?></option>
 		</select>
 		<span class="description"><?php _e( 'List View sets how the to-do lists are viewed.<br /> The Individual setting allows each user to have their own private to-do list.
 		The Group setting allows all users to share one to-do list. The Master setting allows you to have one master list for all users with individual completion of items.', 'cleverness-to-do-list' ); ?></span>
@@ -105,29 +106,29 @@ class CTDL_Settings {
 
 	function show_deadline_option() { ?>
 		<select name="<?php echo $this->general_key; ?>[show_deadline]">
-			<option value="0"<?php if ( $this->general_settings['show_deadline'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
-			<option value="1"<?php if ( $this->general_settings['show_deadline'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="0"<?php if ( $this->general_settings['show_deadline'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+			<option value="1"<?php if ( $this->general_settings['show_deadline'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
 		</select>
 	<?php }
 
 	function show_progress_option() { ?>
 		<select name="<?php echo $this->general_key; ?>[show_progress]">
-			<option value="0"<?php if ( $this->general_settings['show_progress'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
-			<option value="1"<?php if ( $this->general_settings['show_progress'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="0"<?php if ( $this->general_settings['show_progress'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+			<option value="1"<?php if ( $this->general_settings['show_progress'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
 		</select>
 	<?php }
 
 	function show_completed_date_option() { ?>
 		<select name="<?php echo $this->general_key; ?>[show_completed_date]">
-			<option value="0"<?php if ( $this->general_settings['show_completed_date'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
-			<option value="1"<?php if ( $this->general_settings['show_completed_date'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="0"<?php if ( $this->general_settings['show_completed_date'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+			<option value="1"<?php if ( $this->general_settings['show_completed_date'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
 		</select>
 	<?php }
 
 	function todo_author_option() { ?>
 		<select name="<?php echo $this->general_key; ?>[todo_author]">
-			<option value="0"<?php if ( $this->general_settings['todo_author'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-			<option value="1"<?php if ( $this->general_settings['todo_author'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+			<option value="0"<?php if ( $this->general_settings['todo_author'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="1"<?php if ( $this->general_settings['todo_author'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
 		</select>
 		<span class="description"><?php _e( 'This setting is only used when List View is set to Group.', 'cleverness-to-do-list' ); ?></span>
 	<?php
@@ -141,6 +142,7 @@ class CTDL_Settings {
 			<option value="_progress"<?php if ( $this->general_settings['sort_order'] == '_progress' ) echo ' selected="selected"'; ?>><?php _e( 'Progress', 'cleverness-to-do-list' ); ?></option>
 			<option value="cat_id"<?php if ( $this->general_settings['sort_order'] == 'cat_id' ) echo ' selected="selected"'; ?>><?php _e( 'Category', 'cleverness-to-do-list' ); ?></option>
 			<option value="_assign"<?php if ( $this->general_settings['sort_order'] == '_assign' ) echo ' selected="selected"'; ?>><?php _e( 'Assigned User', 'cleverness-to-do-list' ); ?></option>
+			<option value="post_date"<?php if ( $this->general_settings['sort_order'] == 'post_date' ) echo ' selected="selected"'; ?>><?php _e( 'Date Created', 'cleverness-to-do-list' ); ?></option>
 		</select>
 		<span class="description"><?php _e( 'Items are first sorted by priority when ordered by ID, Alphabetical, or Category', 'cleverness-to-do-list' ); ?></span>
 	<?php }
@@ -148,8 +150,8 @@ class CTDL_Settings {
 	function admin_bar_option() {
 		?>
 	<select name="<?php echo $this->general_key; ?>[admin_bar]">
-		<option value="1"<?php if ( $this->general_settings['admin_bar'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-		<option value="0"<?php if ( $this->general_settings['admin_bar'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+		<option value="1"<?php if ( $this->general_settings['admin_bar'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+		<option value="0"<?php if ( $this->general_settings['admin_bar'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
 	</select>
 	<?php
 	}
@@ -164,6 +166,7 @@ class CTDL_Settings {
 		add_settings_field( 'priority_1', __( 'Middle Priority Label', 'cleverness-to-do-list' ), array( &$this, 'priority_1_option' ), $this->advanced_key, 'section_advanced' );
 		add_settings_field( 'priority_2', __( 'Lowest Priority Label', 'cleverness-to-do-list' ), array( &$this, 'priority_2_option' ), $this->advanced_key, 'section_advanced' );
 		add_settings_field( 'show_id', __( 'Show To-Do Item ID', 'cleverness-to-do-list' ), array ( &$this, 'show_id_option' ), $this->advanced_key, 'section_advanced' );
+		add_settings_field( 'show_date_added', __( 'Show Date To-Do Was Added', 'cleverness-to-do-list' ), array ( &$this, 'show_date_added_option' ), $this->advanced_key, 'section_advanced' );
 		add_settings_section( 'section_advanced_assign', __( 'Assign To-Do Items Settings', 'cleverness-to-do-list' ), array( &$this, 'section_advanced_assign_desc' ), $this->advanced_key );
 		add_settings_field( 'assign', __( 'Assign To-Do Items to Users', 'cleverness-to-do-list' ), array( &$this, 'assign_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'show_only_assigned', __( 'Show a User Only the To-Do Items Assigned to Them', 'cleverness-to-do-list' ), array( &$this, 'show_only_assigned_option' ), $this->advanced_key,
@@ -202,16 +205,24 @@ class CTDL_Settings {
 
 	function show_id_option() { ?>
 	<select name="<?php echo $this->advanced_key; ?>[show_id]">
-		<option value="0"<?php if ( $this->advanced_settings['show_id'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-		<option value="1"<?php if ( $this->advanced_settings['show_id'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
+		<option value="0"<?php if ( $this->advanced_settings['show_id'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+		<option value="1"<?php if ( $this->advanced_settings['show_id'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
+	</select>
+	<?php
+	}
+
+	function show_date_added_option() { ?>
+	<select name="<?php echo $this->advanced_key; ?>[show_date_added]">
+		<option value="0"<?php if ( $this->advanced_settings['show_date_added'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+		<option value="1"<?php if ( $this->advanced_settings['show_date_added'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
 	</select>
 	<?php
 	}
 
 	function assign_option() { ?>
 		<select name="<?php echo $this->advanced_key; ?>[assign]">
-			<option value="0"<?php if ( $this->advanced_settings['assign'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-			<option value="1"<?php if ( $this->advanced_settings['assign'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+			<option value="0"<?php if ( $this->advanced_settings['assign'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="1"<?php if ( $this->advanced_settings['assign'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
 		</select>
 		<span class="description"><?php _e( 'This setting must be set to Yes for the following settings to work.', 'cleverness-to-do-list' ); ?></span>
 	<?php
@@ -219,8 +230,8 @@ class CTDL_Settings {
 
 	function show_only_assigned_option() { ?>
 		<select name="<?php echo $this->advanced_key; ?>[show_only_assigned]">
-			<option value="0"<?php if ( $this->advanced_settings['show_only_assigned'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-			<option value="1"<?php if ( $this->advanced_settings['show_only_assigned'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+			<option value="0"<?php if ( $this->advanced_settings['show_only_assigned'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="1"<?php if ( $this->advanced_settings['show_only_assigned'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
 		</select>
 	<?php
 	}
@@ -236,16 +247,16 @@ class CTDL_Settings {
 
 	function email_assigned_option() { ?>
 		<select name="<?php echo $this->advanced_key; ?>[email_assigned]">
-			<option value="0"<?php if ( $this->advanced_settings['email_assigned'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-			<option value="1"<?php if ( $this->advanced_settings['email_assigned'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
+			<option value="0"<?php if ( $this->advanced_settings['email_assigned'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="1"<?php if ( $this->advanced_settings['email_assigned'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
 		</select>
 	<?php
 	}
 
 	function email_category_option() { ?>
 		<select name="<?php echo $this->advanced_key; ?>[email_category]">
-			<option value="0"<?php if ( $this->advanced_settings['email_category'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-			<option value="1"<?php if ( $this->advanced_settings['email_category'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
+			<option value="0"<?php if ( $this->advanced_settings['email_category'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+			<option value="1"<?php if ( $this->advanced_settings['email_category'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
 		</select>
 		<span class="description"><?php _e( 'If categories are enabled.', 'cleverness-to-do-list' ); ?></span>
 	<?php
@@ -253,8 +264,8 @@ class CTDL_Settings {
 
 	function email_show_assigned_by_option() { ?>
 	<select name="<?php echo $this->advanced_key; ?>[email_show_assigned_by]">
-		<option value="0"<?php if ( $this->advanced_settings['email_show_assigned_by'] == '0' ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-		<option value="1"<?php if ( $this->advanced_settings['email_show_assigned_by'] == '1' ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
+		<option value="0"<?php if ( $this->advanced_settings['email_show_assigned_by'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+		<option value="1"<?php if ( $this->advanced_settings['email_show_assigned_by'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?></option>
 	</select>
 	<?php
 	}
@@ -350,7 +361,15 @@ class CTDL_Settings {
 			echo '<a class="nav-tab '.$active.'" href="?page='.$this->plugin_key.'&amp;tab='.$tab_key.'">'.$tab_caption.'</a>';
 		}
 		echo '</h2>';
+		if ( isset( $_GET['settings-updated'] ) ) {
+			echo '<div id="message" class="updated"><p><strong>'.__( 'Settings saved.' ).'</strong></p></div>';
+		} elseif ( isset( $_GET['action'] ) && $_GET['action'] == 'deletetables' ) {
+			echo '<div id="message" class="updated"><p><strong>'.__( 'Tables have been deleted.', 'cleverness-to-do-list' ).'</strong></p></div>';
+		} elseif ( isset( $_GET['action'] ) && $_GET['action'] == 'deletealltodos' ) {
+			echo '<div id="message" class="updated"><p><strong>'.__( 'To-Do Items have been deleted.', 'cleverness-to-do-list' ).'</strong></p></div>';
+		}
 	}
+
 
 	function show_delete_tables_button() {
 		$cleverness_todo_delete_tables_nonce = wp_create_nonce( 'tododeletetables' );

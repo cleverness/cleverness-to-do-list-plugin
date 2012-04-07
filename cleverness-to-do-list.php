@@ -26,12 +26,13 @@ include_once 'includes/cleverness-to-do-list-widget.class.php';
  */
 function cleverness_todo_loader() {
 
-	define( 'CTDL_DB_VERSION', '3.1' ); // also update in cleverness_todo_activation
+	define( 'CTDL_DB_VERSION', '3.1' ); // also update in cleverness_todo_activation at the bottom of this file
 	define( 'CTDL_PLUGIN_VERSION', '3.1' );
 	define( 'CTDL_FILE', __FILE__ );
 	define( 'CTDL_BASENAME', plugin_basename( __FILE__ ) );
 	define( 'CTDL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 	define( 'CTDL_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+
 	$plugin_path = plugin_basename( dirname( __FILE__ ) .'/languages' );
 	load_plugin_textdomain( 'cleverness-to-do-list', '', $plugin_path );
 

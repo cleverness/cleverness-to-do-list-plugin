@@ -5,8 +5,10 @@
  * Creates the to-do list widget
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.0
+ * @version 3.1
  * @todo add option to check off items
+ * @todo private category showing empty ol
+ * @todo private category showing if sort order is not category
  */
 
 /**
@@ -59,19 +61,25 @@ class CTDL_Widget extends WP_Widget {
 
 		echo '<ol>';
 
-		if ( CTDL_Loader::$settings['categories'] == '1' && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $category == 0 ) {
+		if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $category == 0 ) {
 
 			$categories = CTDL_Categories::get_categories();
+			$visibility = get_option( 'CTDL_categories' );
 			$items = 0;
 			$posts_to_exclude = array();
 
 			foreach ( $categories as $category ) {
 
-				$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $category->term_id );
+				$category_id = $category->term_id;
+				$visibility = ( $visibility["category_$category_id"] != '' ? $visibility["category_$category_id"] : '0' );
 
-				if ( $todo_items->have_posts() ) {
-					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to ) );
-					$items = 1;
+				if ( $visibility == 0 ) {
+					$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $category_id );
+
+					if ( $todo_items->have_posts() ) {
+						array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to ) );
+						$items = 1;
+					}
 				}
 
 			}
