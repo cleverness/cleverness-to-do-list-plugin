@@ -7,8 +7,7 @@
  * @package cleverness-to-do-list
  * @version 3.1
  * @todo add option to check off items
- * @todo private category showing empty ol
- * @todo private category showing if sort order is not category
+ * @todo visiblity still buggy
  */
 
 /**
@@ -59,32 +58,27 @@ class CTDL_Widget extends WP_Widget {
 			echo $after_title;
 		}
 
-		echo '<ol>';
-
 		if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $category == 0 ) {
 
 			$categories = CTDL_Categories::get_categories();
-			$visibility = get_option( 'CTDL_categories' );
 			$items = 0;
 			$posts_to_exclude = array();
 
 			foreach ( $categories as $category ) {
 
 				$category_id = $category->term_id;
-				$visibility = ( $visibility["category_$category_id"] != '' ? $visibility["category_$category_id"] : '0' );
 
-				if ( $visibility == 0 ) {
-					$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $category_id );
+				$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $category_id );
 
-					if ( $todo_items->have_posts() ) {
-						array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to ) );
-						$items = 1;
-					}
+				if ( $todo_items->have_posts() ) {
+					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to ) );
+					$items = 1;
 				}
 
 			}
 
 			$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, 0, $posts_to_exclude );
+
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to );
 				$items = 1;
@@ -95,6 +89,8 @@ class CTDL_Widget extends WP_Widget {
 			}
 
 		} else {
+
+			echo '<ol>';
 
 			$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $category );
 
@@ -125,7 +121,7 @@ class CTDL_Widget extends WP_Widget {
 	 */
 	protected function show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to, $category = 0 ) {
 		global $ClevernessToDoList;
-		if ( CTDL_Loader::$settings['categories'] == '1' ) $visibility = get_option( 'CTDL_categories' );
+		if ( CTDL_Loader::$settings['categories'] == 1 ) $visibility = get_option( 'CTDL_categories' );
 		$layout = 'list';
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
@@ -137,7 +133,7 @@ class CTDL_Widget extends WP_Widget {
 
 			$priority_class = CTDL_Lib::set_priority_class( $priority );
 
-			if ( CTDL_Loader::$settings['categories'] == '1' && $category == '0' ) {
+			if ( CTDL_Loader::$settings['categories'] == 1 && $category == '0' ) {
 				$cats = get_the_terms( $id, 'todocategories' );
 				if ( $cats != NULL ) {
 					foreach( $cats as $category ) {
@@ -152,7 +148,7 @@ class CTDL_Widget extends WP_Widget {
 
 			if ( $visible == 0 ) {
 
-				$ClevernessToDoList->list .= '<li class="'.$priority_class.'">';
+				$ClevernessToDoList->list .= '<li'.$priority_class.'>';
 				$ClevernessToDoList->show_todo_text( get_the_content(), $layout );
 				if ( $progress == 1  && $progress_meta != '' ) {
 					$ClevernessToDoList->list .= ' - ';

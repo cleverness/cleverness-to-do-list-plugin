@@ -55,7 +55,7 @@ class CTDL_Categories {
 		if ( !is_wp_error( $term ) ) {
 			$category_id = $term['term_id'];
 			$options = get_option( 'CTDL_categories' );
-			$options["category_$category_id"] = $_POST['cleverness_todo_cat_visibility'];
+			$options["category_$category_id"] = absint( $_POST['cleverness_todo_cat_visibility'] );
 			update_option( 'CTDL_categories', $options );
 			return 1;
 		} else {
