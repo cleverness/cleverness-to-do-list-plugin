@@ -4,7 +4,8 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.1
- * @todo add meta value for sort order and enable sorting
+ * @todo add meta value for sort order and enable
+ * @todo fix privacy to work when sort order is any
  */
 
 /**
@@ -184,7 +185,7 @@ class CTDL_Categories {
 							<option value="0" selected="selected"><?php _e( 'Public', 'cleverness-to-do-list' ); ?>&nbsp;</option>
 							<option value="1"><?php _e( 'Private', 'cleverness-to-do-list' ); ?></option>
 						</select>
-						<br /><span class="description"><?php _e( 'Private categories are not visible using the sidebar widgets or shortcode.', 'cleverness-to-do-list' ); ?></span>
+						<br /><span class="description"><?php _e( 'Private categories are not visible using the sidebar widgets or shortcode (only when Sort Order is set to Category)', 'cleverness-to-do-list' ); ?></span>
 					</td>
 				</tr>
 				<tr><td></td>

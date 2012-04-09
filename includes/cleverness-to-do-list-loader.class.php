@@ -12,9 +12,8 @@
  * Loader class
  * @package cleverness-to-do-list
  * @subpackage includes
- * @todo fix check_plugin_version
+ * @todo only load files when needed
  * @todo find a way to only call frontend classes if shortcode is used
- * @todo private categories still showing in front-end
  */
 class CTDL_Loader {
 	public static $settings;
@@ -22,15 +21,13 @@ class CTDL_Loader {
 	public static function init() {
 		global $ClevernessToDoList, $CTDL_Frontend_Checklist, $CTDL_Frontend_Admin;
 
-		self::check_wp_version();
-		//self::check_plugin_version();
 		$general_options      = ( get_option( 'CTDL_general' ) ? get_option( 'CTDL_general' ) : array() );
 		$advanced_options     = ( get_option( 'CTDL_advanced' ) ? get_option( 'CTDL_advanced' ) : array() );
 		$permissions_options  = ( get_option( 'CTDL_permissions' ) ? get_option( 'CTDL_permissions' ) : array() );
 		self::$settings       = array_merge( $general_options, $advanced_options, $permissions_options );
 		self::include_files();
-		self::setup_custom_post_type();
-		self::create_taxonomies();
+		if ( !post_type_exists( 'todo' ) ) self::setup_custom_post_type();
+		if ( !taxonomy_exists( 'todocategories' ) ) self::create_taxonomies();
 		self::call_wp_hooks();
 
         $ClevernessToDoList = new ClevernessToDoList();
@@ -44,36 +41,6 @@ class CTDL_Loader {
 			new CTDL_Frontend_List;
 		}
 
-	}
-
-	/**
-	 * Checks the WordPress version to make sure the plugin is compatible
-	 * @static
-	 */
-	public static function check_wp_version() {
-		global $wp_version;
-
-		$exit_msg = __( 'To-Do List requires WordPress 3.3 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please update.</a>', 'cleverness-to-do-list' );
-		if ( version_compare( $wp_version, "3.3", "<" ) ) {
-			exit( $exit_msg );
-		}
-	}
-
-	/**
-	 * Check the plugins version against the stored plugin database version and upgrade plugin if needed
-	 * @static
-	 * @since 3.0.3
-	 */
-	public static function check_plugin_version() {
-		if ( get_option( 'CTDL_db_version' ) ) {
-			$installed_ver = get_option( 'CTDL_db_version' );
-		} else {
-			$installed_ver = 0;
-		}
-
-		if ( CTDL_DB_VERSION != $installed_ver ) {
-			if ( CTDL_PLUGIN_VERSION != '3.0.6' && ( $installed_ver != '3.0' || $installed_ver != '3.1' || $installed_ver != '3.0.2' || $installed_ver != '3.0.3' ) ) cleverness_todo_activation();
-		}
 	}
 
 	/**

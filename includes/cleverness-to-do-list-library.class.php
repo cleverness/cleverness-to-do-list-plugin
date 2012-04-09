@@ -571,31 +571,37 @@ class CTDL_Lib {
 			if ( !post_type_exists( 'todo' ) ) CTDL_Loader::setup_custom_post_type();
 			if ( !taxonomy_exists( 'todocategories' ) ) CTDL_Loader::create_taxonomies();
 
-			// if there was no db version option, add the first to-do item
+			// if there was no db version option
 			if ( $installed_version  == 0 ) {
 
-				global $current_user;
-				get_currentuserinfo();
+				// check to see if there are any to-do custom posts
+				$existing_todos = self::check_for_todos();
 
-				// add first post
-				$first_post = __( 'Add your first To-Do List item', 'cleverness-to-do-list' );
+				// if not, add the first to-do item
+				if ( $existing_todos == 0 ) {
+					global $current_user;
+					get_currentuserinfo();
 
-				$the_post = array(
-					'post_type'        => 'todo',
-					'post_title'       => substr( $first_post, 0, 100 ),
-					'post_content'     => $first_post,
-					'post_status'      => 'publish',
-					'post_author'      => $current_user->ID,
-					'comment_status'   => 'closed',
-					'ping_status'      => 'closed',
-				);
+					// add first post
+					$first_post = __( 'Add your first To-Do List item', 'cleverness-to-do-list' );
 
-				$post_id = wp_insert_post( $the_post );
-				add_post_meta( $post_id, '_status', 0, true );
-				add_post_meta( $post_id, '_priority', 1, true );
-				add_post_meta( $post_id, '_assign', -1, true );
-				add_post_meta( $post_id, '_deadline', '', true );
-				add_post_meta( $post_id, '_progress', 0, true );
+					$the_post = array(
+						'post_type'        => 'todo',
+						'post_title'       => substr( $first_post, 0, 100 ),
+						'post_content'     => $first_post,
+						'post_status'      => 'publish',
+						'post_author'      => $current_user->ID,
+						'comment_status'   => 'closed',
+						'ping_status'      => 'closed',
+					);
+
+					$post_id = wp_insert_post( $the_post );
+					add_post_meta( $post_id, '_status', 0, true );
+					add_post_meta( $post_id, '_priority', 1, true );
+					add_post_meta( $post_id, '_assign', -1, true );
+					add_post_meta( $post_id, '_deadline', '', true );
+					add_post_meta( $post_id, '_progress', 0, true );
+				}
 
 				self::set_options( $installed_version );
 
@@ -604,16 +610,10 @@ class CTDL_Lib {
 				// if the db version is < 3.0
 				if ( $installed_version < 3 ) {
 
-					// check to see if there are any existing custom posts todos
-					$args = array(
-						'post_type' => 'todo',
-					);
-					$todo_items = new WP_Query( $args );
-					if ( $todo_items->have_posts() ) {
-						// if yes, see if they are in the same as in the db tables
+					// check to see if there's existing to-do items. if so, convert them to custom posts
+					$existing_todos = self::check_for_todos();
 
-					} else {
-						// if no, add todos from tables as posts
+					if ( $existing_todos == 0 ) {
 						self::convert_todos();
 					}
 
@@ -660,7 +660,7 @@ class CTDL_Lib {
 				'email_category'            => 1,
 				'email_show_assigned_by'    => 0,
 				'show_id'                   => 0,
-				'show_date_added'         => 0,
+				'show_date_added'           => 0,
 			);
 
 			$permissions_options = array(
@@ -718,6 +718,7 @@ class CTDL_Lib {
 					'email_category'            => 1,
 					'email_show_assigned_by'    => 0,
 					'show_id'                   => 0,
+					'show_date_added'           => 0,
 				);
 
 				$permissions_options = array(
@@ -761,6 +762,29 @@ class CTDL_Lib {
 		}
 	}
 
+	/**
+	 * Check for existing to-do custom post types
+	 * @static
+	 * @since 3.1
+	 * @return int
+	 */
+	public static function check_for_todos() {
+		$args = array(
+			'post_type' => 'todo',
+		);
+		$todo_items = new WP_Query( $args );
+		if ( $todo_items->have_posts() ) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * Convert to-dos from old custom tables to custom post types
+	 * @static
+	 * @since 3.0
+	 */
 	public static function convert_todos() {
 		global $wpdb;
 

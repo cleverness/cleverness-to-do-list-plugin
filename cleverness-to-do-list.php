@@ -18,7 +18,6 @@ Plugin URI: http://cleverness.org/plugins/to-do-list/
  */
 
 add_action( 'init', 'cleverness_todo_loader' );
-register_activation_hook( __FILE__, 'cleverness_todo_activation' );
 include_once 'includes/cleverness-to-do-list-widget.class.php';
 
 /**
@@ -26,12 +25,12 @@ include_once 'includes/cleverness-to-do-list-widget.class.php';
  */
 function cleverness_todo_loader() {
 
-	define( 'CTDL_DB_VERSION', '3.1' ); // also update in cleverness_todo_activation at the bottom of this file
-	define( 'CTDL_PLUGIN_VERSION', '3.1' );
-	define( 'CTDL_FILE', __FILE__ );
-	define( 'CTDL_BASENAME', plugin_basename( __FILE__ ) );
-	define( 'CTDL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-	define( 'CTDL_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+	if ( !defined( 'CTDL_DB_VERSION' ) ) define( 'CTDL_DB_VERSION', '3.1' ); // also update in cleverness_todo_activation at the bottom of this file
+	if ( !defined( 'CTDL_PLUGIN_VERSION' ) ) define( 'CTDL_PLUGIN_VERSION', '3.1' );
+	if ( !defined( 'CTDL_FILE' ) ) define( 'CTDL_FILE', __FILE__ );
+	if ( !defined( 'CTDL_BASENAME' ) ) define( 'CTDL_BASENAME', plugin_basename( __FILE__ ) );
+	if ( !defined( 'CTDL_PLUGIN_DIR' ) ) define( 'CTDL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+	if ( !defined( 'CTDL_PLUGIN_URL' ) ) define( 'CTDL_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 
 	$plugin_path = plugin_basename( dirname( __FILE__ ) .'/languages' );
 	load_plugin_textdomain( 'cleverness-to-do-list', '', $plugin_path );
@@ -82,13 +81,42 @@ function cleverness_todo_loader() {
 }
 
 /**
+ * Check to see if plugin has an upgrade
+ */
+function cleverness_todo_check_for_upgrade() {
+	if ( did_action( 'plugins_loaded' ) === 1 ) {
+		cleverness_todo_activation();
+	}
+}
+
+/**
  * Install plugin on plugin activation
  */
 function cleverness_todo_activation() {
+	global $wp_version;
+
+	$exit_msg = __( 'To-Do List requires WordPress 3.3 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please update.</a>', 'cleverness-to-do-list' );
+	if ( version_compare( $wp_version, "3.3", "<" ) ) {
+		exit( $exit_msg );
+	}
+
 	if ( !defined( 'CTDL_DB_VERSION' ) ) define( 'CTDL_DB_VERSION','3.1' );
 	if ( !defined( 'CTDL_FILE' ) ) define( 'CTDL_FILE', __FILE__ );
 	include_once 'includes/cleverness-to-do-list-library.class.php';
-	CTDL_Lib::install_plugin();
+
+	if ( get_option( 'CTDL_db_version' ) ) {
+		$installed_ver = get_option( 'CTDL_db_version' );
+	} else {
+		$installed_ver = 0;
+	}
+
+	if ( CTDL_DB_VERSION != $installed_ver ) {
+		CTDL_Lib::install_plugin();
+	}
+
 }
+
+register_activation_hook( __FILE__, 'cleverness_todo_activation' );
+add_action( 'plugins_loaded', 'cleverness_todo_check_for_upgrade' );
 
 ?>

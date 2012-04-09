@@ -62,16 +62,19 @@ class CTDL_Widget extends WP_Widget {
 
 			$categories = CTDL_Categories::get_categories();
 			$items = 0;
+			$visible = 0;
 			$posts_to_exclude = array();
+			$visibility = get_option( 'CTDL_categories' );
 
 			foreach ( $categories as $category ) {
 
 				$category_id = $category->term_id;
+				$visible = $visibility["category_$category->term_id"];
 
 				$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $category_id );
 
 				if ( $todo_items->have_posts() ) {
-					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to ) );
+					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to, 0, $visible ) );
 					$items = 1;
 				}
 
@@ -116,10 +119,11 @@ class CTDL_Widget extends WP_Widget {
 	 * @param $progress
 	 * @param $deadline
 	 * @param $assigned_to
-	 * @param $category
+	 * @param int $category
+	 * @param int $visible
 	 * @return array $posts_to_exclude
 	 */
-	protected function show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to, $category = 0 ) {
+	protected function show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to, $category = 0, $visible = 0 ) {
 		global $ClevernessToDoList;
 		if ( CTDL_Loader::$settings['categories'] == 1 ) $visibility = get_option( 'CTDL_categories' );
 		$layout = 'list';
@@ -127,13 +131,12 @@ class CTDL_Widget extends WP_Widget {
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
 			$id = get_the_ID();
 			$posts_to_exclude[] = $id;
-			$visible = 0;
 
 			list( $priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
 
 			$priority_class = CTDL_Lib::set_priority_class( $priority );
 
-			if ( CTDL_Loader::$settings['categories'] == 1 && $category == '0' ) {
+			if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $category == '0' ) {
 				$cats = get_the_terms( $id, 'todocategories' );
 				if ( $cats != NULL ) {
 					foreach( $cats as $category ) {
