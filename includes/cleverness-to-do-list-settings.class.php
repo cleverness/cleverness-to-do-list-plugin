@@ -5,7 +5,7 @@
  * Creates the settings and page to manage the plugin settings
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.0
+ * @version 3.1
  */
 
 /**
@@ -142,7 +142,7 @@ class CTDL_Settings {
 			<option value="_progress"<?php if ( $this->general_settings['sort_order'] == '_progress' ) echo ' selected="selected"'; ?>><?php _e( 'Progress', 'cleverness-to-do-list' ); ?></option>
 			<option value="cat_id"<?php if ( $this->general_settings['sort_order'] == 'cat_id' ) echo ' selected="selected"'; ?>><?php _e( 'Category', 'cleverness-to-do-list' ); ?></option>
 			<option value="_assign"<?php if ( $this->general_settings['sort_order'] == '_assign' ) echo ' selected="selected"'; ?>><?php _e( 'Assigned User', 'cleverness-to-do-list' ); ?></option>
-			<option value="post_date"<?php if ( $this->general_settings['sort_order'] == 'post_date' ) echo ' selected="selected"'; ?>><?php _e( 'Date Created', 'cleverness-to-do-list' ); ?></option>
+			<option value="post_date"<?php if ( $this->general_settings['sort_order'] == 'post_date' ) echo ' selected="selected"'; ?>><?php _e( 'Date Added', 'cleverness-to-do-list' ); ?></option>
 		</select>
 		<span class="description"><?php _e( 'Items are first sorted by priority when ordered by ID, Alphabetical, or Category', 'cleverness-to-do-list' ); ?></span>
 	<?php }

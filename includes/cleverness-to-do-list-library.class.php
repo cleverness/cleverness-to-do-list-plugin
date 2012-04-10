@@ -5,7 +5,7 @@
  * Library of functions for the To-Do List
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.0.2
+ * @version 3.1
  */
 
 /**

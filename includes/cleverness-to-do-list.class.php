@@ -5,7 +5,7 @@
  * The main to-do list class
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.0
+ * @version 3.1
  */
 
 /**
