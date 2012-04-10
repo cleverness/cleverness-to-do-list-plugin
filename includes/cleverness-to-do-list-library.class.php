@@ -607,6 +607,11 @@ class CTDL_Lib {
 
 			} else {
 
+				self::set_options( $installed_version );
+
+				// update db version to current versions
+				update_option( 'CTDL_db_version', CTDL_DB_VERSION );
+
 				// if the db version is < 3.0
 				if ( $installed_version < 3 ) {
 
@@ -618,11 +623,6 @@ class CTDL_Lib {
 					}
 
 				}
-
-				self::set_options( $installed_version );
-
-				// update db version to current versions
-				update_option( 'CTDL_db_version', CTDL_DB_VERSION );
 
 			}
 

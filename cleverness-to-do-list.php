@@ -81,15 +81,6 @@ function cleverness_todo_loader() {
 }
 
 /**
- * Check to see if plugin has an upgrade
- */
-function cleverness_todo_check_for_upgrade() {
-	if ( did_action( 'plugins_loaded' ) === 1 ) {
-		cleverness_todo_activation();
-	}
-}
-
-/**
  * Install plugin on plugin activation
  */
 function cleverness_todo_activation() {
@@ -117,6 +108,5 @@ function cleverness_todo_activation() {
 }
 
 register_activation_hook( __FILE__, 'cleverness_todo_activation' );
-add_action( 'plugins_loaded', 'cleverness_todo_check_for_upgrade' );
 
 ?>

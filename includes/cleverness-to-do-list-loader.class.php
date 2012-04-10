@@ -21,6 +21,7 @@ class CTDL_Loader {
 	public static function init() {
 		global $ClevernessToDoList, $CTDL_Frontend_Checklist, $CTDL_Frontend_Admin;
 
+		self::check_for_upgrade();
 		$general_options      = ( get_option( 'CTDL_general' ) ? get_option( 'CTDL_general' ) : array() );
 		$advanced_options     = ( get_option( 'CTDL_advanced' ) ? get_option( 'CTDL_advanced' ) : array() );
 		$permissions_options  = ( get_option( 'CTDL_permissions' ) ? get_option( 'CTDL_permissions' ) : array() );
@@ -41,6 +42,22 @@ class CTDL_Loader {
 			new CTDL_Frontend_List;
 		}
 
+	}
+
+	/**
+	 * Check to see if plugin has an upgrade
+	 * @static
+	 * @since 3.1
+	 */
+	public static function check_for_upgrade() {
+		global $wp_version;
+
+		$exit_msg = __( 'To-Do List requires WordPress 3.3 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please update.</a>', 'cleverness-to-do-list' );
+		if ( version_compare( $wp_version, "3.3", "<" ) ) {
+			exit( $exit_msg );
+		}
+
+		cleverness_todo_activation();
 	}
 
 	/**

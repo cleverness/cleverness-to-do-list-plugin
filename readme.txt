@@ -146,7 +146,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Fixed translations not loading
 * Changed plugin activation set-up
 * Changed the field order in the display table
-* Deleting the plugin via WordPress will now delete to-do item
+* Deleting the plugin via WordPress will now delete to-do items and categories
 * Fixed issues with fields that should be hidden appearing when using the todoadmin shortcode
 
 = 3.0.6 =

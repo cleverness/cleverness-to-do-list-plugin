@@ -1,5 +1,4 @@
 <?php
-//@todo add delete taxonomy
 if ( !defined( 'ABSPATH') && !defined( 'WP_UNINSTALL_PLUGIN' ) )
     exit();
 
@@ -46,5 +45,28 @@ if ( current_user_can('delete_plugins') ) {
 	endwhile;
 
 	// delete taxonomy
+	if ( !taxonomy_exists( 'todocategories' ) ) {
+		$labels = array(
+			'name'          => _x( 'Categories', 'taxonomy general name' ),
+			'singular_name' => _x( 'Category', 'taxonomy singular name' ),
+		);
+
+		register_taxonomy( 'todocategories', array( 'todo' ), array(
+			'hierarchical' => true,
+			'labels'       => $labels,
+			'show_ui'      => false,
+			'query_var'    => false,
+			'rewrite'      => false,
+		) );
+	}
+
+	$terms = get_terms( 'todocategories', '&hide_empty=0' );
+	$count = count( $terms );
+	if ( $count > 0 ) {
+		foreach ( $terms as $term ) {
+			wp_delete_term( $term->term_id, 'todocategories' );
+		}
+	}
+
 }
 ?>
