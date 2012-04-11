@@ -77,9 +77,6 @@ class CTDL_Help {
 	public static function cleverness_todo_faqs_help() { ?>
 		<h3><?php _e( 'Frequently Asked Questions', 'cleverness-to-do-list' ); ?></h3>
 
-		<p><strong><?php _e( 'I upgraded and all my to-do items are gone', 'cleverness-to-do-list' ); ?></strong><br/>
-		<?php _e( 'If you did not do the automatic upgrade from the Plugins page, make sure you deactivate and then activate the plugin. Your to-do list items should be converted to the new format once you activate the plugin.', 'cleverness - to -do-list' ); ?></p>
-
 		<p><strong><?php _e( 'What should I do if I find a bug?', 'cleverness-to-do-list' ); ?></strong><br/>
 		<?php _e( 'Visit the plugin website and leave a comment or contact me.', 'cleverness-to-do-list' ); ?><br/>
 		<a href="http://cleverness.org/plugins/to-do-list/#respond" target="_blank">http://cleverness.org/plugins/to-do-list/#respond</a><br/>

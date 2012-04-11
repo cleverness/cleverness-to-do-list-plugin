@@ -6,7 +6,7 @@ Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.3
 Tested up to: 3.3.1
-Stable tag: 3.0.7
+Stable tag: 3.1
 
 Integrates a customizable, multi-featured to-do list.
 
@@ -43,9 +43,6 @@ Cleverness To-Do List is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU General Public License along with this plugin. If not, see <http://www.gnu.org/licenses/>.
 
 == Frequently Asked Questions ==
-
-= I upgraded and all my to-do items are gone =
-If you did not do the automatic upgrade from the Plugins page, make sure you deactivate and then activate the plugin. Your to-do list items should be converted to the new format once you activate the plugin.
 
 = What is the shortcode to display items in a post or page? =
 [todolist]

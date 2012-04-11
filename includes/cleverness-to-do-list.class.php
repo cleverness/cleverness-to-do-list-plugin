@@ -24,9 +24,12 @@ class ClevernessToDoList {
 
 	/**
 	 * Display a to-do list
+	 * @param int $completed
+	 * @return
 	 */
-	public function display() {
+	public function display( $completed = 0 ) {
 		list( $priorities, $user, $url, $action ) = CTDL_Lib::set_variables();
+		if ( is_admin() ) $completed = 1;
 
 		if ( is_admin() ) $this->list .= '<div class="wrap"><div class="icon32"><img src="'.CTDL_PLUGIN_URL.'/images/cleverness-todo-icon.png" alt="" /></div> <h2>'.__('To-Do List', 'cleverness-to-do-list').'</h2>';
 
@@ -51,14 +54,14 @@ class ClevernessToDoList {
 		$this->list .= '</table>';
 
 		/* Show completed items in admin */
-		if ( is_admin() ) {
+		if ( $completed == 1 ) {
 			wp_reset_postdata();
 			$this->list .= '<h3>'.__( 'Completed Items', 'cleverness-to-do-list' );
 			if ( current_user_can( CTDL_Loader::$settings['purge_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 				$cleverness_todo_purge_nonce = wp_create_nonce( 'todopurge' );
 				$this->list .= ' (<a id="delete-all-todos" href="admin.php?page=cleverness-to-do-list&amp;action=purgetodo&_wpnonce='.esc_attr( $cleverness_todo_purge_nonce ).'">'.__('Delete All', 'cleverness-to-do-list').'</a>)';
 		 	}
-			if ( is_admin() ) $this->list .= '</h3>';
+			$this->list .= '</h3>';
 
 			$this->list .= '<table id="todo-list-completed" class="todo-table widefat">';
 			$this->show_table_headings( 1 );
