@@ -12,8 +12,6 @@
  * Loader class
  * @package cleverness-to-do-list
  * @subpackage includes
- * @todo only load files when needed
- * @todo find a way to only call frontend classes if shortcode is used
  */
 class CTDL_Loader {
 	public static $settings;

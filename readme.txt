@@ -72,6 +72,7 @@ Table view with the title of Upcoming Articles and showing the progress and who 
 [todochecklist]
 
 The options are:
+
 * **title** - default is no title.
 * **priority** - default is hide (0). Use 1 to show.
 * **assigned** - default is hide (0). Use 1 to show.
@@ -94,6 +95,7 @@ Permalinks must be enabled on the site to be able to use this feature.
 [todoadmin]
 
 The options are:
+
 * **title** - default is no title.
 * **priority** - default is hide (0). Use 1 to show.
 * **assigned** - default is hide (0). Use 1 to show.
