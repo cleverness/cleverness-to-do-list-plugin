@@ -5,7 +5,7 @@
  * Allows administration and viewing of to-do items on front-end
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.0
+ * @version 3.1.1
  */
 
 /**
@@ -629,17 +629,18 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				/** @var $priorities string */
 				if ( $priorities == 'show' && $type == 'table' ) $this->show_priority( $the_priority, $priority );
 				/** @var $progress string */
-				if ( $progress == 'show' ) $this->show_progress( $progress_meta, $type );
+				if ( $progress == 'show' && CTDL_Loader::$settings['show_progress'] == 1 ) $this->show_progress( $progress_meta, $type );
 				/** @var $category string */
-				if ( $category == 0  && $type == 'table' ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
+				if ( $category == 0  && $type == 'table' && CTDL_Loader::$settings['categories'] == 1 ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
 				/** @var $assigned string */
-				if ( $assigned == 'show' ) $this->show_assigned( $assign_meta, $type );
+				if ( $assigned == 'show' && ( ( ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
+						( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) ) && CTDL_Loader::$settings['assign'] == 0 ) ) $this->show_assigned( $assign_meta, $type );
 				/** @var $addedby string */
-				if ( $addedby == 'show' ) $this->show_addedby( get_the_author(), $type );
+				if ( $addedby == 'show' && CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 ) $this->show_addedby( get_the_author(), $type );
 				/** @var $deadline string */
-				if ( $deadline == 'show' ) $this->show_deadline( $deadline_meta, $type );
+				if ( $deadline == 'show' && CTDL_Loader::$settings['show_deadline'] == 1 ) $this->show_deadline( $deadline_meta, $type );
 				/** @var $date int */
-				if ( $date == 1 ) $this->show_date_added( get_the_date(), $type );
+				if ( $date == 1 && CTDL_Loader::$settings['show_date_added'] == 1) $this->show_date_added( get_the_date(), $type );
 				if ( $completed == 1 && $type == 'list' ) $this->list .= ' - ';
 				if ( $completed == 1 ) $this->show_completed( $completed_meta, $type );
 
@@ -674,17 +675,17 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 		/** @var $priorities string */
 		if ( $priorities == 'show' ) $this->list .= '<th>'.__( 'Priority', 'cleverness-to-do-list' ).'</th>';
 		/** @var $progress string */
-		if ( $progress == 'show' ) $this->list .= '<th>'.__( 'Progress', 'cleverness-to-do-list' ).'</th>';
+		if ( $progress == 'show' && CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th>'.__( 'Progress', 'cleverness-to-do-list' ).'</th>';
 		/** @var $category mixed */
 		if ( CTDL_Loader::$settings['categories'] == 1 && $category == '0' ) $this->list .= '<th>'.__( 'Category', 'cleverness-to-do-list' ).'</th>';
 		/** @var $assigned string */
-		if ( $assigned == 'show' && ( CTDL_Loader::$settings['assign'] == 0  && (CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0
+		if ( $assigned == 'show' && ( CTDL_Loader::$settings['assign'] == 0  && ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0
 				&& ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) || ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1 )
 				&& CTDL_Loader::$settings['assign'] == 0 ) ) $this->list .= '<th>'.__( 'Assigned To', 'cleverness-to-do-list' ).'</th>';
 		/** @var $addedby string */
-		if ( $addedby == 'show' ) $this->list .= '<th>'.__( 'Added By', 'cleverness-to-do-list' ).'</th>';
+		if ( $addedby == 'show' && CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 ) $this->list .= '<th>'.__( 'Added By', 'cleverness-to-do-list' ).'</th>';
 		/** @var $deadline string */
-		if ( $deadline == 'show') $this->list .= '<th>'.__( 'Deadline', 'cleverness-to-do-list' ).'</th>';
+		if ( $deadline == 'show' && CTDL_Loader::$settings['show_deadline'] == 1) $this->list .= '<th>'.__( 'Deadline', 'cleverness-to-do-list' ).'</th>';
 		/** @var $date int */
 		if ( $date == 1 && CTDL_Loader::$settings['show_date_added'] == 1 ) $this->list .= '<th>'.__( 'Date Added', 'cleverness-to-do-list' ).'</th>';
 		if ( $completed == 1 ) $this->list .= '<th>'.__( 'Completed', 'cleverness-to-do-list' ).'</th>';
@@ -743,6 +744,8 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				} else {
 					$this->list .= ' - '.__( 'added by', 'cleverness-to-do-list' ).' '.esc_attr( $author );
 				}
+			} else {
+				if ( $layout == 'table' ) $this->list .= '<td></td>';
 			}
 		}
 	}
