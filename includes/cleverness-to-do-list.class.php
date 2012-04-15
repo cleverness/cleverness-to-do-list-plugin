@@ -170,7 +170,7 @@ class ClevernessToDoList {
 				$this->show_assigned( $assign_meta );
 				$this->show_addedby( get_the_author() );
 				$this->show_deadline( $deadline_meta );
-				$this->show_date_added( get_the_date() );
+				$this->show_date_added( get_the_date( CTDL_Loader::$settings['date_format'] ) );
 				if ( $completed == 1 ) $this->show_completed( $completed_meta );
 				$this->show_edit_link( $id, $url );
 				$this->list .= '</tr>';
@@ -386,7 +386,7 @@ class ClevernessToDoList {
 		if ( CTDL_Loader::$settings['assign'] == 0  && (CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0
 			&& ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) || ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1 )
 			&& CTDL_Loader::$settings['assign'] == 0 ) $this->list .= '<th>'.__( 'Assigned To', 'cleverness-to-do-list' ).'</th>';
-		if ( CTDL_Loader::$settings['todo_author'] == 0 ) $this->list .= '<th>'.__ ('Added By', 'cleverness-to-do-list' ).'</th>';
+		if ( CTDL_Loader::$settings['todo_author'] == 0 && CTDL_Loader::$settings['list_view'] == 1 ) $this->list .= '<th>'.__ ('Added By', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th>'.__( 'Deadline', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['show_date_added'] == 1 ) $this->list .= '<th>'.__( 'Date Added', 'cleverness-to-do-list' ).'</th>';
 		if ( $completed == 1 && CTDL_Loader::$settings['show_completed_date'] == 1) $this->list .= '<th>'.__('Completed', 'cleverness-to-do-list' ).'</th>';
@@ -551,7 +551,6 @@ class ClevernessToDoList {
 	 */
 	public function show_date_added( $date, $layout = 'table' ) {
 		if ( CTDL_Loader::$settings['show_date_added'] == 1 ) {
-			$date = ( isset( $date ) ? date( CTDL_Loader::$settings['date_format'], strtotime( $date ) ) : '' );
 			if ( $layout == 'table' ) {
 				$this->list .= ( $date != '' ? sprintf( '<td>%s</td>', esc_attr( $date ) ) : '<td></td>' );
 			} else {

@@ -6,7 +6,7 @@ Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.3
 Tested up to: 3.3.1
-Stable tag: 3.1.1
+Stable tag: 3.1.2
 
 Integrates a customizable, multi-featured to-do list.
 
@@ -135,6 +135,10 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 3. Settings Page
 
 == Changelog ==
+
+= 3.1.2 =
+* Fixed Added By showing in under Individual setting
+* Fixed Date Added showing 1970 under some circumstances
 
 = 3.1.1 =
 * Fixed issue with todochecklist shortcode and categories
@@ -334,6 +338,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Fixed to work in WordPress 2.8
 
 == Upgrade Notice ==
+
+= 3.1.2 =
+Bug fix
 
 = 3.1.1 =
 Bug fix

@@ -65,9 +65,9 @@ class CTDL_Settings {
 		_e( 'The default general capabilities of each user role are as follows: ', 'cleverness-to-do-list' );
 		echo '<br />';
 		_e( 'Contributors: Edit Posts, Authors: Publish Posts, Editors: Edit Others Posts, Administrators: Manage Options', 'cleverness-to-do-list' );
-		echo '<br /><br /><em>';
+		echo '<br /><br /><em><strong>';
 		_e( 'When using the Master list type non-administrator users should only be allowed to view and complete items, otherwise they will be able to edit the Master list.', 'cleverness-to-do-list' );
-		echo '</em>';
+		echo '</strong></em>';
 	}
 
 	function register_general_settings() {
