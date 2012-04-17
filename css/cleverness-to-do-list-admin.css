@@ -22,3 +22,11 @@ p.error {
 #todo-cats th#action-col {
 	width: 18%;
 }
+
+.scroll-checkboxes {
+	height: 40px;
+	padding: 5px;
+	overflow-y: scroll;
+	width: 200px;
+	border: 1px solid #ccc
+}

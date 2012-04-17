@@ -231,7 +231,7 @@ class CTDL_Lib {
 			add_post_meta( $post_id, '_status', 0, true );
 			$priority = ( isset( $_POST['cleverness_todo_priority'] ) ? absint( $_POST['cleverness_todo_priority'] ) : 1 );
 			add_post_meta( $post_id, '_priority', $priority, true );
-			$assign = ( isset( $_POST['cleverness_todo_assign'] ) ? esc_attr( $_POST['cleverness_todo_assign'] ) : -1 );
+			$assign = ( isset( $_POST['cleverness_todo_assign'] ) ? serialize( $_POST['cleverness_todo_assign'] ) : -1 );
 			add_post_meta( $post_id, '_assign', $assign, true );
 			$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ? esc_attr( $_POST['cleverness_todo_deadline'] ) : '' );
 			add_post_meta( $post_id, '_deadline', $deadline, true );

@@ -286,27 +286,25 @@ class ClevernessToDoList {
 			$selected = '';
 			$this->form .= '<tr>
 		  		<th scope="row"><label for="cleverness_todo_assign">'.__( 'Assign To', 'cleverness-to-do-list' ).'</label></th>
-		  		<td>
-					<select name="cleverness_todo_assign" id="cleverness_todo_assign">';
-					if ( isset( $assign ) && $assign == '-1' ) $selected = ' selected="selected"';
-					$this->form .= sprintf( '<option value="-1"%s>%s</option>', $selected, __( 'None', 'cleverness-to-do-list' ) );
+		  		<td><div class="scroll-checkboxes">';
+					if ( isset( $assign ) && $assign == '-1' ) $selected = ' checked="checked"';
+					$this->form .= sprintf( '<input type="checkbox" name="cleverness_todo_assign[]" id="cleverness_todo_assign" value="-1" %s/> %s', $selected, __( 'None', 'cleverness-to-do-list' ) ).'<br />';
 
 					if ( CTDL_Loader::$settings['user_roles'] == '' ) {
 						$roles = array( 'contributor', 'author', 'editor', 'administrator' );
 					} else {
 						$roles = explode( ", ", CTDL_Loader::$settings['user_roles'] );
-						}
+					}
 					foreach ( $roles as $role ) {
 						$role_users = CTDL_Lib::get_users( $role );
-						foreach( $role_users as $role_user ) {
-							$selected = '';
+						foreach ( $role_users as $role_user ) {
+							$selected  = '';
 							$user_info = get_userdata( $role_user->ID );
-							if ( isset( $assign ) && $assign == $role_user->ID ) $selected = ' selected="selected"';
-							$this->form .= sprintf( '<option value="%d"%s>%s</option>', $role_user->ID, $selected, $user_info->display_name );
+							if ( isset( $assign ) && $assign == $role_user->ID ) $selected = ' checked="checked"';
+							$this->form .= sprintf( '<input type="checkbox" name="cleverness_todo_assign[]" id="cleverness_todo_assign" value="%d" %s/> %s', $role_user->ID, $selected, $user_info->display_name ).'<br />';
 						}
 					}
-
-					$this->form .= '</select>
+					$this->form .= '</div>
 				</td>
 			</tr>';
 		}
@@ -484,13 +482,29 @@ class ClevernessToDoList {
 	public function show_assigned( $assign, $layout = 'table' ) {
 		if ( ( ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
 		( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1) ) && CTDL_Loader::$settings['assign'] == 0 ) {
+
+			if ( is_serialized( $assign ) ) $assign = unserialize( $assign );
+			echo $assign;
 			if ( $assign != '-1' && $assign != '' && $assign != 0 ) {
-				$assign_user = get_userdata( $assign );
-				if ( $layout == 'table' ) {
-					$this->list .= '<td>'.esc_attr( $assign_user->display_name ).'</td>';
+
+				if ( is_array( $assign ) ) {
+					$assign_users = '';
+					if ( $layout == 'table' ) $this->list .= '<td>';
+					foreach ( $assign as $value ) {
+						$assign_users .= get_userdata( $value ).', ';
+					}
+					$this->list .= esc_attr( substr( $assign_users, -2 ) );
+					if ( $layout == 'table' ) $this->list .= '</td>';
+
 				} else {
-					$this->list .= esc_attr( $assign_user->display_name );
+					$assign_user = get_userdata( $assign );
+					if ( $layout == 'table' ) {
+						$this->list .= '<td>' . esc_attr( $assign_user->display_name ) . '</td>';
+					} else {
+						$this->list .= esc_attr( $assign_user->display_name );
+					}
 				}
+
 			} else {
 				if ( $layout == 'table' ) $this->list .= '<td></td>';
 			}
