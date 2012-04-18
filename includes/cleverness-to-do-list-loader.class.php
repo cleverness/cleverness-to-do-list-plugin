@@ -201,6 +201,10 @@ class CTDL_Loader {
 		wp_enqueue_script( 'cleverness_todo_js' );
 		wp_enqueue_script( 'jquery-color' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
+		wp_enqueue_script( 'jquery-ui-core' );
+		wp_enqueue_script( 'jquery-ui-widget' );
+		wp_enqueue_script( 'jquery-ui-mouse' );
+		wp_enqueue_script( 'jquery-ui-resizable' );
 		wp_localize_script( 'cleverness_todo_js', 'ctdl', CTDL_Loader::get_js_vars() );
 	}
 

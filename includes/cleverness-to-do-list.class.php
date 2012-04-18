@@ -208,7 +208,7 @@ class ClevernessToDoList {
 
     	    $this->form .= '<form name="edittodo" id="edittodo" action="'.$url.'" method="post"><table class="todo-form form-table">';
 			$this->create_priority_field( get_post_meta( $id, '_priority', true ) );
-			$this->create_assign_field( get_post_meta( $id, '_assign', true ) );
+			$this->create_assign_field( get_post_meta( $id, '_assign' ) );
 			$this->create_deadline_field( get_post_meta( $id, '_deadline', true ) );
 			$this->create_progress_field( get_post_meta( $id, '_progress', true ) );
 			$this->create_category_field( get_the_terms( $id, 'todocategories' ) );
@@ -286,7 +286,7 @@ class ClevernessToDoList {
 			$selected = '';
 			$this->form .= '<tr>
 		  		<th scope="row"><label for="cleverness_todo_assign">'.__( 'Assign To', 'cleverness-to-do-list' ).'</label></th>
-		  		<td><div class="scroll-checkboxes">';
+		  		<td><div id="resizable" class="ui-widget-content ui-resizable scroll-checkboxes">';
 					if ( isset( $assign ) && $assign == '-1' ) $selected = ' checked="checked"';
 					$this->form .= sprintf( '<input type="checkbox" name="cleverness_todo_assign[]" id="cleverness_todo_assign" value="-1" %s/> %s', $selected, __( 'None', 'cleverness-to-do-list' ) ).'<br />';
 
@@ -300,7 +300,11 @@ class ClevernessToDoList {
 						foreach ( $role_users as $role_user ) {
 							$selected  = '';
 							$user_info = get_userdata( $role_user->ID );
-							if ( isset( $assign ) && $assign == $role_user->ID ) $selected = ' checked="checked"';
+							if ( is_array( $assign ) ) {
+								if ( isset( $assign ) && in_array( $role_user->ID, $assign ) ) $selected = ' checked="checked"';
+							} else {
+								if ( isset( $assign ) && $assign == $role_user->ID ) $selected = ' checked="checked"';
+							}
 							$this->form .= sprintf( '<input type="checkbox" name="cleverness_todo_assign[]" id="cleverness_todo_assign" value="%d" %s/> %s', $role_user->ID, $selected, $user_info->display_name ).'<br />';
 						}
 					}
@@ -363,10 +367,21 @@ class ClevernessToDoList {
 	 */
 	protected function create_todo_text_field( $todo_text = NULL ) {
 		$text = ( isset( $todo_text ) ? stripslashes( esc_html( $todo_text, 1 ) ) : '' );
-		$this->form .= sprintf( '<tr>
+		$this->form .= '<tr><th scope="row">'. __( 'To-Do', 'cleverness-to-do-list' ).'</th><td>';
+		ob_start();
+		wp_editor( $text, 'clevernesstododescription', array( 'media_buttons' => true,
+		                                                      'textarea_name' => 'cleverness_todo_description',
+		                                                      "textarea_rows" => 4,
+		                                                       ) );
+		$this->form .= ob_get_contents();
+		ob_end_clean();
+
+		$this->form .= '</td></tr>';
+
+		/*$this->form .= sprintf( '<tr>
         	<th scope="row"><label for="cleverness_todo_description">%s</label></th>
         	<td><textarea id="cleverness_todo_description" name="cleverness_todo_description" rows="5" cols="50">%s</textarea></td>
-			</tr>', __( 'To-Do', 'cleverness-to-do-list' ), $text );
+			</tr>', __( 'To-Do', 'cleverness-to-do-list' ), $text );*/
 	}
 
 	/**
@@ -483,17 +498,16 @@ class ClevernessToDoList {
 		if ( ( ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
 		( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1) ) && CTDL_Loader::$settings['assign'] == 0 ) {
 
-			if ( is_serialized( $assign ) ) $assign = unserialize( $assign );
-			echo $assign;
 			if ( $assign != '-1' && $assign != '' && $assign != 0 ) {
 
 				if ( is_array( $assign ) ) {
 					$assign_users = '';
 					if ( $layout == 'table' ) $this->list .= '<td>';
 					foreach ( $assign as $value ) {
-						$assign_users .= get_userdata( $value ).', ';
+						$user = get_userdata( $value );
+						$assign_users .= $user->display_name.', ';
 					}
-					$this->list .= esc_attr( substr( $assign_users, -2 ) );
+					$this->list .= substr( $assign_users, 0, -2 );
 					if ( $layout == 'table' ) $this->list .= '</td>';
 
 				} else {

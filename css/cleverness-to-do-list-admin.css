@@ -24,9 +24,10 @@ p.error {
 }
 
 .scroll-checkboxes {
-	height: 40px;
+	height: 55px;
 	padding: 5px;
-	overflow-y: scroll;
-	width: 200px;
+    overflow-y: scroll;
+	overflow-x: hidden;
+	width: 250px;
 	border: 1px solid #ccc
 }
