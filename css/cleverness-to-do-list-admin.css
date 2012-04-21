@@ -4,23 +4,29 @@
 .todo-low, .widefat .todo-low td {
 	color: #666666;
 }
+
 p.error {
 	margin: 5px 0 15px;
 	background-color: #FFEBE8;
     border-color: #CC0000;
-	border-radius: 3px 3px 3px 3px;
+	border-radius: 3px;
     border-style: solid;
     border-width: 1px;
 	padding: 5px;
 }
-#todo-cats th#id-col {
+
+#todo-list th#checkbox-col {
+	width: 15px;
+}
+#todo-cats th#id-col, #todo-list th#id-col {
 	width: 5%;
 }
 #todo-cats th#vis-col {
 	width: 15%;
 }
-#todo-cats th#action-col {
-	width: 18%;
+#todo-cats th#action-col, #todo-list th#action-col {
+	width: 8%;
+	min-width: 120px;
 }
 
 .scroll-checkboxes {
@@ -30,4 +36,9 @@ p.error {
 	overflow-x: hidden;
 	width: 250px;
 	border: 1px solid #ccc
+}
+
+#cleverness_todo input.floatleft {
+	float: left;
+	margin-right: 5px;
 }

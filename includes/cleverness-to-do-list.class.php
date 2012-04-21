@@ -366,12 +366,15 @@ class ClevernessToDoList {
 	 * @param array $todo_text Existing field data
 	 */
 	protected function create_todo_text_field( $todo_text = NULL ) {
-		$text = ( isset( $todo_text ) ? stripslashes( esc_html( $todo_text, 1 ) ) : '' );
+		//$text = ( isset( $todo_text ) ? stripslashes( esc_html( $todo_text, 1 ) ) : '' );
+		//$text = apply_filters( 'the_content', $todo_text );
 		$this->form .= '<tr><th scope="row">'. __( 'To-Do', 'cleverness-to-do-list' ).'</th><td>';
 		ob_start();
-		wp_editor( $text, 'clevernesstododescription', array( 'media_buttons' => true,
+		wp_editor( $todo_text, 'clevernesstododescription', array(
+															  'media_buttons' => true,
 		                                                      'textarea_name' => 'cleverness_todo_description',
-		                                                      "textarea_rows" => 4,
+		                                                      'textarea_rows' => 5,
+															  'wpautop'       => true,
 		                                                       ) );
 		$this->form .= ob_get_contents();
 		ob_end_clean();
@@ -390,8 +393,8 @@ class ClevernessToDoList {
 	 */
 	protected function show_table_headings( $completed = 0 ) {
 		$this->list .= '<thead><tr>';
-		if ( !is_admin() ) $this->list .= '<th></th>';
-		if ( CTDL_Loader::$settings['show_id'] ) $this->list .= '<th>'.__( 'ID', 'cleverness-to-do-list' ).'</th>';
+		$this->list .= '<th id="checkbox-col"></th>';
+		if ( CTDL_Loader::$settings['show_id'] ) $this->list .= '<th id="id-col">'.__( 'ID', 'cleverness-to-do-list' ).'</th>';
 		$this->list .= '<th>'.__( 'Item', 'cleverness-to-do-list' ).'</th>';
 	  	$this->list .= '<th>'.__( 'Priority', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th>'.__( 'Progress', 'cleverness-to-do-list' ).'</th>';
@@ -403,7 +406,7 @@ class ClevernessToDoList {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th>'.__( 'Deadline', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['show_date_added'] == 1 ) $this->list .= '<th>'.__( 'Date Added', 'cleverness-to-do-list' ).'</th>';
 		if ( $completed == 1 && CTDL_Loader::$settings['show_completed_date'] == 1) $this->list .= '<th>'.__('Completed', 'cleverness-to-do-list' ).'</th>';
-		if ( current_user_can(CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) $this->list .= '<th>'.__( 'Action', 'cleverness-to-do-list' ).'</th>';
+		if ( current_user_can(CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) $this->list .= '<th id="action-col">'.__( 'Action', 'cleverness-to-do-list' ).'</th>';
     	$this->list .= '</tr></thead>';
 	}
 
@@ -427,7 +430,7 @@ class ClevernessToDoList {
 	protected function show_checkbox( $id, $completed = NULL, $layout = 'table', $single = '' ) {
 		$permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 		if ( $permission === true ) {
-			if ( $layout == 'table' ) $this->list .= '<td>';
+			if ( is_admin() || $layout == 'table' ) $this->list .= '<td>';
 			if ( $completed == 1 ) {
 				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox completed'.$single.'" checked="checked" />', esc_attr( $id ) );
 			} else {
@@ -435,7 +438,7 @@ class ClevernessToDoList {
 			}
 			$cleverness_todo_complete_nonce = wp_create_nonce( 'todocomplete' );
 			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="'.esc_attr( $cleverness_todo_complete_nonce ).'" />';
-			if ( !is_admin() && $layout == 'table' ) $this->list .= '</td>';
+			if ( is_admin() || $layout == 'table' ) $this->list .= '</td>';
 		}
 	}
 
@@ -445,13 +448,12 @@ class ClevernessToDoList {
 	 * @param string $layout
 	 */
 	public function show_todo_text( $todo_text, $layout = 'table' ) {
-		if ( !is_admin() && $layout == 'table' ) {
+		if ( is_admin() || $layout == 'table' ) {
 			$this->list .= '<td>';
-		} elseif ( is_admin() ) {
-			$this->list .= '&nbsp;';
 		}
-		$this->list .= stripslashes( $todo_text );
-		if ( $layout == 'table' ) $this->list .= '</td>';
+		$text = apply_filters( 'the_content', $todo_text );
+		$this->list .= $text;
+		if ( is_admin() || $layout == 'table' ) $this->list .= '</td>';
 	}
 
 	/**

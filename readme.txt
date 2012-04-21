@@ -137,6 +137,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 == Changelog ==
 
 = 3.2 =
+ * Added ability to assign to-do items to multiple users
+ * Changed the textarea to use WP_Editor
+ * Added dashboard setting to hide the Edit link on the Dashboard widget
 
 = 3.1.2 =
 * Fixed Added By showing in under Individual setting

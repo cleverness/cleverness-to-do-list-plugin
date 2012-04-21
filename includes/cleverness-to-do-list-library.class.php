@@ -775,6 +775,12 @@ class CTDL_Lib {
 				update_option( 'CTDL_advanced', $advanced_options );
 			}
 
+			if ( $version < 3.2 ) {
+				$dashboard_options = get_option( 'CTDL_dashboard_settings' );
+				$dashboard_options['show_edit_link'] = 1;
+				update_option( 'CTDL_dashboard_settings', $dashboard_options );
+			}
+
 		}
 	}
 
