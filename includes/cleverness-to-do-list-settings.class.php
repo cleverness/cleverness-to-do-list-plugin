@@ -64,7 +64,7 @@ class CTDL_Settings {
 		echo '<br />';
 		_e( 'The default general capabilities of each user role are as follows: ', 'cleverness-to-do-list' );
 		echo '<br />';
-		_e( 'Contributors: Edit Posts, Authors: Publish Posts, Editors: Edit Others Posts, Administrators: Manage Options', 'cleverness-to-do-list' );
+		_e( 'Subscribers: Read, Contributors: Edit Posts, Authors: Publish Posts, Editors: Edit Others Posts, Administrators: Manage Options', 'cleverness-to-do-list' );
 		echo '<br /><br /><em><strong>';
 		_e( 'When using the Master list type non-administrator users should only be allowed to view and complete items, otherwise they will be able to edit the Master list.', 'cleverness-to-do-list' );
 		echo '</strong></em>';
@@ -303,6 +303,7 @@ class CTDL_Settings {
 
 	function permission_option($args) { ?>
 		<select name="<?php echo $this->permissions_key; ?>[<?php echo $args['label_for']; ?>]">
+			<option value="read"<?php if ( $this->permission_settings[$args['label_for']] == 'read' ) echo ' selected="selected"'; ?>><?php _e( 'Read', 'cleverness-to-do-list' ); ?></option>
 			<option value="edit_posts"<?php if ( $this->permission_settings[$args['label_for']] == 'edit_posts' ) echo ' selected="selected"'; ?>><?php _e( 'Edit Posts', 'cleverness-to-do-list' ); ?></option>
 			<option value="publish_posts"<?php if ( $this->permission_settings[$args['label_for']] == 'publish_posts' ) echo ' selected="selected"'; ?>><?php _e( 'Publish Posts', 'cleverness-to-do-list' ); ?></option>
 			<option value="edit_others_posts"<?php if ( $this->permission_settings[$args['label_for']] == 'edit_others_posts' ) echo ' selected="selected"'; ?>><?php _e( 'Edit Others Posts', 'cleverness-to-do-list'); ?></option>

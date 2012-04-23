@@ -282,7 +282,7 @@ class ClevernessToDoList {
 	 * @param int $assign Existing field data
 	 */
 	protected function create_assign_field( $assign = NULL ) {
-		if ( CTDL_Loader::$settings['assign'] == 0 && current_user_can( CTDL_Loader::$settings['assign_capability'] ) ) {
+		if ( CTDL_Loader::$settings['list_view'] != 0 && ( CTDL_Loader::$settings['assign'] == 0 && current_user_can( CTDL_Loader::$settings['assign_capability'] ) ) ) {
 			$selected = '';
 			$this->form .= '<tr>
 		  		<th scope="row"><label for="cleverness_todo_assign">'.__( 'Assign To', 'cleverness-to-do-list' ).'</label></th>
