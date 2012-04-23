@@ -366,8 +366,6 @@ class ClevernessToDoList {
 	 * @param array $todo_text Existing field data
 	 */
 	protected function create_todo_text_field( $todo_text = NULL ) {
-		//$text = ( isset( $todo_text ) ? stripslashes( esc_html( $todo_text, 1 ) ) : '' );
-		//$text = apply_filters( 'the_content', $todo_text );
 		$this->form .= '<tr><th scope="row">'. __( 'To-Do', 'cleverness-to-do-list' ).'</th><td>';
 		ob_start();
 		wp_editor( $todo_text, 'clevernesstododescription', array(
@@ -378,13 +376,7 @@ class ClevernessToDoList {
 		                                                       ) );
 		$this->form .= ob_get_contents();
 		ob_end_clean();
-
 		$this->form .= '</td></tr>';
-
-		/*$this->form .= sprintf( '<tr>
-        	<th scope="row"><label for="cleverness_todo_description">%s</label></th>
-        	<td><textarea id="cleverness_todo_description" name="cleverness_todo_description" rows="5" cols="50">%s</textarea></td>
-			</tr>', __( 'To-Do', 'cleverness-to-do-list' ), $text );*/
 	}
 
 	/**
