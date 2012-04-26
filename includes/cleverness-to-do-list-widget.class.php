@@ -153,16 +153,16 @@ class CTDL_Widget extends WP_Widget {
 
 				$ClevernessToDoList->list .= '<li'.$priority_class.'>';
 				$ClevernessToDoList->show_todo_text( get_the_content(), $layout );
-				if ( $progress == 1  && $progress_meta != '' ) {
+				if ( CTDL_Loader::$settings['show_progress'] == 1 && $progress == 1  && $progress_meta != '' ) {
 					$ClevernessToDoList->list .= ' - ';
 					$ClevernessToDoList->show_progress( $progress_meta, $layout );
 				}
-				if ( $deadline == 1 && $deadline_meta != '' ) {
+				if ( CTDL_Loader::$settings['show_deadline'] == 1 && $deadline == 1 && $deadline_meta != '' ) {
 					$ClevernessToDoList->list .= '<br /><span class="deadline">'.__( 'Deadline: ', 'cleverness-to-do-list' );
 					$ClevernessToDoList->show_deadline( $deadline_meta, $layout );
 					$ClevernessToDoList->list .= '</span>';
 				}
-				if ( $assigned_to == 1 && CTDL_Loader::$settings['list_view'] != '2' && $assign_meta != -1 ) {
+				if ( CTDL_Loader::$settings['assign'] == 0 && $assigned_to == 1 && CTDL_Loader::$settings['list_view'] != 0 && $assign_meta != -1 ) {
 					$ClevernessToDoList->list .= '<br /><span class="assigned">'.__( 'Assigned to ', 'cleverness-to-do-list' );
 					$ClevernessToDoList->show_assigned( $assign_meta, $layout );
 					$ClevernessToDoList->list .= '</span>';

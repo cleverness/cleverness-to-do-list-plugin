@@ -6,7 +6,7 @@ Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.3
 Tested up to: 3.3.1
-Stable tag: 3.1.3
+Stable tag: 3.1.4
 
 Integrates a customizable, multi-featured to-do list.
 
@@ -135,6 +135,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 3. Settings Page
 
 == Changelog ==
+
+= 3.1.4 =
+* Fixed issue with Assign column not showing
 
 = 3.1.3 =
 * Added ability to chose Subscriber level capabilities in User Permissions
@@ -342,6 +345,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Fixed to work in WordPress 2.8
 
 == Upgrade Notice ==
+
+= 3.1.4 =
+Bug fix
 
 = 3.1.3 =
 Bug fix

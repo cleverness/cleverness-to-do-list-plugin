@@ -383,8 +383,8 @@ class ClevernessToDoList {
 	  	$this->list .= '<th>'.__( 'Priority', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th>'.__( 'Progress', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['categories'] == 1 ) $this->list .= '<th>'.__( 'Category', 'cleverness-to-do-list' ).'</th>';
-		if ( CTDL_Loader::$settings['assign'] == 0  && (CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0
-			&& ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) || ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1 )
+		if ( CTDL_Loader::$settings['assign'] == 0  && ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0
+			&& ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) || ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 )
 			&& CTDL_Loader::$settings['assign'] == 0 ) $this->list .= '<th>'.__( 'Assigned To', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['todo_author'] == 0 && CTDL_Loader::$settings['list_view'] == 1 ) $this->list .= '<th>'.__ ('Added By', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th>'.__( 'Deadline', 'cleverness-to-do-list' ).'</th>';
@@ -482,8 +482,8 @@ class ClevernessToDoList {
 	 * @param string $layout
 	 */
 	public function show_assigned( $assign, $layout = 'table' ) {
-		if ( ( ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
-		( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1) ) && CTDL_Loader::$settings['assign'] == 0 ) {
+		if ( ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
+		( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1) ) && CTDL_Loader::$settings['assign'] == 0 ) {
 			if ( $assign != '-1' && $assign != '' && $assign != 0 ) {
 				$assign_user = get_userdata( $assign );
 				if ( $layout == 'table' ) {

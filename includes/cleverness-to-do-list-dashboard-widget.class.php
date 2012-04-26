@@ -129,8 +129,8 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			$this->list .= '<p id="todo-'.$id.'"><span'.$priority_class.'>';
 			$this->show_checkbox( $id, $completed );
 			$this->show_todo_text( get_the_content() );
-			if ( ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) )
-					||  ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) && CTDL_Loader::$settings['assign'] == 0 ) {
+			if ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) )
+					||  ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) && CTDL_Loader::$settings['assign'] == 0 ) {
 				$assign_user = '';
 				if ( $assign_meta != '-1' && $assign_meta != '0' ) {
 					$assign_user = get_userdata( $assign_meta );
