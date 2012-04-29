@@ -321,8 +321,9 @@ class ClevernessToDoList {
 			$value = ( isset( $deadline ) && $deadline != 0 ? $deadline : '' );
 			$this->form .= sprintf( '<tr>
 				<th scope="row"><label for="cleverness_todo_deadline">%s</label></th>
-				<td><input type="text" name="cleverness_todo_deadline" id="cleverness_todo_deadline" value="%s" /></td>
-			</tr>', __( 'Deadline', 'cleverness-to-do-list' ), esc_attr( $value ) );
+				<td><input type="hidden" name="cleverness_todo_format" id="cleverness_todo_format" value="%s" />
+				<input type="text" name="cleverness_todo_deadline" id="cleverness_todo_deadline" value="%s" /></td>
+			</tr>', __( 'Deadline', 'cleverness-to-do-list' ), CTDL_Lib::dateFormatTojQueryUIDatePickerFormat( CTDL_Loader::$settings['date_format'] ), esc_attr( $value ) );
 		}
 	}
 

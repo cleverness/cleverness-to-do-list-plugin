@@ -511,6 +511,34 @@ class CTDL_Lib {
 	}
 
 	/**
+	 * Convert PHP date to jQuery date
+	 * @static
+	 * @param $dateFormat
+	 * @return string
+	 * @since 3.1.5
+	 */
+	public static function dateFormatTojQueryUIDatePickerFormat( $dateFormat ) {
+
+		$chars = array(
+			// Day
+			'd' => 'dd',
+			'j' => 'd',
+			'l' => 'DD',
+			'D' => 'D',
+			// Month
+			'm' => 'mm',
+			'n' => 'm',
+			'F' => 'MM',
+			'M' => 'M',
+			// Year
+			'Y' => 'yy',
+			'y' => 'y',
+		);
+
+		return strtr( (string)$dateFormat, $chars );
+	}
+
+	/**
 	 * Add an Item to the Admin Menu
 	 * @param $wp_admin_bar
 	 */
