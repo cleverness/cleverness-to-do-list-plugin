@@ -197,7 +197,7 @@ class CTDL_Loader {
 	 * @static
 	 */
 	public static function add_admin_js() {
-		wp_register_script( 'cleverness_todo_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-admin.js', '', 1.0, true );
+		wp_register_script( 'cleverness_todo_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-admin.js', '', 1.1, true );
 		wp_enqueue_script( 'cleverness_todo_js' );
 		wp_enqueue_script( 'jquery-color' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -246,7 +246,7 @@ class CTDL_Loader {
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_script( 'jquery-color' );
-		wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-frontend.js', array( 'jquery' ), 1.0, true );
+		wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-frontend.js', array( 'jquery' ), 1.1, true );
 		wp_enqueue_script( 'cleverness_todo_checklist_complete_js' );
 		wp_localize_script( 'cleverness_todo_checklist_complete_js', 'ctdl', CTDL_Loader::get_js_vars() );
 		wp_print_scripts( 'cleverness_todo_checklist_complete_js' );

@@ -1,9 +1,8 @@
 jQuery( document ).ready( function( $ ) {
 
 	$( function() {
-		//$( "#cleverness_todo_deadline" ).datepicker();
-		$dateformat = $( "#cleverness_todo_format" ).val();
-		$( "#cleverness_todo_deadline" ).datepicker( { dateFormat: $dateformat }  );
+		$cleverness_todo_dateformat = $( "#cleverness_todo_format" ).val();
+		$( "#cleverness_todo_deadline" ).datepicker( { dateFormat: $cleverness_todo_dateformat }  );
 	} );
 
 	$( '.todo-table tbody tr:visible:even' ).addClass( 'alternate' );

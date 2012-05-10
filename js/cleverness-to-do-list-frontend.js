@@ -1,7 +1,8 @@
 jQuery( document ).ready( function( $ ) {
 
 	$( function() {
-		$( "#cleverness_todo_deadline" ).datepicker();
+		$cleverness_todo_dateformat = $( "#cleverness_todo_format" ).val();
+		$( "#cleverness_todo_deadline" ).datepicker( { dateFormat:$cleverness_todo_dateformat } );
 	} );
 
 	$( '.todo-checkbox' ).click( function () {

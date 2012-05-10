@@ -5,7 +5,7 @@
  * Allows administration and viewing of to-do items on front-end
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.1.1
+ * @version 3.1.7
  */
 
 /**
@@ -35,6 +35,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		), $atts ) );
 		$this->atts = $atts;
 		$this->add_script = true;
+		$this->list = '';
 
 		/** @var $title string */
 		if ( $title != '' ) {
@@ -288,6 +289,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 		get_currentuserinfo();
 		$this->add_script = true;
 		$layout = 'list';
+		$this->list = '';
 
 		list( $priorities, $user, $url, $action ) = CTDL_Lib::set_variables();
 
@@ -507,19 +509,21 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 	 */
 	public function display() {
 		extract( shortcode_atts( array(
-			'title'      => '',
-			'type' => 'list',
-			'priorities' => 'show',
-			'assigned' => 'show',
-			'deadline' => 'show',
-			'progress' => 'show',
-			'addedby'  => 'show',
-			'date'     => 0,
-			'completed' => '',
+			'title'           => '',
+			'type'            => 'list',
+			'priorities'      => 'show',
+			'assigned'        => 'show',
+			'deadline'        => 'show',
+			'progress'        => 'show',
+			'addedby'         => 'show',
+			'date'            => 0,
+			'completed'       => '',
 			'completed_title' => '',
-			'list_type' => 'ol',
-			'category' => '0'
+			'list_type'       => 'ol',
+			'category'        => '0'
 		), $this->atts ) );
+
+		$this->list = '';
 
 		/** @var $category mixed */
 		if ( $category == 'all' ) $category = '0';
