@@ -231,8 +231,14 @@ class CTDL_Lib {
 			add_post_meta( $post_id, '_status', 0, true );
 			$priority = ( isset( $_POST['cleverness_todo_priority'] ) ? absint( $_POST['cleverness_todo_priority'] ) : 1 );
 			add_post_meta( $post_id, '_priority', $priority, true );
-			$assign = ( isset( $_POST['cleverness_todo_assign'] ) ? esc_attr( $_POST['cleverness_todo_assign'] ) : -1 );
-			add_post_meta( $post_id, '_assign', $assign, true );
+			$assign = ( isset( $_POST['cleverness_todo_assign'] ) ? $_POST['cleverness_todo_assign'] : -1 );
+			if ( is_array( $assign ) ) {
+				foreach( $assign as $value ) {
+					add_post_meta( $post_id, '_assign', $value );
+				}
+			} else {
+				add_post_meta( $post_id, '_assign', $assign );
+			}
 			$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ? esc_attr( $_POST['cleverness_todo_deadline'] ) : '' );
 			add_post_meta( $post_id, '_deadline', $deadline, true );
 			$progress = ( isset( $_POST['cleverness_todo_progress'] ) ? absint( $_POST['cleverness_todo_progress'] ) : 0 );
@@ -290,7 +296,17 @@ class CTDL_Lib {
 
 			if ( isset( $_POST['cat'] ) ) wp_set_post_terms( $post_id, absint( $_POST['cat'] ), 'todocategories', false);
 			if ( isset( $_POST['cleverness_todo_priority'] ) ) update_post_meta( $post_id, '_priority', esc_attr( $_POST['cleverness_todo_priority'] ) );
-			if ( isset( $_POST['cleverness_todo_assign'] ) ) update_post_meta( $post_id, '_assign', esc_attr( $_POST['cleverness_todo_assign'] ) );
+			if ( isset( $_POST['cleverness_todo_assign'] ) )  {
+				$assign = $_POST['cleverness_todo_assign'];
+				if ( is_array( $assign ) ) {
+					delete_post_meta( $post_id, '_assign' );
+					foreach ( $assign as $value ) {
+						add_post_meta( $post_id, '_assign', absint( $value ) );
+					}
+				} else {
+					update_post_meta( $post_id, '_assign', absint( $assign ) );
+				}
+			}
 			if ( isset( $_POST['cleverness_todo_deadline'] ) ) update_post_meta( $post_id, '_deadline', esc_attr( $_POST['cleverness_todo_deadline'] ) );
 			if ( isset( $_POST['cleverness_todo_progress'] ) ) update_post_meta( $post_id, '_progress', absint( $_POST['cleverness_todo_progress'] ) );
 
@@ -439,7 +455,7 @@ class CTDL_Lib {
 	public static function get_todo_meta( $id ) {
 		$post_meta = get_post_custom( $id );
 		$priority = ( isset( $post_meta['_priority'][0] ) ? $post_meta['_priority'][0] : 1 );
-		$assign_meta = ( isset( $post_meta['_assign'][0] ) ? $post_meta['_assign'][0] : 0 );
+		$assign_meta = ( isset( $post_meta['_assign'] ) ? $post_meta['_assign'] : 0 );
 		$deadline_meta = ( isset( $post_meta['_deadline'][0] ) ? $post_meta['_deadline'][0] : '' );
 		$completed_meta = ( isset( $post_meta['_completed'][0] ) ? $post_meta['_completed'][0] : NULL );
 		$progress_meta = ( isset( $post_meta['_progress'][0] ) ? $post_meta['_progress'][0] : '' );
@@ -785,6 +801,12 @@ class CTDL_Lib {
 				$advanced_options['email_show_assigned_by'] = 0;
 				$advanced_options['show_date_added'] = 0;
 				update_option( 'CTDL_advanced', $advanced_options );
+			}
+
+			if ( $version < 3.2 ) {
+				$dashboard_options = get_option( 'CTDL_dashboard_settings' );
+				$dashboard_options['show_edit_link'] = 1;
+				update_option( 'CTDL_dashboard_settings', $dashboard_options );
 			}
 
 		}

@@ -208,7 +208,7 @@ class ClevernessToDoList {
 
     	    $this->form .= '<form name="edittodo" id="edittodo" action="'.$url.'" method="post"><table class="todo-form form-table">';
 			$this->create_priority_field( get_post_meta( $id, '_priority', true ) );
-			$this->create_assign_field( get_post_meta( $id, '_assign', true ) );
+			$this->create_assign_field( get_post_meta( $id, '_assign' ) );
 			$this->create_deadline_field( get_post_meta( $id, '_deadline', true ) );
 			$this->create_progress_field( get_post_meta( $id, '_progress', true ) );
 			$this->create_category_field( get_the_terms( $id, 'todocategories' ) );
@@ -286,27 +286,29 @@ class ClevernessToDoList {
 			$selected = '';
 			$this->form .= '<tr>
 		  		<th scope="row"><label for="cleverness_todo_assign">'.__( 'Assign To', 'cleverness-to-do-list' ).'</label></th>
-		  		<td>
-					<select name="cleverness_todo_assign" id="cleverness_todo_assign">';
-					if ( isset( $assign ) && $assign == '-1' ) $selected = ' selected="selected"';
-					$this->form .= sprintf( '<option value="-1"%s>%s</option>', $selected, __( 'None', 'cleverness-to-do-list' ) );
+		  		<td><div id="resizable" class="ui-widget-content ui-resizable scroll-checkboxes">';
+					if ( isset( $assign ) && $assign == '-1' ) $selected = ' checked="checked"';
+					$this->form .= sprintf( '<input type="checkbox" name="cleverness_todo_assign[]" id="cleverness_todo_assign" value="-1" %s/> %s', $selected, __( 'None', 'cleverness-to-do-list' ) ).'<br />';
 
 					if ( CTDL_Loader::$settings['user_roles'] == '' ) {
 						$roles = array( 'contributor', 'author', 'editor', 'administrator' );
 					} else {
 						$roles = explode( ", ", CTDL_Loader::$settings['user_roles'] );
-						}
+					}
 					foreach ( $roles as $role ) {
 						$role_users = CTDL_Lib::get_users( $role );
-						foreach( $role_users as $role_user ) {
-							$selected = '';
+						foreach ( $role_users as $role_user ) {
+							$selected  = '';
 							$user_info = get_userdata( $role_user->ID );
-							if ( isset( $assign ) && $assign == $role_user->ID ) $selected = ' selected="selected"';
-							$this->form .= sprintf( '<option value="%d"%s>%s</option>', $role_user->ID, $selected, $user_info->display_name );
+							if ( is_array( $assign ) ) {
+								if ( isset( $assign ) && in_array( $role_user->ID, $assign ) ) $selected = ' checked="checked"';
+							} else {
+								if ( isset( $assign ) && $assign == $role_user->ID ) $selected = ' checked="checked"';
+							}
+							$this->form .= sprintf( '<input type="checkbox" name="cleverness_todo_assign[]" id="cleverness_todo_assign" value="%d" %s/> %s', $role_user->ID, $selected, $user_info->display_name ).'<br />';
 						}
 					}
-
-					$this->form .= '</select>
+					$this->form .= '</div>
 				</td>
 			</tr>';
 		}
@@ -365,11 +367,17 @@ class ClevernessToDoList {
 	 * @param array $todo_text Existing field data
 	 */
 	protected function create_todo_text_field( $todo_text = NULL ) {
-		$text = ( isset( $todo_text ) ? stripslashes( esc_html( $todo_text, 1 ) ) : '' );
-		$this->form .= sprintf( '<tr>
-        	<th scope="row"><label for="cleverness_todo_description">%s</label></th>
-        	<td><textarea id="cleverness_todo_description" name="cleverness_todo_description" rows="5" cols="50">%s</textarea></td>
-			</tr>', __( 'To-Do', 'cleverness-to-do-list' ), $text );
+		$this->form .= '<tr><th scope="row">'. __( 'To-Do', 'cleverness-to-do-list' ).'</th><td>';
+		ob_start();
+		wp_editor( $todo_text, 'clevernesstododescription', array(
+															  'media_buttons' => true,
+		                                                      'textarea_name' => 'cleverness_todo_description',
+		                                                      'textarea_rows' => 5,
+															  'wpautop'       => true,
+		                                                       ) );
+		$this->form .= ob_get_contents();
+		ob_end_clean();
+		$this->form .= '</td></tr>';
 	}
 
 	/**
@@ -378,8 +386,8 @@ class ClevernessToDoList {
 	 */
 	protected function show_table_headings( $completed = 0 ) {
 		$this->list .= '<thead><tr>';
-		if ( !is_admin() ) $this->list .= '<th></th>';
-		if ( CTDL_Loader::$settings['show_id'] ) $this->list .= '<th>'.__( 'ID', 'cleverness-to-do-list' ).'</th>';
+		$this->list .= '<th id="checkbox-col"></th>';
+		if ( CTDL_Loader::$settings['show_id'] ) $this->list .= '<th id="id-col">'.__( 'ID', 'cleverness-to-do-list' ).'</th>';
 		$this->list .= '<th>'.__( 'Item', 'cleverness-to-do-list' ).'</th>';
 	  	$this->list .= '<th>'.__( 'Priority', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th>'.__( 'Progress', 'cleverness-to-do-list' ).'</th>';
@@ -391,7 +399,7 @@ class ClevernessToDoList {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th>'.__( 'Deadline', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['show_date_added'] == 1 ) $this->list .= '<th>'.__( 'Date Added', 'cleverness-to-do-list' ).'</th>';
 		if ( $completed == 1 && CTDL_Loader::$settings['show_completed_date'] == 1) $this->list .= '<th>'.__('Completed', 'cleverness-to-do-list' ).'</th>';
-		if ( current_user_can(CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) $this->list .= '<th>'.__( 'Action', 'cleverness-to-do-list' ).'</th>';
+		if ( current_user_can(CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) $this->list .= '<th id="action-col">'.__( 'Action', 'cleverness-to-do-list' ).'</th>';
     	$this->list .= '</tr></thead>';
 	}
 
@@ -415,7 +423,7 @@ class ClevernessToDoList {
 	protected function show_checkbox( $id, $completed = NULL, $layout = 'table', $single = '' ) {
 		$permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 		if ( $permission === true ) {
-			if ( $layout == 'table' ) $this->list .= '<td>';
+			if ( is_admin() || $layout == 'table' ) $this->list .= '<td>';
 			if ( $completed == 1 ) {
 				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox completed'.$single.'" checked="checked" />', esc_attr( $id ) );
 			} else {
@@ -423,7 +431,7 @@ class ClevernessToDoList {
 			}
 			$cleverness_todo_complete_nonce = wp_create_nonce( 'todocomplete' );
 			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="'.esc_attr( $cleverness_todo_complete_nonce ).'" />';
-			if ( !is_admin() && $layout == 'table' ) $this->list .= '</td>';
+			if ( is_admin() || $layout == 'table' ) $this->list .= '</td>';
 		}
 	}
 
@@ -433,13 +441,12 @@ class ClevernessToDoList {
 	 * @param string $layout
 	 */
 	public function show_todo_text( $todo_text, $layout = 'table' ) {
-		if ( !is_admin() && $layout == 'table' ) {
+		if ( is_admin() || $layout == 'table' ) {
 			$this->list .= '<td>';
-		} elseif ( is_admin() ) {
-			$this->list .= '&nbsp;';
 		}
-		$this->list .= stripslashes( $todo_text );
-		if ( $layout == 'table' ) $this->list .= '</td>';
+		$text = apply_filters( 'the_content', $todo_text );
+		$this->list .= $text;
+		if ( is_admin() || $layout == 'table' ) $this->list .= '</td>';
 	}
 
 	/**
@@ -486,12 +493,26 @@ class ClevernessToDoList {
 		if ( ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
 		( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1) ) && CTDL_Loader::$settings['assign'] == 0 ) {
 			if ( $assign != '-1' && $assign != '' && $assign != 0 ) {
-				$assign_user = get_userdata( $assign );
-				if ( $layout == 'table' ) {
-					$this->list .= '<td>'.esc_attr( $assign_user->display_name ).'</td>';
+
+				if ( is_array( $assign ) ) {
+					$assign_users = '';
+					if ( $layout == 'table' ) $this->list .= '<td>';
+					foreach ( $assign as $value ) {
+						$user = get_userdata( $value );
+						$assign_users .= $user->display_name.', ';
+					}
+					$this->list .= substr( $assign_users, 0, -2 );
+					if ( $layout == 'table' ) $this->list .= '</td>';
+
 				} else {
-					$this->list .= esc_attr( $assign_user->display_name );
+					$assign_user = get_userdata( $assign );
+					if ( $layout == 'table' ) {
+						$this->list .= '<td>' . esc_attr( $assign_user->display_name ) . '</td>';
+					} else {
+						$this->list .= esc_attr( $assign_user->display_name );
+					}
 				}
+
 			} else {
 				if ( $layout == 'table' ) $this->list .= '<td></td>';
 			}

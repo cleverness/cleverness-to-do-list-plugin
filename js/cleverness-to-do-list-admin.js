@@ -5,6 +5,10 @@ jQuery( document ).ready( function( $ ) {
 		$( "#cleverness_todo_deadline" ).datepicker( { dateFormat: $cleverness_todo_dateformat }  );
 	} );
 
+	$( function () {
+		$( "#resizable" ).resizable();
+	} );
+
 	$( '.todo-table tbody tr:visible:even' ).addClass( 'alternate' );
 
 	/* Complete To-Dos */

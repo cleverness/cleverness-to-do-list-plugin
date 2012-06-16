@@ -5,7 +5,7 @@
  * Creates the dashboard widget
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.1
+ * @version 3.2
  */
 
 /**
@@ -126,7 +126,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 				}
 			}
 
-			$this->list .= '<p id="todo-'.$id.'"><span'.$priority_class.'>';
+			$this->list .= '<div id="todo-'.$id.'"'.$priority_class.'>';
 			$this->show_checkbox( $id, $completed );
 			$this->show_todo_text( get_the_content() );
 			if ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) )
@@ -157,14 +157,31 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 				}
 			}
 
-			if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 )
+			if ( $this->dashboard_settings['show_edit_link'] == 1 && ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) )
 				$this->list .= ' <small>(<a href="admin.php?page=cleverness-to-do-list&amp;action=edit-todo&amp;id='.esc_attr( $id ).'">'.__( 'Edit', 'cleverness-to-do-list' ).'</a>)</small>';
 
-			$this->list .= '</span></p>';
+			$this->list .= '</div>';
 		endwhile;
 
 		return $posts_to_exclude;
 
+	}
+
+	/**
+	 * Create the HTML to show a To-Do List Checkbox
+	 * @param int $id
+	 * @param boolean $completed
+	 * @param string $layout
+	 * @param string $single
+	 * @since 3.2
+	 */
+	protected function show_checkbox( $id, $completed = NULL, $layout = 'table', $single = '' ) {
+		$permission = CTDL_Lib::check_permission( 'todo', 'complete' );
+		if ( $permission === true ) {
+			$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted floatleft' . $single . '"/>', esc_attr( $id ) );
+			$cleverness_todo_complete_nonce = wp_create_nonce( 'todocomplete' );
+			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="' . esc_attr( $cleverness_todo_complete_nonce ) . '" />';
+		}
 	}
 
 	/**
@@ -194,6 +211,16 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 				<select id="cleverness_todo_dashboard_settings[show_dashboard_deadline]" name="cleverness_todo_dashboard_settings[show_dashboard_deadline]">
 					<option value="0"<?php if ( $options['show_dashboard_deadline'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
 					<option value="1"<?php if ( $options['show_dashboard_deadline'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+				</select>
+			</p>
+
+			<p><label
+					for="cleverness_todo_dashboard_settings[show_edit_link]"><?php _e( 'Show Edit Link', 'cleverness-to-do-list' ); ?></label>
+				<select id="cleverness_todo_dashboard_settings[show_edit_link]"
+						name="cleverness_todo_dashboard_settings[show_edit_link]">
+					<option value="0"<?php if ( $options['show_edit_link'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+					<option value="1"<?php if ( $options['show_edit_link'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>
+						&nbsp;</option>
 				</select>
 			</p>
 
