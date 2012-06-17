@@ -1,6 +1,7 @@
 .todo-important, .widefat .todo-important td {
 	color: #CC0033;
-	}
+}
+
 .todo-low, .widefat .todo-low td {
 	color: #666666;
 }
@@ -29,7 +30,7 @@ p.error {
 	min-width: 120px;
 }
 
-.scroll-checkboxes {
+.todo-scroll-checkboxes {
 	height: 55px;
 	padding: 5px;
     overflow-y: scroll;
@@ -41,4 +42,19 @@ p.error {
 #cleverness_todo input.floatleft {
 	float: left;
 	margin-right: 5px;
+}
+
+table#todo-list thead tr .header {
+	background-image: url(images/bg.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+
+table#todo-list thead tr .headerSortUp {
+	background-image: url(images/asc.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
+}
+
+table#todo-list thead tr .headerSortDown {
+	background-image: url(images/desc.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
 }

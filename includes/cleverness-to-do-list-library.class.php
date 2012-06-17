@@ -744,7 +744,8 @@ class CTDL_Lib {
 					'show_deadline'         => $the_options['show_deadline'],
 					'show_progress'         => $the_options['show_progress'],
 					'sort_order'            => $the_options['sort_order'],
-					'admin_bar'             => 1
+					'admin_bar'             => 1,
+					'wysiwyg'               => 1,
 				);
 
 				$advanced_options = array(
@@ -807,6 +808,12 @@ class CTDL_Lib {
 				$dashboard_options = get_option( 'CTDL_dashboard_settings' );
 				$dashboard_options['show_edit_link'] = 1;
 				update_option( 'CTDL_dashboard_settings', $dashboard_options );
+			}
+
+			if ( $version < 3.2 ) {
+				$general_options            = get_option( 'CTDL_general' );
+				$general_options['wysiwyg'] = 1;
+				update_option( 'CTDL_general', $general_options );
 			}
 
 		}

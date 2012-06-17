@@ -6,6 +6,10 @@ Description: Manage to-do list items on a individual or group basis with categor
 Author: C.M. Kendrick
 Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list/
+@todo add post planner advertising
+@todo add filter and action hooks
+@todo add tablesorter to front-end admin
+@todo format front-end checklist better
 */
 
 /**
@@ -25,21 +29,22 @@ include_once 'includes/cleverness-to-do-list-widget.class.php';
  */
 function cleverness_todo_loader() {
 
-	if ( !defined( 'CTDL_DB_VERSION' ) ) define( 'CTDL_DB_VERSION', '3.2' ); // also update in cleverness_todo_activation at the bottom of this file
+	if ( !defined( 'CTDL_DB_VERSION' ) )     define( 'CTDL_DB_VERSION', '3.2' ); // also update in cleverness_todo_activation at the bottom of this file
 	if ( !defined( 'CTDL_PLUGIN_VERSION' ) ) define( 'CTDL_PLUGIN_VERSION', '3.2' );
-	if ( !defined( 'CTDL_FILE' ) ) define( 'CTDL_FILE', __FILE__ );
-	if ( !defined( 'CTDL_BASENAME' ) ) define( 'CTDL_BASENAME', plugin_basename( __FILE__ ) );
-	if ( !defined( 'CTDL_PLUGIN_DIR' ) ) define( 'CTDL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-	if ( !defined( 'CTDL_PLUGIN_URL' ) ) define( 'CTDL_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+	if ( !defined( 'CTDL_FILE' ) )           define( 'CTDL_FILE', __FILE__ );
+	if ( !defined( 'CTDL_BASENAME' ) )       define( 'CTDL_BASENAME', plugin_basename( __FILE__ ) );
+	if ( !defined( 'CTDL_PLUGIN_DIR' ) )     define( 'CTDL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+	if ( !defined( 'CTDL_PLUGIN_URL' ) )     define( 'CTDL_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 
-	$plugin_path = plugin_basename( dirname( __FILE__ ) .'/languages' );
-	load_plugin_textdomain( 'cleverness-to-do-list', '', $plugin_path );
+	$language_path = plugin_basename( dirname( __FILE__ ) .'/languages' );
+	load_plugin_textdomain( 'cleverness-to-do-list', '', $language_path );
 
 	include_once 'includes/cleverness-to-do-list-loader.class.php';
+
 	CTDL_Loader::init();
 
 	$action = '';
-	if ( isset( $_GET['action'] ) ) $action = $_GET['action'];
+	if ( isset( $_GET['action'] ) )  $action = $_GET['action'];
 	if ( isset( $_POST['action'] ) ) $action = $_POST['action'];
 
 	switch( $action ) {
@@ -92,7 +97,7 @@ function cleverness_todo_activation() {
 	}
 
 	if ( !defined( 'CTDL_DB_VERSION' ) ) define( 'CTDL_DB_VERSION','3.2' );
-	if ( !defined( 'CTDL_FILE' ) ) define( 'CTDL_FILE', __FILE__ );
+	if ( !defined( 'CTDL_FILE' ) )       define( 'CTDL_FILE', __FILE__ );
 	include_once 'includes/cleverness-to-do-list-library.class.php';
 
 	if ( get_option( 'CTDL_db_version' ) ) {
@@ -108,5 +113,3 @@ function cleverness_todo_activation() {
 }
 
 register_activation_hook( __FILE__, 'cleverness_todo_activation' );
-
-?>

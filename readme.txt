@@ -5,8 +5,8 @@ Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.3
-Tested up to: 3.3.1
-Stable tag: 3.1.2
+Tested up to: 3.4
+Stable tag: 3.2
 
 Integrates a customizable, multi-featured to-do list.
 
@@ -138,8 +138,12 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 = 3.2 =
  * Added ability to assign to-do items to multiple users
- * Changed the textarea to use WP_Editor
+ * Added the option for the textarea to use WP_Editor
  * Added dashboard setting to hide the Edit link on the Dashboard widget
+ * Added jQuery table sorting of the To-Do List
+ * Fixed missing jQuery UI CSS images
+ * Fixed completed date not showing in front-end shortcode
+
 
 = 3.1.7 =
 * Fixed issue with front-end shortcode

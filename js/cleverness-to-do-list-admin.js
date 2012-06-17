@@ -1,12 +1,14 @@
 jQuery( document ).ready( function( $ ) {
 
+	$( '#todo-list' ).tablesorter();
+
 	$( function() {
 		$cleverness_todo_dateformat = $( "#cleverness_todo_format" ).val();
 		$( "#cleverness_todo_deadline" ).datepicker( { dateFormat: $cleverness_todo_dateformat }  );
 	} );
 
 	$( function () {
-		$( "#resizable" ).resizable();
+		$( "#cleverness-resizable" ).resizable();
 	} );
 
 	$( '.todo-table tbody tr:visible:even' ).addClass( 'alternate' );

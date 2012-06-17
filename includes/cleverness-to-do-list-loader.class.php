@@ -190,7 +190,7 @@ class CTDL_Loader {
 		if ( file_exists( $cleverness_style_file ) ) {
 			wp_register_style( 'cleverness_todo_style_sheet', $cleverness_style_url );
 			wp_enqueue_style( 'cleverness_todo_style_sheet' );
-			wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-classic.css' );
+			wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-fresh.css' );
 		}
 	}
 
@@ -199,8 +199,12 @@ class CTDL_Loader {
 	 * @static
 	 */
 	public static function add_admin_js() {
-		wp_register_script( 'cleverness_todo_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-admin.js', '', 1.1, true );
+		wp_register_script( 'cleverness_todo_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-admin.js', '', 1.2, true );
+		wp_register_script( 'cleverness_metadata_js', CTDL_PLUGIN_URL.'/js/jquery.metadata.js', '', 1.0, true );
+		wp_register_script( 'cleverness_tablesorter_js', CTDL_PLUGIN_URL.'/js/jquery.tablesorter.min.js', '', 1.0, true );
 		wp_enqueue_script( 'cleverness_todo_js' );
+		wp_enqueue_script( 'cleverness_metadata_js' );
+		wp_enqueue_script( 'cleverness_tablesorter_js' );
 		wp_enqueue_script( 'jquery-color' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_script( 'jquery-ui-core' );

@@ -83,6 +83,7 @@ class CTDL_Settings {
 		add_settings_field( 'show_progress', __( 'Show Progress', 'cleverness-to-do-list' ), array( &$this, 'show_progress_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'sort_order', __( 'Sort Order', 'cleverness-to-do-list' ), array( &$this, 'sort_order_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'admin_bar', __( 'Show Admin Bar Menu', 'cleverness-to-do-list' ), array( &$this, 'admin_bar_option' ), $this->general_key, 'section_general' );
+		add_settings_field( 'wysiwyg', __( 'Use WYSIWYG Editor', 'cleverness-to-do-list' ), array( &$this, 'wysiwyg_option' ), $this->general_key, 'section_general' );
 	}
 
 	function categories_option() { ?>
@@ -152,6 +153,16 @@ class CTDL_Settings {
 	<select name="<?php echo $this->general_key; ?>[admin_bar]">
 		<option value="1"<?php if ( $this->general_settings['admin_bar'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
 		<option value="0"<?php if ( $this->general_settings['admin_bar'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+	</select>
+	<?php
+	}
+
+	function wysiwyg_option() {
+		?>
+	<select name="<?php echo $this->general_key; ?>[wysiwyg]">
+		<option value="1" <?php selected( $this->general_settings['wysiwyg'], 1 ); ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>
+			&nbsp;</option>
+		<option value="0" <?php selected( $this->general_settings['wysiwyg'], 0 ); ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
 	</select>
 	<?php
 	}

@@ -286,7 +286,7 @@ class ClevernessToDoList {
 			$selected = '';
 			$this->form .= '<tr>
 		  		<th scope="row"><label for="cleverness_todo_assign">'.__( 'Assign To', 'cleverness-to-do-list' ).'</label></th>
-		  		<td><div id="resizable" class="ui-widget-content ui-resizable scroll-checkboxes">';
+		  		<td><div id="cleverness-resizable" class="ui-widget-content ui-resizable todo-scroll-checkboxes">';
 					if ( isset( $assign ) && $assign == '-1' ) $selected = ' checked="checked"';
 					$this->form .= sprintf( '<input type="checkbox" name="cleverness_todo_assign[]" id="cleverness_todo_assign" value="-1" %s/> %s', $selected, __( 'None', 'cleverness-to-do-list' ) ).'<br />';
 
@@ -368,15 +368,20 @@ class ClevernessToDoList {
 	 */
 	protected function create_todo_text_field( $todo_text = NULL ) {
 		$this->form .= '<tr><th scope="row">'. __( 'To-Do', 'cleverness-to-do-list' ).'</th><td>';
-		ob_start();
-		wp_editor( $todo_text, 'clevernesstododescription', array(
-															  'media_buttons' => true,
-		                                                      'textarea_name' => 'cleverness_todo_description',
-		                                                      'textarea_rows' => 5,
-															  'wpautop'       => true,
-		                                                       ) );
-		$this->form .= ob_get_contents();
-		ob_end_clean();
+		if ( CTDL_Loader::$settings['wysiwyg'] == 1 ) {
+			ob_start();
+			wp_editor( $todo_text, 'clevernesstododescription', array(
+				'media_buttons' => true,
+				'textarea_name' => 'cleverness_todo_description',
+				'textarea_rows' => 5,
+				'wpautop'       => true,
+			) );
+			$this->form .= ob_get_contents();
+			ob_end_clean();
+		} else {
+			$text = ( isset( $todo_text ) ? stripslashes( esc_html( $todo_text, 1 ) ) : '' );
+			$this->form .= '<textarea id="cleverness_todo_description" name="cleverness_todo_description" rows="5" cols="50">'.$text.'</textarea>';
+		}
 		$this->form .= '</td></tr>';
 	}
 
@@ -386,7 +391,7 @@ class ClevernessToDoList {
 	 */
 	protected function show_table_headings( $completed = 0 ) {
 		$this->list .= '<thead><tr>';
-		$this->list .= '<th id="checkbox-col"></th>';
+		$this->list .= '<th id="checkbox-col" class="{sorter: false} no-sort"></th>';
 		if ( CTDL_Loader::$settings['show_id'] ) $this->list .= '<th id="id-col">'.__( 'ID', 'cleverness-to-do-list' ).'</th>';
 		$this->list .= '<th>'.__( 'Item', 'cleverness-to-do-list' ).'</th>';
 	  	$this->list .= '<th>'.__( 'Priority', 'cleverness-to-do-list' ).'</th>';
@@ -399,7 +404,7 @@ class ClevernessToDoList {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th>'.__( 'Deadline', 'cleverness-to-do-list' ).'</th>';
 		if ( CTDL_Loader::$settings['show_date_added'] == 1 ) $this->list .= '<th>'.__( 'Date Added', 'cleverness-to-do-list' ).'</th>';
 		if ( $completed == 1 && CTDL_Loader::$settings['show_completed_date'] == 1) $this->list .= '<th>'.__('Completed', 'cleverness-to-do-list' ).'</th>';
-		if ( current_user_can(CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) $this->list .= '<th id="action-col">'.__( 'Action', 'cleverness-to-do-list' ).'</th>';
+		if ( current_user_can(CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) $this->list .= '<th id="action-col" class="{sorter: false} no-sort">'.__( 'Action', 'cleverness-to-do-list' ).'</th>';
     	$this->list .= '</tr></thead>';
 	}
 
@@ -444,8 +449,12 @@ class ClevernessToDoList {
 		if ( is_admin() || $layout == 'table' ) {
 			$this->list .= '<td>';
 		}
-		$text = apply_filters( 'the_content', $todo_text );
-		$this->list .= $text;
+		if ( CTDL_Loader::$settings['wysiwyg'] == 1 ) {
+			$text = apply_filters( 'the_content', $todo_text );
+			$this->list .= $text;
+		} else {
+			$this->list .= stripslashes( $todo_text );
+		}
 		if ( is_admin() || $layout == 'table' ) $this->list .= '</td>';
 	}
 
