@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cleverness To-Do List
 Version: 3.2
-Description: Manage to-do list items on a individual or group basis with categories. Includes a dashboard widget and a sidebar widget.
+Description: Manage to-do list items on a individual or group basis. Includes a dashboard widget, a sidebar widget, and shortcodes.
 Author: C.M. Kendrick
 Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list/
@@ -10,6 +10,14 @@ Plugin URI: http://cleverness.org/plugins/to-do-list/
 @todo add filter and action hooks
 @todo add tablesorter to front-end admin
 @todo format front-end checklist better
+@todo dashboard widget formatting
+@todo post planner integration
+@todo frontend checklist editlink and date not showing
+@todo check out following possible bugs: can't see the "assign to" even if I set the lowest rights or change userroles,
+ToDo Widget: all private and public to-do's over all users show up if not logged in. If logged in it will show only my public and private posts, but should show public posts from others, nor?,
+an user with no rights for publish-pages can delete his own to-do's, even if the minimum right for that is set to "publish-pages"
+@todo make sure everything is properly escaped
+@todo blank area on bottom of page due to datepicker. need to hide
 */
 
 /**
@@ -59,13 +67,13 @@ function cleverness_todo_loader() {
 
 		case 'completetodo':
 			$cleverness_todo_complete_nonce = $_REQUEST['_wpnonce'];
-			if ( !wp_verify_nonce( $cleverness_todo_complete_nonce, 'todocomplete' ) ) die( 'Security check failed' );
+			if ( !wp_verify_nonce( $cleverness_todo_complete_nonce, 'todocomplete' ) ) die( __( 'Security check failed', 'cleverness-to-do-list' ) );
 			CTDL_LIb::complete_todo( absint( $_GET['id'] ), 1 );
 			break;
 
 		case 'uncompletetodo':
 			$cleverness_todo_complete_nonce = $_REQUEST['_wpnonce'];
-			if ( !wp_verify_nonce( $cleverness_todo_complete_nonce, 'todocomplete' ) ) die( 'Security check failed' );
+			if ( !wp_verify_nonce( $cleverness_todo_complete_nonce, 'todocomplete' ) ) die( __( 'Security check failed', 'cleverness-to-do-list' ) );
 			CTDL_LIb::complete_todo( absint( $_GET['id'] ), 0 );
 			break;
 

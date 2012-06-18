@@ -5,7 +5,7 @@
  * Loads the plugin
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.1
+ * @version 3.2
  */
 
 /**
@@ -67,8 +67,8 @@ class CTDL_Loader {
 		register_post_type( 'todo',
 			array(
 				'labels'              => array(
-					'name'          => __( 'To-Do' ),
-					'singular_name' => __( 'To-Do' )
+					'name'          => __( 'To-Do', 'cleverness-to-do-list' ),
+					'singular_name' => __( 'To-Do', 'cleverness-to-do-list' )
 				),
 				'public'              => false,
 				'publicly_queryable'  => false,
@@ -91,8 +91,8 @@ class CTDL_Loader {
 	 */
 	public static function create_taxonomies() {
 		$labels = array(
-			'name'          => _x( 'Categories', 'taxonomy general name' ),
-			'singular_name' => _x( 'Category', 'taxonomy singular name' ),
+			'name'          => _x( 'Categories', 'taxonomy general name', 'cleverness-to-do-list' ),
+			'singular_name' => _x( 'Category', 'taxonomy singular name', 'cleverness-to-do-list' ),
 		);
 
 		register_taxonomy( 'todocategories', array( 'todo' ), array(
@@ -126,14 +126,14 @@ class CTDL_Loader {
 	 * @static
 	 */
 	private static function call_wp_hooks() {
-		add_action( 'wp_ajax_cleverness_delete_todo', 'CTDL_Lib::delete_todo_callback' );
-		add_action( 'wp_ajax_cleverness_todo_complete', 'CTDL_Lib::complete_todo_callback' );
+		add_action( 'wp_ajax_cleverness_delete_todo', array( 'CTDL_Lib', 'delete_todo_callback' ) );
+		add_action( 'wp_ajax_cleverness_todo_complete', array( 'CTDL_Lib', 'complete_todo_callback' ) );
 		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', array( 'CTDL_Lib', 'add_to_toolbar' ), 999 );
 		if ( is_admin() ) {
-			add_action( 'admin_init', __CLASS__.'::admin_init' );
-			add_action( 'admin_menu', __CLASS__.'::create_admin_menu' );
-			add_filter( 'plugin_action_links', 'CTDL_Lib::add_settings_link', 10, 2 );
-			if ( self::$settings['categories'] == 1 ) add_action( 'admin_init', 'CTDL_Categories::initialize_categories' );
+			add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
+			add_action( 'admin_menu', array( __CLASS__, 'create_admin_menu' ) );
+			add_filter( 'plugin_action_links', array( 'CTDL_Lib', 'add_settings_link' ), 10, 2 );
+			if ( self::$settings['categories'] == 1 ) add_action( 'admin_init', array( 'CTDL_Categories', 'initialize_categories' ) );
 		}
 	}
 
@@ -146,13 +146,13 @@ class CTDL_Loader {
 		global $cleverness_todo_page, $cleverness_todo_cat_page;
 
 		$cleverness_todo_page = add_menu_page( __( 'To-Do List', 'cleverness-to-do-list' ), __( 'To-Do List', 'cleverness-to-do-list' ), self::$settings['view_capability'], 'cleverness-to-do-list',
-				__CLASS__.'::plugin_page', CTDL_PLUGIN_URL.'/images/cleverness-todo-icon-sm.png' );
+			array( __CLASS__, 'plugin_page' ), CTDL_PLUGIN_URL.'/images/cleverness-todo-icon-sm.png' );
 		if ( self::$settings['categories'] == 1 ) {
 			$cleverness_todo_cat_page = add_submenu_page( 'cleverness-to-do-list', __( 'To-Do List Categories', 'cleverness-to-do-list' ), __( 'Categories', 'cleverness-to-do-list' ),
-				self::$settings['add_cat_capability'], 'cleverness-to-do-list-cats', 'CTDL_Categories::create_category_page' );
-			add_action( "load-$cleverness_todo_cat_page", 'CTDL_Help::cleverness_todo_help_tab' );
+				self::$settings['add_cat_capability'], 'cleverness-to-do-list-cats', array( 'CTDL_Categories', 'create_category_page' ) );
+			add_action( "load-$cleverness_todo_cat_page", array( 'CTDL_Help', 'cleverness_todo_help_tab' ) );
 		}
-		add_action( "load-$cleverness_todo_page", 'CTDL_Help::cleverness_todo_help_tab' );
+		add_action( "load-$cleverness_todo_page", array( 'CTDL_Help', 'cleverness_todo_help_tab' ) );
 	}
 
 	/**
@@ -171,13 +171,13 @@ class CTDL_Loader {
 	 * @static
 	 */
 	public static function admin_init() {
-		global $cleverness_todo_page, $cleverness_todo_settings_page, $cleverness_todo_cat_page ;
+		global $cleverness_todo_page, $cleverness_todo_settings_page, $cleverness_todo_cat_page;
 
-		add_action( 'admin_print_styles-'.$cleverness_todo_page, __CLASS__.'::add_admin_css' );
-		add_action( 'admin_print_scripts-'.$cleverness_todo_page, __CLASS__.'::add_admin_js' );
-		add_action( 'admin_print_styles-'.$cleverness_todo_cat_page, __CLASS__.'::add_admin_css' );
-		add_action( 'admin_print_scripts-'.$cleverness_todo_cat_page, __CLASS__.'::add_admin_js' );
-		add_action( 'admin_print_scripts-'.$cleverness_todo_settings_page, __CLASS__.'::add_admin_js' );
+		add_action( 'admin_print_styles-'.$cleverness_todo_page, array( __CLASS__, 'add_admin_css' ) );
+		add_action( 'admin_print_scripts-'.$cleverness_todo_page, array( __CLASS__, 'add_admin_js' ) );
+		add_action( 'admin_print_styles-'.$cleverness_todo_cat_page, array( __CLASS__, 'add_admin_css' ) );
+		add_action( 'admin_print_scripts-'.$cleverness_todo_cat_page, array( __CLASS__, 'add_admin_js' ) );
+		add_action( 'admin_print_scripts-'.$cleverness_todo_settings_page, array( __CLASS__, 'add_admin_js' ) );
 	}
 
 	/**
@@ -185,12 +185,12 @@ class CTDL_Loader {
 	 * @static
 	 */
 	public static function add_admin_css() {
-		$cleverness_style_url = CTDL_PLUGIN_URL . '/css/cleverness-to-do-list-admin.css';
-		$cleverness_style_file = CTDL_PLUGIN_DIR . '/css/cleverness-to-do-list-admin.css';
+		$cleverness_style_url = CTDL_PLUGIN_URL.'/css/cleverness-to-do-list-admin.css';
+		$cleverness_style_file = CTDL_PLUGIN_DIR.'/css/cleverness-to-do-list-admin.css';
 		if ( file_exists( $cleverness_style_file ) ) {
 			wp_register_style( 'cleverness_todo_style_sheet', $cleverness_style_url );
 			wp_enqueue_style( 'cleverness_todo_style_sheet' );
-			wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-fresh.css' );
+			wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL.'/css/jquery-ui-fresh.css' );
 		}
 	}
 
@@ -221,15 +221,15 @@ class CTDL_Loader {
 	 */
 	public static function get_js_vars() {
 		return array(
-			'SUCCESS_MSG' => __( 'To-Do Deleted.', 'cleverness-to-do-list' ),
-			'ERROR_MSG' => __( 'There was a problem performing that action.', 'cleverness-to-do-list' ),
-			'PERMISSION_MSG' => __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' ),
-			'CONFIRMATION_MSG' => __( "You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
-			'CONFIRMATION_ALL_MSG' => __( "You are about to permanently delete all completed items. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
+			'SUCCESS_MSG'                 => __( 'To-Do Deleted.', 'cleverness-to-do-list' ),
+			'ERROR_MSG'                   => __( 'There was a problem performing that action.', 'cleverness-to-do-list' ),
+			'PERMISSION_MSG'              => __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' ),
+			'CONFIRMATION_MSG'            => __( "You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
+			'CONFIRMATION_ALL_MSG'        => __( "You are about to permanently delete all completed items. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 			'CONFIRMATION_DELETE_ALL_MSG' => __( "You are about to permanently delete all to-do items. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 			'CONFIRMATION_DEL_TABLES_MSG' => __( "You are about to permanently delete database tables. This cannot be undone. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
-			'NONCE' => wp_create_nonce( 'cleverness-todo' ),
-			'AJAX_URL' => admin_url( 'admin-ajax.php' )
+			'NONCE'                       => wp_create_nonce( 'cleverness-todo' ),
+			'AJAX_URL'                    => admin_url( 'admin-ajax.php' )
 		);
 	}
 
@@ -241,7 +241,7 @@ class CTDL_Loader {
 
 		if ( !$CTDL_Frontend_Admin->add_script ) return;
 
-		wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-classic.css' );
+		wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-fresh.css' );
 		wp_print_styles( 'jquery.ui.theme' );
 	}
 
@@ -263,4 +263,3 @@ class CTDL_Loader {
 	}
 
 }
-?>

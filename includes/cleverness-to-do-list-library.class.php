@@ -5,7 +5,7 @@
  * Library of functions for the To-Do List
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.1
+ * @version 3.2
  */
 
 /**
@@ -15,12 +15,27 @@
  */
 class CTDL_Lib {
 
-	/* Get to-do list item */
+	/**
+	 * Get to-do list item
+	 * @static
+	 * @param $id
+	 * @return mixed
+	 */
 	public static function get_todo( $id ) {
 		$post = get_post( absint( $id ) );
 		return $post;
 	}
 
+	/**
+	 * Get to-do list items
+	 * @static
+	 * @param $user
+	 * @param $limit
+	 * @param int $status
+	 * @param int $cat_id
+	 * @param array $to_exclude
+	 * @return WP_Query
+	 */
 	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0, $to_exclude = array() ) {
 
 		/* Sort Order */
@@ -161,12 +176,16 @@ class CTDL_Lib {
 		return $results;
 	}
 
+	/**
+	 * Complete to-do item ajax callback
+	 * @static
+	 */
 	public static function complete_todo_callback() {
 		check_ajax_referer( 'cleverness-todo' );
 		$permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 
 		if ( $permission === true ) {
-			$message = CTDL_Lib::complete_todo( absint( $_POST['cleverness_id'] ), absint( $_POST['cleverness_status'] ) );
+			$message = self::complete_todo( absint( $_POST['cleverness_id'] ), absint( $_POST['cleverness_status'] ) );
 		} else {
 			$message = __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
 		}
@@ -175,6 +194,12 @@ class CTDL_Lib {
 		die(); // this is required to return a proper result
 	}
 
+	/**
+	 * Complete to-do item
+	 * @static
+	 * @param $id
+	 * @param $status
+	 */
 	public static function complete_todo( $id, $status ) {
 		global $current_user;
 
@@ -199,7 +224,11 @@ class CTDL_Lib {
 
 	}
 
-	/* Insert new to-do item into the database */
+	/**
+	 * Insert new to-do item into the database
+	 * @static
+	 * @return mixed
+	 */
 	public static function insert_todo() {
 		global $current_user;
 
@@ -249,7 +278,13 @@ class CTDL_Lib {
 		return;
 	}
 
-	/* Send an email to assigned user */
+	/**
+	 * Send an email to assigned user
+	 * @static
+	 * @param $assign
+	 * @param $deadline
+	 * @param int $category
+	 */
 	protected static function email_user( $assign, $deadline, $category = 0 ) {
 		global $current_user;
 		get_currentuserinfo();
@@ -278,7 +313,11 @@ class CTDL_Lib {
 
 	}
 
-	/* Update to-do list item */
+	/**
+	 * Update to-do list item
+	 * @static
+	 * @return mixed
+	 */
 	public static function edit_todo() {
 		$permission = CTDL_LIB::check_permission( 'todo', 'edit' );
 
@@ -315,7 +354,10 @@ class CTDL_Lib {
 		return;
 	}
 
-	/* Delete To-Do Ajax */
+	/**
+	 * Delete To-Do Ajax
+	 * @static
+	 */
 	public static function delete_todo_callback() {
 		check_ajax_referer( 'cleverness-todo' );
 		$permission = CTDL_Lib::check_permission( 'todo', 'delete' );
@@ -324,13 +366,21 @@ class CTDL_Lib {
 		die(); // this is required to return a proper result
 	}
 
-	/* Delete to-do list item */
+	/**
+	 * Delete to-do list item
+	 * @static
+	 * @param $id
+	 * @return int
+	 */
 	public static function delete_todo( $id ) {
 		wp_delete_post( absint( $id ), true );
 		return 1;
 	}
 
-	/* Delete all completed to-do list items */
+	/**
+	 * Delete all completed to-do list items
+	 * @static
+	 */
 	public static function delete_all_completed_todos() {
 		global $userdata;
 
@@ -377,7 +427,10 @@ class CTDL_Lib {
 		}
 	}
 
-	/* Delete all to-do list items */
+	/**
+	 * Delete all to-do list items
+	 * @static
+	 */
 	public static function delete_all_todos() {
 
 		$permission = CTDL_LIB::check_permission( 'todo', 'purge' );
@@ -477,7 +530,13 @@ class CTDL_Lib {
 		return $priority_class;
 	}
 
-	/* Check if User Has Permission */
+	/**
+	 * Check if User Has Permission
+	 * @static
+	 * @param $type
+	 * @param $action
+	 * @return bool
+	 */
 	public static function check_permission( $type, $action ) {
 
 		switch ( $type ) {
@@ -504,7 +563,12 @@ class CTDL_Lib {
 		return $user;
 	}
 
-	/* Get list of users */
+	/**
+	 * Get list of users
+	 * @static
+	 * @param $role
+	 * @return array
+	 */
 	public static function get_users( $role ) {
 		$wp_user_search = new WP_User_Query( array( 'role' => $role ) );
 		return $wp_user_search->get_results();
@@ -578,7 +642,13 @@ class CTDL_Lib {
 		}
 	}
 
-	/* Add Settings link to plugin */
+	/**
+	 * Add Settings link to plugin
+	 * @static
+	 * @param $links
+	 * @param $file
+	 * @return array
+	 */
 	public static function add_settings_link( $links, $file ) {
 		static $this_plugin;
 		if ( !$this_plugin ) $this_plugin = CTDL_BASENAME;
@@ -590,13 +660,19 @@ class CTDL_Lib {
 		return $links;
 	}
 
-	/* Add plugin info to admin footer */
+	/**
+	 * Add plugin info to admin footer
+	 * @static
+	 */
 	public static function cleverness_todo_admin_footer() {
 		$plugin_data = get_plugin_data( CTDL_FILE );
 		printf( __( "%s plugin | Version %s | by %s | <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org' target='_blank'>Donate</a><br />", 'cleverness-to-do-list' ), $plugin_data['Title'], $plugin_data['Version'], $plugin_data['Author'] );
 	}
 
-	/* Create database table and add default options */
+	/**
+	 * Create database table and add default options
+	 * @static
+	 */
 	public static function install_plugin () {
 
 		// get database version from options table
@@ -674,6 +750,11 @@ class CTDL_Lib {
 
 	}
 
+	/**
+	 * Set Plugin Default Options
+	 * @static
+	 * @param $version
+	 */
 	public static function set_options( $version ) {
 
 		if ( $version == 0 ) {
@@ -925,4 +1006,3 @@ class CTDL_Lib {
 	}
 
 }
-?>
