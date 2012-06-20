@@ -196,6 +196,7 @@ class CTDL_Widget extends WP_Widget {
 	/**
 	 * Creates the form for the widget settings
 	 * @param $instance
+	 * @return string|void
 	 */
 	function form( $instance ) {
 		$defaults = array( 'title' => __('To-Do List', 'cleverness-to-do-list'), 'number' => '5', 'assigned_to' => false, 'deadline' => false, 'progress' => false, 'category' => 'All');

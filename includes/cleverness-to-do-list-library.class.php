@@ -36,7 +36,7 @@ class CTDL_Lib {
 	 * @param array $to_exclude
 	 * @return WP_Query
 	 */
-	public static function get_todos( $user, $limit = -1, $status = 0, $cat_id = 0, $to_exclude = array() ) {
+	public static function get_todos( $user = 0, $limit = -1, $status = 0, $cat_id = 0, $to_exclude = array() ) {
 
 		/* Sort Order */
 		// if sort_order is post_date, order by that first
@@ -483,19 +483,14 @@ class CTDL_Lib {
 	}
 
 	/**
-	 * Set priority, user, url, and action variables
+	 * Set url and action variables
 	 * @return array
 	 */
 	public static function set_variables() {
-		global $current_user, $userdata;
-		$priorities = array( 0 => CTDL_Loader::$settings['priority_0'],
-		                     1 => CTDL_Loader::$settings['priority_1'],
-		                     2 => CTDL_Loader::$settings['priority_2'] );
-		$user = CTDL_Lib::get_user_id( $current_user, $userdata );
 		$url = CTDL_Lib::get_page_url();
 		$url = strtok( $url, '?' );
 		$action = ( isset( $_GET['action'] ) ? $_GET['action'] : '' );
-		return array( $priorities, $user, $url, $action );
+		return array( $url, $action );
 	}
 
 	/**

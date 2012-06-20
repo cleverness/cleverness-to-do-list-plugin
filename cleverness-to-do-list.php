@@ -13,11 +13,10 @@ Plugin URI: http://cleverness.org/plugins/to-do-list/
 @todo dashboard widget formatting
 @todo post planner integration
 @todo frontend checklist editlink and date not showing
-@todo check out following possible bugs: can't see the "assign to" even if I set the lowest rights or change userroles,
-ToDo Widget: all private and public to-do's over all users show up if not logged in. If logged in it will show only my public and private posts, but should show public posts from others, nor?,
-an user with no rights for publish-pages can delete his own to-do's, even if the minimum right for that is set to "publish-pages"
+@ToDo Widget: all private and public to-do's over all users show up if not logged in. If logged in it will show only my public and private posts, but should show public posts from others, nor?,
+@todo error in widget when not logged in
 @todo make sure everything is properly escaped
-@todo blank area on bottom of page due to datepicker. need to hide
+@todo allow asisgnments in individual view?
 */
 
 /**

@@ -126,8 +126,6 @@ class CTDL_Loader {
 	 * @static
 	 */
 	private static function call_wp_hooks() {
-		add_action( 'wp_ajax_cleverness_delete_todo', array( 'CTDL_Lib', 'delete_todo_callback' ) );
-		add_action( 'wp_ajax_cleverness_todo_complete', array( 'CTDL_Lib', 'complete_todo_callback' ) );
 		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', array( 'CTDL_Lib', 'add_to_toolbar' ), 999 );
 		if ( is_admin() ) {
 			add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
@@ -135,6 +133,8 @@ class CTDL_Loader {
 			add_filter( 'plugin_action_links', array( 'CTDL_Lib', 'add_settings_link' ), 10, 2 );
 			if ( self::$settings['categories'] == 1 ) add_action( 'admin_init', array( 'CTDL_Categories', 'initialize_categories' ) );
 		}
+		add_action( 'wp_ajax_cleverness_delete_todo', array( 'CTDL_Lib', 'delete_todo_callback' ) );
+		add_action( 'wp_ajax_cleverness_todo_complete', array( 'CTDL_Lib', 'complete_todo_callback' ) );
 	}
 
 	/**
@@ -253,10 +253,10 @@ class CTDL_Loader {
 
 		if ( !$CTDL_Frontend_Checklist->add_script && !$CTDL_Frontend_Admin->add_script ) return;
 
+		wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-frontend.js', array( 'jquery' ), 1.1, true );
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_script( 'jquery-color' );
-		wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-frontend.js', array( 'jquery' ), 1.1, true );
 		wp_enqueue_script( 'cleverness_todo_checklist_complete_js' );
 		wp_localize_script( 'cleverness_todo_checklist_complete_js', 'ctdl', CTDL_Loader::get_js_vars() );
 		wp_print_scripts( 'cleverness_todo_checklist_complete_js' );
