@@ -141,6 +141,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
  * Added the option for the textarea to use WP_Editor
  * Added dashboard setting to hide the Edit link on the Dashboard widget
  * Added jQuery table sorting of the To-Do List
+ * Added filters and hooks
  * Fixed missing jQuery UI CSS images
  * Fixed completed date not showing in front-end shortcode
 

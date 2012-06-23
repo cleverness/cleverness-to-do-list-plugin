@@ -145,10 +145,11 @@ class CTDL_Loader {
 	public static function create_admin_menu() {
 		global $cleverness_todo_page, $cleverness_todo_cat_page;
 
-		$cleverness_todo_page = add_menu_page( __( 'To-Do List', 'cleverness-to-do-list' ), __( 'To-Do List', 'cleverness-to-do-list' ), self::$settings['view_capability'], 'cleverness-to-do-list',
-			array( __CLASS__, 'plugin_page' ), CTDL_PLUGIN_URL.'/images/cleverness-todo-icon-sm.png' );
+		$cleverness_todo_page = add_menu_page( apply_filters( 'ctdl_todo_list', __( 'To-Do List', 'cleverness-to-do-list' ) ), apply_filters( 'ctdl_todo_list', __( 'To-Do List', 'cleverness-to-do-list' ) ),
+			self::$settings['view_capability'], 'cleverness-to-do-list', array( __CLASS__, 'plugin_page' ), CTDL_PLUGIN_URL.'/images/cleverness-todo-icon-sm.png' );
 		if ( self::$settings['categories'] == 1 ) {
-			$cleverness_todo_cat_page = add_submenu_page( 'cleverness-to-do-list', __( 'To-Do List Categories', 'cleverness-to-do-list' ), __( 'Categories', 'cleverness-to-do-list' ),
+			$cleverness_todo_cat_page = add_submenu_page( 'cleverness-to-do-list', apply_filters( 'ctdl_categories_title', __( 'To-Do List Categories', 'cleverness-to-do-list' ) ),
+				apply_filters( 'ctdl_categories', __( 'Categories', 'cleverness-to-do-list' ) ),
 				self::$settings['add_cat_capability'], 'cleverness-to-do-list-cats', array( 'CTDL_Categories', 'create_category_page' ) );
 			add_action( "load-$cleverness_todo_cat_page", array( 'CTDL_Help', 'cleverness_todo_help_tab' ) );
 		}

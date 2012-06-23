@@ -181,7 +181,7 @@ class CTDL_Settings {
 		add_settings_field( 'priority_2', __( 'Lowest Priority Label', 'cleverness-to-do-list' ), array( $this, 'priority_2_option' ), $this->advanced_key, 'section_advanced' );
 		add_settings_field( 'show_id', __( 'Show To-Do Item ID', 'cleverness-to-do-list' ), array ( $this, 'show_id_option' ), $this->advanced_key, 'section_advanced' );
 		add_settings_field( 'show_date_added', __( 'Show Date To-Do Was Added', 'cleverness-to-do-list' ), array ( $this, 'show_date_added_option' ), $this->advanced_key, 'section_advanced' );
-		add_settings_section( 'section_advanced_assign', __( 'Assign To-Do Items Settings', 'cleverness-to-do-list' ), array( $this, 'section_advanced_assign_desc' ), $this->advanced_key );
+		add_settings_section( 'section_advanced_assign', __( 'Assign To-Do Items Settings (Only When Using Group or Master View)', 'cleverness-to-do-list' ), array( $this, 'section_advanced_assign_desc' ), $this->advanced_key );
 		add_settings_field( 'assign', __( 'Assign To-Do Items to Users', 'cleverness-to-do-list' ), array( $this, 'assign_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'show_only_assigned', __( 'Show a User Only the To-Do Items Assigned to Them', 'cleverness-to-do-list' ), array( $this, 'show_only_assigned_option' ), $this->advanced_key,
 			'section_advanced_assign' );
