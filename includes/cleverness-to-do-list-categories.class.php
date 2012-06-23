@@ -3,7 +3,7 @@
  * Cleverness To-Do List Plugin Categories
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.1
+ * @version 3.2
  * @todo add meta value for sort order and enable
  * @todo fix privacy to work when sort order is any
  */
@@ -148,13 +148,13 @@ class CTDL_Categories {
 
 			case 'addtodocat':
 				if ( $_POST['cleverness_todo_cat_name'] != '' ) {
-					if ( !wp_verify_nonce( $_POST['_todo_add_cat_nonce'], 'todoaddcat') ) die( 'Security check failed' );
+					if ( !wp_verify_nonce( $_POST['_todo_add_cat_nonce'], 'todoaddcat') ) die( esc_html__( 'Security check failed', 'cleverness-to-do-list' ) );
 					$status = CTDL_Categories::insert_category();
 					if ( $status != 1 ) {
-						$cleverness_todo_message = __( 'There was a problem performing that action.', 'cleverness-to-do-list' );
+						$cleverness_todo_message = esc_html__( 'There was a problem performing that action.', 'cleverness-to-do-list' );
 					}
 				} else {
-					$cleverness_todo_message = __( 'Category name cannot be blank.', 'cleverness-to-do-list' );
+					$cleverness_todo_message = esc_html__( 'Category name cannot be blank.', 'cleverness-to-do-list' );
 				}
 				break;
 
@@ -166,46 +166,47 @@ class CTDL_Categories {
 
 	<div class="wrap">
 		<div class="icon32"><img src="<?php echo CTDL_PLUGIN_URL; ?>/images/cleverness-todo-icon.png" alt="" /></div>
-		<h2><?php _e( 'To-Do List Categories', 'cleverness-to-do-list' ); ?></h2>
+		<h2><?php apply_filters( 'ctdl_categories_title', esc_html__( 'To-Do List Categories', 'cleverness-to-do-list' ) ); ?></h2>
 
 		<?php if ( $cleverness_todo_message != '' ) echo '<div id="message" class="error below-h2"><p>'.$cleverness_todo_message.'</p></div>'; ?>
 
-		<h3><?php _e( 'Add New Category', 'cleverness-to-do-list' ); ?></h3>
+		<h3><?php echo apply_filters( 'ctdl_add_category', esc_html__( 'Add New Category', 'cleverness-to-do-list' ) ); ?></h3>
 
 		<form name="addtodocat" id="addtodocat" action="" method="post">
 			<table class="form-table">
 				<tr>
-					<th scope="row"><label for="cleverness_todo_cat_name"><?php _e( 'Category Name', 'cleverness-to-do-list' ); ?></label></th>
+					<th scope="row"><label for="cleverness_todo_cat_name"><?php echo apply_filters( 'ctdl_category_name', esc_html__( 'Category Name', 'cleverness-to-do-list' ) ); ?></label></th>
 					<td><input type="text" name="cleverness_todo_cat_name" id="cleverness_todo_cat_name" class="regular-text" value="" /></td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="cleverness_todo_cat_visibility"><?php _e( 'Visibility', 'cleverness-to-do-list' ); ?></label></th>
+					<th scope="row"><label for="cleverness_todo_cat_visibility"><?php esc_html_e( 'Visibility', 'cleverness-to-do-list' ); ?></label></th>
 					<td>
 						<select name="cleverness_todo_cat_visibility" id="cleverness_todo_cat_visibility">
-							<option value="0" selected="selected"><?php _e( 'Public', 'cleverness-to-do-list' ); ?>&nbsp;</option>
-							<option value="1"><?php _e( 'Private', 'cleverness-to-do-list' ); ?></option>
+							<option value="0" selected="selected"><?php esc_attr_e( 'Public', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+							<option value="1"><?php esc_attr_e( 'Private', 'cleverness-to-do-list' ); ?></option>
 						</select>
-						<br /><span class="description"><?php _e( 'Private categories are not visible using the sidebar widgets or shortcode (only when Sort Order is set to Category)', 'cleverness-to-do-list' ); ?></span>
+						<br /><span class="description"><?php echo apply_filters( 'ctdl_category_visibility',
+						esc_html__( 'Private categories are not visible using the sidebar widgets or shortcode (only when Sort Order is set to Category)', 'cleverness-to-do-list' ) ); ?></span>
 					</td>
 				</tr>
 				<tr><td></td>
 					<td>
 						<?php wp_nonce_field( 'todoaddcat', '_todo_add_cat_nonce' ); ?>
 						<input type="hidden" name="cleverness_todo_action" value="addtodocat" />
-						<input type="submit" name="button" id="add-todo" class="button-primary" value="<?php _e( 'Add Category', 'cleverness-to-do-list' ); ?>" />
+						<input type="submit" name="button" id="add-todo-category" class="button-primary" value="<?php echo apply_filters( 'ctdl_add_category', esc_attr__( 'Add Category', 'cleverness-to-do-list' ) ); ?>" />
 					</td>
 				</tr>
 			</table>
 		</form>
 
-		<h3><?php _e( 'Existing Categories', 'cleverness-to-do-list' ); ?></h3>
+		<h3><?php echo apply_filters( 'ctdl_existing_categories', esc_html__( 'Existing Categories', 'cleverness-to-do-list' ) ); ?></h3>
 		<table id="todo-cats" class="widefat">
 			<thead>
 			<tr>
-				<th id="id-col"><?php _e( 'ID', 'cleverness-to-do-list' ); ?></th>
-				<th class="row-title"><?php _e( 'Name', 'cleverness-to-do-list' ); ?></th>
-				<th id="vis-col"><?php _e( 'Visibility', 'cleverness-to-do-list' ); ?></th>
-				<th id="action-col"><?php _e( 'Action', 'cleverness-to-do-list' ); ?></th>
+				<th id="id-col"><?php esc_html_e( 'ID', 'cleverness-to-do-list' ); ?></th>
+				<th class="row-title"><?php esc_html_e( 'Name', 'cleverness-to-do-list' ); ?></th>
+				<th id="vis-col"><?php esc_html_e( 'Visibility', 'cleverness-to-do-list' ); ?></th>
+				<th id="action-col"><?php esc_html_e( 'Action', 'cleverness-to-do-list' ); ?></th>
 			</tr>
 			</thead>
 			<tbody>
@@ -222,23 +223,23 @@ class CTDL_Categories {
 							<td><?php echo $category_id; ?></td>
 							<td class="row-title"><?php echo esc_attr( $category->name ); ?></td>
 							<td><?php if ( $visibility == '0' ) {
-								echo __( 'Public', 'cleverness-to-do-list' );
+								echo esc_html__( 'Public', 'cleverness-to-do-list' );
 							} else if ( $visibility == '1' ) {
-								echo __( 'Private', 'cleverness-to-do-list' );
+								echo esc_html__( 'Private', 'cleverness-to-do-list' );
 							} ?></td>
 							<td>
-								<input class="edit-todo button-secondary" type="button" value="<?php _e( 'Edit' ); ?>" />
-								<input class="delete-todo button-secondary" type="button" value="<?php _e( 'Delete' ); ?>" />
+								<input class="edit-todo-category button-secondary" type="button" value="<?php esc_attr_e( 'Edit' ); ?>" />
+								<input class="delete-todo-category button-secondary" type="button" value="<?php esc_attr_e( 'Delete' ); ?>" />
 							</td>
 						</tr>
 				<?php } } ?>
 			</tbody>
 			<tfoot>
 			<tr>
-				<th class="row-title"><?php _e( 'ID', 'cleverness-to-do-list' ); ?></th>
-				<th><?php _e(' Name', 'cleverness-to-do-list' ); ?></th>
-				<th><?php _e( 'Visibility', 'cleverness-to-do-list' ); ?></th>
-				<th><?php _e( 'Action', 'cleverness-to-do-list' ); ?></th>
+				<th class="row-title"><?php esc_html_e( 'ID', 'cleverness-to-do-list' ); ?></th>
+				<th><?php esc_html_e(' Name', 'cleverness-to-do-list' ); ?></th>
+				<th><?php esc_html_e( 'Visibility', 'cleverness-to-do-list' ); ?></th>
+				<th><?php esc_html_e( 'Action', 'cleverness-to-do-list' ); ?></th>
 			</tr>
 			</tfoot>
 		</table>
@@ -255,10 +256,10 @@ class CTDL_Categories {
 		global $cleverness_todo_cat_page;
 
 		wp_register_script( 'cleverness_todo_category_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-categories.js', '', 1.0, true );
-		add_action( 'admin_print_scripts-' . $cleverness_todo_cat_page, __CLASS__.'::add_category_js' );
-		add_action( 'wp_ajax_cleverness_todo_cat_get', __CLASS__.'::get_category_callback' );
-		add_action( 'wp_ajax_cleverness_todo_cat_update', __CLASS__.'::update_category_callback' );
-		add_action( 'wp_ajax_cleverness_todo_cat_delete', __CLASS__.'::delete_category_callback' );
+		add_action( 'admin_print_scripts-' . $cleverness_todo_cat_page, array( __CLASS__, 'add_category_js' ) );
+		add_action( 'wp_ajax_cleverness_todo_cat_get', array( __CLASS__, 'get_category_callback' ) );
+		add_action( 'wp_ajax_cleverness_todo_cat_update', array( __CLASS__, 'update_category_callback' ) );
+		add_action( 'wp_ajax_cleverness_todo_cat_delete', array( __CLASS__, 'delete_category_callback' ) );
 	}
 
 	/**
@@ -290,5 +291,3 @@ class CTDL_Categories {
 	}
 
 }
-
-?>

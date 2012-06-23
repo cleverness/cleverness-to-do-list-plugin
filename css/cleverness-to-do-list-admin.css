@@ -30,12 +30,16 @@ p.error {
 	min-width: 120px;
 }
 
+#cleverness_todo_priority, #cleverness_todo_deadline, #cat {
+	width: 220px;
+}
+
 .todo-scroll-checkboxes {
-	height: 55px;
+	height: 38px;
 	padding: 5px;
     overflow-y: scroll;
 	overflow-x: hidden;
-	width: 250px;
+	width: 205px;
 	border: 1px solid #ccc
 }
 
@@ -61,4 +65,9 @@ table#todo-list thead tr .headerSortDown {
 
 #ui-datepicker-div {
 	display: none;
+}
+
+#wp-clevernesstododescription-wrap {
+	width: 50%;
+	min-width: 500px;
 }

@@ -88,6 +88,7 @@ class ClevernessToDoList {
 	 * @return string $heading
 	 */
 	protected function show_heading() {
+		$heading = '';
 		if ( is_admin() ) $heading = '<h3>'.esc_html__( 'To-Do Items', 'cleverness-to-do-list' );
 		if ( current_user_can( CTDL_Loader::$settings['add_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 			$heading .= ' (<a href="#addtodo">'.esc_html__( 'Add New Item', 'cleverness-to-do-list' ).'</a>)';
@@ -101,6 +102,7 @@ class ClevernessToDoList {
 	 * @return string $completed_heading
 	 */
 	protected function show_completed_heading() {
+		$completed_heading = '';
 		$completed_heading = '<h3>'.__( 'Completed Items', 'cleverness-to-do-list' );
 		if ( current_user_can( CTDL_Loader::$settings['purge_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 			$cleverness_todo_purge_nonce = wp_create_nonce( 'todopurge' );
@@ -225,27 +227,27 @@ class ClevernessToDoList {
 	 * Creates the HTML for the form used to edit a to-do item
 	 * @param $todo_item
 	 * @return string Form HTML
-	 * @todo don't call get_post_meta individually
 	 */
 	protected function create_edit_todo_form( $todo_item ) {
-			$id = $todo_item->ID;
-			if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list'; else $url = strtok( $this->url, "?" );
-			$this->form = '';
+		$id = $todo_item->ID;
+		list( $priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
+		if ( is_admin() ) $url = 'admin.php?page=cleverness-to-do-list'; else $url = strtok( $this->url, "?" );
+		$this->form = '';
 
-			if ( is_admin() ) $this->form .= apply_filters( 'ctdl_edit_heading', '<h3>'.esc_html__( 'Edit To-Do Item', 'cleverness-to-do-list' ).'</h3>' );
+		if ( is_admin() ) $this->form .= apply_filters( 'ctdl_edit_heading', '<h3>'.esc_html__( 'Edit To-Do Item', 'cleverness-to-do-list' ).'</h3>' );
 
-    	    $this->form .= '<form name="edittodo" id="edittodo" action="'.$url.'" method="post"><table class="todo-form form-table">';
-			$this->create_priority_field( get_post_meta( $id, '_priority', true ) );
-			$this->create_assign_field( get_post_meta( $id, '_assign' ) );
-			$this->create_deadline_field( get_post_meta( $id, '_deadline', true ) );
-			$this->create_progress_field( get_post_meta( $id, '_progress', true ) );
-			$this->create_category_field( get_the_terms( $id, 'todocategories' ) );
-			do_action( 'ctdl_edit_form' );
-			$this->create_todo_text_field( $todo_item->post_content );
-			$this->form .= '</table>'.wp_nonce_field( 'todoupdate', 'todoupdate', true, false ).'<input type="hidden" name="action" value="updatetodo" />
+		$this->form .= '<form name="edittodo" id="edittodo" action="'.$url.'" method="post"><table class="todo-form form-table">';
+		$this->create_priority_field( $priority );
+		$this->create_deadline_field( $deadline_meta );
+		$this->create_category_field( get_the_terms( $id, 'todocategories' ) );
+		$this->create_assign_field( $assign_meta );
+		$this->create_progress_field( $progress_meta );
+		do_action( 'ctdl_edit_form' );
+		$this->create_todo_text_field( $todo_item->post_content );
+		$this->form .= '</table>'.wp_nonce_field( 'todoupdate', 'todoupdate', true, false ).'<input type="hidden" name="action" value="updatetodo" />
         	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_edit_text', esc_attr__( 'Edit To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>
-				<input type="hidden" name="id" value="'. absint( $id ).'" />';
-			$this->form .= '</form>';
+				<input type="hidden" name="id" value="'.absint( $id ).'" />';
+		$this->form .= '</form>';
 
 		return $this->form;
 	}
@@ -264,10 +266,10 @@ class ClevernessToDoList {
     	    $this->form .= '<form name="addtodo" id="addtodo" action="'.$this->url.'" method="post">
 	  		    <table class="todo-form form-table">';
 				$this->create_priority_field();
-				$this->create_assign_field();
 				$this->create_deadline_field();
-				$this->create_progress_field();
 				$this->create_category_field();
+				$this->create_assign_field();
+				$this->create_progress_field();
 				do_action( 'ctdl_add_form' );
 				$this->create_todo_text_field();
 				$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
@@ -324,17 +326,17 @@ class ClevernessToDoList {
 					} else {
 						$roles = explode( ", ", CTDL_Loader::$settings['user_roles'] );
 					}
+
 					foreach ( $roles as $role ) {
 						$role_users = CTDL_Lib::get_users( $role );
 						foreach ( $role_users as $role_user ) {
 							$selected  = '';
-							$user_info = get_userdata( $role_user->ID );
 							if ( is_array( $assign ) ) {
 								if ( isset( $assign ) && in_array( $role_user->ID, $assign ) ) $selected = ' checked="checked"';
 							} else {
 								if ( isset( $assign ) && $assign == $role_user->ID ) $selected = ' checked="checked"';
 							}
-							$this->form .= sprintf( '<input type="checkbox" name="cleverness_todo_assign[]" id="cleverness_todo_assign" value="%d" %s/> %s', $role_user->ID, $selected, $user_info->display_name ).'<br />';
+							$this->form .= sprintf( '<input type="checkbox" name="cleverness_todo_assign[]" id="cleverness_todo_assign" value="%d" %s/> %s', $role_user->ID, $selected, $role_user->display_name ).'<br />';
 						}
 					}
 					$this->form .= '</div>

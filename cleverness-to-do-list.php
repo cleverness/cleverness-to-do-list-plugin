@@ -16,7 +16,9 @@ Plugin URI: http://cleverness.org/plugins/to-do-list/
 @ToDo Widget: all private and public to-do's over all users show up if not logged in. If logged in it will show only my public and private posts, but should show public posts from others, nor?,
 @todo error in widget when not logged in
 @todo make sure everything is properly escaped
-@todo make sure assignment if statement is correct
+@todo add css to frontend including assign box
+@todo update POT file and add esc_htmls and esc_attr
+@todo change progress to slider
 */
 
 /**

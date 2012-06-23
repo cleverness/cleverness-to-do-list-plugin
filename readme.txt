@@ -137,14 +137,15 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 == Changelog ==
 
 = 3.2 =
- * Added ability to assign to-do items to multiple users
- * Added the option for the textarea to use WP_Editor
- * Added dashboard setting to hide the Edit link on the Dashboard widget
- * Added jQuery table sorting of the To-Do List
- * Added filters and hooks
- * Fixed missing jQuery UI CSS images
- * Fixed completed date not showing in front-end shortcode
-
+* Added ability to assign to-do items to multiple users
+* Added the option for the textarea to use WP_Editor
+* Added dashboard setting to hide the Edit link on the Dashboard widget
+* Added jQuery table sorting of the To-Do List
+* Added filters and hooks
+* Fixed missing jQuery UI CSS images
+* Fixed completed date not showing in front-end shortcode
+* Changed User Roles in Settings to checkboxes instead of text field
+* Removed closing PHP tags in files
 
 = 3.1.7 =
 * Fixed issue with front-end shortcode

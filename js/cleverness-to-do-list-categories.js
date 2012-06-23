@@ -3,7 +3,7 @@ jQuery( document ).ready( function( $ ) {
 	$( '#todo-cats tbody tr:visible:even' ).addClass( 'alternate' );
 
 	/* Delete Categories */
-	$( '.delete-todo' ).live( 'click', function () {
+	$( '.delete-todo-category' ).live( 'click', function () {
 		var confirmed = confirm( ctdlcat.CONFIRMATION_MSG );
 		if ( confirmed == false ) return;
 		var _item = this;
@@ -40,7 +40,7 @@ jQuery( document ).ready( function( $ ) {
 	/* end Delete Categories */
 
 	/* Get Category */
-	$( '.edit-todo' ).live( 'click',function () {
+	$( '.edit-todo-category' ).live( 'click',function () {
 		var _item = this;
 		var todotr = $( _item ).closest( 'tr' );
 
@@ -61,7 +61,7 @@ jQuery( document ).ready( function( $ ) {
 				visibilityform += '>' + ctdlcat.PRIVATE + '</option></select>';
 				$( todotr ).find( ':nth-child(2)' ).empty().html( nameform );
 				$( todotr ).find( ':nth-child(3)' ).empty().html( visibilityform );
-				$( _item ).parent().empty().html( '<input type="button" class="submit-edit button-primary" value="'+ctdlcat.EDIT_CAT+'" /></form>' );
+				$( _item ).parent().empty().html( '<input type="button" class="submit-edit-category button-primary" value="'+ctdlcat.EDIT_CAT+'" /></form>' );
       		    },
         	error: function( r ) {
 				$( '#message' ).html( '<p>'+ctdlcat.ERROR_MSG+'</p>' ).show().addClass( 'error below-h2' );
@@ -72,7 +72,7 @@ jQuery( document ).ready( function( $ ) {
 	/* end Get Category */
 
 	/* Edit Categories */
-	$( '.submit-edit' ).live( 'click',function () {
+	$( '.submit-edit-category' ).live( 'click',function () {
 		var _item = this;
 		var todotr = $( _item ).closest( 'tr' );
 		var catname = $( todotr ).find( 'input[name = "cleverness_todo_cat_name"]' ).val();
@@ -93,7 +93,7 @@ jQuery( document ).ready( function( $ ) {
 					var color = todotr.css( 'background-color' );
 					var visibilitytxt = ctdlcat.PUBLIC;
 					if ( visibility == 1 ) { visibilitytxt = ctdlcat.PRIVATE }
-					$( _item).parent().empty().html( '<input class="edit-todo button-secondary" type="button" value="Edit" /> <input class="delete-todo button-secondary delete-tag" type="button" value="Delete" />' );
+					$( _item).parent().empty().html( '<input class="edit-todo-category button-secondary" type="button" value="Edit" /> <input class="delete-todo-category button-secondary delete-tag" type="button" value="Delete" />' );
 					$( todotr ).find( ':nth-child(2)' ).empty().html( catname );
 					$( todotr ).find( ':nth-child(3)' ).empty().html(visibilitytxt );
 					$( todotr ).css( 'background-color', '#FFFFE0' );

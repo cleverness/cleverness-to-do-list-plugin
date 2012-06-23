@@ -76,17 +76,18 @@ class CTDL_Settings {
 	function register_general_settings() {
 		$this->plugin_tabs[$this->general_key] = __( 'To-Do List Settings', 'cleverness-to-do-list' );
 
-		register_setting( $this->general_key, $this->general_key );
+		register_setting( $this->general_key, $this->general_key, array( $this, 'validate_input' ) );
 		add_settings_section( 'section_general', __( 'To-Do List Settings', 'cleverness-to-do-list' ), array( $this, 'section_general_desc' ), $this->general_key );
 		add_settings_field( 'categories', __( 'Categories', 'cleverness-to-do-list' ), array( $this, 'categories_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'list_view', __( 'List View', 'cleverness-to-do-list' ), array( $this, 'list_view_option' ), $this->general_key, 'section_general' );
+		add_settings_field( 'sort_order', __( 'Sort Order', 'cleverness-to-do-list' ), array( $this, 'sort_order_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'todo_author', __( 'Show Added By', 'cleverness-to-do-list' ), array( $this, 'todo_author_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'show_completed_date', __( 'Show Date Completed', 'cleverness-to-do-list' ), array( $this, 'show_completed_date_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'show_deadline', __( 'Show Deadline', 'cleverness-to-do-list' ), array( $this, 'show_deadline_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'show_progress', __( 'Show Progress', 'cleverness-to-do-list' ), array( $this, 'show_progress_option' ), $this->general_key, 'section_general' );
-		add_settings_field( 'sort_order', __( 'Sort Order', 'cleverness-to-do-list' ), array( $this, 'sort_order_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'admin_bar', __( 'Show Admin Bar Menu', 'cleverness-to-do-list' ), array( $this, 'admin_bar_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'wysiwyg', __( 'Use WYSIWYG Editor', 'cleverness-to-do-list' ), array( $this, 'wysiwyg_option' ), $this->general_key, 'section_general' );
+		do_action( 'ctdl_general_settings' );
 	}
 
 	function categories_option() { ?>
@@ -173,7 +174,7 @@ class CTDL_Settings {
 	function register_advanced_settings() {
 		$this->plugin_tabs[$this->advanced_key] = __( 'Advanced Settings', 'cleverness-to-do-list' );
 
-		register_setting( $this->advanced_key, $this->advanced_key );
+		register_setting( $this->advanced_key, $this->advanced_key, array( $this, 'validate_input' ) );
 		add_settings_section( 'section_advanced', __( 'To-Do List Advanced Settings', 'cleverness-to-do-list' ), array( $this, 'section_advanced_desc' ), $this->advanced_key );
 		add_settings_field( 'date_format', __( 'Date Format', 'cleverness-to-do-list' ), array( $this, 'date_format_option' ), $this->advanced_key, 'section_advanced' );
 		add_settings_field( 'priority_0', __( 'Highest Priority Label', 'cleverness-to-do-list' ), array( $this, 'priority_0_option' ), $this->advanced_key, 'section_advanced' );
@@ -181,11 +182,12 @@ class CTDL_Settings {
 		add_settings_field( 'priority_2', __( 'Lowest Priority Label', 'cleverness-to-do-list' ), array( $this, 'priority_2_option' ), $this->advanced_key, 'section_advanced' );
 		add_settings_field( 'show_id', __( 'Show To-Do Item ID', 'cleverness-to-do-list' ), array ( $this, 'show_id_option' ), $this->advanced_key, 'section_advanced' );
 		add_settings_field( 'show_date_added', __( 'Show Date To-Do Was Added', 'cleverness-to-do-list' ), array ( $this, 'show_date_added_option' ), $this->advanced_key, 'section_advanced' );
+		do_action( 'ctdl_advanced_settings' );
 		add_settings_section( 'section_advanced_assign', __( 'Assign To-Do Items Settings (Only When Using Group or Master View)', 'cleverness-to-do-list' ), array( $this, 'section_advanced_assign_desc' ), $this->advanced_key );
 		add_settings_field( 'assign', __( 'Assign To-Do Items to Users', 'cleverness-to-do-list' ), array( $this, 'assign_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'show_only_assigned', __( 'Show a User Only the To-Do Items Assigned to Them', 'cleverness-to-do-list' ), array( $this, 'show_only_assigned_option' ), $this->advanced_key,
 			'section_advanced_assign' );
-		add_settings_field( 'user_roles', __( 'User Roles Allowed', 'cleverness-to-do-list' ), array( $this, 'user_roles_option' ), $this->advanced_key, 'section_advanced_assign' );
+		add_settings_field( 'user_roles', __( 'User Roles to Show', 'cleverness-to-do-list' ), array( $this, 'user_roles_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_assigned', __( 'Email Assigned To-Do Items to User', 'cleverness-to-do-list' ), array( $this, 'email_assigned_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_category', __( 'Add Category to Subject', 'cleverness-to-do-list' ), array( $this, 'email_category_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_show_assigned_by', __( 'Show Who Assigned the To-Do Item in Email', 'cleverness-to-do-list' ), array( $this, 'email_show_assigned_by_option' ), $this->advanced_key, 'section_advanced_assign' );
@@ -251,10 +253,16 @@ class CTDL_Settings {
 	}
 
 	function user_roles_option() { ?>
-		<input class="regular-text" type="text" name="<?php echo $this->advanced_key; ?>[user_roles]" value="<?php if ( $this->advanced_settings['user_roles'] != '' )
-		echo $this->advanced_settings['user_roles']; else echo 'contributor, author, editor, administrator'; ?>" />
-		<span class="description"><?php _e( ' Separate each role with a comma.', 'cleverness-to-do-list' ); ?></span><br />
-		<span class="description"><?php _e( 'Used in displaying the list of users who can be assigned to-do items.', 'cleverness-to-do-list' ); ?></span><br/>
+		<?php
+		$editable_roles = get_editable_roles();
+		foreach ( $editable_roles as $role => $details ) {
+			$name = translate_user_role( $details['name'] );
+			echo '<input type="checkbox" name="'.$this->advanced_key.'[user_roles][]"';
+			if ( in_array( $role, explode( ', ', $this->advanced_settings['user_roles'] ) ) ) echo ' checked="checked"';
+			echo ' value="'.esc_attr( $role ).'" /> '.$name.' &nbsp; ';
+		}
+		?>
+		<br /><span class="description"><?php _e( 'Used in displaying the list of users who can be assigned to-do items.', 'cleverness-to-do-list' ); ?></span><br/>
 		<a href="http://codex.wordpress.org/Roles_and_Capabilities"><?php _e( 'Documentation on User Roles', 'cleverness-to-do-list' ); ?></a>
 	<?php
 	}
@@ -302,7 +310,7 @@ class CTDL_Settings {
 	function register_permission_settings() {
 		$this->plugin_tabs[$this->permissions_key] = __( 'User Permissions', 'cleverness-to-do-list' );
 
-		register_setting( $this->permissions_key, $this->permissions_key );
+		register_setting( $this->permissions_key, $this->permissions_key, array( $this, 'validate_input' ) );
 		add_settings_section( 'section_permission', __( 'To-Do List User Permissions for Group and Master List Types', 'cleverness-to-do-list' ), array( $this, 'section_permission_desc' ), $this->permissions_key );
 		add_settings_field( 'view_capability', __( 'View To-Do List', 'cleverness-to-do-list' ), array( $this, 'permission_option' ), $this->permissions_key, 'section_permission', array( 'label_for' => 'view_capability' ) );
 		add_settings_field( 'complete_capability', __( 'Complete To-Do Item Capability', 'cleverness-to-do-list' ), array( $this, 'permission_option' ), $this->permissions_key, 'section_permission', array( 'label_for' => 'complete_capability' ) );
@@ -313,6 +321,7 @@ class CTDL_Settings {
 		add_settings_field( 'delete_capability', __( 'Delete To-Do Item Capability', 'cleverness-to-do-list' ), array( $this, 'permission_option' ), $this->permissions_key, 'section_permission', array( 'label_for' => 'delete_capability' ) );
 		add_settings_field( 'purge_capability', __( 'Delete All To-Do Items Capability', 'cleverness-to-do-list' ), array( $this, 'permission_option' ), $this->permissions_key, 'section_permission', array( 'label_for' => 'purge_capability' ) );
 		add_settings_field( 'add_cat_capability', __( 'Add Categories Capability', 'cleverness-to-do-list' ), array( $this, 'permission_option' ), $this->permissions_key, 'section_permission', array( 'label_for' => 'add_cat_capability' ) );
+		do_action( 'ctdl_permission_settings' );
 	}
 
 	function permission_option($args) { ?>
@@ -326,6 +335,23 @@ class CTDL_Settings {
 			<option value="manage_options"<?php if ( $this->permission_settings[$args['label_for']] == 'manage_options' ) echo ' selected="selected"'; ?>><?php _e( 'Manage Options', 'cleverness-to-do-list' ); ?></option>
 		</select>
 	<?php }
+
+	function validate_input( $input ) {
+		$output = array();
+
+		foreach ( $input as $key => $value ) {
+
+			if ( isset( $input[$key] ) ) {
+				if ( $key == 'user_roles' ) {
+					$output[$key] = implode( ', ', $input[$key] );
+				} else {
+					$output[$key] = strip_tags( stripslashes( $input[$key] ) );
+				}
+			}
+		}
+
+		return $output;
+	}
 
 	function add_admin_menus() {
 		global $cleverness_todo_settings_page;

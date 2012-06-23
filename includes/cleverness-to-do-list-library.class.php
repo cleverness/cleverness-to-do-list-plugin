@@ -187,7 +187,7 @@ class CTDL_Lib {
 		if ( $permission === true ) {
 			$message = self::complete_todo( absint( $_POST['cleverness_id'] ), absint( $_POST['cleverness_status'] ) );
 		} else {
-			$message = __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
+			$message = esc_html__( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
 		}
 		echo $message;
 
@@ -238,7 +238,7 @@ class CTDL_Lib {
 
 		if ( $permission === true ) {
 
-			if ( !wp_verify_nonce( $_REQUEST['todoadd'], 'todoadd' ) ) die( 'Security check failed' );
+			if ( !wp_verify_nonce( $_REQUEST['todoadd'], 'todoadd' ) ) die( esc_html__( 'Security check failed', 'cleverness-to-do-list' ) );
 
 			if ( CTDL_Loader::$settings['email_assigned'] == '1' && CTDL_Loader::$settings['assign'] == '0' ) {
 				CTDL_Lib::email_user( $_POST['cleverness_todo_assign'], $_POST['cleverness_todo_deadline'], $_POST['cat'] );
@@ -323,7 +323,7 @@ class CTDL_Lib {
 
 		if ( $permission === true ) {
 
-			if ( !wp_verify_nonce( $_REQUEST['todoupdate'], 'todoupdate' ) ) die( 'Security check failed' );
+			if ( !wp_verify_nonce( $_REQUEST['todoupdate'], 'todoupdate' ) ) die( esc_html__( 'Security check failed', 'cleverness-to-do-list' ) );
 
 			$my_post = array(
 				'ID'            => absint( $_POST['id'] ),
@@ -388,7 +388,7 @@ class CTDL_Lib {
 
 		if ( $permission === true ) {
 			$cleverness_todo_purge_nonce = $_REQUEST['_wpnonce'];
-			if ( !wp_verify_nonce( $cleverness_todo_purge_nonce, 'todopurge' ) ) die( 'Security check failed' );
+			if ( !wp_verify_nonce( $cleverness_todo_purge_nonce, 'todopurge' ) ) die( esc_html__( 'Security check failed', 'cleverness-to-do-list' ) );
 
 			if ( CTDL_Loader::$settings['list_view'] == '0' ) {
 				$args = array(
@@ -437,7 +437,7 @@ class CTDL_Lib {
 
 		if ( $permission === true ) {
 			$cleverness_todo_delete_all_nonce = $_REQUEST['_wpnonce'];
-			if ( !wp_verify_nonce( $cleverness_todo_delete_all_nonce, 'tododeletetodos' ) ) die( 'Security check failed' );
+			if ( !wp_verify_nonce( $cleverness_todo_delete_all_nonce, 'tododeletetodos' ) ) die( esc_html__( 'Security check failed', 'cleverness-to-do-list' ) );
 
 			$args = array(
 				'post_type' => 'todo',
@@ -465,7 +465,7 @@ class CTDL_Lib {
 			global $wpdb;
 
 			$cleverness_todo_delete_tables_nonce = $_REQUEST['_wpnonce'];
-			if ( !wp_verify_nonce( $cleverness_todo_delete_tables_nonce, 'tododeletetables' ) ) die( 'Security check failed' );
+			if ( !wp_verify_nonce( $cleverness_todo_delete_tables_nonce, 'tododeletetables' ) ) die( esc_html__( 'Security check failed', 'cleverness-to-do-list' ) );
 			if ( !function_exists( 'is_plugin_active_for_network' ) ) require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 			if ( is_plugin_active_for_network( __FILE__ ) ) {
 				$prefix = $wpdb->base_prefix;
