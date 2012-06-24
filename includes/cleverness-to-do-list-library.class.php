@@ -617,7 +617,7 @@ class CTDL_Lib {
 	 * Add an Item to the Admin Menu
 	 * @param $wp_admin_bar
 	 */
-	public function add_to_toolbar( $wp_admin_bar ) {
+	public static function add_to_toolbar( $wp_admin_bar ) {
 		$wp_admin_bar->add_node( array(
 			'id'    => 'todolist',
 			'title' => __( 'To-Do List', 'cleverness-to-do-list' ),

@@ -202,7 +202,7 @@ class ClevernessToDoList {
 				$this->show_deadline( $deadline_meta );
 				$this->show_date_added( get_the_date( CTDL_Loader::$settings['date_format'] ) );
 				if ( $completed == 1 ) $this->show_completed( $completed_meta );
-				do_action( 'ctdl_list_items' );
+				$this->list .= do_action( 'ctdl_list_items' );
 				$this->show_edit_link( $id );
 				$this->list .= '</tr>';
 			}
@@ -242,7 +242,7 @@ class ClevernessToDoList {
 		$this->create_category_field( get_the_terms( $id, 'todocategories' ) );
 		$this->create_assign_field( $assign_meta );
 		$this->create_progress_field( $progress_meta );
-		do_action( 'ctdl_edit_form' );
+		$this->form .= do_action( 'ctdl_edit_form' );
 		$this->create_todo_text_field( $todo_item->post_content );
 		$this->form .= '</table>'.wp_nonce_field( 'todoupdate', 'todoupdate', true, false ).'<input type="hidden" name="action" value="updatetodo" />
         	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_edit_text', esc_attr__( 'Edit To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>
@@ -270,7 +270,7 @@ class ClevernessToDoList {
 				$this->create_category_field();
 				$this->create_assign_field();
 				$this->create_progress_field();
-				do_action( 'ctdl_add_form' );
+				$this->form .= do_action( 'ctdl_add_form' );
 				$this->create_todo_text_field();
 				$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
         	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>';
@@ -435,7 +435,7 @@ class ClevernessToDoList {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).'</th>';
 		if ( CTDL_Loader::$settings['show_date_added'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).'</th>';
 		if ( $completed == 1 && CTDL_Loader::$settings['show_completed_date'] == 1) $this->list .= '<th>'.apply_filters( 'ctdl_heading_completed', esc_html__('Completed', 'cleverness-to-do-list' ) ).'</th>';
-		do_action( 'ctdl_table_headings' );
+		$this->list .= do_action( 'ctdl_table_headings' );
 		if ( current_user_can(CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 )
 			$this->list .= '<th id="action-col" class="{sorter: false} no-sort">'.apply_filters( 'ctdl_heading_action', esc_html__( 'Action', 'cleverness-to-do-list' ) ).'</th>';
     	$this->list .= '</tr></thead>';

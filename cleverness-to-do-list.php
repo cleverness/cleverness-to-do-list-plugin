@@ -7,7 +7,6 @@ Author: C.M. Kendrick
 Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list/
 @todo add post planner advertising
-@todo add filter and action hooks
 @todo add tablesorter to front-end admin
 @todo format front-end checklist better
 @todo dashboard widget formatting
@@ -15,7 +14,6 @@ Plugin URI: http://cleverness.org/plugins/to-do-list/
 @todo frontend checklist editlink and date not showing
 @ToDo Widget: all private and public to-do's over all users show up if not logged in. If logged in it will show only my public and private posts, but should show public posts from others, nor?,
 @todo error in widget when not logged in
-@todo make sure everything is properly escaped
 @todo add css to frontend including assign box
 @todo update POT file and add esc_htmls and esc_attr
 @todo change progress to slider
