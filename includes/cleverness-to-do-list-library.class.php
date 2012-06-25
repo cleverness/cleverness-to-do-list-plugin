@@ -22,7 +22,7 @@ class CTDL_Lib {
 	 * @return mixed
 	 */
 	public static function get_todo( $id ) {
-		$post = get_post( absint( $id ) );
+		$post = get_post( $id );
 		return $post;
 	}
 
@@ -54,7 +54,7 @@ class CTDL_Lib {
 		}
 
 		/* Author */
-		if ( CTDL_Loader::$settings['list_view'] == 0 ) {
+		if ( CTDL_Loader::$settings['list_view'] == 0 && $user != 0 ) {
 			$author = $user;
 		} else {
 			$author = NULL;
@@ -63,7 +63,7 @@ class CTDL_Lib {
 		/* View Settings */
 
 		// In Group View, Show Only Tasks Assigned to That User when Set
-		if ( CTDL_Loader::$settings['list_view'] == '1' && CTDL_Loader::$settings['show_only_assigned'] == '0' && ( !current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) {
+		if ( CTDL_Loader::$settings['list_view'] == '1' && $user != 0 && CTDL_Loader::$settings['show_only_assigned'] == '0' && ( !current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) {
 			$metaquery = array(
 				array(
 					'key'   => '_status',
@@ -76,7 +76,7 @@ class CTDL_Lib {
 			);
 
 		// Master view with No Editing Capabilities
-		} elseif ( CTDL_Loader::$settings['list_view'] == '2' && !current_user_can( CTDL_Loader::$settings['edit_capability'] ) ) {
+		} elseif ( CTDL_Loader::$settings['list_view'] == '2' && $user != 0 && !current_user_can( CTDL_Loader::$settings['edit_capability'] ) ) {
 
 			if ( $status == 0 ) {
 				// first get all the posts where _user_USERID_status = 1 and put them into an array
@@ -96,7 +96,7 @@ class CTDL_Lib {
 					$to_exclude[] = get_the_ID();
 				endwhile;
 
-				if ( CTDL_Loader::$settings['show_only_assigned'] == '0' && ( !current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) {
+				if ( CTDL_Loader::$settings['show_only_assigned'] == '0' && $user != 0 && ( !current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) {
 					$metaquery = array(
 						array(
 							'key'   => '_status',
@@ -116,7 +116,7 @@ class CTDL_Lib {
 					);
 				}
 
-			} elseif ( $status == 1 ) {
+			} elseif ( $status == 1 && $user != 0 ) {
 				$metaquery = array(
 					array(
 						'key'   => '_status',
@@ -185,11 +185,11 @@ class CTDL_Lib {
 		$permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 
 		if ( $permission === true ) {
-			$message = self::complete_todo( absint( $_POST['cleverness_id'] ), absint( $_POST['cleverness_status'] ) );
+			self::complete_todo( absint( $_POST['cleverness_id'] ), absint( $_POST['cleverness_status'] ) );
 		} else {
 			$message = esc_html__( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
 		}
-		echo $message;
+		if ( isset( $message ) ) echo $message;
 
 		die(); // this is required to return a proper result
 	}
@@ -270,7 +270,7 @@ class CTDL_Lib {
 			}
 			$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ? esc_attr( $_POST['cleverness_todo_deadline'] ) : '' );
 			add_post_meta( $post_id, '_deadline', $deadline, true );
-			$progress = ( isset( $_POST['cleverness_todo_progress'] ) ? absint( $_POST['cleverness_todo_progress'] ) : 0 );
+			$progress = ( isset( $_POST['cleverness_todo_progress'] ) ? $_POST['cleverness_todo_progress'] : 0 );
 			add_post_meta( $post_id, '_progress', $progress, true );
 
 		}
@@ -335,19 +335,17 @@ class CTDL_Lib {
 
 			if ( isset( $_POST['cat'] ) ) wp_set_post_terms( $post_id, absint( $_POST['cat'] ), 'todocategories', false);
 			if ( isset( $_POST['cleverness_todo_priority'] ) ) update_post_meta( $post_id, '_priority', esc_attr( $_POST['cleverness_todo_priority'] ) );
-			if ( isset( $_POST['cleverness_todo_assign'] ) )  {
-				$assign = $_POST['cleverness_todo_assign'];
-				if ( is_array( $assign ) ) {
-					delete_post_meta( $post_id, '_assign' );
-					foreach ( $assign as $value ) {
-						add_post_meta( $post_id, '_assign', absint( $value ) );
-					}
-				} else {
-					update_post_meta( $post_id, '_assign', absint( $assign ) );
+			$assign = ( isset( $_POST['cleverness_todo_assign'] ) ? $_POST['cleverness_todo_assign'] : -1 );
+			if ( is_array( $assign ) ) {
+				delete_post_meta( $post_id, '_assign' );
+				foreach ( $assign as $value ) {
+					add_post_meta( $post_id, '_assign', $value );
 				}
+			} else {
+				update_post_meta( $post_id, '_assign', $assign );
 			}
 			if ( isset( $_POST['cleverness_todo_deadline'] ) ) update_post_meta( $post_id, '_deadline', esc_attr( $_POST['cleverness_todo_deadline'] ) );
-			if ( isset( $_POST['cleverness_todo_progress'] ) ) update_post_meta( $post_id, '_progress', absint( $_POST['cleverness_todo_progress'] ) );
+			if ( isset( $_POST['cleverness_todo_progress'] ) ) update_post_meta( $post_id, '_progress', $_POST['cleverness_todo_progress'] );
 
 		}
 
@@ -762,7 +760,9 @@ class CTDL_Lib {
 				'show_deadline'         => 0,
 				'show_progress'         => 0,
 				'sort_order'            => 'ID',
-				'admin_bar'             => 1
+				'admin_bar'             => 1,
+				'post_planner'          => 0,
+				'wysiwyg'               => 1,
 			);
 
 			$advanced_options = array(
@@ -889,6 +889,7 @@ class CTDL_Lib {
 			if ( $version < 3.2 ) {
 				$general_options            = get_option( 'CTDL_general' );
 				$general_options['wysiwyg'] = 1;
+				$general_options['post_planner'] = 0;
 				update_option( 'CTDL_general', $general_options );
 			}
 

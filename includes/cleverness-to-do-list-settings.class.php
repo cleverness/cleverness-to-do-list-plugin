@@ -87,6 +87,7 @@ class CTDL_Settings {
 		add_settings_field( 'show_progress', __( 'Show Progress', 'cleverness-to-do-list' ), array( $this, 'show_progress_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'admin_bar', __( 'Show Admin Bar Menu', 'cleverness-to-do-list' ), array( $this, 'admin_bar_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'wysiwyg', __( 'Use WYSIWYG Editor', 'cleverness-to-do-list' ), array( $this, 'wysiwyg_option' ), $this->general_key, 'section_general' );
+		add_settings_field( 'post_planner', __( 'Integrate with Post Planner', 'cleverness-to-do-list' ), array( $this, 'post_planner_option' ), $this->general_key, 'section_general' );
 		do_action( 'ctdl_general_settings' );
 	}
 
@@ -169,6 +170,22 @@ class CTDL_Settings {
 		<option value="0" <?php selected( $this->general_settings['wysiwyg'], 0 ); ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
 	</select>
 	<?php
+	}
+
+	function post_planner_option() {
+		if ( is_plugin_active( 'post-planner/post-planner.php' ) ) :
+		?>
+	<select name="<?php echo $this->general_key; ?>[post_planner]">
+		<option value="1" <?php selected( $this->general_settings['post_planner'], 1 ); ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>
+			&nbsp;</option>
+		<option value="0" <?php selected( $this->general_settings['post_planner'], 0 ); ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+	</select>
+		<?php
+		else : ?>
+			<input type="hidden" name="<?php echo $this->general_key; ?>[post_planner]" value="0" />
+			<a href="http://codecanyon.net/item/wordpress-post-planner/2496996" target="_blank"><?php esc_html_e( 'Purchase Plugin', 'cleverness-to-do-list' ); ?></a>
+		<?php
+		endif;
 	}
 
 	function register_advanced_settings() {

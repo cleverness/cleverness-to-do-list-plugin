@@ -383,7 +383,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 
 				$this->list .= '<div id="todo-'.esc_attr( $id ).'"'.$priority_class.'>';
 				$this->show_checkbox( $id, '', 'list' );
-				$this->list .= ' ';
+				$this->list .= '<div class="todoitem">';
 				$this->show_todo_text( get_the_content(), 'list' );
 				/** @var $priority int */
 				if ( $priority == 1 ) $this->show_priority( $the_priority );
@@ -400,7 +400,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 				$this->list .= do_action( 'ctdl_list_items' );
 				/** @var $editlink int */
 				if ( $editlink == 1 ) $this->show_edit_link( $id );
-				$this->list .= '</div>';
+				$this->list .= '</div></div>';
 			}
 		endwhile;
 

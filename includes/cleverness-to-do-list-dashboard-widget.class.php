@@ -35,14 +35,10 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 
 		echo $this->list;
 
-		echo '<div style="clear: both;"></div>';
-
 		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'add' );
 		if ( $cleverness_todo_permission === true ) {
 			echo '<br /><p style="float: right">'. '<a href="admin.php?page=cleverness-to-do-list#addtodo">'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'  &raquo;</a></p>';
 		}
-
-		echo '<div style="clear: both;"></div>';
 
 	}
 
@@ -133,6 +129,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 
 			$this->list .= '<div id="todo-'.$id.'"'.$priority_class.'>';
 			$this->show_checkbox( $id, $completed );
+			$this->list .= '<div class="todoitem">';
 			$this->show_todo_text( get_the_content() );
 			if ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) )
 					||  ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) && CTDL_Loader::$settings['assign'] == 0 ) {
@@ -167,7 +164,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			if ( $this->dashboard_settings['show_edit_link'] == 1 && ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) )
 				$this->list .= ' <small>(<a href="admin.php?page=cleverness-to-do-list&amp;action=edit-todo&amp;id='.esc_attr( $id ).'">'.__( 'Edit' ).'</a>)</small>';
 
-			$this->list .= '</div>';
+			$this->list .= '</div></div>';
 		endwhile;
 
 		return $posts_to_exclude;

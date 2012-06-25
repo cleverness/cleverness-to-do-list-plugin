@@ -4,21 +4,8 @@ div > .todo-checkbox {
 	margin-top: 5px;
 }
 
-div.todo-list small, div.todo-list p {
-	float: left;
-	margin-left: 5px;
-}
-
 div.todo-list {
 	clear: both;
-}
-
-.todo-scroll-checkboxes {
-	height: 40px;
-	padding: 5px;
-	overflow-y: scroll;
-	overflow-x: hidden;
-	width: 205px;
 }
 
 table#todo-list thead tr .header {
@@ -38,4 +25,26 @@ table#todo-list thead tr .headerSortDown {
 
 #ui-datepicker-div {
 	display: none;
+}
+
+#cleverness_todo_progress {
+	width: 30px;
+	margin-left: 5px;
+	margin-right: 0;
+	border: 0;
+	text-align: right;
+	padding: 0;
+	background: transparent url('');
+	box-shadow: 0 0 0;
+}
+
+#cleverness-todo-progress-slider {
+	float: left;
+	width: 170px;
+	margin-top: 5px;
+	border-radius: 0;
+}
+
+.todoitem {
+	margin-left: 20px;
 }

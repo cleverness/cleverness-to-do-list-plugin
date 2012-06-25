@@ -34,13 +34,20 @@ p.error {
 	width: 220px;
 }
 
-.todo-scroll-checkboxes {
-	height: 38px;
-	padding: 5px;
-    overflow-y: scroll;
-	overflow-x: hidden;
-	width: 205px;
-	border: 1px solid #ccc
+#cleverness_todo_progress {
+	width: 30px;
+	margin-left: 5px;
+	margin-right: 0;
+	border: 0;
+	text-align: right;
+	padding: 0;
+}
+
+#cleverness-todo-progress-slider {
+	float: left;
+	width: 170px;
+	margin-top: 5px;
+	border-radius: 0;
 }
 
 #cleverness_todo input.floatleft {
@@ -50,6 +57,7 @@ p.error {
 
 table#todo-list thead tr .header {
 	background-image: url(images/bg.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
+	background-image: url(images/bg.gif), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
@@ -57,10 +65,12 @@ table#todo-list thead tr .header {
 
 table#todo-list thead tr .headerSortUp {
 	background-image: url(images/asc.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
+	background-image: url(images/asc.gif), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
 }
 
 table#todo-list thead tr .headerSortDown {
 	background-image: url(images/desc.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
+	background-image: url(images/desc.gif), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
 }
 
 #ui-datepicker-div {
@@ -77,10 +87,12 @@ table#todo-list thead tr .headerSortDown {
 	clear: both;
 }
 
-#cleverness_todo p, #cleverness_todo small {
-	float: left;
-	margin: 0;
-	margin-left: 5px;
+.todoitem {
+	margin-left: 20px;
+}
+
+.todoitem p {
+	margin: 0.5em 0;
 }
 
 div.todo-list {

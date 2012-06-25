@@ -145,6 +145,8 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Fixed missing jQuery UI CSS images
 * Fixed completed date not showing in front-end shortcode
 * Changed User Roles in Settings to checkboxes instead of text field
+* Changed Progress dropdown to slider
+* Changed Assign dropdown to use Select2
 * Removed closing PHP tags in files
 
 = 3.1.7 =

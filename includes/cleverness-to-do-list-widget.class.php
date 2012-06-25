@@ -6,7 +6,6 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.2
- * @todo add option to check off items
  * @todo visiblity still buggy
  */
 
@@ -30,7 +29,7 @@ class CTDL_Widget extends WP_Widget {
 	 *
 	 */
 	function widget( $args, $instance ) {
-		global $current_user, $userdata, $ClevernessToDoList;
+		global $ClevernessToDoList;
 		get_currentuserinfo();
 		extract( $args );
 
@@ -40,12 +39,19 @@ class CTDL_Widget extends WP_Widget {
 		$deadline    = $instance['deadline'];
 		$progress    = $instance['progress'];
 		$category    = $instance['category'];
+		$individual  = ( isset( $instance['individual'] ) ? $instance['individual'] : 0 );
 
-		if ( CTDL_Loader::$settings['list_view'] == '2' ) {
-			$user = $current_user->ID;
+		if ( $individual == 1 && is_user_logged_in() ) {
+			global $current_user, $userdata;
+			if ( CTDL_Loader::$settings['list_view'] == '2' ) {
+				$user = $current_user->ID;
+			} else {
+				$user = $userdata->ID;
+			}
 		} else {
-			$user = $userdata->ID;
+			$user = 0;
 		}
+
 
 		/** @var $before_widget WP_Widget */
 		echo $before_widget;
@@ -190,6 +196,7 @@ class CTDL_Widget extends WP_Widget {
 		$instance['deadline'] = $new_instance['deadline'];
 		$instance['progress'] = $new_instance['progress'];
 		$instance['category'] = $new_instance['category'];
+		$instance['individual'] = $new_instance['individual'];
 		return $instance;
 	}
 
@@ -236,6 +243,9 @@ class CTDL_Widget extends WP_Widget {
 			<br />
 			<input class="checkbox" type="checkbox" <?php checked( $instance['progress'] ); ?> value="1" id="<?php echo $this->get_field_id( 'progress' ); ?>" name="<?php echo $this->get_field_name( 'progress' ); ?>" />
 			<label for="<?php echo $this->get_field_id( 'progress' ); ?>"><?php _e( 'Show Progress', 'cleverness-to-do-list' ); ?></label>
+			<br />
+			<input class="checkbox" type="checkbox" <?php checked( $instance['individual'] ); ?> value="1" id="<?php echo $this->get_field_id( 'individual' ); ?>" name="<?php echo $this->get_field_name( 'individual' ); ?>" />
+			<label for="<?php echo $this->get_field_id( 'individual' ); ?>"><?php _e( 'Show Only User\'s Own Items if Logged In and Applicable', 'cleverness-to-do-list' ); ?></label>
 		</p>
 		<?php
 	}
