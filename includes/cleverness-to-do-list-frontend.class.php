@@ -286,7 +286,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			'category'   => 0,
 			'addedby'    => 0,
 			'date'       => 0,
-			'todoid'     => ''
+			'todoid'     => '',
+			'editlink'   => 0
 		), $this->atts ) );
 		global $current_user;
 		get_currentuserinfo();
@@ -331,6 +332,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 				/** @var $date int */
 				if ( $date == 1 ) $this->show_date_added( get_the_date() );
 				$this->list .= do_action( 'ctdl_list_items' );
+				/** @var $editlink int */
+				if ( $editlink == 1 ) $this->show_edit_link( $id );
 			} else {
 				/* if there are no to-do items, display this message */
 				$this->list .= '<p>'.apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ).'</p>';
@@ -363,7 +366,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			'category'   => 0,
 			'addedby'    => 0,
 			'date'       => 0,
-			'todoid'     => ''
+			'todoid'     => '',
+			'editlink'   => 0,
 		), $this->atts ) );
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
@@ -377,7 +381,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 
 				$this->show_category_headings ( get_the_terms( $id, 'todocategories' ), $this->cat_id );
 
-				$this->list .= '<div id="todo-'.esc_attr( $id ).'" class="todo-list'.$priority_class.'">';
+				$this->list .= '<div id="todo-'.esc_attr( $id ).'"'.$priority_class.'>';
 				$this->show_checkbox( $id, '', 'list' );
 				$this->list .= ' ';
 				$this->show_todo_text( get_the_content(), 'list' );
@@ -394,6 +398,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 				/** @var $date int */
 				if ( $date == 1 ) $this->show_date_added( get_the_date() );
 				$this->list .= do_action( 'ctdl_list_items' );
+				/** @var $editlink int */
+				if ( $editlink == 1 ) $this->show_edit_link( $id );
 				$this->list .= '</div>';
 			}
 		endwhile;
@@ -415,6 +421,17 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 					$this->cat_id = $category->term_id;
 				}
 			}
+		}
+	}
+
+	public function show_edit_link( $id ) {
+		$edit = '';
+		$url  = admin_url( 'admin.php?page=cleverness-to-do-list&amp;action=edit-todo&amp;id='.$id );
+		if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
+			$edit = '<a href="'.$url.'" class="edit-todo">'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit' ) ).'</a>';
+		}
+		if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
+			$this->list .= ' <small>['.$edit.']</small>';
 		}
 	}
 
@@ -476,10 +493,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	 * @since 3.1
 	 */
 	public function show_date_added( $date, $type = 'list' ) {
-		if ( CTDL_Loader::$settings['show_date_added'] == 1 ) {
-			$date = ( isset( $date ) ? date( CTDL_Loader::$settings['date_format'], strtotime( $date ) ) : '' );
-			$this->list .= ' <small>['.apply_filters( 'ctdl_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).': '.( $date != '' ? sprintf( '%s', esc_attr( $date ) ) : '' ).']</small>';
-		}
+		$date = ( isset( $date ) ? date( CTDL_Loader::$settings['date_format'], strtotime( $date ) ) : '' );
+		$this->list .= ' <small>['.apply_filters( 'ctdl_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).': '.( $date != '' ? sprintf( '%s', esc_attr( $date ) ) : '' ).']</small>';
 	}
 
 	/**

@@ -512,8 +512,9 @@ class ClevernessToDoList {
 				$edit .= ' | <a href="" class="delete-todo">'.apply_filters( 'ctdl_delete', esc_html__( 'Delete' ) ).'</a>';
 				}
 			}
-	  	if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' )
-			$this->list .= '<td>'.$edit.'</td>';
+	  	if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
+			  $this->list .= '<td>'.$edit.'</td>';
+		 }
 	}
 
 	/**

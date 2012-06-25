@@ -519,9 +519,9 @@ class CTDL_Lib {
 	 */
 	public static function set_priority_class( $priority ) {
 		$priority_class = '';
-		if ( $priority == '0' ) $priority_class = ' class="todo-important"';
-		if ( $priority == '1' ) $priority_class = ' class="todo-normal"';
-		if ( $priority == '2' ) $priority_class = ' class="todo-low"';
+		if ( $priority == '0' ) $priority_class = ' class="todo-important todo-list"';
+		if ( $priority == '1' ) $priority_class = ' class="todo-normal todo-list"';
+		if ( $priority == '2' ) $priority_class = ' class="todo-low todo-list"';
 		return $priority_class;
 	}
 

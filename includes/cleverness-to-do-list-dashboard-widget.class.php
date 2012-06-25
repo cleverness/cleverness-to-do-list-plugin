@@ -35,10 +35,14 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 
 		echo $this->list;
 
+		echo '<div style="clear: both;"></div>';
+
 		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'add' );
 		if ( $cleverness_todo_permission === true ) {
-			echo '<p style="text-align: right">'. '<a href="admin.php?page=cleverness-to-do-list#addtodo">'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'  &raquo;</a></p>';
+			echo '<br /><p style="float: right">'. '<a href="admin.php?page=cleverness-to-do-list#addtodo">'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'  &raquo;</a></p>';
 		}
+
+		echo '<div style="clear: both;"></div>';
 
 	}
 
@@ -231,8 +235,8 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			     <?php wp_dropdown_categories( 'taxonomy=todocategories&echo=1&orderby=name&hide_empty=0&show_option_all='.__( 'All', 'cleverness-to-do-list' ).'&id=cleverness_todo_dashboard_settings[dashboard_cat]&name=cleverness_todo_dashboard_settings[dashboard_cat]&selected='.$cat_id ); ?>
 			</p>
 
-			<p class="description"><?php esc_html_e( 'This setting is only used when <em>List View</em> is set to <em>Group</em>.', 'cleverness-to-do-list' ); ?></p>
-   		    <p><label for="cleverness_todo_dashboard_settings[dashboard_author]"><?php esc_html_e( 'Show <em>Added By</em> on Dashboard Widget', 'cleverness-to-do-list' ); ?></label>
+			<p class="description"><?php _e( 'This setting is only used when <em>List View</em> is set to <em>Group</em>.', 'cleverness-to-do-list' ); ?></p>
+   		    <p><label for="cleverness_todo_dashboard_settings[dashboard_author]"><?php _e( 'Show <em>Added By</em> on Dashboard Widget', 'cleverness-to-do-list' ); ?></label>
 				<select id="cleverness_todo_dashboard_settings[dashboard_author]" name="cleverness_todo_dashboard_settings[dashboard_author]">
 					<option value="0"<?php if ( $options['dashboard_author'] == 0 ) echo ' selected="selected"'; ?>><?php esc_html_e( 'Yes', 'cleverness-to-do-list') ; ?>&nbsp;</option>
 					<option value="1"<?php if ( $options['dashboard_author'] == 1 ) echo ' selected="selected"'; ?>><?php esc_html_e( 'No', 'cleverness-to-do-list' ); ?></option>

@@ -71,3 +71,19 @@ table#todo-list thead tr .headerSortDown {
 	width: 50%;
 	min-width: 500px;
 }
+
+#cleverness_todo h4 {
+	margin-top: 20px;
+	clear: both;
+}
+
+#cleverness_todo p, #cleverness_todo small {
+	float: left;
+	margin: 0;
+	margin-left: 5px;
+}
+
+div.todo-list {
+	clear: both;
+	margin: 15px 0;
+}

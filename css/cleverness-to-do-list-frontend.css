@@ -1,0 +1,41 @@
+div > .todo-checkbox {
+	float: left;
+	margin-right: 5px;
+	margin-top: 5px;
+}
+
+div.todo-list small, div.todo-list p {
+	float: left;
+	margin-left: 5px;
+}
+
+div.todo-list {
+	clear: both;
+}
+
+.todo-scroll-checkboxes {
+	height: 40px;
+	padding: 5px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	width: 205px;
+}
+
+table#todo-list thead tr .header {
+	background-image: url(images/bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+
+table#todo-list thead tr .headerSortUp {
+	background-image: url(images/asc.gif);
+}
+
+table#todo-list thead tr .headerSortDown {
+	background-image: url(images/desc.gif);
+}
+
+#ui-datepicker-div {
+	display: none;
+}
