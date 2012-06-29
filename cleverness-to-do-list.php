@@ -45,6 +45,14 @@ function cleverness_todo_loader() {
 
 	CTDL_Loader::init();
 
+	if ( !defined( 'CTDL_PP' ) ) {
+		if ( in_array( 'post-planner/post-planner.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) && CTDL_Loader::$settings['post_planner'] == 1 ) {
+			define( 'CTDL_PP', true );
+		} else {
+			define( 'CTDL_PP', false );
+		}
+	}
+
 	$action = '';
 	if ( isset( $_GET['action'] ) )  $action = $_GET['action'];
 	if ( isset( $_POST['action'] ) ) $action = $_POST['action'];

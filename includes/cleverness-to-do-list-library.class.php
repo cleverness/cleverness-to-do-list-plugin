@@ -272,6 +272,7 @@ class CTDL_Lib {
 			add_post_meta( $post_id, '_deadline', $deadline, true );
 			$progress = ( isset( $_POST['cleverness_todo_progress'] ) ? $_POST['cleverness_todo_progress'] : 0 );
 			add_post_meta( $post_id, '_progress', $progress, true );
+			if ( isset( $_POST['cleverness_todo_planner'] ) ) add_post_meta( $post_id, '_planner', absint( $_POST['cleverness_todo_planner'] ) );
 
 		}
 
@@ -346,7 +347,7 @@ class CTDL_Lib {
 			}
 			if ( isset( $_POST['cleverness_todo_deadline'] ) ) update_post_meta( $post_id, '_deadline', esc_attr( $_POST['cleverness_todo_deadline'] ) );
 			if ( isset( $_POST['cleverness_todo_progress'] ) ) update_post_meta( $post_id, '_progress', $_POST['cleverness_todo_progress'] );
-
+			if ( isset( $_POST['cleverness_todo_planner'] ) ) update_post_meta( $post_id, '_planner', absint( $_POST['cleverness_todo_planner'] ) );
 		}
 
 		return;
@@ -505,8 +506,27 @@ class CTDL_Lib {
 		$deadline_meta = ( isset( $post_meta['_deadline'][0] ) ? $post_meta['_deadline'][0] : '' );
 		$completed_meta = ( isset( $post_meta['_completed'][0] ) ? $post_meta['_completed'][0] : NULL );
 		$progress_meta = ( isset( $post_meta['_progress'][0] ) ? $post_meta['_progress'][0] : '' );
-		return array( $priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta );
+		$planner_meta = ( isset( $post_meta['_planner'][0] ) ? $post_meta['_planner'][0] : '' );
+		return array( $priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta, $planner_meta );
 	}
+
+	/**
+	 * Get Planners
+	 * @static
+	 * @return WP_Query
+	 * @since 1.0
+	 */
+	public static function get_planners() {
+
+		$results = get_posts( array(
+			'post_type'      => 'planner',
+			'posts_per_page' => -1,
+			'post_status'    => 'any'
+		) );
+
+		return $results;
+	}
+
 
 	/**
 	 * Sets the priority class of a to-do item

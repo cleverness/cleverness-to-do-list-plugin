@@ -30,7 +30,7 @@ p.error {
 	min-width: 120px;
 }
 
-#cleverness_todo_priority, #cleverness_todo_deadline, #cat {
+#cleverness_todo_priority, #cleverness_todo_deadline, #cat, #cleverness_todo_planner {
 	width: 220px;
 }
 

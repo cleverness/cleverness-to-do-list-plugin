@@ -24,6 +24,7 @@ class CTDL_Loader {
 		$advanced_options     = ( get_option( 'CTDL_advanced' ) ? get_option( 'CTDL_advanced' ) : array() );
 		$permissions_options  = ( get_option( 'CTDL_permissions' ) ? get_option( 'CTDL_permissions' ) : array() );
 		self::$settings       = array_merge( $general_options, $advanced_options, $permissions_options );
+
 		self::include_files();
 		if ( !post_type_exists( 'todo' ) ) self::setup_custom_post_type();
 		if ( !taxonomy_exists( 'todocategories' ) ) self::create_taxonomies();
