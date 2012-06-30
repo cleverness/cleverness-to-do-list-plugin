@@ -535,3 +535,5 @@ French translation by Thibault Guerpillon
 Czech translation by Tomas Vesely
 
 German translation updated by Janne Fleischer
+
+Polish translation by [Adam Zienkowicz](http://i2biz.pl)

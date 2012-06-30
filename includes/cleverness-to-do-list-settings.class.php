@@ -183,7 +183,8 @@ class CTDL_Settings {
 		<?php
 		else : ?>
 			<input type="hidden" name="<?php echo $this->general_key; ?>[post_planner]" value="0" />
-			<a href="http://codecanyon.net/item/wordpress-post-planner/2496996" target="_blank"><?php esc_html_e( 'Purchase Plugin', 'cleverness-to-do-list' ); ?></a>
+			<a href="http://codecanyon.net/item/wordpress-post-planner/2496996?ref=seaserpentstudio" class="button-secondary"><?php esc_html_e( 'Purchase Post Planner Plugin', 'cleverness-to-do-list' ); ?></a>
+			<span class="description">Get more information on my <a href="http://codecanyon.net/item/wordpress-post-planner/2496996?ref=seaserpentstudio">Post Planner</a> premium plugin</span>
 		<?php
 		endif;
 	}

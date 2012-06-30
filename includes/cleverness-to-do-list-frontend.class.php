@@ -75,7 +75,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			$posts_to_exclude[] = $id;
 
 			if ( $visible == 0 ) {
-				list( $the_priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
+				list( $the_priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta, $planner_meta ) = CTDL_Lib::get_todo_meta( $id );
 
 				$priority_class = CTDL_Lib::set_priority_class( $the_priority );
 
@@ -89,6 +89,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 				if ( $progress == 1 ) $this->show_progress( $progress_meta );
 				/** @var $categories int */
 				if ( $categories == 1 ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
+				if ( CTDL_PP ) $this->show_planner( $planner_meta );
 				/** @var $assigned int */
 				if ( $assigned == 1 ) $this->show_assigned( $assign_meta );
 				/** @var $addedby int */
@@ -132,6 +133,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		if ( $progress == 1 && CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_progress', esc_html__( 'Progress', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $categories int */
 		if ( $categories == 1 && CTDL_Loader::$settings['categories'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_category', esc_html__( 'Category', 'cleverness-to-do-list' ) ).'</th>';
+		if ( CTDL_PP ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_planner', esc_html__( 'Post Planner', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $assigned int */
 		if ( $assigned == 1 && ( CTDL_Loader::$settings['assign'] == 0 && ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0
 				&& ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) || ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 )
@@ -169,7 +171,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		), $this->atts ) );
 
 		$id = $todo_item->ID;
-		list( $priority_meta, $assign_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
+		list( $priority_meta, $assign_meta, $deadline_meta, $completed_meta, $progress_meta, $planner_meta ) = CTDL_Lib::get_todo_meta( $id );
 		$url = strtok( $this->url, "?" );
 		$this->form = '';
 
@@ -180,6 +182,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		if ( $deadline == 1 ) $this->create_deadline_field( $deadline_meta );
 		/** @var $categories int */
 		if ( $categories == 1 ) $this->create_category_field( get_the_terms( $id, 'todocategories' ) );
+		if ( CTDL_PP ) $this->create_planner_field( $planner_meta );
 		/** @var $assigned int */
 		if ( $assigned == 1 ) $this->create_assign_field( $assign_meta );
 		/** @var $progress int */
@@ -222,6 +225,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			if ( $deadline == 1 ) $this->create_deadline_field();
 			/** @var $categories int */
 			if ( $categories == 1 ) $this->create_category_field();
+			if ( CTDL_PP ) $this->create_planner_field();
 			/** @var $assigned int */
 			if ( $assigned == 1 ) $this->create_assign_field();
 			/** @var $progress int */

@@ -32,29 +32,35 @@ class CTDL_Help {
 
 		$screen->add_help_tab( array(
 		'id'         => 'cleverness_todo_list_help_tab',
-		'title'      => __( 'To-Do List Help' ),
+		'title'      => __( 'To-Do List Help', 'cleverness-to-do-list' ),
 		'callback'	 => __CLASS__.'::cleverness_todo_help',
 		) );
 
 		$screen->add_help_tab( array(
 		'id'          => 'cleverness_todo_list_shortcode_tab',
-		'title'       => __( 'Shortcodes' ),
+		'title'       => __( 'Shortcodes', 'cleverness-to-do-list' ),
 		'callback'	  => __CLASS__.'::cleverness_todo_shortcodes_help',
 		) );
 
 		$screen->add_help_tab( array(
 		'id'          => 'cleverness_todo_list_faqs_tab',
-		'title'       => __( 'FAQs' ),
+		'title'       => __( 'FAQs', 'cleverness-to-do-list' ),
 		'callback'	  => __CLASS__.'::cleverness_todo_faqs_help',
 		) );
 
 		if ( current_user_can( 'manage_options' ) ) {
 			$screen->add_help_tab( array(
 			'id'          => 'cleverness_todo_list_permissions_tab',
-			'title'       => __( 'User Permissions' ),
+			'title'       => __( 'User Permissions', 'cleverness-to-do-list' ),
 			'callback'	  => __CLASS__.'::cleverness_todo_permissions_help',
 			) );
 		}
+
+		$screen->add_help_tab( array(
+			'id'       => 'cleverness_todo_list_postplanner_tab',
+			'title'    => __( 'Post Planner Integration', 'cleverness-to-do-list' ),
+			'callback' => __CLASS__.'::cleverness_todo_postplanner_help',
+		) );
 
 		$screen->set_help_sidebar( $cleverness_todo_help_sidebar );
 
@@ -179,6 +185,54 @@ class CTDL_Help {
 			<li><strong><?php esc_html_e( 'Add Categories Capability', 'cleverness-to-do-list' ); ?></strong> &#8211; <?php esc_html_e( 'This allows the selected capability to add new categories', 'cleverness-to-do-list' ); ?>.</li>
 		</ul>
 
+	<?php
+	}
+
+	/**
+	 * Creates the post planner help section
+	 * @static
+	 * @since 3.2
+	 */
+	public static function cleverness_todo_postplanner_help() { ?>
+		<h3><?php esc_html_e( 'Post Planner Integration', 'cleverness-to-do-list' ); ?></h3>
+
+		<p>You can use this plugin to create custom to-do lists for your Post Planners if you own my premium plugin, Post Planner.</p>
+
+		<p>Post Planner is a full-featured post planning system.</p>
+
+	<p>Features include:</p>
+
+	<ul>
+		<li>Assign Planners to Users &ndash; chose what roles show up in the assignment drop-down</li>
+		<li>Set Due Dates for Planners &ndash; using a popup date picker</li>
+		<li>Set and Assign Custom Statuses &ndash; including setting a color for each status for the dashboard widget
+		</li>
+		<li>A Standard Checklist for Every Planner &ndash; you set the checklist items</li>
+		<li>Chose the Post Type for Each Planner &ndash; set what post types you want to chose from</li>
+		<li>Comments on Each Planner &ndash; so you can discuss each planner with fellow authors</li>
+		<li>Add and Insert References (links) &ndash; link title, url, target, nofollow</li>
+		<li>Add and Insert Files &ndash; file title, url, and is integrated with the media uploader</li>
+		<li>Add and Insert Images and Set Featured Image &ndash; image title, alt, url, and is integrated with the media
+			uploader
+		</li>
+		<li>Easily integrate planners with new or existing posts &ndash; create a new post from the planner or select an
+			existing post
+		</li>
+		<li>Email Assignments to Assigned Users &ndash; optional feature with configurable email messages</li>
+		<li>Dashboard Widget &ndash; set the number of items to show, sort by category or status, and order by topic,
+			status, assignment, or due date
+		</li>
+		<li>Front-End Widget &ndash; list upcoming posts</li>
+		<li>View the Planner on the Post Edit Page &ndash; planner info shows up in a metabox on post pages</li>
+		<li>Sortable Planner Listings &ndash; filter by category, assignment, status, or post type and order by topic,
+			status, assignment, or due date
+		</li>
+		<li>Categories for Planners &ndash; assign each planner to a category if you wish</li>
+		<li>Admin Bar Menu Item &ndash; easily access your planners</li>
+		<li>Multi-Site Compatible &ndash; each site has its own Planners</li>
+	</ul>
+
+		<p><a href="http://codecanyon.net/item/wordpress-post-planner/2496996?ref=seaserpentstudio" class="button-secondary"><?php esc_html_e( 'Purchase Post Planner Plugin', 'cleverness-to-do-list' ); ?></a></p>
 	<?php
 	}
 
