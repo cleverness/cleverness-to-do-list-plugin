@@ -636,22 +636,24 @@ class CTDL_Lib {
 	 * @param $wp_admin_bar
 	 */
 	public static function add_to_toolbar( $wp_admin_bar ) {
-		$wp_admin_bar->add_node( array(
-			'id'    => 'todolist',
-			'title' => __( 'To-Do List', 'cleverness-to-do-list' ),
-			'href'  => get_admin_url().'admin.php?page=cleverness-to-do-list',
-			'parent' => false
-		) );
 
-		if ( current_user_can( CTDL_Loader::$settings['add_capability'] ) ) {
-
+		if ( current_user_can( CTDL_Loader::$settings['view_capability'] ) ) {
 			$wp_admin_bar->add_node( array(
-				'id'     => 'todolist-add',
-				'title'  => __( 'Add New To-Do Item', 'cleverness-to-do-list' ),
-				'parent' => 'todolist',
-				'href'   => get_admin_url().'admin.php?page=cleverness-to-do-list#addtodo'
+				'id'     => 'todolist',
+				'title'  => __( 'To-Do List', 'cleverness-to-do-list' ),
+				'href'   => get_admin_url().'admin.php?page=cleverness-to-do-list',
+				'parent' => false
 			) );
 
+			if ( current_user_can( CTDL_Loader::$settings['add_capability'] ) ) {
+
+				$wp_admin_bar->add_node( array(
+					'id'     => 'todolist-add',
+					'title'  => __( 'Add New To-Do Item', 'cleverness-to-do-list' ),
+					'parent' => 'todolist',
+					'href'   => get_admin_url().'admin.php?page=cleverness-to-do-list#addtodo'
+				) );
+			}
 		}
 	}
 
@@ -804,12 +806,12 @@ class CTDL_Lib {
 			);
 
 			$permissions_options = array(
-				'view_capability'              => 'publish_posts',
-				'add_capability'               => 'publish_posts',
-				'edit_capability'              => 'publish_posts',
+				'view_capability'              => 'edit_posts',
+				'add_capability'               => 'edit_posts',
+				'edit_capability'              => 'edit_posts',
 				'delete_capability'            => 'manage_options',
 				'purge_capability'             => 'manage_options',
-				'complete_capability'          => 'publish_posts',
+				'complete_capability'          => 'edit_posts',
 				'assign_capability'            => 'manage_options',
 				'view_all_assigned_capability' => 'manage_options',
 				'add_cat_capability'           => 'manage_options',

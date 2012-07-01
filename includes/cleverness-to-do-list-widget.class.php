@@ -164,12 +164,12 @@ class CTDL_Widget extends WP_Widget {
 					$ClevernessToDoList->show_progress( $progress_meta, $layout );
 				}
 				if ( CTDL_Loader::$settings['show_deadline'] == 1 && $deadline == 1 && $deadline_meta != '' ) {
-					$ClevernessToDoList->list .= '<br /><span class="deadline">'.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) );
+					$ClevernessToDoList->list .= '<br /><span class="deadline">'.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).': ';
 					$ClevernessToDoList->show_deadline( $deadline_meta, $layout );
 					$ClevernessToDoList->list .= '</span>';
 				}
-				if ( CTDL_Loader::$settings['assign'] == 0 && $assigned_to == 1 && CTDL_Loader::$settings['list_view'] != 0 && $assign_meta != -1 ) {
-					$ClevernessToDoList->list .= '<br /><span class="assigned">'.apply_filters( 'ctdl_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) );
+				if ( CTDL_Loader::$settings['assign'] == 0 && $assigned_to == 1 && CTDL_Loader::$settings['list_view'] != 0 && $assign_meta != -1 && !in_array( -1, $assign_meta ) ) {
+					$ClevernessToDoList->list .= '<br /><span class="assigned">'.apply_filters( 'ctdl_assigned', esc_html__( 'Assigned to', 'cleverness-to-do-list' ) ).' ';
 					$ClevernessToDoList->show_assigned( $assign_meta, $layout );
 					$ClevernessToDoList->list .= '</span>';
 				}
@@ -206,7 +206,7 @@ class CTDL_Widget extends WP_Widget {
 	 * @return string|void
 	 */
 	function form( $instance ) {
-		$defaults = array( 'title' => apply_filters( 'ctdl_todo_list', esc_html__( 'To-Do List', 'cleverness-to-do-list' ) ), 'number' => '5', 'assigned_to' => false, 'deadline' => false, 'progress' => false, 'category' => 'All' );
+		$defaults = array( 'title' => apply_filters( 'ctdl_todo_list', esc_html__( 'To-Do List', 'cleverness-to-do-list' ) ), 'number' => '5', 'assigned_to' => false, 'deadline' => false, 'progress' => false, 'individual' => 0, 'category' => 'All' );
 		$instance = wp_parse_args( ( array ) $instance, $defaults ); ?>
 
 		<p>
@@ -245,7 +245,7 @@ class CTDL_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'progress' ); ?>"><?php _e( 'Show Progress', 'cleverness-to-do-list' ); ?></label>
 			<br />
 			<input class="checkbox" type="checkbox" <?php checked( $instance['individual'] ); ?> value="1" id="<?php echo $this->get_field_id( 'individual' ); ?>" name="<?php echo $this->get_field_name( 'individual' ); ?>" />
-			<label for="<?php echo $this->get_field_id( 'individual' ); ?>"><?php _e( 'Show Only User\'s Own Items if Logged In and Applicable', 'cleverness-to-do-list' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'individual' ); ?>"><?php _e( 'Show Only Logged-In User\'s Items', 'cleverness-to-do-list' ); ?></label>
 		</p>
 		<?php
 	}

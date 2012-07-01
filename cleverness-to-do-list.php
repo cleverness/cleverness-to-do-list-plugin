@@ -9,7 +9,10 @@ Plugin URI: http://cleverness.org/plugins/to-do-list/
 @todo test out widget on various users
 @todo try out various users and settings
 @todo try fresh install
-@todo update POT file and add esc_htmls and esc_attr
+@todo store deadline in different format for sorting
+@todo add import/export settings
+@todo check out delete posts possible bug: an user with no rights for publish-pages can delete his own to-do’s, even if the minimum right for that is set to “publish-pages”
+@todo user unable to assign posts can't add new posts or edit posts; removes assignments
 */
 
 /**

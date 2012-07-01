@@ -19,7 +19,6 @@ class ClevernessToDoList {
 	protected $priorities = '';
 	protected $user = '';
 	protected $url = '';
-	protected $action = '';
 	public $list = '';
 
 	public function __construct() {
@@ -38,7 +37,7 @@ class ClevernessToDoList {
 	 */
 	public function display( $completed = 0 ) {
 		global $current_user, $userdata;
-		list( $this->url, $this->action ) = CTDL_Lib::set_variables();
+		list( $this->url, $action ) = CTDL_Lib::set_variables();
 		$this->user = CTDL_Lib::get_user_id( $current_user, $userdata );
 		if ( is_admin() ) $completed = 1;
 
@@ -46,7 +45,7 @@ class ClevernessToDoList {
 			<h2>'.apply_filters( 'ctdl_todo_list', esc_html__('To-Do List', 'cleverness-to-do-list') ).'</h2>';
 
 		// get the existing to-do data and show the edit form if editing a to-do item
-		if ( $this->action == 'edit-todo' ) {
+		if ( $action == 'edit-todo' ) {
 			$this->edit_todo_item( $this->url );
 			return;
 		}
@@ -574,8 +573,6 @@ class ClevernessToDoList {
 					}
 
 				}
-			} else {
-				if ( $layout == 'table' ) $this->list .= '<td></td>';
 			}
    	}
 
