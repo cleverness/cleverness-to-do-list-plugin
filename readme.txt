@@ -143,8 +143,11 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Added dashboard setting to hide the Edit link on the Dashboard widget
 * Added jQuery table sorting of the To-Do List using tablesorter
 * Added filters and hooks
+* Added Widget option to show a logged-in user's own items only
+* Added Import/Export of Settings
 * Fixed missing jQuery UI CSS images
 * Fixed completed date not showing in front-end shortcode
+* Fixed issue with multiple widgets
 * Changed User Roles in Settings to checkboxes instead of text field
 * Changed Progress dropdown to slider
 * Changed Assign dropdown to use Select2

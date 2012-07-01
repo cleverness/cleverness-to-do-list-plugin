@@ -148,9 +148,9 @@ class ClevernessToDoList {
 
 			if ( $items == 0 ) {
 				if ( $completed == 0 ) {
-					$this->list .= '<tr><td>'.apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ).'</td></tr>';
+					$this->list .= '<tr><td colspan="100%">'.apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ).'</td></tr>';
 				} else {
-					$this->list .= '<tr><td>'.apply_filters( 'ctdl_no_completed_items', esc_html__( 'No completed items.', 'cleverness-to-do-list' ) ).'</td></tr>';
+					$this->list .= '<tr><td colspan="100%">'.apply_filters( 'ctdl_no_completed_items', esc_html__( 'No completed items.', 'cleverness-to-do-list' ) ).'</td></tr>';
 				}
 			}
 
@@ -162,9 +162,9 @@ class ClevernessToDoList {
 				$this->show_todo_list_items( $todo_items, $completed );
 			} else {
 				if ( $completed == 0 ) {
-					$this->list .= '<tr><td>'.apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ).'</td></tr>';
+					$this->list .= '<tr><td colspan="100%">'.apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ).'</td></tr>';
 				} else {
-					$this->list .= '<tr><td>'.apply_filters( 'ctdl_no_completed_items', esc_html__( 'No completed items.', 'cleverness-to-do-list' ) ).'</td></tr>';
+					$this->list .= '<tr><td colspan="100%">'.apply_filters( 'ctdl_no_completed_items', esc_html__( 'No completed items.', 'cleverness-to-do-list' ) ).'</td></tr>';
 				}
 			}
 

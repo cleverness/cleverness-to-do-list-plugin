@@ -29,6 +29,7 @@ class CTDL_Settings {
 		add_action( 'admin_init', array( $this, 'register_general_settings' ) );
 		add_action( 'admin_init', array( $this, 'register_advanced_settings' ) );
 		add_action( 'admin_init', array( $this, 'register_permission_settings' ) );
+		add_action( 'admin_init', array( $this, 'register_importexport_settings' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menus' ) );
 	}
 
@@ -173,7 +174,7 @@ class CTDL_Settings {
 	}
 
 	function post_planner_option() {
-		if ( is_plugin_active( 'post-planner/post-planner.php' ) ) :
+		if ( is_plugin_active( 'cleverness-to-do-list/cleverness-to-do-list.php' ) ) :
 		?>
 	<select name="<?php echo $this->general_key; ?>[post_planner]">
 		<option value="1" <?php selected( $this->general_settings['post_planner'], 1 ); ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>
@@ -183,8 +184,8 @@ class CTDL_Settings {
 		<?php
 		else : ?>
 			<input type="hidden" name="<?php echo $this->general_key; ?>[post_planner]" value="0" />
-			<a href="http://codecanyon.net/item/wordpress-post-planner/2496996?ref=seaserpentstudio" class="button-secondary"><?php esc_html_e( 'Purchase Post Planner Plugin', 'cleverness-to-do-list' ); ?></a>
-			<span class="description">Get more information on my <a href="http://codecanyon.net/item/wordpress-post-planner/2496996?ref=seaserpentstudio">Post Planner</a> premium plugin</span>
+			<a href="http://codecanyon.net/item/wordpress-cleverness-to-do-list/2496996?ref=seaserpentstudio" class="button-secondary"><?php esc_html_e( 'Purchase Post Planner Plugin', 'cleverness-to-do-list' ); ?></a>
+			<span class="description">Get more information on my <a href="http://codecanyon.net/item/wordpress-cleverness-to-do-list/2496996?ref=seaserpentstudio">Post Planner</a> premium plugin</span>
 		<?php
 		endif;
 	}
@@ -361,7 +362,11 @@ class CTDL_Settings {
 
 			if ( isset( $input[$key] ) ) {
 				if ( $key == 'user_roles' ) {
-					$output[$key] = implode( ', ', $input[$key] );
+					if ( is_array( $value ) ) {
+						$output[$key] = implode( ', ', $input[$key] );
+					} else {
+						$output[$key] = strip_tags( stripslashes( $input[$key] ) );
+					}
 				} else {
 					$output[$key] = strip_tags( stripslashes( $input[$key] ) );
 				}
@@ -369,6 +374,89 @@ class CTDL_Settings {
 		}
 
 		return $output;
+	}
+
+	function register_importexport_settings() {
+		$this->plugin_tabs['importexport'] = esc_attr__( 'Import/Export', 'cleverness-to-do-list' );
+
+		if ( isset( $_GET['ctdl_message'] ) ) {
+			switch ( $_GET['ctdl_message'] ) {
+				case 1:
+					$ctdl_message = esc_attr__( 'Settings Imported', 'cleverness-to-do-list' );
+					break;
+				case 2:
+					$ctdl_message = esc_attr__( 'Invalid Settings File', 'cleverness-to-do-list' );
+					break;
+				case 3:
+					$ctdl_message = esc_attr__( 'No Settings File Selected', 'cleverness-to-do-list' );
+					break;
+				default:
+					$ctdl_message = '';
+					break;
+			}
+		}
+
+		if ( isset( $ctdl_message ) && $ctdl_message != '' ) {
+			echo '<div class="updated"><p>'.$ctdl_message.'</p></div>';
+		}
+
+		// export settings
+		if ( isset( $_GET['cleverness-to-do-list-settings-export'] ) ) {
+			header( "Content-Disposition: attachment; filename=cleverness-to-do-list-settings.txt" );
+			header( 'Content-Type: text/plain; charset=utf-8' );
+			$general   = get_option( 'CTDL_general' );
+			$advanced  = get_option( 'CTDL_advanced' );
+			$user      = get_option( 'CTDL_permissions' );
+
+			echo "[START=CTDL SETTINGS]\n";
+			foreach ( $general as $id => $text )
+				echo "g:$id\t".json_encode( $text )."\n";
+			foreach ( $advanced as $id => $text )
+				echo "a:$id\t".json_encode( $text )."\n";
+			foreach ( $user as $id => $text )
+				echo "p:$id\t".json_encode( $text )."\n";
+			echo "[STOP=CTDL SETTINGS]";
+			exit;
+		}
+
+		// import settings
+		if ( isset( $_POST['cleverness-to-do-list-settings-import'] ) ) {
+			$message = '';
+			if ( $_FILES['cleverness-to-do-list-settings-import-file']['tmp_name'] ) {
+				$import = explode( "\n", file_get_contents( $_FILES['cleverness-to-do-list-settings-import-file']['tmp_name'] ) );
+				if ( array_shift( $import ) == "[START=CTDL SETTINGS]" && array_pop( $import ) == "[STOP=CTDL SETTINGS]" ) {
+					foreach ( $import as $import_option ) {
+						list( $key, $value ) = explode( "\t", $import_option );
+						list( $prefix, $option ) = explode( ':', $key );
+						switch ( $prefix ) {
+							case 'g':
+								$general_options[$option] = json_decode( sanitize_text_field( $value ) );
+								break;
+							case 'a':
+								$advanced_options[$option] = json_decode( sanitize_text_field( $value ) );
+								break;
+							case 'p':
+								$permission_options[$option] = json_decode( sanitize_text_field( $value ) );
+								break;
+							default:
+								break;
+						}
+					}
+					update_option( 'CTDL_general', $general_options );
+					update_option( 'CTDL_advanced', $advanced_options );
+					update_option( 'CTDL_permissions', $permission_options );
+
+					$ctdl_message = 1;
+				} else {
+					$ctdl_message = 2;
+				}
+			} else {
+				$ctdl_message = 3;
+			}
+
+			wp_redirect( admin_url( '/admin.php?page=cleverness-to-do-list-settings&tab=importexport&ctdl_message='.$ctdl_message ) );
+			exit;
+		}
 	}
 
 	function add_admin_menus() {
@@ -389,7 +477,7 @@ class CTDL_Settings {
 		?>
 	<div class="wrap">
 		<?php $this->plugin_options_tabs(); ?>
-		<form method="post" action="options.php">
+		<form method="post" action="options.php" enctype="multipart/form-data">
 			<?php wp_nonce_field( 'update-options' ); ?>
 			<?php settings_fields( $tab ); ?>
 			<?php do_settings_sections( $tab ); ?>
@@ -397,7 +485,8 @@ class CTDL_Settings {
 				$this->show_delete_tables_button();
 				$this->show_delete_todos_button();
 			} ?>
-			<?php submit_button(); ?>
+			<?php if ( $tab == 'importexport' ) $this->importexport_fields(); ?>
+			<?php if ( $tab != 'importexport' ) submit_button(); ?>
 		</form>
 	</div>
 	<?php
@@ -440,6 +529,23 @@ class CTDL_Settings {
 		$cleverness_todo_delete_todos_nonce = wp_create_nonce( 'tododeletetodos' );
 		$url = get_admin_url().'admin.php?page=cleverness-to-do-list-settings&amp;&tab=CTDL_advanced&amp;action=deletealltodos&_wpnonce='.esc_attr( $cleverness_todo_delete_todos_nonce );
 		echo '<p><a class="button-secondary" href="'.$url.'" title="'.__( 'Delete All To-Do Items', 'cleverness-to-do-list' ).'>" id="delete-all-todos">'.__( 'Delete All To-Do Items', 'cleverness-to-do-list' ).'</a></p>';
+	}
+
+	function importexport_fields() {
+		?>
+	<h3><?php esc_html_e( 'Import/Export Settings', 'cleverness-to-do-list' ); ?></h3>
+
+	<p>
+		<a class="submit button" href="?cleverness-to-do-list-settings-export"><?php esc_attr_e( 'Export Settings', 'cleverness-to-do-list' ); ?></a>
+	</p>
+
+	<p>
+		<input type="hidden" name="cleverness-to-do-list-settings-import" id="cleverness-to-do-list-settings-import" value="true" />
+		<?php submit_button( esc_attr__( 'Import Settings', 'cleverness-to-do-list' ), 'button', 'cleverness-to-do-list-settings-submit', false ); ?>
+		<input type="file" name="cleverness-to-do-list-settings-import-file" id="cleverness-to-do-list-settings-import-file" />
+	</p>
+
+	<?php
 	}
 
 }

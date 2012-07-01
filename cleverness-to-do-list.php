@@ -1,18 +1,12 @@
 <?php
 /*
 Plugin Name: Cleverness To-Do List
-Version: 3.2
+Version: 3.2beta
 Description: Manage to-do list items on a individual or group basis. Includes a dashboard widget, a sidebar widget, and shortcodes.
 Author: C.M. Kendrick
 Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list/
-@todo test out widget on various users
-@todo try out various users and settings
-@todo try fresh install
 @todo store deadline in different format for sorting
-@todo add import/export settings
-@todo check out delete posts possible bug: an user with no rights for publish-pages can delete his own to-do’s, even if the minimum right for that is set to “publish-pages”
-@todo user unable to assign posts can't add new posts or edit posts; removes assignments
 */
 
 /**

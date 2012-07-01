@@ -52,7 +52,6 @@ class CTDL_Widget extends WP_Widget {
 			$user = 0;
 		}
 
-
 		/** @var $before_widget WP_Widget */
 		echo $before_widget;
 
@@ -63,6 +62,8 @@ class CTDL_Widget extends WP_Widget {
 			/** @var $after_title string */
 			echo $after_title;
 		}
+
+		$ClevernessToDoList->list = '';
 
 		if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $category == 0 ) {
 

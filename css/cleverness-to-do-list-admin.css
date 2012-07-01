@@ -56,7 +56,7 @@ p.error {
 }
 
 table#todo-list thead tr .header {
-	background: url('images/bg.gif');
+	background: rgb(241, 241, 241) url(images/bg.gif);
 	background-image: url(images/bg.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
 	background-image: url(images/bg.gif), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
 	background-repeat: no-repeat;
@@ -65,11 +65,13 @@ table#todo-list thead tr .header {
 }
 
 table#todo-list thead tr .headerSortUp {
+	background-image: url(images/asc.gif);
 	background-image: url(images/asc.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
 	background-image: url(images/asc.gif), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
 }
 
 table#todo-list thead tr .headerSortDown {
+	background-image: url(images/desc.gif);
 	background-image: url(images/desc.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
 	background-image: url(images/desc.gif), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
 }

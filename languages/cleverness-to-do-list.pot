@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cleverness To-Do List\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-30 19:48-0500\n"
-"PO-Revision-Date: 2012-06-30 19:48-0500\n"
+"POT-Creation-Date: 2012-07-01 17:12-0500\n"
+"PO-Revision-Date: 2012-07-01 17:12-0500\n"
 "Last-Translator: C.M. Kendrick <cindy@cleverness.org>\n"
 "Language-Team:  <cindy@cleverness.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,8 +15,8 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../cleverness-to-do-list.php:74
-#: ../cleverness-to-do-list.php:80
+#: ../cleverness-to-do-list.php:70
+#: ../cleverness-to-do-list.php:76
 #: ../includes/cleverness-to-do-list-categories.class.php:151
 #: ../includes/cleverness-to-do-list-library.class.php:241
 #: ../includes/cleverness-to-do-list-library.class.php:327
@@ -26,7 +26,7 @@ msgstr ""
 msgid "Security check failed"
 msgstr ""
 
-#: ../cleverness-to-do-list.php:106
+#: ../cleverness-to-do-list.php:102
 #: ../includes/cleverness-to-do-list-loader.class.php:54
 msgid "To-Do List requires WordPress 3.3 or newer. <a href=\"http://codex.wordpress.org/Upgrading_WordPress\">Please update.</a>"
 msgstr ""
@@ -86,7 +86,7 @@ msgstr ""
 
 #: ../includes/cleverness-to-do-list-categories.class.php:206
 #: ../includes/cleverness-to-do-list-categories.class.php:239
-#: ../includes/cleverness-to-do-list-settings.class.php:145
+#: ../includes/cleverness-to-do-list-settings.class.php:146
 #: ../includes/cleverness-to-do-list.class.php:440
 msgid "ID"
 msgstr ""
@@ -162,7 +162,6 @@ msgstr ""
 #: ../includes/cleverness-to-do-list-frontend.class.php:463
 #: ../includes/cleverness-to-do-list-frontend.class.php:722
 #: ../includes/cleverness-to-do-list-frontend.class.php:776
-#: ../includes/cleverness-to-do-list-widget.class.php:172
 #: ../includes/cleverness-to-do-list.class.php:449
 msgid "Assigned To"
 msgstr ""
@@ -172,7 +171,7 @@ msgstr ""
 #: ../includes/cleverness-to-do-list-frontend.class.php:489
 #: ../includes/cleverness-to-do-list-frontend.class.php:727
 #: ../includes/cleverness-to-do-list-frontend.class.php:813
-#: ../includes/cleverness-to-do-list-settings.class.php:147
+#: ../includes/cleverness-to-do-list-settings.class.php:148
 #: ../includes/cleverness-to-do-list-widget.class.php:167
 #: ../includes/cleverness-to-do-list.class.php:380
 #: ../includes/cleverness-to-do-list.class.php:451
@@ -216,7 +215,7 @@ msgid "All"
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-dashboard-widget.class.php:214
-#: ../includes/cleverness-to-do-list-settings.class.php:86
+#: ../includes/cleverness-to-do-list-settings.class.php:87
 #: ../includes/cleverness-to-do-list-widget.class.php:242
 msgid "Show Deadline"
 msgstr ""
@@ -224,40 +223,40 @@ msgstr ""
 #: ../includes/cleverness-to-do-list-dashboard-widget.class.php:216
 #: ../includes/cleverness-to-do-list-dashboard-widget.class.php:225
 #: ../includes/cleverness-to-do-list-dashboard-widget.class.php:239
-#: ../includes/cleverness-to-do-list-settings.class.php:115
-#: ../includes/cleverness-to-do-list-settings.class.php:122
-#: ../includes/cleverness-to-do-list-settings.class.php:129
-#: ../includes/cleverness-to-do-list-settings.class.php:137
-#: ../includes/cleverness-to-do-list-settings.class.php:160
-#: ../includes/cleverness-to-do-list-settings.class.php:170
-#: ../includes/cleverness-to-do-list-settings.class.php:181
-#: ../includes/cleverness-to-do-list-settings.class.php:242
-#: ../includes/cleverness-to-do-list-settings.class.php:250
-#: ../includes/cleverness-to-do-list-settings.class.php:259
-#: ../includes/cleverness-to-do-list-settings.class.php:268
-#: ../includes/cleverness-to-do-list-settings.class.php:290
-#: ../includes/cleverness-to-do-list-settings.class.php:298
-#: ../includes/cleverness-to-do-list-settings.class.php:307
+#: ../includes/cleverness-to-do-list-settings.class.php:116
+#: ../includes/cleverness-to-do-list-settings.class.php:123
+#: ../includes/cleverness-to-do-list-settings.class.php:130
+#: ../includes/cleverness-to-do-list-settings.class.php:138
+#: ../includes/cleverness-to-do-list-settings.class.php:161
+#: ../includes/cleverness-to-do-list-settings.class.php:171
+#: ../includes/cleverness-to-do-list-settings.class.php:182
+#: ../includes/cleverness-to-do-list-settings.class.php:243
+#: ../includes/cleverness-to-do-list-settings.class.php:251
+#: ../includes/cleverness-to-do-list-settings.class.php:260
+#: ../includes/cleverness-to-do-list-settings.class.php:269
+#: ../includes/cleverness-to-do-list-settings.class.php:291
+#: ../includes/cleverness-to-do-list-settings.class.php:299
+#: ../includes/cleverness-to-do-list-settings.class.php:308
 msgid "No"
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-dashboard-widget.class.php:217
 #: ../includes/cleverness-to-do-list-dashboard-widget.class.php:226
 #: ../includes/cleverness-to-do-list-dashboard-widget.class.php:238
-#: ../includes/cleverness-to-do-list-settings.class.php:116
-#: ../includes/cleverness-to-do-list-settings.class.php:123
-#: ../includes/cleverness-to-do-list-settings.class.php:130
-#: ../includes/cleverness-to-do-list-settings.class.php:136
-#: ../includes/cleverness-to-do-list-settings.class.php:159
-#: ../includes/cleverness-to-do-list-settings.class.php:168
-#: ../includes/cleverness-to-do-list-settings.class.php:179
-#: ../includes/cleverness-to-do-list-settings.class.php:243
-#: ../includes/cleverness-to-do-list-settings.class.php:251
-#: ../includes/cleverness-to-do-list-settings.class.php:258
-#: ../includes/cleverness-to-do-list-settings.class.php:267
-#: ../includes/cleverness-to-do-list-settings.class.php:291
-#: ../includes/cleverness-to-do-list-settings.class.php:299
-#: ../includes/cleverness-to-do-list-settings.class.php:308
+#: ../includes/cleverness-to-do-list-settings.class.php:117
+#: ../includes/cleverness-to-do-list-settings.class.php:124
+#: ../includes/cleverness-to-do-list-settings.class.php:131
+#: ../includes/cleverness-to-do-list-settings.class.php:137
+#: ../includes/cleverness-to-do-list-settings.class.php:160
+#: ../includes/cleverness-to-do-list-settings.class.php:169
+#: ../includes/cleverness-to-do-list-settings.class.php:180
+#: ../includes/cleverness-to-do-list-settings.class.php:244
+#: ../includes/cleverness-to-do-list-settings.class.php:252
+#: ../includes/cleverness-to-do-list-settings.class.php:259
+#: ../includes/cleverness-to-do-list-settings.class.php:268
+#: ../includes/cleverness-to-do-list-settings.class.php:292
+#: ../includes/cleverness-to-do-list-settings.class.php:300
+#: ../includes/cleverness-to-do-list-settings.class.php:309
 msgid "Yes"
 msgstr ""
 
@@ -269,7 +268,7 @@ msgstr ""
 #: ../includes/cleverness-to-do-list-frontend.class.php:135
 #: ../includes/cleverness-to-do-list-frontend.class.php:718
 #: ../includes/cleverness-to-do-list-library.class.php:309
-#: ../includes/cleverness-to-do-list-settings.class.php:149
+#: ../includes/cleverness-to-do-list-settings.class.php:150
 #: ../includes/cleverness-to-do-list-widget.class.php:231
 #: ../includes/cleverness-to-do-list.class.php:406
 #: ../includes/cleverness-to-do-list.class.php:445
@@ -315,7 +314,7 @@ msgstr ""
 
 #: ../includes/cleverness-to-do-list-frontend.class.php:133
 #: ../includes/cleverness-to-do-list-frontend.class.php:716
-#: ../includes/cleverness-to-do-list-settings.class.php:148
+#: ../includes/cleverness-to-do-list-settings.class.php:149
 #: ../includes/cleverness-to-do-list.class.php:392
 #: ../includes/cleverness-to-do-list.class.php:444
 msgid "Progress"
@@ -331,7 +330,7 @@ msgstr ""
 #: ../includes/cleverness-to-do-list-frontend.class.php:501
 #: ../includes/cleverness-to-do-list-frontend.class.php:729
 #: ../includes/cleverness-to-do-list-frontend.class.php:850
-#: ../includes/cleverness-to-do-list-settings.class.php:151
+#: ../includes/cleverness-to-do-list-settings.class.php:152
 #: ../includes/cleverness-to-do-list.class.php:452
 msgid "Date Added"
 msgstr ""
@@ -379,7 +378,7 @@ msgid "FAQs"
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-help.class.php:54
-#: ../includes/cleverness-to-do-list-settings.class.php:329
+#: ../includes/cleverness-to-do-list-settings.class.php:330
 msgid "User Permissions"
 msgstr ""
 
@@ -523,7 +522,7 @@ msgid "This allows the selected capability to view to-do items"
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-help.class.php:174
-#: ../includes/cleverness-to-do-list-settings.class.php:334
+#: ../includes/cleverness-to-do-list-settings.class.php:335
 msgid "Complete To-Do Item Capability"
 msgstr ""
 
@@ -532,7 +531,7 @@ msgid "This allows the selected capability to mark to-do items as completed or u
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-help.class.php:176
-#: ../includes/cleverness-to-do-list-settings.class.php:335
+#: ../includes/cleverness-to-do-list-settings.class.php:336
 msgid "Add To-Do Item Capability"
 msgstr ""
 
@@ -541,7 +540,7 @@ msgid "This allows the selected capability to add new to-do items"
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-help.class.php:177
-#: ../includes/cleverness-to-do-list-settings.class.php:336
+#: ../includes/cleverness-to-do-list-settings.class.php:337
 msgid "Edit To-Do Item Capability"
 msgstr ""
 
@@ -550,7 +549,7 @@ msgid "This allows the selected capability to edit existing to-do items"
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-help.class.php:178
-#: ../includes/cleverness-to-do-list-settings.class.php:337
+#: ../includes/cleverness-to-do-list-settings.class.php:338
 msgid "Assign To-Do Item Capability"
 msgstr ""
 
@@ -567,7 +566,7 @@ msgid "This allows the selected capability to view all tasks even if <em>Show Ea
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-help.class.php:182
-#: ../includes/cleverness-to-do-list-settings.class.php:339
+#: ../includes/cleverness-to-do-list-settings.class.php:340
 msgid "Delete To-Do Item Capability"
 msgstr ""
 
@@ -584,7 +583,7 @@ msgid "This allows the selected capability to purge all the completed to-do item
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-help.class.php:185
-#: ../includes/cleverness-to-do-list-settings.class.php:341
+#: ../includes/cleverness-to-do-list-settings.class.php:342
 msgid "Add Categories Capability"
 msgstr ""
 
@@ -593,7 +592,7 @@ msgid "This allows the selected capability to add new categories"
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-help.class.php:235
-#: ../includes/cleverness-to-do-list-settings.class.php:186
+#: ../includes/cleverness-to-do-list-settings.class.php:187
 msgid "Purchase Post Planner Plugin"
 msgstr ""
 
@@ -610,7 +609,7 @@ msgid "To-Do:"
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-library.class.php:672
-#: ../includes/cleverness-to-do-list-settings.class.php:376
+#: ../includes/cleverness-to-do-list-settings.class.php:460
 msgid "Settings"
 msgstr ""
 
@@ -652,7 +651,7 @@ msgid "To-Do"
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-loader.class.php:153
-#: ../includes/cleverness-to-do-list-settings.class.php:81
+#: ../includes/cleverness-to-do-list-settings.class.php:82
 msgid "Categories"
 msgstr ""
 
@@ -678,297 +677,329 @@ msgid ""
 " 'Cancel' to stop, 'OK' to delete."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:46
+#: ../includes/cleverness-to-do-list-settings.class.php:47
 msgid "Customize the To-Do List"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:52
+#: ../includes/cleverness-to-do-list-settings.class.php:53
 msgid "Configure these settings to be able to assign to-do items to other users."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:57
+#: ../includes/cleverness-to-do-list-settings.class.php:58
 msgid "If you have recently upgraded and your to-do items are all still visible, you can delete the custom database tables since they are no longer used. You can also delete all your to-do items here."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:58
+#: ../includes/cleverness-to-do-list-settings.class.php:59
 msgid "These actions cannot be undone. Please be sure you want to proceed. It is advised that you back up your database first."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:64
+#: ../includes/cleverness-to-do-list-settings.class.php:65
 msgid "The only permission that applies to the Individual list type is the View To-Do List permission."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:66
+#: ../includes/cleverness-to-do-list-settings.class.php:67
 msgid "You should chose the highest level capabilities that the users you want to be able to preform that action will have."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:68
+#: ../includes/cleverness-to-do-list-settings.class.php:69
 msgid "The default general capabilities of each user role are as follows: "
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:70
+#: ../includes/cleverness-to-do-list-settings.class.php:71
 msgid "Subscribers: Read, Contributors: Edit Posts, Authors: Publish Posts, Editors: Edit Others Posts, Administrators: Manage Options"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:72
+#: ../includes/cleverness-to-do-list-settings.class.php:73
 msgid "When using the Master list type non-administrator users should only be allowed to view and complete items, otherwise they will be able to edit the Master list."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:77
-#: ../includes/cleverness-to-do-list-settings.class.php:80
-#: ../includes/cleverness-to-do-list-settings.class.php:376
+#: ../includes/cleverness-to-do-list-settings.class.php:78
+#: ../includes/cleverness-to-do-list-settings.class.php:81
+#: ../includes/cleverness-to-do-list-settings.class.php:460
 msgid "To-Do List Settings"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:82
+#: ../includes/cleverness-to-do-list-settings.class.php:83
 msgid "List View"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:83
+#: ../includes/cleverness-to-do-list-settings.class.php:84
 msgid "Sort Order"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:84
+#: ../includes/cleverness-to-do-list-settings.class.php:85
 msgid "Show Added By"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:85
+#: ../includes/cleverness-to-do-list-settings.class.php:86
 msgid "Show Date Completed"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:87
+#: ../includes/cleverness-to-do-list-settings.class.php:88
 #: ../includes/cleverness-to-do-list-widget.class.php:245
 msgid "Show Progress"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:88
+#: ../includes/cleverness-to-do-list-settings.class.php:89
 msgid "Show Admin Bar Menu"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:89
+#: ../includes/cleverness-to-do-list-settings.class.php:90
 msgid "Use WYSIWYG Editor"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:90
+#: ../includes/cleverness-to-do-list-settings.class.php:91
 msgid "Integrate with Post Planner"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:96
+#: ../includes/cleverness-to-do-list-settings.class.php:97
 msgid "Disabled"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:97
+#: ../includes/cleverness-to-do-list-settings.class.php:98
 msgid "Enabled"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:99
+#: ../includes/cleverness-to-do-list-settings.class.php:100
 msgid "If you would like to organize your to-do list into categories, enable it here."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:105
+#: ../includes/cleverness-to-do-list-settings.class.php:106
 msgid "Individual"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:106
+#: ../includes/cleverness-to-do-list-settings.class.php:107
 msgid "Group"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:107
+#: ../includes/cleverness-to-do-list-settings.class.php:108
 msgid "Master"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:109
+#: ../includes/cleverness-to-do-list-settings.class.php:110
 msgid ""
 "List View sets how the to-do lists are viewed.<br /> The Individual setting allows each user to have their own private to-do list.\n"
 "\t\tThe Group setting allows all users to share one to-do list. The Master setting allows you to have one master list for all users with individual completion of items."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:139
+#: ../includes/cleverness-to-do-list-settings.class.php:140
 msgid "This setting is only used when List View is set to Group."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:146
+#: ../includes/cleverness-to-do-list-settings.class.php:147
 msgid "Alphabetical"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:150
+#: ../includes/cleverness-to-do-list-settings.class.php:151
 msgid "Assigned User"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:153
+#: ../includes/cleverness-to-do-list-settings.class.php:154
 msgid "Items are first sorted by priority when ordered by ID, Alphabetical, or Category"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:193
+#: ../includes/cleverness-to-do-list-settings.class.php:194
 msgid "Advanced Settings"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:196
+#: ../includes/cleverness-to-do-list-settings.class.php:197
 msgid "To-Do List Advanced Settings"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:197
+#: ../includes/cleverness-to-do-list-settings.class.php:198
 msgid "Date Format"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:198
+#: ../includes/cleverness-to-do-list-settings.class.php:199
 msgid "Highest Priority Label"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:199
+#: ../includes/cleverness-to-do-list-settings.class.php:200
 msgid "Middle Priority Label"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:200
+#: ../includes/cleverness-to-do-list-settings.class.php:201
 msgid "Lowest Priority Label"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:201
+#: ../includes/cleverness-to-do-list-settings.class.php:202
 msgid "Show To-Do Item ID"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:202
+#: ../includes/cleverness-to-do-list-settings.class.php:203
 msgid "Show Date To-Do Was Added"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:204
+#: ../includes/cleverness-to-do-list-settings.class.php:205
 msgid "Assign To-Do Items Settings (Only When Using Group or Master View)"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:205
+#: ../includes/cleverness-to-do-list-settings.class.php:206
 msgid "Assign To-Do Items to Users"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:206
+#: ../includes/cleverness-to-do-list-settings.class.php:207
 msgid "Show a User Only the To-Do Items Assigned to Them"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:208
+#: ../includes/cleverness-to-do-list-settings.class.php:209
 msgid "User Roles to Show"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:209
+#: ../includes/cleverness-to-do-list-settings.class.php:210
 msgid "Email Assigned To-Do Items to User"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:210
+#: ../includes/cleverness-to-do-list-settings.class.php:211
 msgid "Add Category to Subject"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:211
+#: ../includes/cleverness-to-do-list-settings.class.php:212
 msgid "Show Who Assigned the To-Do Item in Email"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:212
+#: ../includes/cleverness-to-do-list-settings.class.php:213
 msgid "From Field for Emails Sent to User"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:213
+#: ../includes/cleverness-to-do-list-settings.class.php:214
 msgid "Subject Field for Emails Sent to User"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:215
+#: ../includes/cleverness-to-do-list-settings.class.php:216
 msgid "Text in Emails Sent to User"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:216
+#: ../includes/cleverness-to-do-list-settings.class.php:217
 msgid "Database Cleanup"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:223
+#: ../includes/cleverness-to-do-list-settings.class.php:224
 msgid "Documentation on Date Formatting"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:228
+#: ../includes/cleverness-to-do-list-settings.class.php:229
 msgid "The highest priority list items are shown in red in the lists."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:237
+#: ../includes/cleverness-to-do-list-settings.class.php:238
 msgid "The lowest priority list items are shown in a lighter grey."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:261
+#: ../includes/cleverness-to-do-list-settings.class.php:262
 msgid "This setting must be set to Yes for the following settings to work."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:283
+#: ../includes/cleverness-to-do-list-settings.class.php:284
 msgid "Used in displaying the list of users who can be assigned to-do items."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:284
+#: ../includes/cleverness-to-do-list-settings.class.php:285
 msgid "Documentation on User Roles"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:301
+#: ../includes/cleverness-to-do-list-settings.class.php:302
 msgid "If categories are enabled."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:332
+#: ../includes/cleverness-to-do-list-settings.class.php:333
 msgid "To-Do List User Permissions for Group and Master List Types"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:333
+#: ../includes/cleverness-to-do-list-settings.class.php:334
 msgid "View To-Do List"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:338
+#: ../includes/cleverness-to-do-list-settings.class.php:339
 msgid "View To-Do Items Assigned to Other Users Capability"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:340
+#: ../includes/cleverness-to-do-list-settings.class.php:341
 msgid "Delete All To-Do Items Capability"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:347
+#: ../includes/cleverness-to-do-list-settings.class.php:348
 msgid "Read"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:348
+#: ../includes/cleverness-to-do-list-settings.class.php:349
 msgid "Edit Posts"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:349
+#: ../includes/cleverness-to-do-list-settings.class.php:350
 msgid "Publish Posts"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:350
+#: ../includes/cleverness-to-do-list-settings.class.php:351
 msgid "Edit Others Posts"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:351
+#: ../includes/cleverness-to-do-list-settings.class.php:352
 msgid "Publish Pages"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:352
+#: ../includes/cleverness-to-do-list-settings.class.php:353
 msgid "Edit Users"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:353
+#: ../includes/cleverness-to-do-list-settings.class.php:354
 msgid "Manage Options"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:424
+#: ../includes/cleverness-to-do-list-settings.class.php:376
+msgid "Import/Export"
+msgstr ""
+
+#: ../includes/cleverness-to-do-list-settings.class.php:381
+msgid "Settings Imported"
+msgstr ""
+
+#: ../includes/cleverness-to-do-list-settings.class.php:384
+msgid "Invalid Settings File"
+msgstr ""
+
+#: ../includes/cleverness-to-do-list-settings.class.php:387
+msgid "No Settings File Selected"
+msgstr ""
+
+#: ../includes/cleverness-to-do-list-settings.class.php:509
 msgid "Settings saved."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:426
+#: ../includes/cleverness-to-do-list-settings.class.php:511
 msgid "Tables have been deleted."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:428
+#: ../includes/cleverness-to-do-list-settings.class.php:513
 msgid "To-Do Items have been deleted."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:436
+#: ../includes/cleverness-to-do-list-settings.class.php:521
 msgid "Delete Tables"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-settings.class.php:442
+#: ../includes/cleverness-to-do-list-settings.class.php:527
 msgid "Delete All To-Do Items"
+msgstr ""
+
+#: ../includes/cleverness-to-do-list-settings.class.php:532
+msgid "Import/Export Settings"
+msgstr ""
+
+#: ../includes/cleverness-to-do-list-settings.class.php:535
+msgid "Export Settings"
+msgstr ""
+
+#: ../includes/cleverness-to-do-list-settings.class.php:540
+msgid "Import Settings"
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-widget.class.php:22
 msgid "Displays To-Do List Items"
+msgstr ""
+
+#: ../includes/cleverness-to-do-list-widget.class.php:172
+msgid "Assigned to"
 msgstr ""
 
 #: ../includes/cleverness-to-do-list-widget.class.php:213

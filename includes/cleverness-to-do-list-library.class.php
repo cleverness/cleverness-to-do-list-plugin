@@ -234,7 +234,7 @@ class CTDL_Lib {
 
 		if ( $_POST['cleverness_todo_description'] == '' ) return;
 
-		$permission = CTDL_LIB::check_permission( 'todo', 'add' );
+		$permission = CTDL_Lib::check_permission( 'todo', 'add' );
 
 		if ( $permission === true ) {
 
@@ -260,13 +260,23 @@ class CTDL_Lib {
 			add_post_meta( $post_id, '_status', 0, true );
 			$priority = ( isset( $_POST['cleverness_todo_priority'] ) ? absint( $_POST['cleverness_todo_priority'] ) : 1 );
 			add_post_meta( $post_id, '_priority', $priority, true );
-			$assign = ( isset( $_POST['cleverness_todo_assign'] ) ? $_POST['cleverness_todo_assign'] : -1 );
-			if ( is_array( $assign ) ) {
-				foreach( $assign as $value ) {
-					add_post_meta( $post_id, '_assign', $value );
+
+			$assign_permission = CTDL_Lib::check_permission( 'todo', 'assign' );
+			// if user can assign to-do items
+			if ( $assign_permission == true ) {
+				$assign = ( isset( $_POST['cleverness_todo_assign'] ) ? $_POST['cleverness_todo_assign'] : -1 );
+				if ( is_array( $assign ) ) {
+					foreach ( $assign as $value ) {
+						add_post_meta( $post_id, '_assign', $value );
+					}
+				} else {
+					add_post_meta( $post_id, '_assign', $assign );
 				}
 			} else {
-				add_post_meta( $post_id, '_assign', $assign );
+				// if user can't assign items, but settings are set to assign items and show only assigned items, then assign it to that user
+				if ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['assign'] == 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 ) {
+					add_post_meta( $post_id, '_assign', $current_user->ID );
+				}
 			}
 			$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ? esc_attr( $_POST['cleverness_todo_deadline'] ) : '' );
 			add_post_meta( $post_id, '_deadline', $deadline, true );
@@ -320,7 +330,7 @@ class CTDL_Lib {
 	 * @return mixed
 	 */
 	public static function edit_todo() {
-		$permission = CTDL_LIB::check_permission( 'todo', 'edit' );
+		$permission = CTDL_Lib::check_permission( 'todo', 'edit' );
 
 		if ( $permission === true ) {
 
@@ -336,15 +346,20 @@ class CTDL_Lib {
 
 			if ( isset( $_POST['cat'] ) ) wp_set_post_terms( $post_id, absint( $_POST['cat'] ), 'todocategories', false);
 			if ( isset( $_POST['cleverness_todo_priority'] ) ) update_post_meta( $post_id, '_priority', esc_attr( $_POST['cleverness_todo_priority'] ) );
-			$assign = ( isset( $_POST['cleverness_todo_assign'] ) ? $_POST['cleverness_todo_assign'] : -1 );
-			if ( is_array( $assign ) ) {
-				delete_post_meta( $post_id, '_assign' );
-				foreach ( $assign as $value ) {
-					add_post_meta( $post_id, '_assign', $value );
+
+			$assign_permission = CTDL_Lib::check_permission( 'todo', 'assign' );
+			if ( $assign_permission == true ) {
+				$assign = ( isset( $_POST['cleverness_todo_assign'] ) ? $_POST['cleverness_todo_assign'] : -1 );
+				if ( is_array( $assign ) ) {
+					delete_post_meta( $post_id, '_assign' );
+					foreach ( $assign as $value ) {
+						add_post_meta( $post_id, '_assign', $value );
+					}
+				} else {
+					update_post_meta( $post_id, '_assign', $assign );
 				}
-			} else {
-				update_post_meta( $post_id, '_assign', $assign );
 			}
+
 			if ( isset( $_POST['cleverness_todo_deadline'] ) ) update_post_meta( $post_id, '_deadline', esc_attr( $_POST['cleverness_todo_deadline'] ) );
 			if ( isset( $_POST['cleverness_todo_progress'] ) ) update_post_meta( $post_id, '_progress', $_POST['cleverness_todo_progress'] );
 			if ( isset( $_POST['cleverness_todo_planner'] ) ) update_post_meta( $post_id, '_planner', absint( $_POST['cleverness_todo_planner'] ) );
