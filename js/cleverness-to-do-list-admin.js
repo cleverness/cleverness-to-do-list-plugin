@@ -2,32 +2,30 @@ jQuery( document ).ready( function( $ ) {
 
 	$( '#todo-list' ).tablesorter();
 
+	$( '#todo-list-completed th' ).click( function () {
+		$( this ).parents( '#todo-list-completed' ).children( 'tbody' ).toggle();
+	} );
+
 	$( "#cleverness_todo_assign" ).select2( {
-		placeholder:"Select a User"
+		placeholder: ctdl.SELECT_USER
 	} );
 
-	$( function () {
-		$( "#cleverness-todo-progress-slider" ).slider( {
-			range:"min",
-			value:$( "#cleverness_todo_progress" ).val(),
-			min  :0,
-			max  :100,
-			step :5,
-			slide:function ( event, ui ) {
-				$( "#cleverness_todo_progress" ).val( ui.value );
-			}
-		} );
-		$( "#cleverness_todo_progress" ).val( $( "#cleverness-todo-progress-slider" ).slider( "value" ) );
+	$( "#cleverness-todo-progress-slider" ).slider( {
+		range:"min",
+		value:$( "#cleverness_todo_progress" ).val(),
+		min  :0,
+		max  :100,
+		step :5,
+		slide:function ( event, ui ) {
+			$( "#cleverness_todo_progress" ).val( ui.value );
+		}
 	} );
+	$( "#cleverness_todo_progress" ).val( $( "#cleverness-todo-progress-slider" ).slider( "value" ) );
 
-	$( function() {
-		var $cleverness_todo_dateformat = $( "#cleverness_todo_format" ).val();
-		$( "#cleverness_todo_deadline" ).datepicker( { dateFormat: $cleverness_todo_dateformat }  );
-	} );
+	var $cleverness_todo_dateformat = $( "#cleverness_todo_format" ).val();
+	$( "#cleverness_todo_deadline" ).datepicker( { dateFormat: $cleverness_todo_dateformat }  );
 
-	$( function () {
-		$( "#cleverness-resizable" ).resizable();
-	} );
+	$( "#cleverness-resizable" ).resizable();
 
 	$( '.todo-table tbody tr:visible:even' ).addClass( 'alternate' );
 

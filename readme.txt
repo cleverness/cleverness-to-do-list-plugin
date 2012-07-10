@@ -145,6 +145,8 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Added filters and hooks
 * Added Widget option to show a logged-in user's own items only
 * Added Import/Export of Settings
+* Added some CSS classes to items
+* Added ability to collapse the Completed To-Do table when you click on the table headings
 * Fixed missing jQuery UI CSS images
 * Fixed completed date not showing in front-end shortcode
 * Fixed issue with multiple widgets

@@ -6,6 +6,7 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.2
+ * @todo check out what's happening when new users are added for master list. bug reports says its not working
  */
 
 /**
@@ -234,6 +235,7 @@ class CTDL_Loader {
 			'CONFIRMATION_ALL_MSG'        => __( "You are about to permanently delete all completed items. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 			'CONFIRMATION_DELETE_ALL_MSG' => __( "You are about to permanently delete all to-do items. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 			'CONFIRMATION_DEL_TABLES_MSG' => __( "You are about to permanently delete database tables. This cannot be undone. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
+			'SELECT_USER'                 => __( 'Select a User', 'cleverness-to-do-list' ),
 			'NONCE'                       => wp_create_nonce( 'cleverness-todo' ),
 			'AJAX_URL'                    => admin_url( 'admin-ajax.php' )
 		);

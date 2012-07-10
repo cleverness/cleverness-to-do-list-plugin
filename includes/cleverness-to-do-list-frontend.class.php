@@ -39,7 +39,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 
 		/** @var $title string */
 		if ( $title != '' ) {
-			$this->list .= '<h3>'.esc_html( $title ).'</h3>';
+			$this->list .= '<h3 class="todo-title">'.esc_html( $title ).'</h3>';
 			}
 
 		if ( is_user_logged_in() ) {
@@ -125,31 +125,31 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		), $this->atts ) );
 
 		$this->list .= '<thead><tr>';
-		$this->list .= '<th class="{sorter: false} no-sort"></th>';
-		$this->list .= '<th>'.apply_filters( 'ctdl_heading_item', esc_html__( 'Item', 'cleverness-to-do-list' ) ).'</th>';
+		$this->list .= '<th id="checkbox-col" class="{sorter: false} no-sort"></th>';
+		$this->list .= '<th id="item-col">'.apply_filters( 'ctdl_heading_item', esc_html__( 'Item', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $priority int */
-		if ( $priority == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_priority', esc_html__( 'Priority', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $priority == 1 ) $this->list .= '<th id="priority-col">'.apply_filters( 'ctdl_heading_priority', esc_html__( 'Priority', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $progress int */
-		if ( $progress == 1 && CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_progress', esc_html__( 'Progress', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $progress == 1 && CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th id="progress-col">'.apply_filters( 'ctdl_heading_progress', esc_html__( 'Progress', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $categories int */
-		if ( $categories == 1 && CTDL_Loader::$settings['categories'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_category', esc_html__( 'Category', 'cleverness-to-do-list' ) ).'</th>';
-		if ( CTDL_PP ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_planner', esc_html__( 'Post Planner', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $categories == 1 && CTDL_Loader::$settings['categories'] == 1 ) $this->list .= '<th id="category-col">'.apply_filters( 'ctdl_heading_category', esc_html__( 'Category', 'cleverness-to-do-list' ) ).'</th>';
+		if ( CTDL_PP ) $this->list .= '<th id="planner-col">'.apply_filters( 'ctdl_heading_planner', esc_html__( 'Post Planner', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $assigned int */
 		if ( $assigned == 1 && ( CTDL_Loader::$settings['assign'] == 0 && ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0
 				&& ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) || ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 )
-				&& CTDL_Loader::$settings['assign'] == 0 ) ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ).'</th>';
+				&& CTDL_Loader::$settings['assign'] == 0 ) ) $this->list .= '<th id="assigned-col">'.apply_filters( 'ctdl_heading_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $addedby int */
 		if ( $addedby == 1 && CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 )
-			$this->list .= '<th>'.apply_filters( 'ctdl_heading_added_by', esc_html__( 'Added By', 'cleverness-to-do-list' ) ).'</th>';
+			$this->list .= '<th id="added-col">'.apply_filters( 'ctdl_heading_added_by', esc_html__( 'Added By', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $deadline int */
-		if ( $deadline == 1  && CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $deadline == 1  && CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th id="deadline-col">'.apply_filters( 'ctdl_heading_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $date int */
-		if ( $date == 1 && CTDL_Loader::$settings['show_date_added'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).'</th>';
-		if ( $completed == 1 && CTDL_Loader::$settings['show_completed_date'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_completed', esc_html__( 'Completed', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $date == 1 && CTDL_Loader::$settings['show_date_added'] == 1 ) $this->list .= '<th id="date-col">'.apply_filters( 'ctdl_heading_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $completed == 1 && CTDL_Loader::$settings['show_completed_date'] == 1 ) $this->list .= '<th id="completed-col">'.apply_filters( 'ctdl_heading_completed', esc_html__( 'Completed', 'cleverness-to-do-list' ) ).'</th>';
 		$this->list .= do_action( 'ctdl_table_headings' );
 		/** @var $editlink int */
 		if ( $editlink == 1 && current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 )
-			$this->list .= '<th class="{sorter: false} no-sort">'.apply_filters( 'ctdl_heading_action', esc_html__( 'Action', 'cleverness-to-do-list' ) ).'</th>';
+			$this->list .= '<th id="action-col" class="{sorter: false} no-sort">'.apply_filters( 'ctdl_heading_action', esc_html__( 'Action', 'cleverness-to-do-list' ) ).'</th>';
 		$this->list .= '</tr></thead>';
 	}
 
@@ -421,7 +421,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			foreach ( $categories as $category ) {
 				$cat = CTDL_Categories::get_category_name( $category->term_id );
 				if ( $this->cat_id != $category->term_id  && $cat != '' ) {
-					$this->list .= '<h3>'.esc_html( $cat ).'</h3>';
+					$this->list .= '<h3 class="todo-category-heading">'.esc_html( $cat ).'</h3>';
 					$this->cat_id = $category->term_id;
 				}
 			}
@@ -435,7 +435,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			$edit = '<a href="'.$url.'" class="edit-todo">'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit' ) ).'</a>';
 		}
 		if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
-			$this->list .= ' <small>['.$edit.']</small>';
+			$this->list .= ' <small class="edit-todo">['.$edit.']</small>';
 		}
 	}
 
@@ -460,7 +460,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 					$assign_user = get_userdata( $assign );
 					$assigned = $assign_user->display_name;
 				}
-				$this->list .= ' <small>['.apply_filters( 'ctdl_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ).': '.esc_attr( $assigned ).']</small>';
+				$this->list .= ' <small class="todo-assigned">['.apply_filters( 'ctdl_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ).': '.esc_attr( $assigned ).']</small>';
 			}
 		}
    	}
@@ -473,7 +473,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	public function show_addedby( $author, $type = 'list' ) {
 		if ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 ) {
 			if ( $author != '0' ) {
-				$this->list .= ' <small>- '.apply_filters( 'ctdl_added_by', esc_html__( 'Added By', 'cleverness-to-do-list' ) ).': '.esc_attr( $author ).'</small>';
+				$this->list .= ' <small class="todo-addedby">- '.apply_filters( 'ctdl_added_by', esc_html__( 'Added By', 'cleverness-to-do-list' ) ).': '.esc_attr( $author ).'</small>';
 			}
 		}
 	}
@@ -486,7 +486,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	 */
 	public function show_deadline( $deadline, $type = 'list' ) {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 && $deadline != '' )
-			$this->list .= ' <small>['.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).': '.esc_attr( $deadline ).']</small>';
+			$this->list .= ' <small class="todo-deadline">['.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).': '.esc_attr( $deadline ).']</small>';
 	}
 
 	/**
@@ -498,7 +498,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	 */
 	public function show_date_added( $date, $type = 'list' ) {
 		$date = ( isset( $date ) ? date( CTDL_Loader::$settings['date_format'], strtotime( $date ) ) : '' );
-		$this->list .= ' <small>['.apply_filters( 'ctdl_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).': '.( $date != '' ? sprintf( '%s', esc_attr( $date ) ) : '' ).']</small>';
+		$this->list .= ' <small class="todo-date">['.apply_filters( 'ctdl_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).': '.( $date != '' ? sprintf( '%s', esc_attr( $date ) ) : '' ).']</small>';
 	}
 
 	/**
@@ -509,7 +509,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	 */
 	public function show_progress( $progress, $type = 'list' ) {
 		if ( CTDL_Loader::$settings['show_progress'] == '1' && $progress != '' ) {
-			$this->list .= ' <small>['.esc_attr( $progress ).'%]</small>';
+			$this->list .= ' <small class="todo-progress">['.esc_attr( $progress ).'%]</small>';
 		}
 	}
 
@@ -580,7 +580,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 
 			/** @var $title string */
 			if ( $title != '') {
-				$this->list .= '<h3>'.esc_html( $title ).'</h3>';
+				$this->list .= '<h3 class="todo-title">'.esc_html( $title ).'</h3>';
 			}
 			/** @var $list_type string */
 			$this->list .= '<'.$list_type.'>';
@@ -596,7 +596,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 
 			if ( $type == 'table' ) {
 
-				$this->list .= '<table id="todo-list" class="todo-table">';
+				$this->list .= '<table id="todo-list-completed" class="todo-table">';
 				/** @var $completed_title string */
 				if ( $completed_title != '' ) $this->list .= '<caption>'.$completed_title.'</caption>';
 				$this->show_table_headings( 1 );
@@ -607,7 +607,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 
 				/** @var $completed_title string */
 				if ( $completed_title != '') {
-					$this->list .= '<h3>'.esc_html( $completed_title ).'</h3>';
+					$this->list .= '<h3 class="todo-title">'.esc_html( $completed_title ).'</h3>';
 				}
 				$this->list .= '<'.$list_type.'>';
 				$this->loop_through_todos( 1, $category );
@@ -709,25 +709,25 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 		), $this->atts ) );
 
 		$this->list .= '<thead><tr>';
-		$this->list .= '<th>'.apply_filters( 'ctdl_heading_item', esc_html__( 'Item', 'cleverness-to-do-list' ) ).'</th>';
+		$this->list .= '<th class="item-col">'.apply_filters( 'ctdl_heading_item', esc_html__( 'Item', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $priorities string */
-		if ( $priorities == 'show' ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_priority', esc_html__( 'Priority', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $priorities == 'show' ) $this->list .= '<th class="priority-col">'.apply_filters( 'ctdl_heading_priority', esc_html__( 'Priority', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $progress string */
-		if ( $progress == 'show' && CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_progress', esc_html__( 'Progress', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $progress == 'show' && CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th class="progress-col">'.apply_filters( 'ctdl_heading_progress', esc_html__( 'Progress', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $category mixed */
-		if ( CTDL_Loader::$settings['categories'] == 1 && $category == '0' ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_category', esc_html__( 'Category', 'cleverness-to-do-list' ) ).'</th>';
+		if ( CTDL_Loader::$settings['categories'] == 1 && $category == '0' ) $this->list .= '<th class="category-col">'.apply_filters( 'ctdl_heading_category', esc_html__( 'Category', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $assigned string */
 		if ( $assigned == 'show' && ( CTDL_Loader::$settings['assign'] == 0  && ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0
 				&& ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) || ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 )
-				&& CTDL_Loader::$settings['assign'] == 0 ) ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ).'</th>';
+				&& CTDL_Loader::$settings['assign'] == 0 ) ) $this->list .= '<th class="assigned-col">'.apply_filters( 'ctdl_heading_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $addedby string */
 		if ( $addedby == 'show' && CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 )
-			$this->list .= '<th>'.apply_filters( 'ctdl_heading_added_by', esc_html__( 'Added By', 'cleverness-to-do-list' ) ).'</th>';
+			$this->list .= '<th class="added-col">'.apply_filters( 'ctdl_heading_added_by', esc_html__( 'Added By', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $deadline string */
-		if ( $deadline == 'show' && CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $deadline == 'show' && CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th class="deadline-col">'.apply_filters( 'ctdl_heading_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $date int */
-		if ( $date == 1 && CTDL_Loader::$settings['show_date_added'] == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).'</th>';
-		if ( $completed == 1 ) $this->list .= '<th>'.apply_filters( 'ctdl_heading_completed', esc_html__( 'Completed', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $date == 1 && CTDL_Loader::$settings['show_date_added'] == 1 ) $this->list .= '<th class="date-col">'.apply_filters( 'ctdl_heading_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $completed == 1 ) $this->list .= '<th class="completed-col">'.apply_filters( 'ctdl_heading_completed', esc_html__( 'Completed', 'cleverness-to-do-list' ) ).'</th>';
 		$this->list .= do_action( 'ctdl_table_headings' );
 		$this->list .= '</tr></thead>';
 	}
@@ -742,7 +742,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 			foreach ( $categories as $category ) {
 				$cat = CTDL_Categories::get_category_name( $category->term_id );
 				if ( $this->cat_id != $category->term_id  && $cat != '' ) {
-					$this->list .= '</'.$list_type.'><h4>'.esc_html( $cat ).'</h4><'.$list_type.'>';
+					$this->list .= '</'.$list_type.'><h4 class="todo-category-heading">'.esc_html( $cat ).'</h4><'.$list_type.'>';
 					$this->cat_id = $category->term_id;
 				}
 			}
@@ -771,12 +771,12 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 					$assigned = $assign_user->display_name;
 				}
 				if ( $layout == 'table' ) {
-					$this->list .= '<td>'.esc_attr( $assigned ).'</td>';
+					$this->list .= '<td class="todo-assigned">'.esc_attr( $assigned ).'</td>';
 				} else {
 					$this->list .= ' - '.apply_filters( 'ctdl_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ).': '.esc_attr( $assigned );
 				}
 			} else {
-				if ( $layout == 'table' ) $this->list .= '<td></td>';
+				if ( $layout == 'table' ) $this->list .= '<td class="todo-assigned"></td>';
 			}
 		}
 	}
@@ -790,12 +790,12 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 		if ( CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 ) {
 			if ( $author != '0' ) {
 				if ( $layout == 'table' ) {
-					$this->list .= '<td>'.esc_attr( $author ).'</td>';
+					$this->list .= '<td class="todo-addedby">'.esc_attr( $author ).'</td>';
 				} else {
 					$this->list .= ' - '.apply_filters( 'ctdl_added_by', esc_html__( 'Added By', 'cleverness-to-do-list' ) ).': '.esc_attr( $author );
 				}
 			} else {
-				if ( $layout == 'table' ) $this->list .= '<td></td>';
+				if ( $layout == 'table' ) $this->list .= '<td class="todo-addedby"></td>';
 			}
 		}
 	}
@@ -808,12 +808,12 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 	public function show_deadline( $deadline, $layout = 'list' ) {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 && $deadline != '' ) {
 			if ( $layout == 'table' ) {
-				$this->list .= ( $deadline != '' ? sprintf( '<td>%s</td>', esc_attr( $deadline ) ) : '<td></td>' );
+				$this->list .= ( $deadline != '' ? sprintf( '<td class="todo-deadline">%s</td>', esc_attr( $deadline ) ) : '<td class="todo-deadline"></td>' );
 			} else {
 				$this->list .= ' - '.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).': '.esc_attr( $deadline );
 			}
 		} elseif ( $layout == 'table' ) {
-				$this->list .= '<td></td>';
+				$this->list .= '<td class="todo-deadline"></td>';
 			}
 	}
 
@@ -825,12 +825,12 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 	public function show_progress( $progress, $layout = 'list' ) {
 		if ( CTDL_Loader::$settings['show_progress'] == 1 && $progress != '' ) {
 			if ( $layout == 'table' ) {
-				$this->list .= ( $progress != '' ? sprintf( '<td>%d%%</td>', esc_attr( $progress ) ) : '<td></td>' );
+				$this->list .= ( $progress != '' ? sprintf( '<td class="todo-progress">%d%%</td>', esc_attr( $progress ) ) : '<td class="todo-progress"></td>' );
 			} else {
 				$this->list .= ' - '.esc_attr( $progress ).'%';
 			}
 		} elseif ( $layout == 'table' ) {
-			$this->list .= '<td></td>';
+			$this->list .= '<td class="todo-progress"></td>';
 		}
 	}
 
@@ -845,7 +845,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 		if ( CTDL_Loader::$settings['show_date_added'] == 1 && $date = 1 ) {
 			$the_date = ( isset( $the_date ) ? date( CTDL_Loader::$settings['date_format'], strtotime( $the_date ) ) : '' );
 			if ( $layout == 'table' ) {
-				$this->list .= ( $date != '' ? sprintf( '<td>%s</td>', esc_attr( $the_date ) ) : '<td></td>' );
+				$this->list .= ( $date != '' ? sprintf( '<td class="todo-date">%s</td>', esc_attr( $the_date ) ) : '<td class="todo-date"></td>' );
 			} else {
 				$this->list .= ' - '.apply_filters( 'ctdl_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).': '.( $date != '' ? sprintf( '%s', esc_attr( $the_date ) ) : '' );
 			}

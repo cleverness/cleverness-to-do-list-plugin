@@ -3,7 +3,7 @@ jQuery( document ).ready( function( $ ) {
 	$( '#todo-list' ).tablesorter();
 
 	$( "#cleverness_todo_assign" ).select2( {
-		placeholder:"Select a User"
+		placeholder: ctdl.SELECT_USER
 	} );
 
 	$( function () {

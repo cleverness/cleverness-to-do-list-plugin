@@ -174,7 +174,7 @@ class CTDL_Settings {
 	}
 
 	function post_planner_option() {
-		if ( is_plugin_active( 'cleverness-to-do-list/cleverness-to-do-list.php' ) ) :
+		if ( is_plugin_active( 'post-planner/post-planner.php' ) ) :
 		?>
 	<select name="<?php echo $this->general_key; ?>[post_planner]">
 		<option value="1" <?php selected( $this->general_settings['post_planner'], 1 ); ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>

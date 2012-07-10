@@ -16,16 +16,16 @@ p.error {
 	padding: 5px;
 }
 
-#todo-list th#checkbox-col {
+#todo-list th#checkbox-col, #todo-list-completed  th#checkbox-col {
 	width: 15px;
 }
-#todo-cats th#id-col, #todo-list th#id-col {
+#todo-cats th#id-col, #todo-list th#id-col, #todo-list-completed th#id-col {
 	width: 5%;
 }
 #todo-cats th#vis-col {
 	width: 15%;
 }
-#todo-cats th#action-col, #todo-list th#action-col {
+#todo-cats th#action-col, #todo-list th#action-col, #todo-list-completed th#action-col {
 	width: 8%;
 	min-width: 120px;
 }
