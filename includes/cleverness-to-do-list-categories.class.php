@@ -5,7 +5,6 @@
  * @package cleverness-to-do-list
  * @version 3.2
  * @todo add meta value for sort order and enable
- * @todo fix privacy to work when sort order is any
  */
 
 /**

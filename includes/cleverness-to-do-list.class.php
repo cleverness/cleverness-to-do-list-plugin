@@ -17,7 +17,6 @@ class ClevernessToDoList {
 	protected $cat_id = '';
 	protected $form = '';
 	protected $priorities = '';
-	protected $user = '';
 	protected $url = '';
 	public $list = '';
 
@@ -33,12 +32,10 @@ class ClevernessToDoList {
 	 * Display a to-do list
 	 * @param int $completed
 	 * @return void
-	 * @todo can i move get_user_id? do i need userdata?
 	 */
 	public function display( $completed = 0 ) {
-		global $current_user, $userdata;
 		list( $this->url, $action ) = CTDL_Lib::set_variables();
-		$this->user = CTDL_Lib::get_user_id( $current_user, $userdata );
+
 		if ( is_admin() ) $completed = 1;
 
 		if ( is_admin() ) $this->list .= '<div class="wrap"><div class="icon32"><img src="'.CTDL_PLUGIN_URL.'/images/cleverness-todo-icon.png" alt="" /></div>
@@ -116,6 +113,8 @@ class ClevernessToDoList {
 	 * @param int $cat_id
 	 */
 	protected function loop_through_todos( $completed = 0, $cat_id = 0 ) {
+		global $current_user, $userdata;
+		$user = CTDL_Lib::get_user_id( $current_user, $userdata );
 
 		// if categories are enabled and sort order is set to cat id and we're not getting todos for a specific category
 		if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $cat_id == 0 ) {
@@ -131,7 +130,7 @@ class ClevernessToDoList {
 					$visible = $visibility["category_$category->term_id"];
 				}
 
-				$todo_items = CTDL_Lib::get_todos( $this->user, -1, $completed, $category->term_id );
+				$todo_items = CTDL_Lib::get_todos( $user, -1, $completed, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
 					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $completed, $visible ) );
@@ -139,7 +138,7 @@ class ClevernessToDoList {
 				}
 			}
 
-			$todo_items = CTDL_Lib::get_todos( $this->user, -1, $completed, 0, $posts_to_exclude );
+			$todo_items = CTDL_Lib::get_todos( $user, -1, $completed, 0, $posts_to_exclude );
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items, $completed );
 				$items = 1;
@@ -155,7 +154,7 @@ class ClevernessToDoList {
 
 		} else {
 
-			$todo_items = CTDL_Lib::get_todos( $this->user, -1, $completed, $cat_id );
+			$todo_items = CTDL_Lib::get_todos( $user, -1, $completed, $cat_id );
 
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items, $completed );
@@ -437,7 +436,7 @@ class ClevernessToDoList {
 	protected function show_table_headings( $completed = 0 ) {
 		$this->list .= '<thead><tr>';
 		if ( CTDL_Loader::$settings['show_id'] ) $this->list .= '<th id="id-col">'.apply_filters( 'ctdl_heading_id', esc_html__( 'ID', 'cleverness-to-do-list' ) ).'</th>';
-		if ( CTDL_Lib::check_permission( 'todo', 'complete' ) ) $this->list .= '<th id="checkbox-col" class="{sorter: false} no-sort"></th>';
+		if ( CTDL_Lib::check_permission( 'todo', 'complete' ) ) $this->list .= '<th id="checkbox-col" class="{sorter: false} no-sort"><span class="icon minus"></span></th>';
 		$this->list .= '<th id="item-col">'.apply_filters( 'ctdl_heading_item', esc_html__( 'Item', 'cleverness-to-do-list' ) ).'</th>';
 	  	$this->list .= '<th id="priority-col">'.apply_filters( 'ctdl_heading_priority', esc_html__( 'Priority', 'cleverness-to-do-list' ) ).'</th>';
 		if ( CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th id="progress-col">'.apply_filters( 'ctdl_heading_progress', esc_html__( 'Progress', 'cleverness-to-do-list' ) ).'</th>';
@@ -625,7 +624,7 @@ class ClevernessToDoList {
 	public function show_deadline( $deadline, $layout = 'table' ) {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) {
 			if ( $layout == 'table' ) {
-				$this->list .= ( $deadline != '' ? sprintf( '<td class="todo-deadline">%s</td>', esc_attr( $deadline ) ) : '<td class="todo-deadline"></td>' );
+				$this->list .= ( $deadline != '' ? sprintf( '<td class="todo-deadline">%s</td>', date( CTDL_Loader::$settings['date_format'], strtotime( $deadline ) ) ) : '<td class="todo-deadline"></td>' );
 			} else {
 				$this->list .= ( $deadline != '' ? sprintf( '%s', esc_attr( $deadline ) ) : '' );
 			}

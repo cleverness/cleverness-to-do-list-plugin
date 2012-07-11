@@ -109,6 +109,7 @@ class CTDL_Settings {
 		</select>
 		<span class="description"><?php _e( 'List View sets how the to-do lists are viewed.<br /> The Individual setting allows each user to have their own private to-do list.
 		The Group setting allows all users to share one to-do list. The Master setting allows you to have one master list for all users with individual completion of items.', 'cleverness-to-do-list' ); ?></span>
+		<br /><span class="description"><?php _e( 'Make sure you adjust the User Permissions appropriately when using the Master List View.', 'cleverness-to-do-list' ); ?></span>
 	<?php }
 
 	function show_deadline_option() { ?>

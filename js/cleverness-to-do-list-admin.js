@@ -4,6 +4,7 @@ jQuery( document ).ready( function( $ ) {
 
 	$( '#todo-list-completed th' ).click( function () {
 		$( this ).parents( '#todo-list-completed' ).children( 'tbody' ).toggle();
+		$( '#todo-list-completed #checkbox-col .icon' ).toggleClass( 'minus' ).toggleClass( 'plus' );
 	} );
 
 	$( "#cleverness_todo_assign" ).select2( {

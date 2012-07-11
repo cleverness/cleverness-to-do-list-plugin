@@ -27,8 +27,6 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	public function dashboard_widget() {
 
 		$cat_id = $this->dashboard_settings['dashboard_cat'];
-
-
 		$limit = $this->dashboard_settings['dashboard_number'];
 
 		$this->loop_through_todos( $cat_id, $limit );

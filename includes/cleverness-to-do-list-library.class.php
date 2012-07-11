@@ -278,7 +278,7 @@ class CTDL_Lib {
 					add_post_meta( $post_id, '_assign', $current_user->ID );
 				}
 			}
-			$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ? esc_attr( $_POST['cleverness_todo_deadline'] ) : '' );
+			$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ? date( 'Y-m-d', strtotime( $_POST['cleverness_todo_deadline'] ) ) : '' );
 			add_post_meta( $post_id, '_deadline', $deadline, true );
 			$progress = ( isset( $_POST['cleverness_todo_progress'] ) ? $_POST['cleverness_todo_progress'] : 0 );
 			add_post_meta( $post_id, '_progress', $progress, true );
@@ -360,7 +360,7 @@ class CTDL_Lib {
 				}
 			}
 
-			if ( isset( $_POST['cleverness_todo_deadline'] ) ) update_post_meta( $post_id, '_deadline', esc_attr( $_POST['cleverness_todo_deadline'] ) );
+			if ( isset( $_POST['cleverness_todo_deadline'] ) ) update_post_meta( $post_id, '_deadline', date( 'Y-m-d', strtotime( $_POST['cleverness_todo_deadline'] ) ) );
 			if ( isset( $_POST['cleverness_todo_progress'] ) ) update_post_meta( $post_id, '_progress', $_POST['cleverness_todo_progress'] );
 			if ( isset( $_POST['cleverness_todo_planner'] ) ) update_post_meta( $post_id, '_planner', absint( $_POST['cleverness_todo_planner'] ) );
 		}

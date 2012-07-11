@@ -6,7 +6,6 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.2
- * @todo check out what's happening when new users are added for master list. bug reports says its not working
  */
 
 /**

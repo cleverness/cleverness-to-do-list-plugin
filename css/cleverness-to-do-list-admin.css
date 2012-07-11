@@ -102,3 +102,22 @@ div.todo-list {
 	clear: both;
 	margin: 15px 0;
 }
+
+#todo-list-completed th {
+	cursor: pointer;
+}
+
+#todo-list-completed #checkbox-col .icon {
+	background: url(images/ui-icons_888888_256x240.png);
+	display: block;
+	height: 16px;
+	width: 16px;
+}
+
+#todo-list-completed #checkbox-col .minus {
+	background-position: -48px -128px;
+}
+
+#todo-list-completed #checkbox-col .plus {
+	background-position: -16px -128px;
+}

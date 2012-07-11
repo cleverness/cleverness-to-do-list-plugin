@@ -6,7 +6,7 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.2
- * @todo visiblity still buggy
+ * @todo fix category privacy to work when sort order is any
  */
 
 /**
@@ -38,7 +38,7 @@ class CTDL_Widget extends WP_Widget {
 		$assigned_to = $instance['assigned_to'];
 		$deadline    = $instance['deadline'];
 		$progress    = $instance['progress'];
-		$category    = $instance['category'];
+		$category    = ( CTDL_Loader::$settings['categories'] == 1 ? $instance['category'] : 0 );
 		$individual  = ( isset( $instance['individual'] ) ? $instance['individual'] : 0 );
 
 		if ( $individual == 1 && is_user_logged_in() ) {
