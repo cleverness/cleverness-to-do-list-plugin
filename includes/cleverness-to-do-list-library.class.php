@@ -360,7 +360,7 @@ class CTDL_Lib {
 				}
 			}
 
-			if ( isset( $_POST['cleverness_todo_deadline'] ) && $_POST['cleverness_todo_deadline'] != '' ) update_post_meta( $post_id, '_deadline', strtotime( $_POST['cleverness_todo_deadline'] ) );
+			if ( isset( $_POST['cleverness_todo_deadline'] ) ) update_post_meta( $post_id, '_deadline', strtotime( $_POST['cleverness_todo_deadline'] ) );
 			if ( isset( $_POST['cleverness_todo_progress'] ) ) update_post_meta( $post_id, '_progress', $_POST['cleverness_todo_progress'] );
 			if ( isset( $_POST['cleverness_todo_planner'] ) ) update_post_meta( $post_id, '_planner', absint( $_POST['cleverness_todo_planner'] ) );
 		}
@@ -775,7 +775,7 @@ class CTDL_Lib {
 				}
 
 				// if db version < 3.2.1, convert deadlines
-				if ( version_compare( $installed_version, '3.2.1', '<' ) ) {
+				if ( version_compare( $installed_version, '3.21', '<' ) ) {
 					self::convert_deadlines();
 				}
 
@@ -951,7 +951,7 @@ class CTDL_Lib {
 				update_option( 'CTDL_general', $general_options );
 			}
 
-			if ( version_compare( $version, '3.2.1', '<' ) ) {
+			if ( version_compare( $version, '3.21', '<' ) ) {
 				$general_options          = get_option( 'CTDL_general' );
 				$general_options['autop'] = 1;
 				update_option( 'CTDL_general', $general_options );

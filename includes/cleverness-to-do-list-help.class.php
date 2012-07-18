@@ -196,9 +196,9 @@ class CTDL_Help {
 	public static function cleverness_todo_postplanner_help() { ?>
 		<h3><?php esc_html_e( 'Post Planner Integration', 'cleverness-to-do-list' ); ?></h3>
 
-		<p>You can use this plugin to create custom to-do lists for your Post Planners if you own my premium plugin, Post Planner.</p>
+		<p>You can use this plugin to create custom to-do lists for your Post Planners if you own my premium plugin, <a href="http://codecanyon.net/item/wordpress-post-planner/2496996?ref=seaserpentstudio">Post Planner</a>.</p>
 
-		<p>Post Planner is a full-featured post planning system.</p>
+		<p><a href="http://codecanyon.net/item/wordpress-post-planner/2496996?ref=seaserpentstudio">Post Planner</a> is a full-featured post planning system.</p>
 
 	<p>Features include:</p>
 
