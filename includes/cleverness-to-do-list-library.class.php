@@ -278,7 +278,7 @@ class CTDL_Lib {
 					add_post_meta( $post_id, '_assign', $current_user->ID );
 				}
 			}
-			$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ? date( 'Y-m-d', strtotime( $_POST['cleverness_todo_deadline'] ) ) : '' );
+			$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) && $_POST['cleverness_todo_deadline'] != '' ? strtotime( $_POST['cleverness_todo_deadline'] ) : '' );
 			add_post_meta( $post_id, '_deadline', $deadline, true );
 			$progress = ( isset( $_POST['cleverness_todo_progress'] ) ? $_POST['cleverness_todo_progress'] : 0 );
 			add_post_meta( $post_id, '_progress', $progress, true );
@@ -360,7 +360,7 @@ class CTDL_Lib {
 				}
 			}
 
-			if ( isset( $_POST['cleverness_todo_deadline'] ) ) update_post_meta( $post_id, '_deadline', date( 'Y-m-d', strtotime( $_POST['cleverness_todo_deadline'] ) ) );
+			if ( isset( $_POST['cleverness_todo_deadline'] ) && $_POST['cleverness_todo_deadline'] != '' ) update_post_meta( $post_id, '_deadline', strtotime( $_POST['cleverness_todo_deadline'] ) );
 			if ( isset( $_POST['cleverness_todo_progress'] ) ) update_post_meta( $post_id, '_progress', $_POST['cleverness_todo_progress'] );
 			if ( isset( $_POST['cleverness_todo_planner'] ) ) update_post_meta( $post_id, '_planner', absint( $_POST['cleverness_todo_planner'] ) );
 		}
@@ -774,6 +774,11 @@ class CTDL_Lib {
 
 				}
 
+				// if db version < 3.2.1, convert deadlines
+				if ( version_compare( $installed_version, '3.2.1', '<' ) ) {
+					self::convert_deadlines();
+				}
+
 			}
 
 		}
@@ -800,6 +805,7 @@ class CTDL_Lib {
 				'admin_bar'             => 1,
 				'post_planner'          => 0,
 				'wysiwyg'               => 1,
+				'autop'                 => 1,
 			);
 
 			$advanced_options = array(
@@ -832,9 +838,18 @@ class CTDL_Lib {
 				'add_cat_capability'           => 'manage_options',
 			);
 
+			$dashboard_options = array(
+				'dashboard_number'        => -1,
+				'dashboard_cat'           => 0,
+				'show_dashboard_deadline' => 0,
+				'show_edit_link'          => 0,
+				'dashboard_author'        => 1,
+			);
+
 			add_option( 'CTDL_general', $general_options );
 			add_option( 'CTDL_advanced', $advanced_options );
 			add_option( 'CTDL_permissions', $permissions_options );
+			add_option( 'CTDL_dashboard_settings', $dashboard_options );
 			add_option( 'CTDL_db_version', CTDL_DB_VERSION );
 
 		} else {
@@ -858,7 +873,6 @@ class CTDL_Lib {
 					'show_progress'         => $the_options['show_progress'],
 					'sort_order'            => $the_options['sort_order'],
 					'admin_bar'             => 1,
-					'wysiwyg'               => 1,
 				);
 
 				$advanced_options = array(
@@ -891,6 +905,13 @@ class CTDL_Lib {
 					'add_cat_capability'           => $the_options['add_cat_capability'],
 				);
 
+				$dashboard_options = array(
+					'dashboard_number'        => -1,
+					'dashboard_cat'           => $the_options['dashboard_cat'],
+					'show_dashboard_deadline' => 0,
+					'dashboard_author'        => 1,
+				);
+
 				if ( $general_options['sort_order'] == 'todotext' ) {
 					$general_options['sort_order'] = 'title';
 				} elseif ( $general_options['sort_order'] == 'id' ) {
@@ -906,6 +927,7 @@ class CTDL_Lib {
 				update_option( 'CTDL_general', $general_options );
 				update_option( 'CTDL_advanced', $advanced_options );
 				update_option( 'CTDL_permissions', $permissions_options );
+				update_option( 'CTDL_dashboard_settings', $dashboard_options );
 				delete_option( 'atd_db_version' );
 				delete_option( 'cleverness_todo_db_version' );
 				delete_option( 'cleverness_todo_settings' );
@@ -921,12 +943,17 @@ class CTDL_Lib {
 				$dashboard_options = get_option( 'CTDL_dashboard_settings' );
 				$dashboard_options['show_edit_link'] = 1;
 				update_option( 'CTDL_dashboard_settings', $dashboard_options );
-			}
 
-			if ( $version < 3.2 ) {
-				$general_options            = get_option( 'CTDL_general' );
+				$general_options = get_option( 'CTDL_general' );
 				$general_options['wysiwyg'] = 1;
 				$general_options['post_planner'] = 0;
+				$general_options['autop'] = 1;
+				update_option( 'CTDL_general', $general_options );
+			}
+
+			if ( version_compare( $version, '3.2.1', '<' ) ) {
+				$general_options          = get_option( 'CTDL_general' );
+				$general_options['autop'] = 1;
 				update_option( 'CTDL_general', $general_options );
 			}
 
@@ -1036,6 +1063,28 @@ class CTDL_Lib {
 			}
 
 		}
+	}
+
+	/**
+	 * Convert deadlines using strtotime so you can sort by them
+	 * @static
+	 * @since 3.2.1
+	 */
+	public static function convert_deadlines() {
+
+		$results = get_posts( array(
+			'post_type'      => 'todo',
+			'posts_per_page' => -1,
+			'post_status'    => 'any'
+		) );
+
+		foreach( $results as $result ) {
+			$deadline = get_post_meta( $result->ID, '_deadline', true );
+			if ( $deadline != '' ) {
+				update_post_meta( $result->ID, '_deadline', strtotime( $deadline ) );
+			}
+		}
+
 	}
 
 }

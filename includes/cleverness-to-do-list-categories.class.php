@@ -165,7 +165,7 @@ class CTDL_Categories {
 
 	<div class="wrap">
 		<div class="icon32"><img src="<?php echo CTDL_PLUGIN_URL; ?>/images/cleverness-todo-icon.png" alt="" /></div>
-		<h2><?php apply_filters( 'ctdl_categories_title', esc_html__( 'To-Do List Categories', 'cleverness-to-do-list' ) ); ?></h2>
+		<h2><?php echo apply_filters( 'ctdl_categories_title', esc_html__( 'To-Do List Categories', 'cleverness-to-do-list' ) ); ?></h2>
 
 		<?php if ( $cleverness_todo_message != '' ) echo '<div id="message" class="error below-h2"><p>'.$cleverness_todo_message.'</p></div>'; ?>
 
@@ -192,7 +192,7 @@ class CTDL_Categories {
 					<td>
 						<?php wp_nonce_field( 'todoaddcat', '_todo_add_cat_nonce' ); ?>
 						<input type="hidden" name="cleverness_todo_action" value="addtodocat" />
-						<input type="submit" name="button" id="add-todo-category" class="button-primary" value="<?php echo apply_filters( 'ctdl_add_category', esc_attr__( 'Add Category', 'cleverness-to-do-list' ) ); ?>" />
+						<input type="submit" name="button" id="add-todo-category" class="button-primary" value="<?php echo apply_filters( 'ctdl_add_category', esc_attr__( 'Submit', 'cleverness-to-do-list' ) ); ?>" />
 					</td>
 				</tr>
 			</table>
@@ -281,7 +281,7 @@ class CTDL_Categories {
 			'SUCCESS_MSG'       => __( 'Category Deleted.', 'cleverness-to-do-list' ),
 			'ERROR_MSG'         => __( 'There was a problem performing that action.', 'cleverness-to-do-list' ),
 			'PERMISSION_MSG'    => __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' ),
-			'EDIT_CAT'          => __( 'Edit Category', 'cleverness-to-do-list' ),
+			'EDIT_CAT'          => __( 'Save Changes', 'cleverness-to-do-list' ),
 			'PUBLIC'            => __( 'Public', 'cleverness-to-do-list' ),
 			'PRIVATE'           => __( 'Private', 'cleverness-to-do-list' ),
 			'CONFIRMATION_MSG'  => __( "You are about to permanently delete the selected item. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),

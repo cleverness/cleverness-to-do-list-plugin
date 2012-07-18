@@ -86,7 +86,7 @@ table#todo-list thead tr .headerSortDown {
 }
 
 #cleverness_todo h4 {
-	margin-top: 20px;
+	margin-top: 15px;
 	clear: both;
 }
 
@@ -95,12 +95,12 @@ table#todo-list thead tr .headerSortDown {
 }
 
 .todoitem p {
-	margin: 0.5em 0;
+	margin: 0.2em 0;
 }
 
 div.todo-list {
 	clear: both;
-	margin: 15px 0;
+	margin: 8px 0;
 }
 
 #todo-list-completed th {

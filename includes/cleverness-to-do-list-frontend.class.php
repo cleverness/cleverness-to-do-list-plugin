@@ -97,7 +97,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 				/** @var $deadline int */
 				if ( $deadline == 1 ) $this->show_deadline( $deadline_meta );
 				/** @var $date int */
-				if ( $date == 1 ) $this->show_date_added( get_the_date() );
+				if ( $date == 1 ) $this->show_date_added( get_the_date( CTDL_Loader::$settings['date_format'] ) );
 				$this->list .= do_action( 'ctdl_list_items' );
 				/** @var $editlink int */
 				if ( $editlink == 1 ) $this->show_edit_link( $id );
@@ -487,7 +487,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	public function show_deadline( $deadline, $type = 'list' ) {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 && $deadline != '' )
 			$this->list .= ' <small class="todo-deadline">['.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).': '.
-			date( CTDL_Loader::$settings['date_format'], strtotime( $deadline ) ).']</small>';
+			date( CTDL_Loader::$settings['date_format'], $deadline ).']</small>';
 	}
 
 	/**
@@ -585,7 +585,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				$this->list .= '<h3 class="todo-title">'.esc_html( $title ).'</h3>';
 			}
 			/** @var $list_type string */
-			$this->list .= '<'.$list_type.'>';
+			$this->list .= '<'.$list_type.' class="todolist">';
 			$this->loop_through_todos( 0, $category );
 			$this->list .= '</'.$list_type.'>';
 
@@ -611,7 +611,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				if ( $completed_title != '') {
 					$this->list .= '<h3 class="todo-title">'.esc_html( $completed_title ).'</h3>';
 				}
-				$this->list .= '<'.$list_type.'>';
+				$this->list .= '<'.$list_type.' class="todolist">';
 				$this->loop_through_todos( 1, $category );
 				$this->list .= '</'.$list_type.'>';
 
@@ -810,9 +810,9 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 	public function show_deadline( $deadline, $layout = 'list' ) {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 && $deadline != '' ) {
 			if ( $layout == 'table' ) {
-				$this->list .= ( $deadline != '' ? sprintf( '<td class="todo-deadline">%s</td>', esc_attr( $deadline ) ) : '<td class="todo-deadline"></td>' );
+				$this->list .= ( $deadline != '' ? sprintf( '<td class="todo-deadline">%s</td>', date( CTDL_Loader::$settings['date_format'], $deadline ) ) : '<td class="todo-deadline"></td>' );
 			} else {
-				$this->list .= ' - '.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).': '.date( CTDL_Loader::$settings['date_format'], strtotime( $deadline ) );
+				$this->list .= ' - '.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).': '.date( CTDL_Loader::$settings['date_format'], $deadline );
 			}
 		} elseif ( $layout == 'table' ) {
 				$this->list .= '<td class="todo-deadline"></td>';

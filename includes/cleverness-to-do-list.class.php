@@ -244,7 +244,7 @@ class ClevernessToDoList {
 		$this->form .= do_action( 'ctdl_edit_form' );
 		$this->create_todo_text_field( $todo_item->post_content );
 		$this->form .= '</table>'.wp_nonce_field( 'todoupdate', 'todoupdate', true, false ).'<input type="hidden" name="action" value="updatetodo" />
-        	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_edit_text', esc_attr__( 'Edit To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>
+        	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_edit_text', esc_attr__( 'Save Changes', 'cleverness-to-do-list' ) ).'" /></p>
 				<input type="hidden" name="id" value="'.absint( $id ).'" />';
 		$this->form .= '</form>';
 
@@ -273,7 +273,7 @@ class ClevernessToDoList {
 				$this->form .= do_action( 'ctdl_add_form' );
 				$this->create_todo_text_field();
 				$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
-        	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>';
+        	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_add_text', esc_attr__( 'Submit To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>';
 			$this->form .= '</form>';
 
 			return $this->form;
@@ -370,7 +370,7 @@ class ClevernessToDoList {
 	 */
 	protected function create_deadline_field( $deadline = NULL ) {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) {
-			$value = ( isset( $deadline ) && $deadline != 0 ? $deadline : '' );
+			$value = ( isset( $deadline ) && $deadline != 0 ? date( CTDL_Loader::$settings['date_format'], $deadline ) : '' );
 			$this->form .= sprintf( '<tr>
 				<th scope="row"><label for="cleverness_todo_deadline">%s</label></th>
 				<td><input type="hidden" name="cleverness_todo_format" id="cleverness_todo_format" value="%s" />
@@ -496,9 +496,11 @@ class ClevernessToDoList {
 		if ( is_admin() || $layout == 'table' ) {
 			$this->list .= '<td class="todo-text">';
 		}
+		if ( CTDL_Loader::$settings['autop'] == 1 ) {
+			$todo_text = wpautop( $todo_text );
+		}
 		if ( CTDL_Loader::$settings['wysiwyg'] == 1 ) {
-			$text = apply_filters( 'the_content', $todo_text );
-			$this->list .= $text;
+			$this->list .= $todo_text;
 		} else {
 			$this->list .= stripslashes( $todo_text );
 		}
@@ -624,9 +626,9 @@ class ClevernessToDoList {
 	public function show_deadline( $deadline, $layout = 'table' ) {
 		if ( CTDL_Loader::$settings['show_deadline'] == 1 ) {
 			if ( $layout == 'table' ) {
-				$this->list .= ( $deadline != '' ? sprintf( '<td class="todo-deadline">%s</td>', date( CTDL_Loader::$settings['date_format'], strtotime( $deadline ) ) ) : '<td class="todo-deadline"></td>' );
+				$this->list .= ( $deadline != '' ? sprintf( '<td class="todo-deadline">%s</td>', date( CTDL_Loader::$settings['date_format'], $deadline ) ) : '<td class="todo-deadline"></td>' );
 			} else {
-				$this->list .= ( $deadline != '' ? sprintf( '%s', esc_attr( $deadline ) ) : '' );
+				$this->list .= ( $deadline != '' ? sprintf( '%s', date( CTDL_Loader::$settings['date_format'], $deadline ) ) : '' );
 			}
 		}
 	}

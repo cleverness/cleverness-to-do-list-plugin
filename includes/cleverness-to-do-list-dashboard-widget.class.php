@@ -26,8 +26,8 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	 */
 	public function dashboard_widget() {
 
-		$cat_id = $this->dashboard_settings['dashboard_cat'];
-		$limit = $this->dashboard_settings['dashboard_number'];
+		$cat_id = ( isset( $this->dashboard_settings['dashboard_cat'] ) ? $this->dashboard_settings['dashboard_cat'] : 0 );
+		$limit = ( isset( $this->dashboard_settings['dashboard_number'] ) ? $this->dashboard_settings['dashboard_number'] : -1 );
 
 		$this->loop_through_todos( $cat_id, $limit );
 
@@ -35,7 +35,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 
 		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'add' );
 		if ( $cleverness_todo_permission === true ) {
-			echo '<br /><p style="float: right">'. '<a href="admin.php?page=cleverness-to-do-list#addtodo">'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'  &raquo;</a></p>';
+			echo '<p style="clear: both; text-align: right">'. '<a href="admin.php?page=cleverness-to-do-list#addtodo">'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'  &raquo;</a></p>';
 		}
 
 	}
@@ -139,8 +139,8 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 					$this->list .= ']</small>';
 				}
 			}
-			if ( $this->dashboard_settings['show_dashboard_deadline'] == 1 && $deadline_meta != '' ) {
-				$this->list .=  ' <small>['.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) );
+			if ( CTDL_Loader::$settings['show_deadline'] == 1 && isset( $this->dashboard_settings['show_dashboard_deadline'] ) && $this->dashboard_settings['show_dashboard_deadline'] == 1 && $deadline_meta != '' ) {
+				$this->list .=  ' <small>['.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).' ';
 				$this->show_deadline( $deadline_meta );
 				$this->list .= ']</small>';
 			}
@@ -149,7 +149,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 				$this->show_progress( $progress_meta );
 				$this->list .= ']</small>';
 			}
-			if ( CTDL_Loader::$settings['list_view'] == 1 && $this->dashboard_settings['dashboard_author'] == 0 ) {
+			if ( CTDL_Loader::$settings['list_view'] == 1 && isset( $this->dashboard_settings['dashboard_author'] ) && $this->dashboard_settings['dashboard_author'] == 0 ) {
 				if ( get_the_author() != '0') {
 					$this->list .= ' <small>- '.apply_filters( 'ctdl_added_by', esc_html__( 'Added By', 'cleverness-to-do-list' ) ).' ';
 					$this->show_addedby( get_the_author() );
@@ -196,7 +196,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		}
    	    settings_fields( 'cleverness-todo-dashboard-settings-group' );
  	    $options = get_option( 'CTDL_dashboard_settings' );
-		$cat_id = $options['dashboard_cat'];
+		$cat_id = ( isset( $options['dashboard_cat'] ) ? $options['dashboard_cat'] : 0 );
 		?>
 		<fieldset>
   		    <p><label for="cleverness_todo_dashboard_settings[dashboard_number]"><?php esc_html_e( 'Number of List Items to Show', 'cleverness-to-do-list' ); ?></label>
@@ -226,9 +226,11 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 				</select>
 			</p>
 
+			<?php if ( CTDL_Loader::$settings['categories'] == 1 ) : ?>
 	 	    <p><label for="cleverness_todo_dashboard_settings[dashboard_cat]"><?php echo apply_filters( 'ctdl_category', esc_html__( 'Category', 'cleverness-to-do-list' ) ); ?></label>
 			     <?php wp_dropdown_categories( 'taxonomy=todocategories&echo=1&orderby=name&hide_empty=0&show_option_all='.__( 'All', 'cleverness-to-do-list' ).'&id=cleverness_todo_dashboard_settings[dashboard_cat]&name=cleverness_todo_dashboard_settings[dashboard_cat]&selected='.$cat_id ); ?>
 			</p>
+			<?php endif; ?>
 
 			<p class="description"><?php _e( 'This setting is only used when <em>List View</em> is set to <em>Group</em>.', 'cleverness-to-do-list' ); ?></p>
    		    <p><label for="cleverness_todo_dashboard_settings[dashboard_author]"><?php _e( 'Show <em>Added By</em> on Dashboard Widget', 'cleverness-to-do-list' ); ?></label>

@@ -5,7 +5,7 @@
  * Loads the plugin
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.2
+ * @version 3.2.1
  */
 
 /**

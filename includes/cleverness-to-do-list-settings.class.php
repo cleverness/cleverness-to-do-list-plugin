@@ -88,6 +88,7 @@ class CTDL_Settings {
 		add_settings_field( 'show_progress', __( 'Show Progress', 'cleverness-to-do-list' ), array( $this, 'show_progress_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'admin_bar', __( 'Show Admin Bar Menu', 'cleverness-to-do-list' ), array( $this, 'admin_bar_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'wysiwyg', __( 'Use WYSIWYG Editor', 'cleverness-to-do-list' ), array( $this, 'wysiwyg_option' ), $this->general_key, 'section_general' );
+		add_settings_field( 'autop', __( 'Use Auto Paragraphs', 'cleverness-to-do-list' ), array( $this, 'autop_option' ), $this->general_key, 'section_general' );
 		add_settings_field( 'post_planner', __( 'Integrate with Post Planner', 'cleverness-to-do-list' ), array( $this, 'post_planner_option' ), $this->general_key, 'section_general' );
 		do_action( 'ctdl_general_settings' );
 	}
@@ -170,6 +171,16 @@ class CTDL_Settings {
 		<option value="1" <?php selected( $this->general_settings['wysiwyg'], 1 ); ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>
 			&nbsp;</option>
 		<option value="0" <?php selected( $this->general_settings['wysiwyg'], 0 ); ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
+	</select>
+	<?php
+	}
+
+	function autop_option() {
+		?>
+	<select name="<?php echo $this->general_key; ?>[autop]">
+		<option value="1" <?php selected( $this->general_settings['autop'], 1 ); ?>><?php _e( 'Yes', 'cleverness-to-do-list' ); ?>
+			&nbsp;</option>
+		<option value="0" <?php selected( $this->general_settings['autop'], 0 ); ?>><?php _e( 'No', 'cleverness-to-do-list' ); ?></option>
 	</select>
 	<?php
 	}
