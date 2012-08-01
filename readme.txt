@@ -5,8 +5,8 @@ Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.3
-Tested up to: 3.4
-Stable tag: 3.2.1
+Tested up to: 3.4.1
+Stable tag: 3.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,6 +130,13 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 4. Everything Enabled
 
 == Changelog ==
+
+= 3.2.3 =
+* Added todolist-completed class to completed items using todolist shortcode
+* Adjusted width of WYSIWYG editor
+
+= 3.2.2 =
+* Fixed Emailing of Assigned Items
 
 = 3.2.1 =
 * Added Post Planner plugin integration
@@ -372,6 +379,12 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Fixed to work in WordPress 2.8
 
 == Upgrade Notice ==
+
+= 3.2.3 =
+Small fixes
+
+= 3.2.2 =
+Bug fix
 
 = 3.2.1 =
 New features

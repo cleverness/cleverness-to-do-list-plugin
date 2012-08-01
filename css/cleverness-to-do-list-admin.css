@@ -81,8 +81,9 @@ table#todo-list thead tr .headerSortDown {
 }
 
 #wp-clevernesstododescription-wrap {
-	width: 50%;
+	width: 60%;
 	min-width: 500px;
+	overflow: auto;
 }
 
 #cleverness_todo h4 {

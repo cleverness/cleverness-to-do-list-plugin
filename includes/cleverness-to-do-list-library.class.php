@@ -240,10 +240,6 @@ class CTDL_Lib {
 
 			if ( !wp_verify_nonce( $_REQUEST['todoadd'], 'todoadd' ) ) die( esc_html__( 'Security check failed', 'cleverness-to-do-list' ) );
 
-			if ( CTDL_Loader::$settings['email_assigned'] == '1' && CTDL_Loader::$settings['assign'] == '0' ) {
-				CTDL_Lib::email_user( $_POST['cleverness_todo_assign'], $_POST['cleverness_todo_deadline'], $_POST['cat'] );
-			}
-
 			$my_post = array(
 				'post_type'        => 'todo',
 				'post_title'       => substr( $_POST['cleverness_todo_description'], 0, 100 ),
@@ -272,6 +268,10 @@ class CTDL_Lib {
 				} else {
 					add_post_meta( $post_id, '_assign', $assign );
 				}
+
+				if ( CTDL_Loader::$settings['email_assigned'] == '1' && CTDL_Loader::$settings['assign'] == '0' ) {
+					CTDL_Lib::email_user( $assign, $_POST['cleverness_todo_deadline'], $_POST['cat'] );
+				}
 			} else {
 				// if user can't assign items, but settings are set to assign items and show only assigned items, then assign it to that user
 				if ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['assign'] == 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 ) {
@@ -299,27 +299,49 @@ class CTDL_Lib {
 	protected static function email_user( $assign, $deadline, $category = 0 ) {
 		global $current_user;
 		get_currentuserinfo();
+		add_filter( 'wp_mail_content_type', create_function( '', 'return "text/html";' ) );
 
-		$priority = esc_attr( $_POST['cleverness_todo_priority'] );
-		$todo_text = esc_html( $_POST['cleverness_todo_description'] );
+		$priority = $_POST['cleverness_todo_priority'];
+		$todo_text = $_POST['cleverness_todo_description'];
 		$priority_array = array( 0 => CTDL_Loader::$settings['priority_0'], 1 => CTDL_Loader::$settings['priority_1'], 2 => CTDL_Loader::$settings['priority_2'] );
 		if ( $category != 0 && $category != -1 ) $category_name = CTDL_Categories::get_category_name( $category );
 
-		if ( current_user_can( CTDL_Loader::$settings['assign_capability'] ) && $assign != '' && $assign != '-1' && $assign != '0' ) {
-			$headers = 'From: '.CTDL_Loader::$settings['email_from'].' <'.get_bloginfo( 'admin_email' ).'>' . "\r\n\\";
-			$subject = CTDL_Loader::$settings['email_subject'];
-			if ( CTDL_Loader::$settings['email_category'] == 1 && $category != 0 && $category != -1 ) {
-	            $subject .= ' - '.$category_name;
+		if ( is_array( $assign ) ) {
+			foreach ( $assign as $assign_value ) {
+				if ( current_user_can( CTDL_Loader::$settings['assign_capability'] ) && $assign_value != '' && $assign_value != '-1' && $assign_value != '0' ) {
+					$headers = 'From: '.CTDL_Loader::$settings['email_from'].' <'.get_bloginfo( 'admin_email' ).'>'."\r\n\\";
+					$subject = CTDL_Loader::$settings['email_subject'];
+					if ( CTDL_Loader::$settings['email_category'] == 1 && $category != 0 && $category != -1 ) {
+						$subject .= ' - '.$category_name;
+					}
+					$assign_user   = get_userdata( $assign_value );
+					$email         = $assign_user->user_email;
+					$email_message = CTDL_Loader::$settings['email_text']."<br>";
+					$email_message .= "<br>".__( 'Priority', 'cleverness-to-do-list' ).': '.$priority_array[$priority]."<br>";
+					if ( CTDL_Loader::$settings['email_show_assigned_by'] == 1 ) $email_message .= "<br>".__( 'From', 'cleverness-to-do-list' ).': '.$current_user->display_name.' ('.$current_user->user_email.')'."<br>";
+					if ( $category != 0 && $category != -1 ) $email_message .= __( 'Category', 'cleverness-to-do-list' ).': '.$category_name."<br>";
+					if ( $deadline != '' ) $email_message .= __( 'Deadline:', 'cleverness-to-do-list' ).' '.date( CTDL_Loader::$settings['date_format'], strtotime( $deadline ) )."<br>";
+					$email_message .= __( 'To-Do:', 'cleverness-to-do-list' ).' '.$todo_text."<br>";
+					wp_mail( $email, $subject, $email_message, $headers );
+				}
 			}
-			$assign_user = get_userdata( $assign );
-			$email = $assign_user->user_email;
-			$email_message = CTDL_Loader::$settings['email_text']."\r\n";
-			$email_message .= "\r\n".__( 'Priority', 'cleverness-to-do-list' ).': '.$priority_array[$priority]."\r\n";
-			if ( CTDL_Loader::$settings['email_show_assigned_by'] == 1 ) $email_message .= "\r\n".__( 'From', 'cleverness-to-do-list' ).': '.$current_user->display_name.' ('.$current_user->user_email.')'."\r\n";
-			if ( $category != 0 && $category != -1 ) $email_message .= __( 'Category', 'cleverness-to-do-list' ).': '.$category."\r\n";
-			if ( $deadline != '' ) $email_message .= __( 'Deadline:', 'cleverness-to-do-list' ).' '.$deadline."\r\n";
-			$email_message .= __( 'To-Do:', 'cleverness-to-do-list' ).$todo_text."\r\n";
-			wp_mail( $email, $subject, $email_message, $headers );
+		} else {
+			if ( current_user_can( CTDL_Loader::$settings['assign_capability'] ) && $assign != '' && $assign != '-1' && $assign != '0' ) {
+				$headers = 'From: '.CTDL_Loader::$settings['email_from'].' <'.get_bloginfo( 'admin_email' ).'>'."\r\n\\";
+				$subject = CTDL_Loader::$settings['email_subject'];
+				if ( CTDL_Loader::$settings['email_category'] == 1 && $category != 0 && $category != -1 ) {
+					$subject .= ' - '.$category_name;
+				}
+				$assign_user   = get_userdata( $assign );
+				$email         = $assign_user->user_email;
+				$email_message = CTDL_Loader::$settings['email_text']."<br>";
+				$email_message .= "<br>".__( 'Priority', 'cleverness-to-do-list' ).': '.$priority_array[$priority]."<br>";
+				if ( CTDL_Loader::$settings['email_show_assigned_by'] == 1 ) $email_message .= "<br>".__( 'From', 'cleverness-to-do-list' ).': '.$current_user->display_name.' ('.$current_user->user_email.')'."<br>";
+				if ( $category != 0 && $category != -1 ) $email_message .= __( 'Category', 'cleverness-to-do-list' ).': '.$category_name."<br>";
+				if ( $deadline != '' ) $email_message .= __( 'Deadline:', 'cleverness-to-do-list' ).' '.date( CTDL_Loader::$settings['date_format'], strtotime( $deadline ) )."<br>";
+				$email_message .= __( 'To-Do:', 'cleverness-to-do-list' ).' '.$todo_text."<br>";
+				wp_mail( $email, $subject, $email_message, $headers );
+			}
 		}
 
 	}

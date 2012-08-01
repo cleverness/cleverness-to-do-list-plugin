@@ -100,18 +100,17 @@ class CTDL_Help {
 		<p><strong>&#91;todolist&#93;</strong></p>
 
 		<ul>
-			<li><strong>title</strong> &#8211; <?php esc_html_e( 'default is no title', 'cleverness-to-do-list' ); ?>.</li>
-			<li><strong>type</strong> &#8211; <?php esc_html_e( 'you can chose <em>list</em> or <em>table</em> view. Default is <em>list</em>', 'cleverness-to-do-list' ); ?>.</li>
-			<li><strong>priorities</strong> &#8211; <?php esc_html_e( 'default is <em>show</em>. Use a blank value to hide (only applies to table view)', 'cleverness-to-do-list' ); ?>.</li>
-			<li><strong>assigned</strong> &#8211; <?php esc_html_e( 'default is <em>show</em>. Use a blank value to hide', 'cleverness-to-do-list' ); ?>.</li>
-			<li><strong>deadline</strong> &#8211; <?php esc_html_e( 'default is <em>show</em>. Use a blank value to hide', 'cleverness-to-do-list' ); ?>.</li>
-			<li><strong>progress</strong> &#8211; <?php esc_html_e( 'default is <em>show</em>. Use a blank value to hide', 'cleverness-to-do-list' ); ?>.</li>
-			<li><strong>addedby</strong> &#8211; <?php esc_html_e( 'default is <em>show</em>. Use a blank value to hide', 'cleverness-to-do-list' ); ?>.</li>
-			<li><strong>date</strong> &#8211; <?php esc_html_e( 'default is hide (0). Use 1 to show', 'cleverness-to-do-list' ); ?>.</li>
-			<li><strong>completed</strong> &#8211; <?php esc_html_e( 'default is blank. Set to <em>show</em> to display completed items', 'cleverness-to-do-list' ); ?>.</li>
-			<li><strong>completed_title</strong> &#8211; <?php esc_html_e( 'default is no title', 'cleverness-to-do-list' ); ?>.</li>
-			<li><strong>list_type</strong> &#8211; <?php esc_html_e( 'default is <em>ol</em> (ordered list). Use <em>ul</em> to show an unordered list', 'cleverness-to-do-list' ); ?>.</li>
-			<li><strong>category</strong> &#8211; <?php esc_html_e( 'default is <em>all</em>. Use the category ID to show a specific category', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>title</strong> &#8211; <?php _e( 'you can chose <em>list</em> or <em>table</em> view. Default is <em>list</em>', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>priorities</strong> &#8211; <?php _e( 'default is <em>show</em>. Use a blank value to hide (only applies to table view)', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>assigned</strong> &#8211; <?php _e( 'default is <em>show</em>. Use a blank value to hide', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>deadline</strong> &#8211; <?php _e( 'default is <em>show</em>. Use a blank value to hide', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>progress</strong> &#8211; <?php _e( 'default is <em>show</em>. Use a blank value to hide', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>addedby</strong> &#8211; <?php _e( 'default is <em>show</em>. Use a blank value to hide', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>date</strong> &#8211; <?php _e( 'default is hide (0). Use 1 to show', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>completed</strong> &#8211; <?php _e( 'default is blank. Set to <em>show</em> to display completed items', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>completed_title</strong> &#8211; <?php _e( 'default is no title', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>list_type</strong> &#8211; <?php _e( 'default is <em>ol</em> (ordered list). Use <em>ul</em> to show an unordered list', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>category</strong> &#8211; <?php _e( 'default is <em>all</em>. Use the category ID to show a specific category', 'cleverness-to-do-list' ); ?>.</li>
 		</ul>
 
 		<p><strong><?php esc_html_e( 'Example:', 'cleverness-to-do-list' ); ?></strong><br/>
