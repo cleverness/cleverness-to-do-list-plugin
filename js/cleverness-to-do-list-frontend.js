@@ -52,7 +52,7 @@ jQuery( document ).ready( function( $ ) {
 	$( '.delete-todo' ).live( 'click', function( e ) {
 		e.preventDefault();
 		var confirmed = confirm( ctdl.CONFIRMATION_MSG );
-		if ( confirmed == false ) return;
+		if ( confirmed == false ) return false;
 		var _item = this;
 		var todotr = $( _item ).closest( 'tr' );
 

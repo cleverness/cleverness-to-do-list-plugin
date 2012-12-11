@@ -5,7 +5,7 @@ jQuery( document ).ready( function( $ ) {
 	/* Delete Categories */
 	$( '.delete-todo-category' ).live( 'click', function () {
 		var confirmed = confirm( ctdlcat.CONFIRMATION_MSG );
-		if ( confirmed == false ) return;
+		if ( confirmed == false ) return false;
 		var _item = this;
 		var todotr = $( _item ).closest( 'tr' );
 

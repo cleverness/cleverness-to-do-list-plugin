@@ -288,7 +288,9 @@ class ClevernessToDoList {
 	 * @since 3.2
 	 */
 	protected function create_planner_field( $planner_meta = NULL ) {
-		$selected = '';
+		if ( $planner_meta == NULL && isset( $_GET['planner'] ) ) {
+			$planner_meta = absint( $_GET['planner'] );
+		}
 		$this->form .= '<tr>
 		  	<th scope="row"><label for="cleverness_todo_planner">'.apply_filters( 'ctdl_planner', esc_html__( 'Post Planner', 'cleverness-to-do-list' ) ).'</label></th>
 		  	<td>

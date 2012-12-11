@@ -548,14 +548,21 @@ class CTDL_Settings {
 	<h3><?php esc_html_e( 'Import/Export Settings', 'cleverness-to-do-list' ); ?></h3>
 
 	<p>
-		<a class="submit button" href="?cleverness-to-do-list-settings-export"><?php esc_attr_e( 'Export Settings', 'cleverness-to-do-list' ); ?></a>
+		<a class="submit button" href="?cleverness-to-do-list-settings-export"><?php esc_attr_e( 'Download Export File', 'cleverness-to-do-list' ); ?></a>
 	</p>
 
 	<p>
 		<input type="hidden" name="cleverness-to-do-list-settings-import" id="cleverness-to-do-list-settings-import" value="true" />
-		<?php submit_button( esc_attr__( 'Import Settings', 'cleverness-to-do-list' ), 'button', 'cleverness-to-do-list-settings-submit', false ); ?>
+		<label for="cleverness-to-do-list-settings-import-file"><?php esc_html_e( 'Choose File to Import', 'cleverness-to-do-list' ); ?>:</label>
 		<input type="file" name="cleverness-to-do-list-settings-import-file" id="cleverness-to-do-list-settings-import-file" />
+		<?php submit_button( esc_attr__( 'Import Settings', 'cleverness-to-do-list' ), 'button', 'cleverness-to-do-list-settings-submit', false ); ?>
 	</p>
+
+		<h3><?php esc_html_e( 'Import/Export To-Do Items', 'cleverness-to-do-list' ); ?></h3>
+
+		<p><?php esc_html_e( 'You can use the built-in WordPress Import/Export feature, located under the Tools menu. On the Export screen,
+		select the To-Do radio button before clicking the Download Export File button.',
+			'cleverness-to-do-list' ); ?></p>
 
 	<?php
 	}

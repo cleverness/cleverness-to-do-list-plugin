@@ -254,7 +254,7 @@ class CTDL_Categories {
 	public static function initialize_categories() {
 		global $cleverness_todo_cat_page;
 
-		wp_register_script( 'cleverness_todo_category_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-categories.js', '', 1.0, true );
+		wp_register_script( 'cleverness_todo_category_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-categories.js', '', CTDL_PLUGIN_VERSION, true );
 		add_action( 'admin_print_scripts-' . $cleverness_todo_cat_page, array( __CLASS__, 'add_category_js' ) );
 		add_action( 'wp_ajax_cleverness_todo_cat_get', array( __CLASS__, 'get_category_callback' ) );
 		add_action( 'wp_ajax_cleverness_todo_cat_update', array( __CLASS__, 'update_category_callback' ) );
