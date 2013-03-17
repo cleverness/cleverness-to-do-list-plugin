@@ -97,7 +97,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 				/** @var $deadline int */
 				if ( $deadline == 1 ) $this->show_deadline( $deadline_meta );
 				/** @var $date int */
-				if ( $date == 1 ) $this->show_date_added( get_the_date( CTDL_Loader::$settings['date_format'] ) );
+				if ( $date == 1 ) $this->show_date_added( get_the_date( 'Ymd' ), get_the_date( CTDL_Loader::$settings['date_format'] ) );
 				$this->list .= do_action( 'ctdl_list_items' );
 				/** @var $editlink int */
 				if ( $editlink == 1 ) $this->show_edit_link( $id );
@@ -400,7 +400,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 				/** @var $deadline int */
 				if ( $deadline == 1 ) $this->show_deadline( $deadline_meta );
 				/** @var $date int */
-				if ( $date == 1 ) $this->show_date_added( get_the_date( CTDL_Loader::$settings['date_format'] ) );
+				if ( $date == 1 ) $this->show_date_added( get_the_date( 'Ymd' ), get_the_date( CTDL_Loader::$settings['date_format'] ) );
 				$this->list .= do_action( 'ctdl_list_items' );
 				/** @var $editlink int */
 				if ( $editlink == 1 ) $this->show_edit_link( $id );
@@ -493,14 +493,15 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	/**
 	 * Show the Date the To-Do Item was Added
 	 * @param $date
+	 * @param $formatted_date
 	 * @param string $type
 	 * @return void
 	 * @since 3.1
 	 */
-	public function show_date_added( $date, $type = 'list' ) {
+	public function show_date_added( $date, $formatted_date, $type = 'list' ) {
 		$date = ( isset( $date ) ? $date : '' );
 		$this->list .= ' <small class="todo-date">['.apply_filters( 'ctdl_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).': '.
-			( $date != '' ? sprintf( '%s', esc_attr( $date ) ) : '' ).']</small>';
+			( $date != '' ? sprintf( '%s', esc_attr( $formatted_date ) ) : '' ).']</small>';
 	}
 
 	/**
@@ -679,7 +680,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				/** @var $deadline string */
 				if ( $deadline == 'show' && CTDL_Loader::$settings['show_deadline'] == 1 ) $this->show_deadline( $deadline_meta, $type );
 				/** @var $date int */
-				if ( $date == 1 && CTDL_Loader::$settings['show_date_added'] == 1) $this->show_date_added( get_the_date( CTDL_Loader::$settings['date_format'] ), $type );
+				if ( $date == 1 && CTDL_Loader::$settings['show_date_added'] == 1) $this->show_date_added( get_the_date( 'Ymd' ), get_the_date( CTDL_Loader::$settings['date_format'] ), $type );
 				if ( $completed == 1 && $type == 'list' ) $this->list .= ' - ';
 				if ( $completed == 1 ) $this->show_completed( $completed_meta, $type );
 				$this->list .= do_action( 'ctdl_list_items' );
@@ -738,6 +739,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 	 * Show category heading only if it's the first item from that category
 	 * @param $categories
 	 * @param $list_type
+	 * @todo don't show empty list that appears before first category
 	 */
 	protected function show_category_headings( $categories, $list_type ) {
 		if ( CTDL_Loader::$settings['categories'] == 1 && $categories != false ) {
@@ -839,18 +841,19 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 	/**
 	 * Show the Date the To-Do Item was Added
 	 * @param $the_date
+	 * @param $formatted_date
 	 * @param string $layout
 	 * @internal param $date
 	 * @since 3.1
 	 */
-	public function show_date_added( $the_date, $layout = 'list' ) {
+	public function show_date_added( $the_date, $formatted_date, $layout = 'list' ) {
 		if ( CTDL_Loader::$settings['show_date_added'] == 1 && $date = 1 ) {
 			$the_date = ( isset( $the_date ) ? esc_attr( $the_date ) : '' );
 			if ( $layout == 'table' ) {
-				$this->list .= ( $date != '' ? sprintf( '<td class="todo-date">%s</td>', esc_attr( $the_date ) ) : '<td class="todo-date"></td>' );
+				$this->list .= ( $date != '' ? sprintf( '<td class="todo-date">%s</td>', esc_attr( $formatted_date ) ) : '<td class="todo-date"></td>' );
 			} else {
 				$this->list .= ' - '.apply_filters( 'ctdl_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).': '.( $date != '' ?
-					sprintf( '%s', esc_attr( $the_date ) ) : '' );
+					sprintf( '%s', esc_attr( $formatted_date ) ) : '' );
 			}
 		}
 	}

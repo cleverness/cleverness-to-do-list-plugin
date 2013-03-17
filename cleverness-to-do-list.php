@@ -14,7 +14,7 @@ Plugin URI: http://cleverness.org/plugins/to-do-list/
  * This plugin was based on the to-do plugin by Abstract Dimensions with a patch by WordPress by Example.
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.2.3
+ * @version 3.3
  */
 
 add_action( 'init', 'cleverness_todo_loader' );

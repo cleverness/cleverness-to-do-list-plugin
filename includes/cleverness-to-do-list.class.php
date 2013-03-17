@@ -198,7 +198,7 @@ class ClevernessToDoList {
 				$this->show_assigned( $assign_meta );
 				$this->show_addedby( get_the_author() );
 				$this->show_deadline( $deadline_meta );
-				$this->show_date_added( get_the_date( CTDL_Loader::$settings['date_format'] ) );
+				$this->show_date_added( get_the_date( 'Ymd' ), get_the_date( CTDL_Loader::$settings['date_format'] ) );
 				if ( $completed == 1 ) $this->show_completed( $completed_meta );
 				$this->list .= do_action( 'ctdl_list_items' );
 				$this->show_edit_link( $id );
@@ -638,15 +638,17 @@ class ClevernessToDoList {
 	/**
 	 * Show the Date the To-Do Item was Added
 	 * @param $date
+	 * @param $formatted_date
 	 * @param string $layout
 	 * @since 3.1
 	 */
-	public function show_date_added( $date, $layout = 'table' ) {
+	public function show_date_added( $date, $formatted_date, $layout = 'table' ) {
 		if ( CTDL_Loader::$settings['show_date_added'] == 1 ) {
 			if ( $layout == 'table' ) {
-				$this->list .= ( $date != '' ? sprintf( '<td class="todo-date">%s</td>', esc_attr( $date ) ) : '<td class="todo-date"></td>' );
+				$this->list .= ( $date != '' ? sprintf( '<td class="todo-date"><span style="display:none">%s</span>%s</td>', esc_attr( $date ),
+					esc_attr( $formatted_date ) ) : '<td class="todo-date"></td>' );
 			} else {
-				$this->list .= ( $date != '' ? sprintf( '%s', esc_attr( $date ) ) : '' );
+				$this->list .= ( $date != '' ? sprintf( '%s', esc_attr( $formatted_date ) ) : '' );
 			}
 		}
 	}

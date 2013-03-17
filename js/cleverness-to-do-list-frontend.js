@@ -42,14 +42,14 @@ jQuery( document ).ready( function( $ ) {
 		jQuery.post( ctdl.AJAX_URL, data, function( response ) {
 			if ( single != true ) {
 				$( todoid ).fadeOut();
-				$( '.todo-checkbox' ).removeAttr( "checked" );
+				$( '.todo-checkbox' ).prop( "checked", false );
 			}
 		} );
 	} );
 
 
 	/* Delete To-Dos */
-	$( '.delete-todo' ).live( 'click', function( e ) {
+	$( '#todo-list' ).on( 'click', '.delete-todo', function( e ) {
 		e.preventDefault();
 		var confirmed = confirm( ctdl.CONFIRMATION_MSG );
 		if ( confirmed == false ) return false;

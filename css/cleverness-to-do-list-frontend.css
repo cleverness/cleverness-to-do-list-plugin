@@ -9,18 +9,18 @@ div.todo-list {
 }
 
 table#todo-list thead tr .header {
-	background-image: url(images/bg.gif);
+	background-image: url('images/bg.gif');
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
 }
 
 table#todo-list thead tr .headerSortUp {
-	background-image: url(images/asc.gif);
+	background-image: url('images/asc.gif');
 }
 
 table#todo-list thead tr .headerSortDown {
-	background-image: url(images/desc.gif);
+	background-image: url('images/desc.gif');
 }
 
 #ui-datepicker-div {
@@ -47,4 +47,8 @@ table#todo-list thead tr .headerSortDown {
 
 .todoitem {
 	margin-left: 20px;
+}
+
+table#todo-list {
+	vertical-align: text-top;
 }

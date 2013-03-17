@@ -6,25 +6,32 @@
 	color: #666666;
 }
 
-p.error {
+.toplevel_page_cleverness-to-do-list p.error, .to-do-list_page_cleverness-to-do-list-cats p.error {
 	margin: 5px 0 15px;
 	background-color: #FFEBE8;
-    border-color: #CC0000;
+    border: 1px solid #CC0000;
 	border-radius: 3px;
-    border-style: solid;
-    border-width: 1px;
 	padding: 5px;
+}
+
+.todo-table th {
+	min-width: 90px;
 }
 
 #todo-list th#checkbox-col, #todo-list-completed  th#checkbox-col {
 	width: 15px;
+	min-width: 15px;
 }
+
 #todo-cats th#id-col, #todo-list th#id-col, #todo-list-completed th#id-col {
-	width: 5%;
+	width: 2%;
+	min-width: 30px;
 }
+
 #todo-cats th#vis-col {
 	width: 15%;
 }
+
 #todo-cats th#action-col, #todo-list th#action-col, #todo-list-completed th#action-col {
 	width: 8%;
 	min-width: 120px;
@@ -56,27 +63,27 @@ p.error {
 }
 
 table#todo-list thead tr .header {
-	background: rgb(241, 241, 241) url(images/bg.gif);
-	background-image: url(images/bg.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
-	background-image: url(images/bg.gif), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
+	background: rgb(241, 241, 241) url('images/bg.gif');
+	background-image: url('images/bg.gif'), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
+	background-image: url('images/bg.gif'), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
 }
 
 table#todo-list thead tr .headerSortUp {
-	background-image: url(images/asc.gif);
-	background-image: url(images/asc.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
-	background-image: url(images/asc.gif), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
+	background-image: url('images/asc.gif');
+	background-image: url('images/asc.gif'), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
+	background-image: url('images/asc.gif'), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
 }
 
 table#todo-list thead tr .headerSortDown {
-	background-image: url(images/desc.gif);
-	background-image: url(images/desc.gif), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
-	background-image: url(images/desc.gif), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
+	background-image: url('images/desc.gif');
+	background-image: url('images/desc.gif'), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
+	background-image: url('images/desc.gif'), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
 }
 
-#ui-datepicker-div {
+.toplevel_page_cleverness-to-do-list #ui-datepicker-div {
 	display: none;
 }
 

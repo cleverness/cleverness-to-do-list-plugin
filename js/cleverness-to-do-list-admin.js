@@ -45,7 +45,7 @@ jQuery( document ).ready( function( $ ) {
 	/* end Complete To-Dos */
 
 	/* Edit To-Dos */
-	$( '.edit-todo' ).live( 'click', function () {
+	$( '.todo-table' ).on( 'click', '.edit-todo', function () {
 		var todotr = $( this ).closest( 'tr' );
 		var id = $( todotr ).attr( 'id' ).substr( 5 );
 		document.location.href = 'admin.php?page=cleverness-to-do-list&action=edit-todo&id='+id;
@@ -53,19 +53,19 @@ jQuery( document ).ready( function( $ ) {
 	/* end Edit To-Dos */
 
 	/* Delete Tables */
-	$( '#delete-tables' ).live( 'click', function () {
+	$( '#delete-tables' ).click( function () {
 		var confirmed = confirm( ctdl.CONFIRMATION_DEL_TABLES_MSG );
 		if ( confirmed == false ) return false;
 	} );
 
 	/* Delete All Todos */
-	$( '#delete-all-todos' ).live( 'click', function () {
+	$( '#delete-all-todos' ).click( function () {
 		var confirmed = confirm( ctdl.CONFIRMATION_DELETE_ALL_MSG );
 		if ( confirmed == false ) return false;
 	} );
 
 	/* Delete To-Dos */
-	$( '.delete-todo' ).live( 'click', function () {
+	$( '.todo-table' ).on( 'click', '.delete-todo', function () {
 		var confirmed = confirm( ctdl.CONFIRMATION_MSG );
 		if ( confirmed == false ) return false;
 		var _item = this;

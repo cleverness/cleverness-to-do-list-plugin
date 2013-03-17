@@ -1,0 +1,1249 @@
+# Copyright (C) 2012 Cleverness To-Do List
+# This file is distributed under the same license as the Cleverness To-Do List package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Cleverness To-Do List\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-11 18:24-0500\n"
+"PO-Revision-Date: 2013-01-23 07:50+0300\n"
+"Last-Translator: Serg\n"
+"Language-Team:  <cindy@cleverness.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;esc_html__;esc_html_e;esc_attr__;esc_attr_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../cleverness-to-do-list.php:68 ../cleverness-to-do-list.php:74
+#: ../includes/cleverness-to-do-list-categories.class.php:150
+#: ../includes/cleverness-to-do-list-library.class.php:241
+#: ../includes/cleverness-to-do-list-library.class.php:359
+#: ../includes/cleverness-to-do-list-library.class.php:427
+#: ../includes/cleverness-to-do-list-library.class.php:476
+#: ../includes/cleverness-to-do-list-library.class.php:504
+msgid "Security check failed"
+msgstr "Bezpečnostná kontrola zlyhala"
+
+#: ../cleverness-to-do-list.php:100
+#: ../includes/cleverness-to-do-list-loader.class.php:54
+msgid ""
+"To-Do List requires WordPress 3.3 or newer. <a href=\"http://codex.wordpress."
+"org/Upgrading_WordPress\">Please update.</a>"
+msgstr ""
+"Zoznam úloh vyžaduje WordPress 3.3 alebo novší. < href=\"http://codex."
+"wordpress.org/Upgrading_WordPress\" &quot;> Prosím aktualizujte."
+
+#: ../includes/cleverness-to-do-list-categories.class.php:153
+#: ../includes/cleverness-to-do-list-categories.class.php:282
+#: ../includes/cleverness-to-do-list-loader.class.php:231
+msgid "There was a problem performing that action."
+msgstr "Vyskytol sa problém vykonaním tejto akcie."
+
+#: ../includes/cleverness-to-do-list-categories.class.php:156
+msgid "Category name cannot be blank."
+msgstr "Názov kategórie nemôže byť prázdny."
+
+#: ../includes/cleverness-to-do-list-categories.class.php:168
+#: ../includes/cleverness-to-do-list-loader.class.php:152
+msgid "To-Do List Categories"
+msgstr "To-Do zoznam kategórií"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:172
+msgid "Add New Category"
+msgstr "Pridať novú kategóriu"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:177
+msgid "Category Name"
+msgstr "Názov kategórie"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:181
+#: ../includes/cleverness-to-do-list-categories.class.php:207
+#: ../includes/cleverness-to-do-list-categories.class.php:240
+msgid "Visibility"
+msgstr "Viditeľnosť"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:184
+#: ../includes/cleverness-to-do-list-categories.class.php:225
+#: ../includes/cleverness-to-do-list-categories.class.php:285
+msgid "Public"
+msgstr "Verejnosti"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:185
+#: ../includes/cleverness-to-do-list-categories.class.php:227
+#: ../includes/cleverness-to-do-list-categories.class.php:286
+msgid "Private"
+msgstr "Súkromné"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:188
+msgid ""
+"Private categories are not visible using the sidebar widgets or shortcode "
+"(only when Sort Order is set to Category)"
+msgstr ""
+"Súkromné kategórie nie sú viditeľné pomocou sidebar widgets alebo krátky "
+"(iba ak poradie zoraďovania je nastavené Kategória)"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:195
+msgid "Submit"
+msgstr "Predložiť"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:201
+msgid "Existing Categories"
+msgstr "Existujúce kategórie"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:205
+#: ../includes/cleverness-to-do-list-categories.class.php:238
+#: ../includes/cleverness-to-do-list-settings.class.php:148
+#: ../includes/cleverness-to-do-list.class.php:438
+msgid "ID"
+msgstr "ID"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:206
+msgid "Name"
+msgstr "meno"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:208
+#: ../includes/cleverness-to-do-list-categories.class.php:241
+#: ../includes/cleverness-to-do-list-frontend.class.php:152
+#: ../includes/cleverness-to-do-list.class.php:454
+msgid "Action"
+msgstr "Akcia"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:230
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:163
+#: ../includes/cleverness-to-do-list-frontend.class.php:435
+#: ../includes/cleverness-to-do-list.class.php:519
+#: ../includes/cleverness-to-do-list.class.php:521
+msgid "Edit"
+msgstr "Upraviť"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:231
+#: ../includes/cleverness-to-do-list.class.php:526
+#: ../includes/cleverness-to-do-list.class.php:528
+msgid "Delete"
+msgstr "Odstrániť"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:239
+msgid " Name"
+msgstr " meno"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:281
+msgid "Category Deleted."
+msgstr "Kategória odstránené."
+
+#: ../includes/cleverness-to-do-list-categories.class.php:283
+#: ../includes/cleverness-to-do-list-library.class.php:190
+#: ../includes/cleverness-to-do-list-loader.class.php:232
+msgid "You do not have sufficient privileges to do that."
+msgstr "Nemáte dostatočné oprávnenia na to."
+
+#: ../includes/cleverness-to-do-list-categories.class.php:284
+#: ../includes/cleverness-to-do-list.class.php:247
+msgid "Save Changes"
+msgstr "Uložiť zmeny"
+
+#: ../includes/cleverness-to-do-list-categories.class.php:287
+#: ../includes/cleverness-to-do-list-loader.class.php:233
+msgid ""
+"You are about to permanently delete the selected item. \n"
+" 'Cancel' to stop, 'OK' to delete."
+msgstr ""
+"Ste Chystáte sa natrvalo odstrániť vybratú položku. \n"
+" &quot;Zrušiť&quot; zastaviť, &quot;OK&quot; zmazať."
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:38
+#: ../includes/cleverness-to-do-list-frontend.class.php:236
+msgid "Add To-Do Item"
+msgstr "Pridať položku úlohy"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:82
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:92
+#: ../includes/cleverness-to-do-list-frontend.class.php:343
+#: ../includes/cleverness-to-do-list-widget.class.php:98
+#: ../includes/cleverness-to-do-list-widget.class.php:110
+#: ../includes/cleverness-to-do-list.class.php:149
+#: ../includes/cleverness-to-do-list.class.php:163
+msgid "No items to do."
+msgstr "Žiadne položky robiť."
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:137
+#: ../includes/cleverness-to-do-list-frontend.class.php:140
+#: ../includes/cleverness-to-do-list-frontend.class.php:463
+#: ../includes/cleverness-to-do-list-frontend.class.php:724
+#: ../includes/cleverness-to-do-list-frontend.class.php:778
+#: ../includes/cleverness-to-do-list.class.php:447
+msgid "Assigned To"
+msgstr "Priradené k"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:143
+#: ../includes/cleverness-to-do-list-frontend.class.php:145
+#: ../includes/cleverness-to-do-list-frontend.class.php:489
+#: ../includes/cleverness-to-do-list-frontend.class.php:729
+#: ../includes/cleverness-to-do-list-frontend.class.php:815
+#: ../includes/cleverness-to-do-list-settings.class.php:150
+#: ../includes/cleverness-to-do-list-widget.class.php:168
+#: ../includes/cleverness-to-do-list.class.php:378
+#: ../includes/cleverness-to-do-list.class.php:449
+msgid "Deadline"
+msgstr "Termín"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:154
+#: ../includes/cleverness-to-do-list-frontend.class.php:143
+#: ../includes/cleverness-to-do-list-frontend.class.php:476
+#: ../includes/cleverness-to-do-list-frontend.class.php:727
+#: ../includes/cleverness-to-do-list-frontend.class.php:797
+#: ../includes/cleverness-to-do-list.class.php:448
+msgid "Added By"
+msgstr "Pridal"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:202
+msgid "Number of List Items to Show"
+msgstr "Počet položiek zoznamu Zobraziť"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:204
+msgid "1"
+msgstr "1"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:205
+msgid "5"
+msgstr "5"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:206
+msgid "10"
+msgstr "10"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:207
+msgid "15"
+msgstr "15"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:208
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:231
+#: ../includes/cleverness-to-do-list-widget.class.php:226
+#: ../includes/cleverness-to-do-list-widget.class.php:233
+msgid "All"
+msgstr "Všetky"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:212
+#: ../includes/cleverness-to-do-list-settings.class.php:87
+#: ../includes/cleverness-to-do-list-widget.class.php:243
+msgid "Show Deadline"
+msgstr "Zobraziť termínu"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:214
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:223
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:239
+#: ../includes/cleverness-to-do-list-settings.class.php:118
+#: ../includes/cleverness-to-do-list-settings.class.php:125
+#: ../includes/cleverness-to-do-list-settings.class.php:132
+#: ../includes/cleverness-to-do-list-settings.class.php:140
+#: ../includes/cleverness-to-do-list-settings.class.php:163
+#: ../includes/cleverness-to-do-list-settings.class.php:173
+#: ../includes/cleverness-to-do-list-settings.class.php:183
+#: ../includes/cleverness-to-do-list-settings.class.php:194
+#: ../includes/cleverness-to-do-list-settings.class.php:255
+#: ../includes/cleverness-to-do-list-settings.class.php:263
+#: ../includes/cleverness-to-do-list-settings.class.php:272
+#: ../includes/cleverness-to-do-list-settings.class.php:281
+#: ../includes/cleverness-to-do-list-settings.class.php:303
+#: ../includes/cleverness-to-do-list-settings.class.php:311
+#: ../includes/cleverness-to-do-list-settings.class.php:320
+msgid "No"
+msgstr "nie"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:215
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:224
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:238
+#: ../includes/cleverness-to-do-list-settings.class.php:119
+#: ../includes/cleverness-to-do-list-settings.class.php:126
+#: ../includes/cleverness-to-do-list-settings.class.php:133
+#: ../includes/cleverness-to-do-list-settings.class.php:139
+#: ../includes/cleverness-to-do-list-settings.class.php:162
+#: ../includes/cleverness-to-do-list-settings.class.php:171
+#: ../includes/cleverness-to-do-list-settings.class.php:181
+#: ../includes/cleverness-to-do-list-settings.class.php:192
+#: ../includes/cleverness-to-do-list-settings.class.php:256
+#: ../includes/cleverness-to-do-list-settings.class.php:264
+#: ../includes/cleverness-to-do-list-settings.class.php:271
+#: ../includes/cleverness-to-do-list-settings.class.php:280
+#: ../includes/cleverness-to-do-list-settings.class.php:304
+#: ../includes/cleverness-to-do-list-settings.class.php:312
+#: ../includes/cleverness-to-do-list-settings.class.php:321
+msgid "Yes"
+msgstr "áno"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:220
+msgid "Show Edit Link"
+msgstr "Zobraziť odkaz Upraviť"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:230
+#: ../includes/cleverness-to-do-list-frontend.class.php:135
+#: ../includes/cleverness-to-do-list-frontend.class.php:720
+#: ../includes/cleverness-to-do-list-library.class.php:322
+#: ../includes/cleverness-to-do-list-library.class.php:340
+#: ../includes/cleverness-to-do-list-settings.class.php:152
+#: ../includes/cleverness-to-do-list-widget.class.php:232
+#: ../includes/cleverness-to-do-list.class.php:404
+#: ../includes/cleverness-to-do-list.class.php:443
+msgid "Category"
+msgstr "Kategória"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:235
+msgid ""
+"This setting is only used when <em>List View</em> is set to <em>Group</em>."
+msgstr ""
+"Toto nastavenie sa používa len pri <em>Zobrazení zoznamu</em> je nastavená "
+"na <em>skupiny</em>."
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:236
+msgid "Show <em>Added By</em> on Dashboard Widget"
+msgstr "Ukázať <em>pridal</em> na Dashboard Widget"
+
+#: ../includes/cleverness-to-do-list-dashboard-widget.class.php:253
+#: ../includes/cleverness-to-do-list-help.class.php:74
+#: ../includes/cleverness-to-do-list-library.class.php:680
+#: ../includes/cleverness-to-do-list-loader.class.php:149
+#: ../includes/cleverness-to-do-list-widget.class.php:22
+#: ../includes/cleverness-to-do-list-widget.class.php:210
+#: ../includes/cleverness-to-do-list.class.php:42
+msgid "To-Do List"
+msgstr "Zoznam úloh"
+
+#: ../includes/cleverness-to-do-list-frontend.class.php:48
+#: ../includes/cleverness-to-do-list-frontend.class.php:274
+msgid "You must be logged in to view"
+msgstr "Musíte byť prihlásený pre zobrazenie"
+
+#: ../includes/cleverness-to-do-list-frontend.class.php:129
+#: ../includes/cleverness-to-do-list-frontend.class.php:714
+#: ../includes/cleverness-to-do-list.class.php:440
+msgid "Item"
+msgstr "Položka"
+
+#: ../includes/cleverness-to-do-list-frontend.class.php:131
+#: ../includes/cleverness-to-do-list-frontend.class.php:716
+#: ../includes/cleverness-to-do-list-library.class.php:320
+#: ../includes/cleverness-to-do-list-library.class.php:338
+#: ../includes/cleverness-to-do-list.class.php:312
+#: ../includes/cleverness-to-do-list.class.php:441
+msgid "Priority"
+msgstr "Prioritou"
+
+#: ../includes/cleverness-to-do-list-frontend.class.php:133
+#: ../includes/cleverness-to-do-list-frontend.class.php:718
+#: ../includes/cleverness-to-do-list-settings.class.php:151
+#: ../includes/cleverness-to-do-list.class.php:390
+#: ../includes/cleverness-to-do-list.class.php:442
+msgid "Progress"
+msgstr "Pokrok"
+
+#: ../includes/cleverness-to-do-list-frontend.class.php:136
+#: ../includes/cleverness-to-do-list.class.php:293
+#: ../includes/cleverness-to-do-list.class.php:444
+msgid "Post Planner"
+msgstr "Príspevok Planner"
+
+#: ../includes/cleverness-to-do-list-frontend.class.php:147
+#: ../includes/cleverness-to-do-list-frontend.class.php:502
+#: ../includes/cleverness-to-do-list-frontend.class.php:731
+#: ../includes/cleverness-to-do-list-frontend.class.php:852
+#: ../includes/cleverness-to-do-list-settings.class.php:154
+#: ../includes/cleverness-to-do-list.class.php:450
+msgid "Date Added"
+msgstr "Dátum pridania"
+
+#: ../includes/cleverness-to-do-list-frontend.class.php:148
+#: ../includes/cleverness-to-do-list-frontend.class.php:732
+#: ../includes/cleverness-to-do-list.class.php:451
+msgid "Completed"
+msgstr "Dokončená"
+
+#: ../includes/cleverness-to-do-list-frontend.class.php:193
+#: ../includes/cleverness-to-do-list.class.php:235
+msgid "Edit To-Do Item"
+msgstr "Upraviť položku úlohy"
+
+#: ../includes/cleverness-to-do-list-frontend.class.php:218
+#: ../includes/cleverness-to-do-list-library.class.php:689
+#: ../includes/cleverness-to-do-list.class.php:263
+msgid "Add New To-Do Item"
+msgstr "Pridať novú položku úlohy"
+
+#: ../includes/cleverness-to-do-list-help.class.php:27
+msgid "Like This Plugin?"
+msgstr "Ako tento Plugin?"
+
+#: ../includes/cleverness-to-do-list-help.class.php:28
+msgid "Please Donate"
+msgstr "Prosím, darovať"
+
+#: ../includes/cleverness-to-do-list-help.class.php:29
+msgid "Plugin Website"
+msgstr "Plugin stránkach"
+
+#: ../includes/cleverness-to-do-list-help.class.php:35
+msgid "To-Do List Help"
+msgstr "To-Do zoznamu pomoc"
+
+#: ../includes/cleverness-to-do-list-help.class.php:41
+msgid "Shortcodes"
+msgstr "Shortcodes"
+
+#: ../includes/cleverness-to-do-list-help.class.php:47
+msgid "FAQs"
+msgstr "Často kladené otázky"
+
+#: ../includes/cleverness-to-do-list-help.class.php:54
+#: ../includes/cleverness-to-do-list-settings.class.php:342
+msgid "User Permissions"
+msgstr "Povolenia používateľa"
+
+#: ../includes/cleverness-to-do-list-help.class.php:61
+#: ../includes/cleverness-to-do-list-help.class.php:196
+msgid "Post Planner Integration"
+msgstr "Príspevok Planner integrácie"
+
+#: ../includes/cleverness-to-do-list-help.class.php:75
+msgid ""
+"This plugin provides users with a to-do list feature. You can configure the "
+"plugin to have private to-do lists for each user, for all users to share a "
+"to-do list, or a master list with individual completing of items. The shared "
+"to-do list has a variety of settings available. You can assign to-do items "
+"to a specific user (includes a setting to email a new to-do item to the "
+"assigned user) and have only those to-do items assigned viewable to a user. "
+"You can also assign different permission levels using capabilities. There "
+"are also settings to show deadline and progress fields. Category support is "
+"included as well as front-end administration."
+msgstr ""
+"Tento plugin poskytuje užívateľom s funkciou to-do zoznamu. Môžete "
+"nakonfigurovať plugin mať súkromnú to-do zoznamy pre každého používateľa, "
+"pre všetkých používateľov na zdieľanie Zoznam úloh, alebo hlavný zoznam s "
+"vyplnením jednotlivých položiek. Zdieľané Zoznam úloh má rôzne nastavenia k "
+"dispozícii. Môžete priradiť polo iek konkrétnemu používateľovi (zahŕňa "
+"nastavenie e-mail novú položku úlohy na priradené používateľovi) a majú iba "
+"tie položky, úlohy priradené zobraziteľné používateľovi. Môžete priradiť "
+"povolenie rôznych úrovní pomocou schopnosti. Tam sú tiež nastavenia Zobraziť "
+"polia termínu a pokroku. Kategória podpora je zahrnuté, rovnako ako front-"
+"end správy."
+
+#: ../includes/cleverness-to-do-list-help.class.php:76
+msgid ""
+"A new menu item is added to manage your list and it is also listed on a "
+"dashboard widget. A sidebar widget is available as well as shortcode to "
+"display the to-do list items on your site. There are two shortcodes for "
+"front-end administration of the list. Management of categories is restricted "
+"to the back-end."
+msgstr ""
+"Nového menu položka sa pridá na správu vášho zoznamu a tiež je uvedený na "
+"Dashboard widget. Sidebar widget je k dispozícii ako aj krátky Zobraziť "
+"položky zoznamu úloh na vašich stránkach. Existujú dva shortcodes pre Front-"
+"end správa zoznamu. Správa kategórií je obmedzené na back-end."
+
+#: ../includes/cleverness-to-do-list-help.class.php:84
+msgid "Frequently Asked Questions"
+msgstr "Často kladené otázky"
+
+#: ../includes/cleverness-to-do-list-help.class.php:86
+msgid "What should I do if I find a bug?"
+msgstr "Čo robiť, keď nájdem chybu?"
+
+#: ../includes/cleverness-to-do-list-help.class.php:87
+msgid "Visit the plugin website and leave a comment or contact me."
+msgstr ""
+"Navštívte webové stránky plugin a zanechať komentár, alebo kontaktujte ma."
+
+#: ../includes/cleverness-to-do-list-help.class.php:98
+msgid "Shortcode Documentation"
+msgstr "Krátky dokumentácie"
+
+#: ../includes/cleverness-to-do-list-help.class.php:99
+msgid "Display a List of To-Do Items"
+msgstr "Zobrazenie zoznamu úloh"
+
+#: ../includes/cleverness-to-do-list-help.class.php:103
+msgid ""
+"you can chose <em>list</em> or <em>table</em> view. Default is <em>list</em>"
+msgstr ""
+"vyberiete <em>Zoznam</em> alebo <em>tabuľkové</em> zobrazenie. Predvolená "
+"hodnota je <em>Zoznam</em>"
+
+#: ../includes/cleverness-to-do-list-help.class.php:104
+msgid ""
+"default is <em>show</em>. Use a blank value to hide (only applies to table "
+"view)"
+msgstr ""
+"Predvolená hodnota je <em>Ukázať</em>. Použiť prázdnu hodnotu skryť (platí "
+"len pre tabuľkyzobrazenie)"
+
+#: ../includes/cleverness-to-do-list-help.class.php:105
+#: ../includes/cleverness-to-do-list-help.class.php:106
+#: ../includes/cleverness-to-do-list-help.class.php:107
+#: ../includes/cleverness-to-do-list-help.class.php:108
+msgid "default is <em>show</em>. Use a blank value to hide"
+msgstr "Predvolená hodnota je <em>Ukázať</em>. Použiť prázdnu hodnotu skryť"
+
+#: ../includes/cleverness-to-do-list-help.class.php:109
+#: ../includes/cleverness-to-do-list-help.class.php:127
+#: ../includes/cleverness-to-do-list-help.class.php:128
+#: ../includes/cleverness-to-do-list-help.class.php:129
+#: ../includes/cleverness-to-do-list-help.class.php:130
+#: ../includes/cleverness-to-do-list-help.class.php:132
+#: ../includes/cleverness-to-do-list-help.class.php:133
+#: ../includes/cleverness-to-do-list-help.class.php:134
+#: ../includes/cleverness-to-do-list-help.class.php:149
+#: ../includes/cleverness-to-do-list-help.class.php:150
+#: ../includes/cleverness-to-do-list-help.class.php:151
+#: ../includes/cleverness-to-do-list-help.class.php:152
+#: ../includes/cleverness-to-do-list-help.class.php:153
+#: ../includes/cleverness-to-do-list-help.class.php:154
+#: ../includes/cleverness-to-do-list-help.class.php:155
+msgid "default is hide (0). Use 1 to show"
+msgstr "Predvolená hodnota je skryť (0). Použitie 1 Ukázať"
+
+#: ../includes/cleverness-to-do-list-help.class.php:110
+msgid "default is blank. Set to <em>show</em> to display completed items"
+msgstr ""
+"Predvolená hodnota je prázdny. Nastaviť <em>Ukázať</em> vyplnené položky"
+
+#: ../includes/cleverness-to-do-list-help.class.php:111
+#: ../includes/cleverness-to-do-list-help.class.php:126
+#: ../includes/cleverness-to-do-list-help.class.php:148
+msgid "default is no title"
+msgstr "Predvolená hodnota je žiadny titul"
+
+#: ../includes/cleverness-to-do-list-help.class.php:112
+msgid ""
+"default is <em>ol</em> (ordered list). Use <em>ul</em> to show an unordered "
+"list"
+msgstr ""
+"Predvolená hodnota je <em>ol</em> (zoradený zoznam). Použite <em>ul</em> "
+"Ukázať neusporiadanýZoznam"
+
+#: ../includes/cleverness-to-do-list-help.class.php:113
+msgid ""
+"default is <em>all</em>. Use the category ID to show a specific category"
+msgstr ""
+"Predvolená hodnota je <em>všetky</em>. Kategórie ID sa používa na zobrazenie "
+"určitej kategórie"
+
+#: ../includes/cleverness-to-do-list-help.class.php:116
+#: ../includes/cleverness-to-do-list-help.class.php:137
+#: ../includes/cleverness-to-do-list-help.class.php:158
+msgid "Example:"
+msgstr "Príklad:"
+
+#: ../includes/cleverness-to-do-list-help.class.php:117
+msgid ""
+"Table view with the title of Upcoming Articles and showing the progress and "
+"who the item was assigned to."
+msgstr ""
+"Tabuľky zobrazenie s názvom pripravovaných článkov a vykazujú pokrok a ktorý "
+"tovar bol pridelený."
+
+#: ../includes/cleverness-to-do-list-help.class.php:122
+msgid "Display a Checklist of To-Do Items"
+msgstr "Zobrazenie kontrolný zoznam polo iek"
+
+#: ../includes/cleverness-to-do-list-help.class.php:131
+msgid ""
+"default is all categories (0).  Use the category ID to show a specific "
+"category"
+msgstr ""
+"predvolené sú všetky kategórie (0).  Kategórie ID sa používa na zobrazenie "
+"určitého Kategória"
+
+#: ../includes/cleverness-to-do-list-help.class.php:135
+msgid ""
+"default is blank (\"\"). Use the ID of the to-do item to display just one "
+"item"
+msgstr ""
+"Predvolená hodnota je prázdny (\" &quot;\"). Použite ID položku úlohy chcete "
+"zobraziť len jeden položka"
+
+#: ../includes/cleverness-to-do-list-help.class.php:138
+msgid ""
+"Set the title to \"My To-Do List\" and show the deadline and the category."
+msgstr "Nastaviť názov na \"My To-Do List\" a ukázať termín a kategórie."
+
+#: ../includes/cleverness-to-do-list-help.class.php:143
+msgid "Display a To-Do List Administration Area"
+msgstr "Zobrazí oblasť správy To-Do zoznam"
+
+#: ../includes/cleverness-to-do-list-help.class.php:144
+msgid "This features only works with permalinks enabled."
+msgstr "Táto funkcia pracuje len s permalinks povolené."
+
+#: ../includes/cleverness-to-do-list-help.class.php:156
+msgid "default is show (1). Use 0 to hide"
+msgstr "predvolené je show (1). Použitie 0 skryť"
+
+#: ../includes/cleverness-to-do-list-help.class.php:159
+msgid ""
+"Set the title to \"Things to Do\" and show the priority and the progress."
+msgstr "Nastaviť názov na \"Things na Do\" a ukáže prioritu a pokroku."
+
+#: ../includes/cleverness-to-do-list-help.class.php:169
+msgid "Additional Information on User Permissions"
+msgstr "Ďalšie informácie o povolení používateľa"
+
+#: ../includes/cleverness-to-do-list-help.class.php:172
+msgid "View To-Do Item Capability"
+msgstr "Zobrazenie úloh položku schopnosti"
+
+#: ../includes/cleverness-to-do-list-help.class.php:172
+msgid "This allows the selected capability to view to-do items"
+msgstr "To umožňuje vybraný schopnosť zobrazenie polo iek"
+
+#: ../includes/cleverness-to-do-list-help.class.php:173
+#: ../includes/cleverness-to-do-list-settings.class.php:347
+msgid "Complete To-Do Item Capability"
+msgstr "Dokončenie úlohy položku schopnosti"
+
+#: ../includes/cleverness-to-do-list-help.class.php:174
+msgid ""
+"This allows the selected capability to mark to-do items as completed or "
+"uncompleted"
+msgstr ""
+"To umožňuje vybraných schopnosť označiť polo iek ako dokončené alebo "
+"nedokončené"
+
+#: ../includes/cleverness-to-do-list-help.class.php:175
+#: ../includes/cleverness-to-do-list-settings.class.php:348
+msgid "Add To-Do Item Capability"
+msgstr "Nepridáva položku úlohy"
+
+#: ../includes/cleverness-to-do-list-help.class.php:175
+msgid "This allows the selected capability to add new to-do items"
+msgstr "To umožňuje vybraný schopnosť pridávať nové polo iek"
+
+#: ../includes/cleverness-to-do-list-help.class.php:176
+#: ../includes/cleverness-to-do-list-settings.class.php:349
+msgid "Edit To-Do Item Capability"
+msgstr "Upraviť úlohy položku schopnosti"
+
+#: ../includes/cleverness-to-do-list-help.class.php:176
+msgid "This allows the selected capability to edit existing to-do items"
+msgstr "To umožňuje vybraných schopnosť upraviť existujúce polo iek"
+
+#: ../includes/cleverness-to-do-list-help.class.php:177
+#: ../includes/cleverness-to-do-list-settings.class.php:350
+msgid "Assign To-Do Item Capability"
+msgstr "Priradiť úlohy položku schopnosti"
+
+#: ../includes/cleverness-to-do-list-help.class.php:178
+msgid ""
+"This allows the selected capability to assign to-do items to individual users"
+msgstr ""
+"To umožňuje vybraný schopnosť priraďovať úlohy pre jednotlivých užívateľov"
+
+#: ../includes/cleverness-to-do-list-help.class.php:179
+msgid "View All Assigned Tasks Capability"
+msgstr "Zobrazenie všetkých priradených úloh schopnosti"
+
+#: ../includes/cleverness-to-do-list-help.class.php:180
+msgid ""
+"This allows the selected capability to view all tasks even if <em>Show Each "
+"User Only Their Assigned Tasks</em> is set to <em>Yes</em>"
+msgstr ""
+"To umožňuje vybraný schopnosť Zobraziť všetky úlohy aj keď <em>Show každý</"
+"em>Užívateľ iba ich pridelené úlohy je nastavená na <em>Áno</em>"
+
+#: ../includes/cleverness-to-do-list-help.class.php:181
+#: ../includes/cleverness-to-do-list-settings.class.php:352
+msgid "Delete To-Do Item Capability"
+msgstr "Odstrániť úlohy položku schopnosti"
+
+#: ../includes/cleverness-to-do-list-help.class.php:181
+msgid "This allows the selected capability to delete individual to-do items"
+msgstr "To umožňuje vybraný schopnosť odstrániť jednotlivých polo iek"
+
+#: ../includes/cleverness-to-do-list-help.class.php:182
+msgid "Purge To-Do Items Capability"
+msgstr "Vymazať To-Do položky schopnosti"
+
+#: ../includes/cleverness-to-do-list-help.class.php:183
+msgid ""
+"This allows the selected capability to purge all the completed to-do items"
+msgstr "To umožňuje vybraný schopnosť vymazať všetky dokončené úlohy položky"
+
+#: ../includes/cleverness-to-do-list-help.class.php:184
+#: ../includes/cleverness-to-do-list-settings.class.php:354
+msgid "Add Categories Capability"
+msgstr "Nepridáva kategórie"
+
+#: ../includes/cleverness-to-do-list-help.class.php:184
+msgid "This allows the selected capability to add new categories"
+msgstr "To umožňuje vybraný schopnosť pridávať nové kategórie"
+
+#: ../includes/cleverness-to-do-list-help.class.php:234
+#: ../includes/cleverness-to-do-list-settings.class.php:199
+msgid "Purchase Post Planner Plugin"
+msgstr "Nákup Post Planner Plugin"
+
+#: ../includes/cleverness-to-do-list-library.class.php:321
+#: ../includes/cleverness-to-do-list-library.class.php:339
+msgid "From"
+msgstr "Od"
+
+#: ../includes/cleverness-to-do-list-library.class.php:323
+#: ../includes/cleverness-to-do-list-library.class.php:341
+msgid "Deadline:"
+msgstr "Termín:"
+
+#: ../includes/cleverness-to-do-list-library.class.php:324
+#: ../includes/cleverness-to-do-list-library.class.php:342
+msgid "To-Do:"
+msgstr "Úlohy:"
+
+#: ../includes/cleverness-to-do-list-library.class.php:709
+#: ../includes/cleverness-to-do-list-settings.class.php:476
+msgid "Settings"
+msgstr "Nastavenia"
+
+#: ../includes/cleverness-to-do-list-library.class.php:721
+#, php-format
+msgid ""
+"%s plugin | Version %s | by %s | <a href='https://www.paypal.com/cgi-bin/"
+"webscr?cmd=_donations&business=cindy@cleverness.org' target='_blank'>Donate</"
+"a><br />"
+msgstr ""
+"%s plugin | Verzia %s | %s | < href='https://www.paypal.com/cgi-bin/webscr?"
+"cmd=_donations&amp;Business=Cindy@cleverness.org &quot;target =&quot;"
+"_blank&quot;> darovať < /a ><br>"
+
+#: ../includes/cleverness-to-do-list-library.class.php:758
+msgid "Add your first To-Do List item"
+msgstr "Pridajte svoj prvú položku na To-Do zoznamu"
+
+#: ../includes/cleverness-to-do-list-library.class.php:835
+msgid "Important"
+msgstr "Dôležité"
+
+#: ../includes/cleverness-to-do-list-library.class.php:836
+msgid "Normal"
+msgstr "Normálne"
+
+#: ../includes/cleverness-to-do-list-library.class.php:837
+msgid "Low"
+msgstr "Nízka"
+
+#: ../includes/cleverness-to-do-list-library.class.php:843
+#: ../includes/cleverness-to-do-list-library.class.php:886
+msgid "A to-do list item has been assigned to you"
+msgstr "Položku Zoznam úlohy bola priradená vám"
+
+#: ../includes/cleverness-to-do-list-library.class.php:844
+#: ../includes/cleverness-to-do-list-library.class.php:885
+msgid "The following item has been assigned to you:"
+msgstr "Nasledujúca položka bola priradená vám:"
+
+#: ../includes/cleverness-to-do-list-loader.class.php:71
+#: ../includes/cleverness-to-do-list-loader.class.php:72
+#: ../includes/cleverness-to-do-list.class.php:414
+msgid "To-Do"
+msgstr "Úlohy"
+
+#: ../includes/cleverness-to-do-list-loader.class.php:153
+#: ../includes/cleverness-to-do-list-settings.class.php:82
+msgid "Categories"
+msgstr "Kategórie"
+
+#: ../includes/cleverness-to-do-list-loader.class.php:230
+msgid "To-Do Deleted."
+msgstr "Úlohy odstránené."
+
+#: ../includes/cleverness-to-do-list-loader.class.php:234
+msgid ""
+"You are about to permanently delete all completed items. \n"
+" 'Cancel' to stop, 'OK' to delete."
+msgstr ""
+"Ste Chystáte sa natrvalo odstrániť všetkých položiek. \n"
+" &quot;Zrušiť&quot; zastaviť, &quot;OK&quot; zmazať."
+
+#: ../includes/cleverness-to-do-list-loader.class.php:235
+msgid ""
+"You are about to permanently delete all to-do items. \n"
+" 'Cancel' to stop, 'OK' to delete."
+msgstr ""
+"Ste natrvalo odstrániť všetky položky úloh. \n"
+" &quot;Zrušiť&quot; zastaviť, &quot;OK&quot; zmazať."
+
+#: ../includes/cleverness-to-do-list-loader.class.php:236
+msgid ""
+"You are about to permanently delete database tables. This cannot be "
+"undone. \n"
+" 'Cancel' to stop, 'OK' to delete."
+msgstr ""
+"Ste Chystáte sa natrvalo odstrániť databázových tabuliek. To nemôže byť "
+"vrátiť späť. \n"
+" &quot;Zrušiť&quot; zastaviť, &quot;OK&quot; zmazať."
+
+#: ../includes/cleverness-to-do-list-loader.class.php:237
+msgid "Select a User"
+msgstr "Vyberte používateľa"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:47
+msgid "Customize the To-Do List"
+msgstr "Prispôsobiť zoznam úloh"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:53
+msgid ""
+"Configure these settings to be able to assign to-do items to other users."
+msgstr ""
+"Konfigurovať tieto nastavenia mohli priraďovať úlohy iným používateľom."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:58
+msgid ""
+"If you have recently upgraded and your to-do items are all still visible, "
+"you can delete the custom database tables since they are no longer used. You "
+"can also delete all your to-do items here."
+msgstr ""
+"Ak ste nedávno inovovali a polo iek sú všetky stále viditeľné, vlastných "
+"databázových tabuliek môžete odstrániť, pretože sa už používajú. Ste Môžete "
+"tiež odstrániť všetky vaše polo iek tu."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:59
+msgid ""
+"These actions cannot be undone. Please be sure you want to proceed. It is "
+"advised that you back up your database first."
+msgstr ""
+"Tieto akcie sa nedá vrátiť späť. Prosím uistite sa, že chcete pokračovať. To "
+"je odporúča zálohovať databázu najprv."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:65
+msgid ""
+"The only permission that applies to the Individual list type is the View To-"
+"Do List permission."
+msgstr ""
+"Len povolenie, ktorý sa vzťahuje na jednotlivý zoznam typu je názor na-"
+"Zoznam povolení."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:67
+msgid ""
+"You should chose the highest level capabilities that the users you want to "
+"be able to preform that action will have."
+msgstr ""
+"By si vybral najvyššej úrovni schopnosti používateľov chcete môcť "
+"predliskov, že akcia bude."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:69
+msgid "The default general capabilities of each user role are as follows: "
+msgstr "Všeobecné predvolené možnosti roly používateľov sú nasledovné: "
+
+#: ../includes/cleverness-to-do-list-settings.class.php:71
+msgid ""
+"Subscribers: Read, Contributors: Edit Posts, Authors: Publish Posts, "
+"Editors: Edit Others Posts, Administrators: Manage Options"
+msgstr ""
+"Odberatelia: Čítanie, prispievatelia: upravovať príspevky, autori: "
+"publikovať príspevky, Redakcia: Upraviť ďalšie príspevky, správcovia: "
+"spravovať možnosti"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:73
+msgid ""
+"When using the Master list type non-administrator users should only be "
+"allowed to view and complete items, otherwise they will be able to edit the "
+"Master list."
+msgstr ""
+"Pri použití Master zoznam typu používatelia mali len Povoliť zobrazenie a "
+"kompletné položky, inak budú schopní upraviť Hlavný zoznam."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:78
+#: ../includes/cleverness-to-do-list-settings.class.php:81
+#: ../includes/cleverness-to-do-list-settings.class.php:476
+msgid "To-Do List Settings"
+msgstr "Nastavenie zoznamu úloh"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:83
+msgid "List View"
+msgstr "Zobrazenie zoznamu"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:84
+msgid "Sort Order"
+msgstr "Poradie zoradenia"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:85
+msgid "Show Added By"
+msgstr "Zobraziť pridal"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:86
+msgid "Show Date Completed"
+msgstr "Ukázať dátum ukončenia"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:88
+#: ../includes/cleverness-to-do-list-widget.class.php:246
+msgid "Show Progress"
+msgstr "Ukázať pokrok"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:89
+msgid "Show Admin Bar Menu"
+msgstr "Zobraziť Admin panel Menu"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:90
+msgid "Use WYSIWYG Editor"
+msgstr "Použitie WYSIWYG Editor"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:91
+msgid "Use Auto Paragraphs"
+msgstr "Použite Auto body"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:92
+msgid "Integrate with Post Planner"
+msgstr "Integrovať s Post Planner"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:98
+msgid "Disabled"
+msgstr "So zdravotným postihnutím"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:99
+msgid "Enabled"
+msgstr "Povolené"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:101
+msgid ""
+"If you would like to organize your to-do list into categories, enable it "
+"here."
+msgstr "Ak chcete usporiadať zoznam úloh do kategórií, mohol tu."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:107
+msgid "Individual"
+msgstr "Jednotlivca"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:108
+msgid "Group"
+msgstr "Skupina"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:109
+msgid "Master"
+msgstr "Master"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:111
+msgid ""
+"List View sets how the to-do lists are viewed.<br /> The Individual setting "
+"allows each user to have their own private to-do list.\n"
+"\t\tThe Group setting allows all users to share one to-do list. The Master "
+"setting allows you to have one master list for all users with individual "
+"completion of items."
+msgstr ""
+"Zobrazenie zoznamu nastaví, ako sú vnímané to-do zoznamy.<br>Individuálne "
+"nastavenieumožní každému používateľovi mať vlastné súkromné to-do zoznamu. \n"
+"Nastavenie skupiny \"t\"tThe umožňuje všetkým používateľom zdieľať jeden "
+"zoznam úloh. Kapitán nastavenie umožňuje mať jeden hlavný zoznam všetkých "
+"používateľov s jednotlivými dokončenie položiek."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:113
+msgid ""
+"Make sure you adjust the User Permissions appropriately when using the "
+"Master List View."
+msgstr ""
+"Uistite sa, že ste používateľské povolenia primerane upravia pri použití "
+"Zobrazenie zoznamu predlohy."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:142
+msgid "This setting is only used when List View is set to Group."
+msgstr ""
+"Toto nastavenie sa používa len pri zobrazení zoznamu je nastavená na skupiny."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:149
+msgid "Alphabetical"
+msgstr "Abecedný"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:153
+msgid "Assigned User"
+msgstr "Priradeného používateľa"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:156
+msgid ""
+"Items are first sorted by priority when ordered by ID, Alphabetical, or "
+"Category"
+msgstr ""
+"Položky sú zoradené najprv podľa priority pri nariadenej ID, abecedne, alebo "
+"Kategória"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:206
+msgid "Advanced Settings"
+msgstr "Rozšírené nastavenia"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:209
+msgid "To-Do List Advanced Settings"
+msgstr "Zoznam úloh pokročilé nastavenia"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:210
+msgid "Date Format"
+msgstr "Formát dátumu"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:211
+msgid "Highest Priority Label"
+msgstr "Najvyššou prioritou štítok"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:212
+msgid "Middle Priority Label"
+msgstr "Stredná priorita štítok"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:213
+msgid "Lowest Priority Label"
+msgstr "Najnižšia priorita štítok"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:214
+msgid "Show To-Do Item ID"
+msgstr "Zobraziť úlohy ID položky"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:215
+msgid "Show Date To-Do Was Added"
+msgstr "Ukázať dátum úloha bola pridaná"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:217
+msgid "Assign To-Do Items Settings (Only When Using Group or Master View)"
+msgstr ""
+"Priradiť úlohy položky nastavenie (len pri použití skupiny alebo zobrazenie "
+"predlohy)"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:218
+msgid "Assign To-Do Items to Users"
+msgstr "Priraďovať úlohy používateľom"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:219
+msgid "Show a User Only the To-Do Items Assigned to Them"
+msgstr "Zobraziť používateľ len položky úlohy priradené k nim"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:221
+msgid "User Roles to Show"
+msgstr "Roly používateľov na Show"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:222
+msgid "Email Assigned To-Do Items to User"
+msgstr "E-mail priradený polo iek pre užívateľa"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:223
+msgid "Add Category to Subject"
+msgstr "Pridať kategóriu na predmet"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:224
+msgid "Show Who Assigned the To-Do Item in Email"
+msgstr "Ukázať, kto priradiť položku úlohy v e-mailu"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:225
+msgid "From Field for Emails Sent to User"
+msgstr "Z oblasti pre E-maily odoslané používateľovi"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:226
+msgid "Subject Field for Emails Sent to User"
+msgstr "Predmetové pole pre E-maily odoslané používateľovi"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:228
+msgid "Text in Emails Sent to User"
+msgstr "Text v E-maily odoslané používateľovi"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:229
+msgid "Database Cleanup"
+msgstr "Vyčistenia databázy"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:236
+msgid "Documentation on Date Formatting"
+msgstr "Dokumentácia k dátumu formátovanie"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:241
+msgid "The highest priority list items are shown in red in the lists."
+msgstr ""
+"Najvyššou prioritou položky zoznamu sú zobrazené červenou farbou v zoznamoch."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:250
+msgid "The lowest priority list items are shown in a lighter grey."
+msgstr "Najnižšia priorita zoznam položky sa zobrazia ľahší sivou."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:274
+msgid "This setting must be set to Yes for the following settings to work."
+msgstr ""
+"Toto nastavenie musíte nastaviť na Áno pre nasledujúce nastavenia pracovať."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:296
+msgid "Used in displaying the list of users who can be assigned to-do items."
+msgstr ""
+"Používaná pri zobrazovaní zoznamu používateľov, ktorí môžu byť priradené "
+"polo iek."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:297
+msgid "Documentation on User Roles"
+msgstr "Dokumentácia o roly používateľov"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:314
+msgid "If categories are enabled."
+msgstr "Ak sú zapnuté kategórií."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:345
+msgid "To-Do List User Permissions for Group and Master List Types"
+msgstr ""
+"To-Do zoznamu používateľské povolenia pre skupinu a Master zoznam typov"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:346
+msgid "View To-Do List"
+msgstr "Zobrazenie zoznamu úloh"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:351
+msgid "View To-Do Items Assigned to Other Users Capability"
+msgstr "Zobrazenie polo iek pridelené iným používateľom schopnosť"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:353
+msgid "Delete All To-Do Items Capability"
+msgstr "Odstrániť všetky položky úloh schopnosti"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:360
+msgid "Read"
+msgstr "Čítanie"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:361
+msgid "Edit Posts"
+msgstr "Upravovať príspevky"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:362
+msgid "Publish Posts"
+msgstr "Publikovať príspevky"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:363
+msgid "Edit Others Posts"
+msgstr "Upraviť ďalšie príspevky"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:364
+msgid "Publish Pages"
+msgstr "Publikovanie stránok"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:365
+msgid "Edit Users"
+msgstr "Upraviť používateľom"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:366
+msgid "Manage Options"
+msgstr "Spravovať možnosti"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:392
+msgid "Import/Export"
+msgstr "Import a Export"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:397
+msgid "Settings Imported"
+msgstr "Nastavenia dovážané"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:400
+msgid "Invalid Settings File"
+msgstr "Neplatný súbor nastavení"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:403
+msgid "No Settings File Selected"
+msgstr "Žiadny súbor nastavení vybraných"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:525
+msgid "Settings saved."
+msgstr "Nastavenia uložené."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:527
+msgid "Tables have been deleted."
+msgstr "Tabuľky sa odstránili."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:529
+msgid "To-Do Items have been deleted."
+msgstr "Polo iek, bola odstránená."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:537
+msgid "Delete Tables"
+msgstr "Odstrániť tabuľky"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:543
+msgid "Delete All To-Do Items"
+msgstr "Odstrániť všetky polo iek"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:548
+msgid "Import/Export Settings"
+msgstr "Import a Export nastavení"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:551
+msgid "Download Export File"
+msgstr "Stiahnuť exportného súboru"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:556
+msgid "Choose File to Import"
+msgstr "Vyberte súbor na Import."
+
+#: ../includes/cleverness-to-do-list-settings.class.php:558
+msgid "Import Settings"
+msgstr "Nastavenie importu"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:561
+msgid "Import/Export To-Do Items"
+msgstr "Import/Export polo iek"
+
+#: ../includes/cleverness-to-do-list-settings.class.php:563
+msgid ""
+"You can use the built-in WordPress Import/Export feature, located under the "
+"Tools menu. On the Export screen,\n"
+"\t\tselect the To-Do radio button before clicking the Download Export File "
+"button."
+msgstr ""
+"Môžete použiť vstavaný WordPress Import/Export funkcie, umiestnené pod "
+"Ponuka Nástroje. Na obrazovke vývoz \n"
+"\"t\"tselect prepínač úlohy pred kliknutím na tlačidlo Stiahnuť exportovať "
+"súbor tlačidlo."
+
+#: ../includes/cleverness-to-do-list-widget.class.php:22
+msgid "Displays To-Do List Items"
+msgstr "Zobrazí zoznam polo iek"
+
+#: ../includes/cleverness-to-do-list-widget.class.php:173
+msgid "Assigned to"
+msgstr "Priradené k"
+
+#: ../includes/cleverness-to-do-list-widget.class.php:214
+msgid "Title"
+msgstr "Názov"
+
+#: ../includes/cleverness-to-do-list-widget.class.php:219
+msgid "Number of Items to Display"
+msgstr "Počet položiek na displej"
+
+#: ../includes/cleverness-to-do-list-widget.class.php:240
+msgid "Show Assigned To"
+msgstr "Zobraziť priradené k"
+
+#: ../includes/cleverness-to-do-list-widget.class.php:249
+msgid "Show Only Logged-In User's Items"
+msgstr "Zobraziť iba prihláseného používateľa na položky"
+
+#: ../includes/cleverness-to-do-list.class.php:88
+msgid "To-Do Items"
+msgstr "Polo iek"
+
+#: ../includes/cleverness-to-do-list.class.php:90
+msgid "Add New Item"
+msgstr "Pridať novú položku"
+
+#: ../includes/cleverness-to-do-list.class.php:101
+msgid "Completed Items"
+msgstr "Vyplnené položky"
+
+#: ../includes/cleverness-to-do-list.class.php:104
+msgid "Delete All"
+msgstr "Odstrániť všetky"
+
+#: ../includes/cleverness-to-do-list.class.php:151
+#: ../includes/cleverness-to-do-list.class.php:165
+msgid "No completed items."
+msgstr "Žiadne vyplnené položky."
+
+#: ../includes/cleverness-to-do-list.class.php:221
+msgid "Return to To-Do List"
+msgstr "Návrat do zoznamu úloh"
+
+#: ../includes/cleverness-to-do-list.class.php:276
+msgid "Submit To-Do Item"
+msgstr "Odoslať položku úlohy"
+
+#: ../includes/cleverness-to-do-list.class.php:295
+msgid "Select"
+msgstr "Vyberte"
+
+#: ../includes/cleverness-to-do-list.class.php:338
+msgid "Assign To"
+msgstr "Priradiť"
+
+#: ../includes/cleverness-to-do-list.class.php:405
+msgid "None"
+msgstr "Žiadny"

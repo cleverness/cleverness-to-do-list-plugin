@@ -3,7 +3,7 @@ jQuery( document ).ready( function( $ ) {
 	$( '#todo-cats tbody tr:visible:even' ).addClass( 'alternate' );
 
 	/* Delete Categories */
-	$( '.delete-todo-category' ).live( 'click', function () {
+	$( '#todo-cats' ).on( 'click', '.delete-todo-category', function () {
 		var confirmed = confirm( ctdlcat.CONFIRMATION_MSG );
 		if ( confirmed == false ) return false;
 		var _item = this;
@@ -40,7 +40,7 @@ jQuery( document ).ready( function( $ ) {
 	/* end Delete Categories */
 
 	/* Get Category */
-	$( '.edit-todo-category' ).live( 'click',function () {
+	$( '#todo-cats' ).on( 'click', '.edit-todo-category', function () {
 		var _item = this;
 		var todotr = $( _item ).closest( 'tr' );
 
@@ -72,7 +72,7 @@ jQuery( document ).ready( function( $ ) {
 	/* end Get Category */
 
 	/* Edit Categories */
-	$( '.submit-edit-category' ).live( 'click',function () {
+	$( '#todo-cats' ).on( 'click', '.submit-edit-category', function () {
 		var _item = this;
 		var todotr = $( _item ).closest( 'tr' );
 		var catname = $( todotr ).find( 'input[name = "cleverness_todo_cat_name"]' ).val();
