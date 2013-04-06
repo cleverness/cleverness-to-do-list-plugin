@@ -16,7 +16,7 @@
 class ClevernessToDoList {
 	protected $cat_id = '';
 	protected $form = '';
-	protected $priorities = '';
+	public $priorities = '';
 	protected $url = '';
 	public $list = '';
 

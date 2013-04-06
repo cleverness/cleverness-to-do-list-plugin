@@ -295,6 +295,8 @@ class CTDL_Lib {
 	 * @param $assign
 	 * @param $deadline
 	 * @param int $category
+	 * @todo add setting for from email
+	 * @todo show link to planner if associated with the planner
 	 */
 	protected static function email_user( $assign, $deadline, $category = 0 ) {
 		global $current_user;

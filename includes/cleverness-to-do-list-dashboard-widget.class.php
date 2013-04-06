@@ -6,6 +6,7 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.2
+ * @todo allow multiple categories to be selected
  */
 
 /**
