@@ -5,7 +5,7 @@
  * Creates the settings and page to manage the plugin settings
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.1
+ * @version 3.3
  */
 
 /**
@@ -223,6 +223,7 @@ class CTDL_Settings {
 		add_settings_field( 'email_category', __( 'Add Category to Subject', 'cleverness-to-do-list' ), array( $this, 'email_category_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_show_assigned_by', __( 'Show Who Assigned the To-Do Item in Email', 'cleverness-to-do-list' ), array( $this, 'email_show_assigned_by_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_from', __( 'From Field for Emails Sent to User', 'cleverness-to-do-list' ), array( $this, 'email_from_option' ), $this->advanced_key, 'section_advanced_assign' );
+		add_settings_field( 'email_from_email', esc_attr__( 'From Email', 'cleverness-to-do-list' ), array( $this, 'email_from_email_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_subject', __( 'Subject Field for Emails Sent to User', 'cleverness-to-do-list' ), array( $this, 'email_subject_option' ), $this->advanced_key,
 			'section_advanced_assign' );
 		add_settings_field( 'email_text', __( 'Text in Emails Sent to User', 'cleverness-to-do-list' ), array( $this, 'email_text_option' ), $this->advanced_key, 'section_advanced_assign' );
@@ -325,6 +326,12 @@ class CTDL_Settings {
 
 	function email_from_option() { ?>
 		<input class="regular-text" type="text" name="<?php echo $this->advanced_key; ?>[email_from]" value="<?php echo $this->advanced_settings['email_from']; ?>" />
+	<?php
+	}
+
+	function email_from_email_option() {
+		?>
+		<input class="regular-text" type="text" name="<?php echo $this->advanced_key; ?>[email_from_email]" value="<?php echo sanitize_text_field( $this->advanced_settings['email_from_email'] ); ?>" />
 	<?php
 	}
 

@@ -6,7 +6,7 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.2
- * @todo allow multiple categories to be selected
+ * @todo allow multiple categories to be selected - currently showing no items text for category - need to remove if more than one category shown
  */
 
 /**
@@ -27,10 +27,13 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	 */
 	public function dashboard_widget() {
 
-		$cat_id = ( isset( $this->dashboard_settings['dashboard_cat'] ) ? $this->dashboard_settings['dashboard_cat'] : 0 );
+		$this->dashboard_settings['dashboard_cat'] = ( isset( $this->dashboard_settings['dashboard_cat'] ) ? $this->dashboard_settings['dashboard_cat'] : 0 );
+		$cat_ids  = ( is_array( $this->dashboard_settings['dashboard_cat'] ) ? $this->dashboard_settings['dashboard_cat'] : array( $this->dashboard_settings['dashboard_cat'] ) );
 		$limit = ( isset( $this->dashboard_settings['dashboard_number'] ) ? $this->dashboard_settings['dashboard_number'] : -1 );
 
-		$this->loop_through_todos( $cat_id, $limit );
+		foreach ( $cat_ids as $cat_id ) {
+			$this->loop_through_todos( $cat_id, $limit );
+		}
 
 		echo $this->list;
 
@@ -198,6 +201,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
    	    settings_fields( 'cleverness-todo-dashboard-settings-group' );
  	    $options = get_option( 'CTDL_dashboard_settings' );
 		$cat_id = ( isset( $options['dashboard_cat'] ) ? $options['dashboard_cat'] : 0 );
+		$cat_ids = ( is_array( $cat_id ) ? $cat_id : array( $cat_id ) );
 		?>
 		<fieldset>
   		    <p><label for="cleverness_todo_dashboard_settings[dashboard_number]"><?php esc_html_e( 'Number of List Items to Show', 'cleverness-to-do-list' ); ?></label>
@@ -228,12 +232,23 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			</p>
 
 			<?php if ( CTDL_Loader::$settings['categories'] == 1 ) : ?>
-	 	    <p><label for="cleverness_todo_dashboard_settings[dashboard_cat]"><?php echo apply_filters( 'ctdl_category', esc_html__( 'Category', 'cleverness-to-do-list' ) ); ?></label>
-			     <?php wp_dropdown_categories( 'taxonomy=todocategories&echo=1&orderby=name&hide_empty=0&show_option_all='.__( 'All', 'cleverness-to-do-list' ).'&id=cleverness_todo_dashboard_settings[dashboard_cat]&name=cleverness_todo_dashboard_settings[dashboard_cat]&selected='.$cat_id ); ?>
-			</p>
+				<p><label for="cleverness_todo_dashboard_settings[dashboard_cat][]" class="cleverness-to-do-list-categories-label"><?php echo apply_filters( 'ctdl_category',
+					esc_html__( 'Category', 'cleverness-to-do-list' ) ); ?></label>
+				<ul class="cleverness-to-do-list-categories">
+					<?php $args = array(
+						'descendants_and_self' => 0,
+						'selected_cats'        => $cat_ids,
+						'popular_cats'         => false,
+						'walker'               => new ClevernessToDoListCategoryWalker(),
+						'taxonomy'             => 'todocategories',
+						'checked_ontop'        => true
+					); ?>
+					<?php wp_terms_checklist( 0, $args ); ?>
+				</ul>
+				</p>
 			<?php endif; ?>
 
-			<p class="description"><?php _e( 'This setting is only used when <em>List View</em> is set to <em>Group</em>.', 'cleverness-to-do-list' ); ?></p>
+			<p class="description" style="clear: both;"><?php _e( 'This setting is only used when <em>List View</em> is set to <em>Group</em>.', 'cleverness-to-do-list' ); ?></p>
    		    <p><label for="cleverness_todo_dashboard_settings[dashboard_author]"><?php _e( 'Show <em>Added By</em> on Dashboard Widget', 'cleverness-to-do-list' ); ?></label>
 				<select id="cleverness_todo_dashboard_settings[dashboard_author]" name="cleverness_todo_dashboard_settings[dashboard_author]">
 					<option value="0"<?php if ( $options['dashboard_author'] == 0 ) echo ' selected="selected"'; ?>><?php esc_html_e( 'Yes', 'cleverness-to-do-list') ; ?>&nbsp;</option>
@@ -273,4 +288,26 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		wp_localize_script( 'cleverness_todo_dashboard_complete_js', 'ctdl', CTDL_Loader::get_js_vars() );
     }
 
+}
+
+class ClevernessToDoListCategoryWalker extends Walker_Category {
+
+	public function start_el( &$output, $category, $depth = 0, $args = array(), $id = 0 ) {
+
+		$args = wp_parse_args( array(
+			'name' => 'cleverness_todo_dashboard_settings[dashboard_cat]'
+		), $args );
+
+		extract( $args );
+
+		if ( empty( $taxonomy ) )
+			$taxonomy = 'category';
+
+		$output .= "\n<li id='{$taxonomy}-{$category->term_id}'>".'<label class="selectit"><input value="'.$category->term_id.'" type="checkbox" name="'.$name.'[]" id="in-'.$taxonomy.'-'
+				.$category->term_id.'"'.checked( in_array( $category->term_id, $selected_cats ), true, false ).disabled( empty( $args['disabled'] ), false, false ).' /> '.esc_html( apply_filters( 'the_category', $category->name ) ).'</label>';
+	}
+
+	function end_el( &$output, $page, $depth = 0, $args = array() ) {
+		$output .= "</li>\n";
+	}
 }

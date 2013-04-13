@@ -129,3 +129,12 @@ div.todo-list {
 #todo-list-completed #checkbox-col .plus {
 	background-position: -16px -128px;
 }
+
+.cleverness-to-do-list-categories, .cleverness-to-do-list-categories-label {
+	float: left;
+}
+
+.cleverness-to-do-list-categories {
+	margin-top: 0;
+	margin-left: 5px;
+}

@@ -5,7 +5,7 @@ Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.3
-Tested up to: 3.5
+Tested up to: 3.6
 Stable tag: 3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -134,6 +134,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 = 3.3 =
 * Added Slovak translation by Branco [WebHostingGeeks.com](http://webhostinggeeks.com/user-reviews/)
 * Added vertical-align: text-top; to frontend admin table in case theme CSS sets it differently
+* Added ability to select multiple categories to display in Dashboard Widget
+* Added setting for the From email address
+* Added Post Planner URL to assigned user email if Post Planner integration is enabled
 * Fixed sorting by Date Added
 * Fixed jQuery 1.9 deprecated functions
 * Adjusted table heading widths in backend
