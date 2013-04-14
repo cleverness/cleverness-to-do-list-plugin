@@ -6,7 +6,6 @@ Description: Manage to-do list items on a individual or group basis. Includes a 
 Author: C.M. Kendrick
 Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list/
-@todo test upgrade settings
 */
 
 /**

@@ -228,7 +228,6 @@ class CTDL_Lib {
 	 * Insert new to-do item into the database
 	 * @static
 	 * @return mixed
-	 * @todo undefined indexes if some of the fields aren't enabled like deadline
 	 */
 	public static function insert_todo() {
 		global $current_user;
@@ -271,7 +270,10 @@ class CTDL_Lib {
 				}
 
 				if ( CTDL_Loader::$settings['email_assigned'] == '1' && CTDL_Loader::$settings['assign'] == '0' ) {
-					CTDL_Lib::email_user( $assign, $_POST['cleverness_todo_deadline'], $_POST['cat'], $_POST['cleverness_todo_planner'] );
+					$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ? $_POST['cleverness_todo_deadline'] : 0 );
+					$cat = ( isset( $_POST['cat'] ) ? $_POST['cat'] : 0 );
+					$planner = ( isset( $_POST['cleverness_todo_planner'] ) ? $_POST['cleverness_todo_planner'] : 0 );
+					CTDL_Lib::email_user( $assign, $deadline, $cat, $planner );
 				}
 			} else {
 				// if user can't assign items, but settings are set to assign items and show only assigned items, then assign it to that user
@@ -322,7 +324,8 @@ class CTDL_Lib {
 					$email_message .= "<br>".__( 'Priority', 'cleverness-to-do-list' ).': '.$priority_array[$priority]."<br>";
 					if ( CTDL_Loader::$settings['email_show_assigned_by'] == 1 ) $email_message .= "<br>".__( 'From', 'cleverness-to-do-list' ).': '.$current_user->display_name.' ('.$current_user->user_email.')'."<br>";
 					if ( $category != 0 && $category != -1 ) $email_message .= __( 'Category', 'cleverness-to-do-list' ).': '.$category_name."<br>";
-					if ( $deadline != '' ) $email_message .= __( 'Deadline:', 'cleverness-to-do-list' ).' '.date( CTDL_Loader::$settings['date_format'], strtotime( $deadline ) )."<br>";
+					if ( $deadline != '' && $deadline != 0 ) $email_message .= __( 'Deadline:', 'cleverness-to-do-list' ).' '.date( CTDL_Loader::$settings['date_format'],
+						strtotime( $deadline ) )."<br>";
 					if ( CTDL_Loader::$settings['post_planner'] == 1 && $planner != 0 ) {
 						$url = admin_url( 'post.php?post='.absint( $planner ).'&action=edit' );
 						$email_message .= esc_html__( 'Post Planner', 'post-planner' ).': <a href="'.$url.'">'.esc_html__( 'View', 'cleverness-to-do-list' )."</a><br>";
@@ -985,13 +988,7 @@ class CTDL_Lib {
 				update_option( 'CTDL_general', $general_options );
 			}
 
-			if ( version_compare( $version, '3.21', '<' ) ) {
-				$general_options          = get_option( 'CTDL_general' );
-				$general_options['autop'] = 1;
-				update_option( 'CTDL_general', $general_options );
-			}
-
-			if ( version_compare( $version, '3.3', '<' ) ) {
+			if ( $version < 3.3 ) {
 				$advanced_options                     = get_option( 'CTDL_advanced' );
 				$advanced_options['email_from_email'] = get_bloginfo( 'admin_email' );
 				update_option( 'CTDL_advanced', $advanced_options );
