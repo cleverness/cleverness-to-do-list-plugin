@@ -138,7 +138,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Added setting for the From email address
 * Added Post Planner URL to assigned user email if Post Planner integration is enabled
 * Fixed sorting by Date Added
-* Fixed [todolist] list format HTML when categories are enabled
+* Fixed [todolist] list format HTML when categories are enabled and to only show categories heading when sort order is set to catgegory
 * Fixed jQuery 1.9 deprecated functions
 * Adjusted table heading widths in backend
 

@@ -586,7 +586,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				$this->list .= '<h3 class="todo-title">'.esc_html( $title ).'</h3>';
 			}
 			/** @var $list_type string */
-			if ( CTDL_Loader::$settings['categories'] == 0 ) $this->list .= '<'.$list_type.' class="todolist">';
+			if ( CTDL_Loader::$settings['categories'] == 0 || CTDL_Loader::$settings['sort_order'] != 'cat_id' ) $this->list .= '<'.$list_type.' class="todolist">';
 			$this->loop_through_todos( 0, $category );
 			$this->list .= '</'.$list_type.'>';
 
@@ -613,7 +613,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				if ( $completed_title != '') {
 					$this->list .= '<h3 class="todo-title">'.esc_html( $completed_title ).'</h3>';
 				}
-				if ( CTDL_Loader::$settings['categories'] == 0 ) $this->list .= '<'.$list_type.' class="todolist todolist-completed">';
+				if ( CTDL_Loader::$settings['categories'] == 0 || CTDL_Loader::$settings['sort_order'] != 'cat_id' ) $this->list .= '<'.$list_type.' class="todolist todolist-completed">';
 				$this->loop_through_todos( 1, $category );
 				$this->list .= '</'.$list_type.'>';
 
@@ -655,7 +655,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				$priority_class = CTDL_Lib::set_priority_class( $the_priority );
 
 				/** @var $type string */
-				if ( $type == 'list' && CTDL_Loader::$settings['categories'] == 1 ) {
+				if ( $type == 'list' && CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' ) {
 					/** @var $list_type string */
 					$this->show_category_headings( get_the_terms( $id, 'todocategories' ), $list_type, $completed );
 				}
