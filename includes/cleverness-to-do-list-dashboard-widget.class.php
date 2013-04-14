@@ -5,8 +5,7 @@
  * Creates the dashboard widget
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.2
- * @todo allow multiple categories to be selected - currently showing no items text for category - need to remove if more than one category shown
+ * @version 3.3
  */
 
 /**
@@ -30,12 +29,18 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		$this->dashboard_settings['dashboard_cat'] = ( isset( $this->dashboard_settings['dashboard_cat'] ) ? $this->dashboard_settings['dashboard_cat'] : 0 );
 		$cat_ids  = ( is_array( $this->dashboard_settings['dashboard_cat'] ) ? $this->dashboard_settings['dashboard_cat'] : array( $this->dashboard_settings['dashboard_cat'] ) );
 		$limit = ( isset( $this->dashboard_settings['dashboard_number'] ) ? $this->dashboard_settings['dashboard_number'] : -1 );
+		$this->list = '';
 
 		foreach ( $cat_ids as $cat_id ) {
 			$this->loop_through_todos( $cat_id, $limit );
 		}
 
-		echo $this->list;
+		if ( $this->list != '' ) {
+			echo $this->list;
+		} else {
+			echo '<p>'.apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ).'</p>';
+		}
+
 
 		$cleverness_todo_permission = CTDL_Lib::check_permission( 'todo', 'add' );
 		if ( $cleverness_todo_permission === true ) {
@@ -93,7 +98,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items );
 			} else {
-				$this->list .= '<tr><td>'.apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ).'</td></tr>';
+				$this->list .= '';
 			}
 
 		}

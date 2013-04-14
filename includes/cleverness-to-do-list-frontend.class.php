@@ -334,7 +334,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 				/** @var $deadline int */
 				if ( $deadline == 1 ) $this->show_deadline( $deadline_meta );
 				/** @var $date int */
-				if ( $date == 1 ) $this->show_date_added( get_the_date() );
+				if ( $date == 1 ) $this->show_date_added( get_the_date(), get_the_date( CTDL_Loader::$settings['date_format'] ) );
 				$this->list .= do_action( 'ctdl_list_items' );
 				/** @var $editlink int */
 				if ( $editlink == 1 ) $this->show_edit_link( $id );
