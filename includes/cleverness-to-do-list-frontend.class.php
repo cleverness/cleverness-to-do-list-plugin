@@ -586,7 +586,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				$this->list .= '<h3 class="todo-title">'.esc_html( $title ).'</h3>';
 			}
 			/** @var $list_type string */
-			$this->list .= '<'.$list_type.' class="todolist">';
+			if ( CTDL_Loader::$settings['categories'] == 0 ) $this->list .= '<'.$list_type.' class="todolist">';
 			$this->loop_through_todos( 0, $category );
 			$this->list .= '</'.$list_type.'>';
 
@@ -596,6 +596,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 		if ( $completed == 'show' ) {
 
 			wp_reset_postdata();
+			$this->cat_id = '';
 
 			if ( $type == 'table' ) {
 
@@ -612,7 +613,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				if ( $completed_title != '') {
 					$this->list .= '<h3 class="todo-title">'.esc_html( $completed_title ).'</h3>';
 				}
-				$this->list .= '<'.$list_type.' class="todolist todolist-completed">';
+				if ( CTDL_Loader::$settings['categories'] == 0 ) $this->list .= '<'.$list_type.' class="todolist todolist-completed">';
 				$this->loop_through_todos( 1, $category );
 				$this->list .= '</'.$list_type.'>';
 
@@ -654,9 +655,9 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				$priority_class = CTDL_Lib::set_priority_class( $the_priority );
 
 				/** @var $type string */
-				if ( $type == 'list' ) {
+				if ( $type == 'list' && CTDL_Loader::$settings['categories'] == 1 ) {
 					/** @var $list_type string */
-					$this->show_category_headings ( get_the_terms( $id, 'todocategories' ), $list_type );
+					$this->show_category_headings( get_the_terms( $id, 'todocategories' ), $list_type, $completed );
 				}
 
 				if ( $type == 'table' ) {
@@ -739,17 +740,28 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 	 * Show category heading only if it's the first item from that category
 	 * @param $categories
 	 * @param $list_type
-	 * @todo don't show empty list that appears before first category
+	 * @param int $completed
 	 */
-	protected function show_category_headings( $categories, $list_type ) {
+	protected function show_category_headings( $categories, $list_type, $completed = 0 ) {
+		$class = ( $completed == 0 ? 'todolist' : 'todolist todolist-completed' );
+		static $i = 0;
 		if ( CTDL_Loader::$settings['categories'] == 1 && $categories != false ) {
 			foreach ( $categories as $category ) {
 				$cat = CTDL_Categories::get_category_name( $category->term_id );
 				if ( $this->cat_id != $category->term_id  && $cat != '' ) {
-					$this->list .= '</'.$list_type.'><h4 class="todo-category-heading">'.esc_html( $cat ).'</h4><'.$list_type.'>';
+					if ( $this->cat_id != '' ) $this->list .= '</'.$list_type.'>';
+					$this->list .= '<h4 class="todo-category-heading">'.esc_html( $cat ).'</h4><'.$list_type.' class="'.$class.'">';
 					$this->cat_id = $category->term_id;
 				}
 			}
+		} elseif ( $categories == false && $i == 0 ) {
+			if ( $this->cat_id != '' ) $this->list .= '</'.$list_type.'>';
+			$this->list .= '<'.$list_type.' class="'.$class.'">';
+			$i++;
+		} elseif ( $categories == false && $completed == 1 && $i == 1 ) {
+			if ( $this->cat_id != '' ) $this->list .= '</'.$list_type.'>';
+			$this->list .= '<'.$list_type.' class="'.$class.'">';
+			$i++;
 		}
 	}
 
