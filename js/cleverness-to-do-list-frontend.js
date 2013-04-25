@@ -41,7 +41,9 @@ jQuery( document ).ready( function( $ ) {
 
 		jQuery.post( ctdl.AJAX_URL, data, function( response ) {
 			if ( single != true ) {
-				$( todoid ).fadeOut().remove();
+				$( todoid ).fadeOut( function () {
+					$( this ).remove();
+				});
 				$( '.todo-checkbox' ).prop( "checked", false );
 			}
 		} );
