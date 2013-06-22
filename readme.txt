@@ -6,7 +6,7 @@ Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 3.3
+Stable tag: 3.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,6 +130,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 4. Everything Enabled
 
 == Changelog ==
+
+= 3.3.1 =
+* Updated Russian translation from Sergei Zastavnyi
 
 = 3.3 =
 * Added Slovak translation by Branco [WebHostingGeeks.com](http://webhostinggeeks.com/user-reviews/)
@@ -395,6 +398,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Upgrade Notice ==
 
+= 3.3.1 =
+Bug fix
+
 = 3.3 =
 New translation, bug fix, features
 
@@ -560,7 +566,7 @@ Icon by [Hylke Bons](http://www.iconfinder.com/icondetails/30045/32/list_shoppin
 
 Spanish translation by [Ricardo](http://yabocs.avytes.com/)
 
-Russian translation by [Almaz](http://alm.net.ru)
+Russian translation by [Almaz](http://alm.net.ru) - Updated by Sergei Zastavnyi
 
 German translation by Ascobol
 
