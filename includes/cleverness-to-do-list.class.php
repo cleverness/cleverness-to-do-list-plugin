@@ -401,8 +401,9 @@ class ClevernessToDoList {
 	 * @param int $cat_id Existing field data
 	 */
 	protected function create_category_field( $cat_id = NULL ) {
+		$cat_id = ( is_array( $cat_id ) ? reset( $cat_id ) : NULL );
 		if ( CTDL_Loader::$settings['categories'] == 1 ) {
-			$cat_id = ( $cat_id != NULL ? $cat_id[0]->term_id : 0 );
+			$cat_id = ( $cat_id != NULL ? $cat_id->term_id : 0 );
 			$this->form .= '<tr><th scope="row"><label for="cat">'.apply_filters( 'ctdl_category', esc_html__( 'Category', 'cleverness-to-do-list' ) ).'</label></th><td>'.
 				wp_dropdown_categories( 'taxonomy=todocategories&echo=0&orderby=name&hide_empty=0&show_option_none='.__( 'None', 'cleverness-to-do-list' ).'&selected='.$cat_id ).'</td></tr>';
 		}

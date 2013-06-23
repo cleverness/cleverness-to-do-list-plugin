@@ -6,7 +6,6 @@ Description: Manage to-do list items on a individual or group basis. Includes a 
 Author: C.M. Kendrick
 Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list/
-@todo look at http://wordpress.org/support/topic/frontend-editing-and-category?replies=4
 @todo checkout: when you change a major priority for this list is red and the table does not change color
 @todo sorting by date added: Date Added sorts only on the first click, and not after.
 @todo Add Filters to Front-End Progress Display

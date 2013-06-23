@@ -134,6 +134,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 = 3.3.1 =
 * Updated Russian translation from Sergei Zastavnyi
 * Fixed sorting when getting specific categories
+* Fixed issue with category not being set when using todoadmin and todolist shortcodes together
 
 = 3.3 =
 * Added Slovak translation by Branco [WebHostingGeeks.com](http://webhostinggeeks.com/user-reviews/)
