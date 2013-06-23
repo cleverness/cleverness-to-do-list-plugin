@@ -2,7 +2,7 @@
 	color: #CC0033;
 }
 
-.todo-low, .widefat .todo-low td {
+.todo-low, .widefat .todo-low td, .widefat .todo-low td p {
 	color: #666666;
 }
 
