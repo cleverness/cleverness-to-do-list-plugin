@@ -145,6 +145,7 @@ class CTDL_Lib {
 				'post_status'    => 'publish',
 				'posts_per_page' => $limit,
 				'orderby'        => $orderby,
+				'meta_key'       => $metakey,
 				'order'          => 'ASC',
 				'post__not_in'   => $to_exclude,
 				'tax_query'      => array(

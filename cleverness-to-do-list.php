@@ -7,12 +7,11 @@ Author: C.M. Kendrick
 Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list/
 @todo look at http://wordpress.org/support/topic/frontend-editing-and-category?replies=4
-@todo todolist shortcode when showing a specific category sorts by alphabetically instead of sort setting - also check other shortcodes, widget, and dashboard widget
 @todo checkout: when you change a major priority for this list is red and the table does not change color
 @todo sorting by date added: Date Added sorts only on the first click, and not after.
-@todo make sure any hooks added to modified plugin are in main plugin
 @todo Add Filters to Front-End Progress Display
 @todo item text for important is not red
+@todo add category attribute to todoadmin to show specific category
 @todo make mp6 compatible
 */
 
