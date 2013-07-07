@@ -139,6 +139,8 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Fixed todo text not being red in admin when priority is set to important
 * Fixed todo text not being grey in admin when priority is set to low
 * Fixed jQuery sorting of Date Added not working after first sorting
+* Fixed dash showing for Date Completed even when field set to not show
+* Added filters for front-end progress display
 
 = 3.3 =
 * Added Slovak translation by Branco [WebHostingGeeks.com](http://webhostinggeeks.com/user-reviews/)

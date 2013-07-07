@@ -512,7 +512,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	 */
 	public function show_progress( $progress, $type = 'list' ) {
 		if ( CTDL_Loader::$settings['show_progress'] == '1' && $progress != '' ) {
-			$this->list .= ' <small class="todo-progress">['.esc_attr( $progress ).'%]</small>';
+			$this->list .= ' <small class="todo-progress">'.apply_filters( 'ctdl_frontend_checklist_progress', '['.esc_attr( $progress ).'%]' ).'</small>';
 		}
 	}
 
@@ -682,8 +682,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				if ( $deadline == 'show' && CTDL_Loader::$settings['show_deadline'] == 1 ) $this->show_deadline( $deadline_meta, $type );
 				/** @var $date int */
 				if ( $date == 1 && CTDL_Loader::$settings['show_date_added'] == 1) $this->show_date_added( get_the_date( 'Ymd' ), get_the_date( CTDL_Loader::$settings['date_format'] ), $type );
-				if ( $completed == 1 && $type == 'list' ) $this->list .= ' - ';
-				if ( $completed == 1 ) $this->show_completed( $completed_meta, $type );
+				if ( CTDL_Loader::$settings['show_completed_date'] && $completed == 1 ) $this->show_completed( $completed_meta, $type );
 				$this->list .= do_action( 'ctdl_list_items' );
 
 				if ( $type == 'table' ) {
@@ -843,7 +842,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 			if ( $layout == 'table' ) {
 				$this->list .= ( $progress != '' ? sprintf( '<td class="todo-progress">%d%%</td>', esc_attr( $progress ) ) : '<td class="todo-progress"></td>' );
 			} else {
-				$this->list .= ' - '.esc_attr( $progress ).'%';
+				$this->list .= apply_filters( 'ctdl_frontend_progress', ' - '.esc_attr( $progress ).'%' );
 			}
 		} elseif ( $layout == 'table' ) {
 			$this->list .= '<td class="todo-progress"></td>';
@@ -866,6 +865,22 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 			} else {
 				$this->list .= ' - '.apply_filters( 'ctdl_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).': '.( $date != '' ?
 					sprintf( '%s', esc_attr( $formatted_date ) ) : '' );
+			}
+		}
+	}
+
+	/**
+	 * Show the Date that a To-Do Item was Completed
+	 * @param string $completed
+	 * @param string $layout
+	 */
+	public function show_completed( $completed, $layout = 'table' ) {
+		if ( CTDL_Loader::$settings['show_completed_date'] && $completed != '0000-00-00 00:00:00' ) {
+			$date = ( isset( $completed ) ? date( CTDL_Loader::$settings['date_format'], strtotime( $completed ) ) : '' );
+			if ( $layout == 'table' ) {
+				$this->list .= '<td class="todo-completed">'.esc_attr( $date ).'</td>';
+			} else {
+				$this->list .= ' - '.apply_filters( 'ctdl_completed', esc_html__( 'Completed', 'cleverness-to-do-list' ) ).': '.esc_attr( $date );
 			}
 		}
 	}
