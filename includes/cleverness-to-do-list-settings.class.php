@@ -231,7 +231,8 @@ class CTDL_Settings {
 	}
 
 	function date_format_option() { ?>
-		<input class="small-text" type="text" name="<?php echo $this->advanced_key; ?>[date_format]" value="<?php if ( $this->advanced_settings['date_format'] != '' ) echo $this->advanced_settings['date_format']; else
+		<input type="text" name="<?php echo $this->advanced_key; ?>[date_format]" value="<?php if ( $this->advanced_settings['date_format'] != '' ) echo
+		$this->advanced_settings['date_format']; else
 			echo 'm/d/Y';
 			?>"	/><br />
 		<a href="http://codex.wordpress.org/Formatting_Date_and_Time"><?php _e( 'Documentation on Date Formatting', 'cleverness-to-do-list' ); ?></a>

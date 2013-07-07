@@ -141,6 +141,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Fixed todo text not being grey in admin when priority is set to low
 * Fixed jQuery sorting of Date Added not working after first sorting
 * Fixed dash showing for Date Completed even when field set to not show
+* Fixed date formatting setting width
 * Added filters for front-end progress display
 * Added category attribute to todoadmin to show a specific category
 
