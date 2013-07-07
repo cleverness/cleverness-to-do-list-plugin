@@ -99,6 +99,7 @@ The options are:
 * **addedby** - default is hide (0). Use 1 to show.
 * **date** - default is hide (0). Use 1 to show.
 * **editlink** - default is show (1). Use 0 to hide.
+* **category** - default is all categories (0).  Use the category ID to show a specific category.
 
 Example:
 
@@ -141,6 +142,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Fixed jQuery sorting of Date Added not working after first sorting
 * Fixed dash showing for Date Completed even when field set to not show
 * Added filters for front-end progress display
+* Added category attribute to todoadmin to show a specific category
 
 = 3.3 =
 * Added Slovak translation by Branco [WebHostingGeeks.com](http://webhostinggeeks.com/user-reviews/)

@@ -52,6 +52,40 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 	}
 
 	/**
+	 * Display a to-do list
+	 * @param int $completed
+	 * @return void
+	 */
+	public function display( $completed = 0 ) {
+		extract( shortcode_atts( array(
+			'category' => 0,
+		), $this->atts ) );
+		list( $this->url, $action ) = CTDL_Lib::set_variables();
+
+		// get the existing to-do data and show the edit form if editing a to-do item
+		if ( $action == 'edit-todo' ) {
+			$this->edit_todo_item( $this->url );
+			return;
+		}
+
+		// otherwise, display the list of to-do items
+		$this->list .= $this->show_heading();
+
+		$this->list .= '<table id="todo-list" class="todo-table widefat">';
+
+		$this->show_table_headings();
+
+		/** @var $category int */
+		$this->loop_through_todos( 0, $category );
+
+		$this->list .= '</table>';
+
+		$this->list .= $this->create_new_todo_form();
+
+		wp_reset_postdata();
+	}
+
+	/**
 	 * Generate the To-Do List
 	 * @param $todo_items
 	 * @param int $completed
@@ -167,7 +201,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			'categories' => 0,
 			'addedby'    => 0,
 			'date'       => 0,
-			'editlink'   => 1
+			'editlink'   => 1,
+			'category'   => 0
 		), $this->atts ) );
 
 		$id = $todo_item->ID;
@@ -181,7 +216,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		/** @var $deadline int */
 		if ( $deadline == 1 ) $this->create_deadline_field( $deadline_meta );
 		/** @var $categories int */
-		if ( $categories == 1 ) $this->create_category_field( get_the_terms( $id, 'todocategories' ) );
+		/** @var $category int */
+		if ( $categories == 1 || $category != 0 ) $this->create_category_field( get_the_terms( $id, 'todocategories' ) );
 		if ( CTDL_PP ) $this->create_planner_field( $planner_meta );
 		/** @var $assigned int */
 		if ( $assigned == 1 ) $this->create_assign_field( $assign_meta );
@@ -212,7 +248,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 				'categories' => 0,
 				'addedby'    => 0,
 				'date'       => 0,
-				'editlink'   => 1
+				'editlink'   => 1,
+				'category'   => 0
 			), $this->atts ) );
 
 			$this->form = '<h3>'.apply_filters( 'ctdl_add_heading', esc_html__( 'Add New To-Do Item', 'cleverness-to-do-list' ) ).'</h3>';
@@ -224,7 +261,13 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			/** @var $deadline int */
 			if ( $deadline == 1 ) $this->create_deadline_field();
 			/** @var $categories int */
-			if ( $categories == 1 ) $this->create_category_field();
+			/** @var $category int */
+			if ( $categories == 1 && $category == 0 ) {
+				$this->create_category_field();
+			} elseif ( $category != 0 ) {
+				$category = array( get_term_by( 'id', $category, 'todocategories' ) );
+				$this->create_category_field( $category );
+			}
 			if ( CTDL_PP ) $this->create_planner_field();
 			/** @var $assigned int */
 			if ( $assigned == 1 ) $this->create_assign_field();
