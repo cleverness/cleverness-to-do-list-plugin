@@ -133,10 +133,12 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 = 3.3.1 =
 * Updated Russian translation from Sergei Zastavnyi
+* Updated Tablesorter jQuery plugin to forked version from http://mottie.github.io/tablesorter/
 * Fixed sorting when getting specific categories
 * Fixed issue with category not being set when using todoadmin and todolist shortcodes together
 * Fixed todo text not being red in admin when priority is set to important
 * Fixed todo text not being grey in admin when priority is set to low
+* Fixed jQuery sorting of Date Added not working after first sorting
 
 = 3.3 =
 * Added Slovak translation by Branco [WebHostingGeeks.com](http://webhostinggeeks.com/user-reviews/)
@@ -145,7 +147,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Added setting for the From email address
 * Added Post Planner URL to assigned user email if Post Planner integration is enabled
 * Fixed sorting by Date Added
-* Fixed [todolist] list format HTML when categories are enabled and to only show category headings when sort order is set to catgegory
+* Fixed [todolist] list format HTML when categories are enabled and to only show category headings when sort order is set to category
 * Fixed jQuery 1.9 deprecated functions
 * Adjusted table heading widths in backend
 
