@@ -134,6 +134,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski
+* Fixed Trying to get property of non-object notice in todolist shortcode
 
 = 3.3.1 =
 * Updated Russian translation from Sergei Zastavnyi
