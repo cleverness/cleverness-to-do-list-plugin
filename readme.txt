@@ -132,6 +132,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Changelog ==
 
+= 3.3.2 =
+* Updated Polish translation from Michał Wielkopolski
+
 = 3.3.1 =
 * Updated Russian translation from Sergei Zastavnyi
 * Updated Tablesorter jQuery plugin to forked version from http://mottie.github.io/tablesorter/
@@ -409,6 +412,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 == Upgrade Notice ==
 
+= 3.3.2 =
+Bug fix, updated translation
+
 = 3.3.1 =
 Bug fix
 
@@ -589,7 +595,7 @@ Czech translation by Tomas Vesely
 
 German translation updated by Janne Fleischer
 
-Polish translation by [Adam Zienkowicz](http://i2biz.pl)
+Polish translation by [Adam Zienkowicz](http://i2biz.pl) - Updated by [Michał Wielkopolski](http://www.oikoslab.pl/)
 
 Slovak translation by Branco [WebHostingGeeks.com](http://webhostinggeeks.com/user-reviews/)
 
