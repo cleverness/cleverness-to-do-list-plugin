@@ -180,6 +180,8 @@ class CTDL_Widget extends WP_Widget {
 
 		endwhile;
 
+		wp_reset_postdata();
+
 		return $posts_to_exclude;
 	}
 

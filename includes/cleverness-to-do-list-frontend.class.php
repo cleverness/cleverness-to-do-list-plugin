@@ -139,6 +139,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			}
 		endwhile;
 
+		wp_reset_postdata();
+
 		return $posts_to_exclude;
 	}
 
@@ -451,6 +453,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			}
 		endwhile;
 
+		wp_reset_postdata();
+
 		return $posts_to_exclude;
 
 	}
@@ -735,6 +739,8 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				}
 			}
 		endwhile;
+
+		wp_reset_postdata();
 
 		return $posts_to_exclude;
 	}

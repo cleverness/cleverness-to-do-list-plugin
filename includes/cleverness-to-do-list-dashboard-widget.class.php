@@ -174,6 +174,8 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			$this->list .= '</div></div>';
 		endwhile;
 
+		wp_reset_postdata();
+
 		return $posts_to_exclude;
 
 	}

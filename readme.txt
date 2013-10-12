@@ -134,6 +134,8 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 
 = 3.4 =
 * Updated version of Select2 to 3.4.3
+* Added wp_reset_postdata() to widget loop (thanks to dwightlathan77), delete all todos loop, get_todos loop for master view, get all completed todos loop, main show_todo_list_items loop, dashboard widget loop,
+and frontend loops
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski

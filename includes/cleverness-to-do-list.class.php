@@ -206,6 +206,8 @@ class ClevernessToDoList {
 			}
 		endwhile;
 
+		wp_reset_postdata();
+
 		return $posts_to_exclude;
 
 	}

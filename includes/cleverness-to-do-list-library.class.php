@@ -95,6 +95,7 @@ class CTDL_Lib {
 				while ( $posts_to_exclude->have_posts() ) : $posts_to_exclude->the_post();
 					$to_exclude[] = get_the_ID();
 				endwhile;
+				wp_reset_postdata();
 
 				if ( CTDL_Loader::$settings['show_only_assigned'] == '0' && $user != 0 && ( !current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) {
 					$metaquery = array(
@@ -474,6 +475,8 @@ class CTDL_Lib {
 				$id = get_the_ID();
 				wp_delete_post( absint( $id ), true );
 			endwhile;
+
+			wp_reset_postdata();
 		}
 	}
 
@@ -500,6 +503,8 @@ class CTDL_Lib {
 				$id = get_the_ID();
 				wp_delete_post( absint( $id ), true );
 			endwhile;
+
+			wp_reset_postdata();
 		}
 	}
 
