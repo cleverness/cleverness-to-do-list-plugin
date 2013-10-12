@@ -5,8 +5,8 @@ Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.3
-Tested up to: 3.6
-Stable tag: 3.3.2
+Tested up to: 3.7
+Stable tag: 3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -131,6 +131,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 4. Everything Enabled
 
 == Changelog ==
+
+= 3.4 =
+* Updated version of Select2 to 3.4.3
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski
@@ -412,6 +415,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Fixed to work in WordPress 2.8
 
 == Upgrade Notice ==
+
+= 3.4 =
+Bug fixes, new features
 
 = 3.3.2 =
 Bug fix, updated translation
