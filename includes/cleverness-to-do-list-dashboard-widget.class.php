@@ -155,7 +155,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			}
 			if ( CTDL_Loader::$settings['show_progress'] == 1 && $progress_meta != '' ) {
 				$this->list .= ' <small>[';
-				$this->show_progress( $progress_meta );
+				$this->show_progress( $progress_meta, 'list', $completed );
 				$this->list .= ']</small>';
 			}
 			if ( CTDL_Loader::$settings['list_view'] == 1 && isset( $this->dashboard_settings['dashboard_author'] ) && $this->dashboard_settings['dashboard_author'] == 0 ) {

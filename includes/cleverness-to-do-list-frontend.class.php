@@ -555,9 +555,10 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	 * Show the progress of the to-do item
 	 * @param int $progress
 	 * @param string $type
+	 * @param int $completed
 	 * @return void
 	 */
-	public function show_progress( $progress, $type = 'list' ) {
+	public function show_progress( $progress, $type = 'list', $completed = 0 ) {
 		if ( CTDL_Loader::$settings['show_progress'] == '1' && $progress != '' ) {
 			$this->list .= ' <small class="todo-progress">'.apply_filters( 'ctdl_frontend_checklist_progress', '['.esc_attr( $progress ).'%]' ).'</small>';
 		}
@@ -717,7 +718,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				/** @var $priorities string */
 				if ( $priorities == 'show' && $type == 'table' ) $this->show_priority( $the_priority );
 				/** @var $progress string */
-				if ( $progress == 'show' && CTDL_Loader::$settings['show_progress'] == 1 ) $this->show_progress( $progress_meta, $type );
+				if ( $progress == 'show' && CTDL_Loader::$settings['show_progress'] == 1 ) $this->show_progress( $progress_meta, $type, $completed );
 				/** @var $category string */
 				if ( $category == 0  && $type == 'table' && CTDL_Loader::$settings['categories'] == 1 ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
 				/** @var $assigned string */
@@ -887,8 +888,10 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 	 * Show the progress of the to-do item
 	 * @param $progress
 	 * @param $layout
+	 * @param $completed
 	 */
-	public function show_progress( $progress, $layout = 'list' ) {
+	public function show_progress( $progress, $layout = 'list', $completed = 0 ) {
+		$progress = ( $completed == 1 ? '100' : $progress );
 		if ( CTDL_Loader::$settings['show_progress'] == 1 && $progress != '' ) {
 			if ( $layout == 'table' ) {
 				$this->list .= ( $progress != '' ? sprintf( '<td class="todo-progress">%d%%</td>', esc_attr( $progress ) ) : '<td class="todo-progress"></td>' );

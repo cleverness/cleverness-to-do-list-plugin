@@ -192,7 +192,7 @@ class ClevernessToDoList {
 				$this->show_checkbox( $id, $completed );
 				$this->show_todo_text( get_the_content() );
 				$this->show_priority( $priority );
-				$this->show_progress( $progress_meta );
+				$this->show_progress( $progress_meta, 'table', $completed );
 				$this->show_category( get_the_terms( $id, 'todocategories' ) );
 				if ( CTDL_PP ) $this->show_planner( $planner_meta );
 				$this->show_assigned( $assign_meta );
@@ -677,9 +677,11 @@ class ClevernessToDoList {
 	 * Show the Progress of a To-Do Item
 	 * @param int $progress
 	 * @param string $layout
+	 * @param int $completed
 	 */
-	public function show_progress( $progress, $layout = 'table' ) {
+	public function show_progress( $progress, $layout = 'table', $completed = 0 ) {
 		if ( CTDL_Loader::$settings['show_progress'] == 1 ) {
+			$progress = ( $completed == 1 ? '100' : $progress );
 			if ( $layout == 'table' ) {
 				$this->list .= ( $progress != '' ? sprintf( '<td class="todo-progress">%d%%</td>', esc_attr( $progress ) ) : '<td class="todo-progress"></td>' );
 			} else {
