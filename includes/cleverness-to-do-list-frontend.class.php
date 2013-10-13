@@ -336,7 +336,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			'addedby'    => 0,
 			'date'       => 0,
 			'todoid'     => '',
-			'editlink'   => 0
+			'editlink'   => 0,
+			'completed'  => 0
 		), $this->atts ) );
 		global $current_user;
 		get_currentuserinfo();
@@ -391,7 +392,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 		} else {
 
 			/** @var $category mixed */
-			$this->loop_through_todos( 0, $category );
+			/** @var $completed mixed */
+			$this->loop_through_todos( $completed, $category );
 
 		}
 
@@ -417,6 +419,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			'date'       => 0,
 			'todoid'     => '',
 			'editlink'   => 0,
+			'completed'  => 0
 		), $this->atts ) );
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
@@ -431,7 +434,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 				$this->show_category_headings ( get_the_terms( $id, 'todocategories' ), $this->cat_id );
 
 				$this->list .= '<div id="todo-'.esc_attr( $id ).'"'.$priority_class.'>';
-				$this->show_checkbox( $id, '', 'list' );
+				$this->show_checkbox( $id, $completed, 'list' );
 				$this->list .= '<div class="todoitem">';
 				$this->show_todo_text( get_the_content(), 'list' );
 				/** @var $priority int */

@@ -138,9 +138,11 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 and frontend loops
 * Show progress as 100% completed for completed items
 * Fixed Assigned to text shows up even though the value is empty on dashboard widget
+TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes - refresh page after checking/unchecking?
+TODO: Add completed attribute to admin shortcode
+TODO: Add completed only shortcode to todolist shortcode?
 TODO: * Email assigned user when todo is modified in any way
-TODO: * Can multiple categories be added to todos?
-TODO: * Edit todo page showing blank space at top of page
+TODO: * Can multiple hierarchial categories be added to todos?
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski
