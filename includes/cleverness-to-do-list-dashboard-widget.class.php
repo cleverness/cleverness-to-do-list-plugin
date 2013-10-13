@@ -139,14 +139,9 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			$this->list .= '<div class="todoitem">';
 			$this->show_todo_text( get_the_content() );
 			if ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) )
-					||  ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) && CTDL_Loader::$settings['assign'] == 0 ) {
-				$assign_user = '';
-				if ( $assign_meta != '-1' && $assign_meta != '0' ) {
-					$assign_user = get_userdata( $assign_meta );
-					$this->list .= ' <small>['.apply_filters( 'ctdl_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ).' ';
-					$this->show_assigned( $assign_meta );
-					$this->list .= ']</small>';
-				}
+					|| ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) && CTDL_Loader::$settings['assign'] == 0 && $assign_meta != 0 && $assign_meta != ''
+					&& $assign_meta != -1 && !in_array( -1, $assign_meta ) ) {
+				$this->show_assigned( $assign_meta );
 			}
 			if ( CTDL_Loader::$settings['show_deadline'] == 1 && isset( $this->dashboard_settings['show_dashboard_deadline'] ) && $this->dashboard_settings['show_dashboard_deadline'] == 1 && $deadline_meta != '' ) {
 				$this->list .=  ' <small>['.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).' ';
@@ -194,6 +189,35 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted floatleft' . $single . '"/>', esc_attr( $id ) );
 			$cleverness_todo_complete_nonce = wp_create_nonce( 'todocomplete' );
 			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="' . esc_attr( $cleverness_todo_complete_nonce ) . '" />';
+		}
+	}
+
+	/**
+	 * Show the User that a To-Do Item is Assigned To
+	 * @param int $assign
+	 * @param string $layout
+	 * @since 3.4
+	 */
+	public function show_assigned( $assign, $layout = 'list' ) {
+		if ( ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) ||
+				( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) ) && CTDL_Loader::$settings['assign'] == 0 ) {
+			$this->list .= ' <small>[' . apply_filters( 'ctdl_assigned', esc_html__( 'Assigned to', 'cleverness-to-do-list' ) ) . ' ';
+			if ( is_array( $assign ) ) {
+				$assign_users = '';
+				foreach ( $assign as $value ) {
+					if ( $value != '-1' && $value != '' && $value != 0 ) {
+						$user = get_userdata( $value );
+						$assign_users .= $user->display_name . ', ';
+					}
+				}
+				$this->list .= substr( $assign_users, 0, -2 );
+			} else {
+				if ( $assign != '-1' && $assign != '' && $assign != 0 ) {
+					$assign_user = get_userdata( $assign );
+					$this->list .= esc_html( $assign_user->display_name );
+				}
+			}
+			$this->list .= ']</small>';
 		}
 	}
 
