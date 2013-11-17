@@ -337,7 +337,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			'date'       => 0,
 			'todoid'     => '',
 			'editlink'   => 0,
-			'completed'  => 0
+			'completed'  => 0,
+			'refresh'    => 0
 		), $this->atts ) );
 		global $current_user;
 		get_currentuserinfo();
@@ -346,6 +347,12 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 		$this->list = '';
 
 		list( $this->url, $this->action ) = CTDL_Lib::set_variables();
+
+		/** @var $refresh int
+		 * @var $completed int */
+		$class = ( $refresh == 1 ? 'refresh todo-checklist' : 'todo-checklist' );
+		$class = ( $completed == 1 ? $class.' completed-checklist' : $class.' uncompleted-checklist' );
+		$this->list .= '<div class="'.$class.'">';
 
 		/** @var $title string */
 		if ( $title != '') {
@@ -392,10 +399,11 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 		} else {
 
 			/** @var $category mixed */
-			/** @var $completed mixed */
 			$this->loop_through_todos( $completed, $category );
 
 		}
+
+		$this->list .= '</div>';
 
 		wp_reset_postdata();
 	}

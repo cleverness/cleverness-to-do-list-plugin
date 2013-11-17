@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy
 Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
-Requires at least: 3.3
+Requires at least: 3.5
 Tested up to: 3.7
 Stable tag: 3.4
 License: GPLv2 or later
@@ -138,11 +138,12 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 and frontend loops
 * Show progress as 100% completed for completed items
 * Fixed Assigned to text shows up even though the value is empty on dashboard widget
-TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes - refresh page after checking/unchecking?
+TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes - refresh page after checking/unchecking to get correct sorting?
 TODO: Add completed attribute to admin shortcode
 TODO: Add completed only shortcode to todolist shortcode?
 TODO: * Email assigned user when todo is modified in any way
 TODO: * Can multiple hierarchial categories be added to todos?
+TODO: Add show completed option in wordpress dashboard
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski

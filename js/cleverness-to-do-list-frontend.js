@@ -26,11 +26,12 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	$( '.todo-checkbox' ).click( function () {
-		var status = 1;
+		var status = 0;
 		var id = $( this ).attr( 'id' ).substr( 5 );
 		var todoid = '#todo-' + id;
-		var single = $ (this ).hasClass( 'single' );
-		if ($( this ).prop( 'checked' ) == false ) status = 0;
+		var single = $( this ).hasClass( 'single' );
+		var refresh = $( this ).parent().parent().hasClass( 'refresh' );
+		if ( $( this ).prop( 'checked' ) ) status = 1;
 
 		var data = {
 			action: 'cleverness_todo_complete',
@@ -39,12 +40,27 @@ jQuery( document ).ready( function( $ ) {
 			_ajax_nonce: ctdl.NONCE
 		};
 
+		var todo_data = {
+			action: 'cleverness_display_todos',
+			_ajax_nonce: ctdl.NONCE
+		};
+
 		jQuery.post( ctdl.AJAX_URL, data, function( response ) {
 			if ( single != true ) {
 				$( todoid ).fadeOut( function () {
 					$( this ).remove();
-				});
-				$( '.todo-checkbox' ).prop( "checked", false );
+				} );
+				//$( '.todo-checkbox' ).prop( "checked", false );
+			}
+			if ( refresh == true ) {
+				jQuery.post( ctdl.AJAX_URL, todo_data, function( response2 ) {
+					if ( status == 1 ) {
+						alert(response2.id);
+						$ ('.completed-checklist' ).html( 'test' );
+					} else if ( status == 0 ) {
+						$( '.uncompleted-checklist' ).html( response.id );
+					}
+				} );
 			}
 		} );
 	} );

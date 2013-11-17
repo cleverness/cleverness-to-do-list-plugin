@@ -127,6 +127,7 @@ class CTDL_Loader {
 	 * @static
 	 */
 	private static function call_wp_hooks() {
+		global $CTDL_Frontend_Checklist;
 		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', array( 'CTDL_Lib', 'add_to_toolbar' ), 999 );
 		if ( is_admin() ) {
 			add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
@@ -136,6 +137,7 @@ class CTDL_Loader {
 		}
 		add_action( 'wp_ajax_cleverness_delete_todo', array( 'CTDL_Lib', 'delete_todo_callback' ) );
 		add_action( 'wp_ajax_cleverness_todo_complete', array( 'CTDL_Lib', 'complete_todo_callback' ) );
+		add_action( 'wp_ajax_cleverness_display_todos', array( 'CTDL_Lib', 'display_todos_callback' ) );
 	}
 
 	/**
