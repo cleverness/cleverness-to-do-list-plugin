@@ -141,8 +141,10 @@ and frontend loops
 TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes - refresh page after checking/unchecking?
 TODO: Add completed attribute to admin shortcode
 TODO: Add completed only shortcode to todolist shortcode?
-TODO: * Email assigned user when todo is modified in any way
-TODO: * Can multiple hierarchial categories be added to todos?
+TODO: Email assigned user when todo is modified in any way
+TODO: Can multiple hierarchial categories be added to todos?
+TODO: Add completed display to dashboard widget
+TODO: MP6 check
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski
