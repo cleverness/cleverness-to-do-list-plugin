@@ -25,7 +25,7 @@ include_once 'includes/cleverness-to-do-list-widget.class.php';
  */
 function cleverness_todo_loader() {
 
-	if ( !defined( 'CTDL_DB_VERSION' ) )     define( 'CTDL_DB_VERSION', '3.3' ); // also update in cleverness_todo_activation at the bottom of this file
+	if ( !defined( 'CTDL_DB_VERSION' ) )     define( 'CTDL_DB_VERSION', '3.4' ); // also update in cleverness_todo_activation at the bottom of this file
 	if ( !defined( 'CTDL_PLUGIN_VERSION' ) ) define( 'CTDL_PLUGIN_VERSION', '3.4' );
 	if ( !defined( 'CTDL_FILE' ) )           define( 'CTDL_FILE', __FILE__ );
 	if ( !defined( 'CTDL_BASENAME' ) )       define( 'CTDL_BASENAME', plugin_basename( __FILE__ ) );
@@ -100,7 +100,7 @@ function cleverness_todo_activation() {
 		exit( $exit_msg );
 	}
 
-	if ( !defined( 'CTDL_DB_VERSION' ) ) define( 'CTDL_DB_VERSION','3.3' );
+	if ( !defined( 'CTDL_DB_VERSION' ) ) define( 'CTDL_DB_VERSION','3.4' );
 	if ( !defined( 'CTDL_FILE' ) )       define( 'CTDL_FILE', __FILE__ );
 	include_once 'includes/cleverness-to-do-list-library.class.php';
 

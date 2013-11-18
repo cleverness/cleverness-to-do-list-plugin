@@ -886,6 +886,7 @@ class CTDL_Lib {
 				'show_dashboard_deadline' => 0,
 				'show_edit_link'          => 0,
 				'dashboard_author'        => 1,
+				'show_dashboard_completed'     => 0
 			);
 
 			add_option( 'CTDL_general', $general_options );
@@ -949,10 +950,12 @@ class CTDL_Lib {
 				);
 
 				$dashboard_options = array(
-					'dashboard_number'        => -1,
+					'dashboard_number'        => $the_options['dashboard_number'],
 					'dashboard_cat'           => $the_options['dashboard_cat'],
-					'show_dashboard_deadline' => 0,
-					'dashboard_author'        => 1,
+					'show_dashboard_deadline' => $the_options['show_dashboard_deadline'],
+					'show_edit_link'          => $the_options['show_edit_link'],
+					'dashboard_author'        => $the_options['dashboard_author'],
+					'show_dashboard_completed'     => 0,
 				);
 
 				if ( $general_options['sort_order'] == 'todotext' ) {

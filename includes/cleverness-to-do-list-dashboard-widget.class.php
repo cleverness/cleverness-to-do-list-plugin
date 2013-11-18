@@ -17,8 +17,8 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	public $dashboard_settings = '';
 
 	public function __construct() {
-		add_action( 'wp_dashboard_setup', array( &$this, 'dashboard_setup' ) );
-		add_action( 'admin_init', array( &$this, 'dashboard_init' ) );
+		add_action( 'wp_dashboard_setup', array( $this, 'dashboard_setup' ) );
+		add_action( 'admin_init', array( $this, 'dashboard_init' ) );
 	}
 
 	/**
@@ -29,13 +29,21 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		$this->dashboard_settings['dashboard_cat'] = ( isset( $this->dashboard_settings['dashboard_cat'] ) ? $this->dashboard_settings['dashboard_cat'] : 0 );
 		$cat_ids  = ( is_array( $this->dashboard_settings['dashboard_cat'] ) ? $this->dashboard_settings['dashboard_cat'] : array( $this->dashboard_settings['dashboard_cat'] ) );
 		$limit = ( isset( $this->dashboard_settings['dashboard_number'] ) ? $this->dashboard_settings['dashboard_number'] : -1 );
+		$completed = ( isset( $this->dashboard_settings['show_dashboard_completed'] ) ? $this->dashboard_settings['show_dashboard_completed'] : 0 );
 		$this->list = '';
 
-		foreach ( $cat_ids as $cat_id ) {
-			$this->loop_through_todos( $cat_id, $limit );
+		$this->list .= '<div id="cleverness-uncompleted">';
+		$this->get_uncompleted_items( $cat_ids, $limit );
+		$this->list .= '</div>';
+
+		if ( $completed == 1 ) {
+			$this->list .= '<div id="cleverness-completed">';
+			$this->get_completed_items( $cat_ids, $limit );
+			$this->list .= '</div>';
 		}
 
 		if ( $this->list != '' ) {
+			$this->list .= '<input type="hidden" name="cleverness-dashboard-completed" value="'.$completed.'">';
 			echo $this->list;
 		} else {
 			echo '<p>'.apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ).'</p>';
@@ -50,12 +58,40 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	}
 
 	/**
+	 * Gets the uncompleted todos
+	 * @param $cat_ids
+	 * @param $limit
+	 * @return mixed
+	 */
+	public function get_uncompleted_items( $cat_ids, $limit ) {
+
+		foreach ( $cat_ids as $cat_id ) {
+			$this->loop_through_todos( $cat_id, $limit );
+		}
+
+	}
+
+	/**
+	 * Gets the completed todos
+	 * @param $cat_ids
+	 * @param $limit
+	 */
+	public function get_completed_items( $cat_ids, $limit ) {
+
+		foreach ( $cat_ids as $cat_id ) {
+			$this->loop_through_todos( $cat_id, $limit, 1 );
+		}
+
+	}
+
+	/**
 	 * Loops through to-do items
 	 * Has no completed items and passes a limit value and a category id
 	 * @param int $cat_id
 	 * @param $limit
+	 * @param $status
 	 */
-	protected function loop_through_todos( $cat_id = 0, $limit = -1 ) {
+	protected function loop_through_todos( $cat_id = 0, $limit = -1, $status = 0 ) {
 		global $userdata, $current_user;
 		get_currentuserinfo();
 
@@ -72,18 +108,18 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			$posts_to_exclude = array();
 
 			foreach ( $categories as $category ) {
-				$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $category->term_id );
+				$todo_items = CTDL_Lib::get_todos( $user, $limit, $status, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
-					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, 0, $cat_id ) );
+					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $status, $cat_id ) );
 					$items = 1;
 				}
 			}
 
-			$todo_items = CTDL_Lib::get_todos( $user, 0, 0, 0, $posts_to_exclude );
+			$todo_items = CTDL_Lib::get_todos( $user, 0, $status, 0, $posts_to_exclude );
 
 			if ( $todo_items->have_posts() ) {
-				$this->show_todo_list_items( $todo_items, 0 );
+				$this->show_todo_list_items( $todo_items, $status );
 				$items = 1;
 			}
 
@@ -93,10 +129,10 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 
 		} else {
 
-			$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $cat_id );
+			$todo_items = CTDL_Lib::get_todos( $user, $limit, $status, $cat_id );
 
 			if ( $todo_items->have_posts() ) {
-				$this->show_todo_list_items( $todo_items );
+				$this->show_todo_list_items( $todo_items, $status );
 			} else {
 				$this->list .= '';
 			}
@@ -178,15 +214,19 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	/**
 	 * Create the HTML to show a To-Do List Checkbox
 	 * @param int $id
-	 * @param boolean $completed
+	 * @param int $completed
 	 * @param string $layout
 	 * @param string $single
 	 * @since 3.2
 	 */
-	protected function show_checkbox( $id, $completed = NULL, $layout = 'table', $single = '' ) {
+	protected function show_checkbox( $id, $completed = 0, $layout = 'table', $single = '' ) {
 		$permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 		if ( $permission === true ) {
-			$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted floatleft' . $single . '"/>', esc_attr( $id ) );
+			if ( $completed == 1 ) {
+				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox completed floatleft' . $single . '" checked="checked" />', esc_attr( $id ) );
+			} elseif ( $completed == 0 ) {
+				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted floatleft' . $single . '"/>', esc_attr( $id ) );
+			}
 			$cleverness_todo_complete_nonce = wp_create_nonce( 'todocomplete' );
 			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="' . esc_attr( $cleverness_todo_complete_nonce ) . '" />';
 		}
@@ -222,6 +262,28 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	}
 
 	/**
+	 * Ajax callback for getting todos
+	 */
+	public function dashboard_get_todos_callback() {
+		check_ajax_referer( 'cleverness-todo' );
+		$this->dashboard_settings['dashboard_cat'] = ( isset( $this->dashboard_settings['dashboard_cat'] ) ? $this->dashboard_settings['dashboard_cat'] : 0 );
+		$cat_ids = ( is_array( $this->dashboard_settings['dashboard_cat'] ) ? $this->dashboard_settings['dashboard_cat'] : array( $this->dashboard_settings['dashboard_cat'] ) );
+		$limit = ( isset( $this->dashboard_settings['dashboard_number'] ) ? $this->dashboard_settings['dashboard_number'] : -1 );
+
+		$status = absint( $_POST['cleverness_status'] );
+		$this->list = '';
+
+		if ( $status == 1 ) {
+			$this->get_completed_items( $cat_ids, $limit );
+		} elseif ( $status == 0 ) {
+			$this->get_uncompleted_items( $cat_ids, $limit );
+		}
+		wp_send_json( array( 'data' => $this->list ) ); // encode to JSON and send response
+
+		die(); // this is required to return a proper result
+	}
+
+	/**
 	 * Dashboard Widget Options
 	 */
 	public function dashboard_options() {
@@ -242,6 +304,13 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 					<option value="10"<?php if ( $options['dashboard_number'] == '10' ) echo ' selected="selected"'; ?>><?php _e( '10', 'cleverness-to-do-list' ); ?></option>
 					<option value="15"<?php if ( $options['dashboard_number'] == '15' ) echo ' selected="selected"'; ?>><?php _e( '15', 'cleverness-to-do-list' ); ?></option>
 					<option value="-1"<?php if ( $options['dashboard_number'] == '-1' ) echo ' selected="selected"'; ?>><?php _e( 'All', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+				</select>
+			</p>
+
+			<p><label for="cleverness_todo_dashboard_settings[show_dashboard_completed]"><?php esc_html_e( 'Show Completed Items', 'cleverness-to-do-list' ); ?></label>
+				<select id="cleverness_todo_dashboard_settings[show_dashboard_completed]" name="cleverness_todo_dashboard_settings[show_dashboard_completed]">
+					<option value="0"<?php if ( $options['show_dashboard_completed'] == 0 ) echo ' selected="selected"'; ?>><?php esc_html_e( 'No', 'cleverness-to-do-list' ); ?></option>
+					<option value="1"<?php if ( $options['show_dashboard_completed'] == 1 ) echo ' selected="selected"'; ?>><?php esc_html_e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
 				</select>
 			</p>
 
@@ -308,6 +377,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		wp_register_script( 'cleverness_todo_dashboard_complete_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-dashboard-widget.js', '', CTDL_PLUGIN_VERSION, true );
 		add_action( 'admin_print_scripts-index.php',  array( $this, 'dashboard_add_js' ) );
 		add_action( 'wp_ajax_cleverness_todo_dashboard_complete', array( 'CTDL_Lib', 'complete_todo_callback' ) );
+		add_action( 'wp_ajax_cleverness_dashboard_get_todos', array( $this, 'dashboard_get_todos_callback' ) );
 		add_action( 'admin_print_styles-index.php', array ( 'CTDL_Loader', 'add_admin_css' ) );
 	}
 
@@ -318,7 +388,6 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		wp_enqueue_script( 'cleverness_todo_dashboard_complete_js' );
 		wp_localize_script( 'cleverness_todo_dashboard_complete_js', 'ctdl', CTDL_Loader::get_js_vars() );
     }
-
 }
 
 class ClevernessToDoListCategoryWalker extends Walker_Category {
