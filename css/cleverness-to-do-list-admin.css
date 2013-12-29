@@ -41,6 +41,11 @@
 	width: 220px;
 }
 
+#cleverness_todo_deadline {
+	position: relative;
+	z-index: 1000;
+}
+
 #cleverness_todo_progress {
 	width: 30px;
 	margin-left: 5px;
@@ -48,6 +53,8 @@
 	border: 0;
 	text-align: right;
 	padding: 0;
+	background: transparent;
+	box-shadow: 0 0;
 }
 
 #cleverness-todo-progress-slider {
@@ -105,10 +112,12 @@ table#todo-list thead tr .sorter-false {
 
 .todoitem {
 	margin-left: 20px;
+	margin-bottom: 1em;
 }
 
 .todoitem p {
-	margin: 0.2em 0;
+	margin: 0 0 0.2em 0;
+	line-height: 0.8em;
 }
 
 div.todo-list {
