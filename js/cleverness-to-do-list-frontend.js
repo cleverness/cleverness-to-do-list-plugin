@@ -29,7 +29,7 @@ jQuery( document ).ready( function( $ ) {
 		var status = 1;
 		var id = $( this ).attr( 'id' ).substr( 5 );
 		var todoid = '#todo-' + id;
-		var single = $ (this ).hasClass( 'single' );
+		var single = $( this ).hasClass( 'single' );
 		if ($( this ).prop( 'checked' ) == false ) status = 0;
 
 		var data = {
@@ -44,7 +44,12 @@ jQuery( document ).ready( function( $ ) {
 				$( todoid ).fadeOut( function () {
 					$( this ).remove();
 				});
-				$( '.todo-checkbox' ).prop( "checked", false );
+				location.reload();
+				if ( $( this ).hasClass( 'completed' ) ) {
+					$( this ).prop( 'checked' );
+				} else {
+					$( this ).prop( 'checked', false );
+				}
 			}
 		} );
 	} );

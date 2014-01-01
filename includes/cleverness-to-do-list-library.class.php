@@ -606,7 +606,7 @@ class CTDL_Lib {
 	 * @param $action
 	 * @return bool
 	 */
-	public static function check_permission( $type, $action ) {
+	public static function check_permission( $type, $action = NULL ) {
 
 		switch ( $type ) {
 			case 'category':
@@ -615,6 +615,9 @@ class CTDL_Lib {
 				break;
 			case 'todo':
 				$permission = ( current_user_can( CTDL_Loader::$settings[$action.'_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ? true : false );
+				break;
+			case 'edit':
+				$permission = ( CTDL_Loader::$dashboard_settings['show_edit_link'] == 1 && ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) ? true : false );
 				break;
 		}
 
@@ -886,6 +889,7 @@ class CTDL_Lib {
 				'show_dashboard_deadline' => 0,
 				'show_edit_link'          => 0,
 				'dashboard_author'        => 1,
+				'show_completed'          => 0
 			);
 
 			add_option( 'CTDL_general', $general_options );
@@ -998,6 +1002,12 @@ class CTDL_Lib {
 				$advanced_options                     = get_option( 'CTDL_advanced' );
 				$advanced_options['email_from_email'] = get_bloginfo( 'admin_email' );
 				update_option( 'CTDL_advanced', $advanced_options );
+			}
+
+			if ( $version < 3.4 ) {
+				$dashboard_options = get_option( 'CTDL_dashboard_settings' );
+				$dashboard_options['show_completed'] = 1;
+				update_option( 'CTDL_dashboard_settings', $dashboard_options );
 			}
 
 		}

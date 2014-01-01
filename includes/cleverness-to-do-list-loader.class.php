@@ -15,15 +15,17 @@
  */
 class CTDL_Loader {
 	public static $settings;
+	public static $dashboard_settings;
 
 	public static function init() {
-		global $ClevernessToDoList, $CTDL_Frontend_Checklist, $CTDL_Frontend_Admin;
+		global $ClevernessToDoList, $CTDL_Frontend_Checklist, $CTDL_Frontend_Admin, $CTDL_templates, $CTDL_dashboard;
 
 		if ( is_admin() ) self::check_for_upgrade();
 		$general_options      = ( get_option( 'CTDL_general' ) ? get_option( 'CTDL_general' ) : array() );
 		$advanced_options     = ( get_option( 'CTDL_advanced' ) ? get_option( 'CTDL_advanced' ) : array() );
 		$permissions_options  = ( get_option( 'CTDL_permissions' ) ? get_option( 'CTDL_permissions' ) : array() );
 		self::$settings       = array_merge( $general_options, $advanced_options, $permissions_options );
+		self::$dashboard_settings = get_option( 'CTDL_dashboard_settings' );
 
 		self::include_files();
 		if ( !post_type_exists( 'todo' ) ) self::setup_custom_post_type();
@@ -31,10 +33,11 @@ class CTDL_Loader {
 		self::call_wp_hooks();
 
         $ClevernessToDoList = new ClevernessToDoList();
+		$CTDL_templates = new CTDL_Template_Loader;
 
 		if ( is_admin() ) {
 			new CTDL_Settings();
-			new CTDL_Dashboard_Widget();
+			$CTDL_Dashboard = new CTDL_Dashboard_Widget();
 		} else {
 			$CTDL_Frontend_Admin     = new CTDL_Frontend_Admin;
 			$CTDL_Frontend_Checklist = new CTDL_Frontend_Checklist;
@@ -112,6 +115,11 @@ class CTDL_Loader {
 	private static function include_files() {
 		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-library.class.php';
 		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list.class.php';
+		if ( !class_exists( 'Gamajo_Template_Loader' ) ) {
+			include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-template.class.php';
+		}
+		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-template-loader.class.php';
+		include_once CTDL_PLUGIN_DIR . 'includes/cleverness-to-do-list-template-functions.class.php';
 		if ( self::$settings['categories'] == 1 ) include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-categories.class.php';
 		if ( is_admin() ) {
 			include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-settings.class.php';
