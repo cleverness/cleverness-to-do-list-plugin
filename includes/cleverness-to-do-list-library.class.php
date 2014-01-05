@@ -183,9 +183,22 @@ class CTDL_Lib {
 	 */
 	public static function display_todos_callback() {
 		global $CTDL_Frontend_Checklist;
-		check_ajax_referer( 'cleverness-todo' );
+		check_ajax_referer( 'ctdl-todo' );
 
-		$response = CTDL_LIB::get_todos();
+		$response = CTDL_Lib::get_todos();
+		wp_send_json( $response ); // encode to JSON and send response
+
+		die(); // this is required to return a proper result
+	}
+
+	/**
+	 * Ajax callback for getting todos
+	 */
+	public static function dashboard_display_todos_callback() {
+		global $CTDL_Dashboard_Widget;
+		check_ajax_referer( 'ctdl-todo' );
+
+		$response = $CTDL_Dashboard_Widget->display( $_POST['ctdl_status'] );
 		wp_send_json( $response ); // encode to JSON and send response
 
 		die(); // this is required to return a proper result
@@ -663,6 +676,15 @@ class CTDL_Lib {
 			case 'dashboard-author':
 				$permission = ( ( CTDL_Loader::$settings['list_view'] == 1 && isset( CTDL_Loader::$dashboard_settings['dashboard_author'] ) &&
 						CTDL_Loader::$dashboard_settings['dashboard_author'] == 0 ) && ( $data != '0' ) ? true : false );
+				break;
+			case 'widget-deadline':
+				$permission = ( CTDL_Loader::$settings['show_deadline'] == 1 && $deadline == 1 && $data != NULL? true : false );
+				break;
+			case 'widget-progress':
+				$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && $progress == 1 && $data != NULL ? true : false );
+				break;
+			case 'widget-assigned':
+				$permission = ( CTDL_Loader::$settings['assign'] == 0 && $assigned_to == 1 && CTDL_Loader::$settings['list_view'] != 0 && $assign_meta != -1 && !in_array( -1, $assign_meta ) ? true : false );
 				break;
 		}
 

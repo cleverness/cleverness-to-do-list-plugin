@@ -24,26 +24,50 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	 * Creates the dashboard widget
 	 */
 	public function dashboard_widget() {
+
+		$this->display();
+
+		if ( CTDL_Lib::check_permission( 'todo', 'add' ) ) {
+			echo '<p class="add-todo">' . '<a href="admin.php?page=cleverness-to-do-list#addtodo">' .
+					apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ) . '  &raquo;</a></p>';
+		}
+	}
+
+	/** Display the to-do list */
+	public function display( $status = 0 ) {
 		CTDL_Loader::$dashboard_settings['dashboard_cat'] = ( isset( CTDL_Loader::$dashboard_settings['dashboard_cat'] ) ? CTDL_Loader::$dashboard_settings['dashboard_cat'] : 0 );
 		$cat_ids = ( is_array( CTDL_Loader::$dashboard_settings['dashboard_cat'] ) ? CTDL_Loader::$dashboard_settings['dashboard_cat'] : array( CTDL_Loader::$dashboard_settings['dashboard_cat'] ) );
 		$limit = ( isset( CTDL_Loader::$dashboard_settings['dashboard_number'] ) ? CTDL_Loader::$dashboard_settings['dashboard_number'] : -1 );
+		$completed = ( CTDL_Loader::$dashboard_settings['show_completed'] == 1 ? 1 : 0 );
 
-		foreach ( $cat_ids as $cat_id ) {
-			$this->loop_through_todos( $cat_id, $limit );
-		}
 
-		if ( CTDL_Lib::check_permission( 'todo', 'add' ) ) {
-			echo '<p class="add-todo">' . '<a href="admin.php?page=cleverness-to-do-list#addtodo">' . apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ) . '  &raquo;</a></p>';
-		}
+			$class = 'uncompleted-checklist';
+			echo '<div class="' . $class . '">';
+			foreach ( $cat_ids as $cat_id ) {
+				$this->loop_through_todos( 0, $cat_id, $limit );
+			}
+			echo '</div>';
+
+			if ( $completed == 1 ) {
+				$class = 'completed-checklist';
+				echo '<div class="' . $class . '">';
+				foreach ( $cat_ids as $cat_id ) {
+					$this->loop_through_todos( 1, $cat_id, $limit );
+				}
+				echo '</div>';
+			}
+
+
 	}
 
 	/**
 	 * Loops through to-do items
-	 * Has no completed items and passes a limit value and a category id
+	 * Passes a completed value, limit value and a category id
+	 * @param int $status
 	 * @param int $cat_id
 	 * @param $limit
 	 */
-	protected function loop_through_todos( $cat_id = 0, $limit = -1 ) {
+	protected function loop_through_todos( $status = 0, $cat_id = 0, $limit = -1 ) {
 		global $userdata, $current_user;
 		get_currentuserinfo();
 
@@ -56,18 +80,18 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			$posts_to_exclude = array();
 
 			foreach ( $categories as $category ) {
-				$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $category->term_id );
+				$todo_items = CTDL_Lib::get_todos( $user, $limit, $status, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
-					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, 0, $cat_id ) );
+					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $status, $cat_id ) );
 					$items = 1;
 				}
 			}
 
-			$todo_items = CTDL_Lib::get_todos( $user, 0, 0, 0, $posts_to_exclude );
+			$todo_items = CTDL_Lib::get_todos( $user, 0, $status, 0, $posts_to_exclude );
 
 			if ( $todo_items->have_posts() ) {
-				$this->show_todo_list_items( $todo_items, 0 );
+				$this->show_todo_list_items( $todo_items, $status );
 				$items = 1;
 			}
 
@@ -76,10 +100,10 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			}
 		} else {
 
-			$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $cat_id );
+			$todo_items = CTDL_Lib::get_todos( $user, $limit, $status, $cat_id );
 
 			if ( $todo_items->have_posts() ) {
-				$this->show_todo_list_items( $todo_items );
+				$this->show_todo_list_items( $todo_items, $status );
 			} else {
 				echo '<p>' . apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ) . '</p>';
 			}
@@ -90,12 +114,14 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	 * Shows the to-do list items
 	 * Has dashboard specific settings
 	 * @param $todo_items
-	 * @param int $CTDL_completed
-	 * @param int $CTDL_cat_id
+	 * @param int $status
+	 * @param int $cat_id
 	 * @return array $posts_to_exclude
 	 */
-	protected function show_todo_list_items( $todo_items, $CTDL_completed = 0, $CTDL_cat_id = 0 ) {
-		global $CTDL_templates;
+	protected function show_todo_list_items( $todo_items, $status = 0, $cat_id = 0 ) {
+		global $CTDL_templates, $CTDL_status, $CTDL_category;
+		$CTDL_status = $status;
+		$CTDL_category = $cat_id;
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
 

@@ -111,8 +111,9 @@ class ClevernessToDoList {
 	 * Loop through to-do items
 	 * @param int $completed
 	 * @param int $cat_id
+	 * @param int $limit
 	 */
-	protected function loop_through_todos( $completed = 0, $cat_id = 0 ) {
+	protected function loop_through_todos( $completed = 0, $cat_id = 0, $limit = -1 ) {
 		global $current_user, $userdata;
 		$user = CTDL_Lib::get_user_id( $current_user, $userdata );
 
@@ -473,11 +474,11 @@ class ClevernessToDoList {
 	/**
 	 * Create the HTML to show a To-Do List Checkbox
 	 * @param int $id
-	 * @param boolean $completed
+	 * @param int $completed
 	 * @param string $layout
 	 * @param string $single
 	 */
-	protected function show_checkbox( $id, $completed = NULL, $layout = 'table', $single = '' ) {
+	protected function show_checkbox( $id, $completed = 0, $layout = 'table', $single = '' ) {
 		$permission = CTDL_Lib::check_permission( 'todo', 'complete' );
 		if ( $permission === true ) {
 			if ( is_admin() || $layout == 'table' ) $this->list .= '<td>';

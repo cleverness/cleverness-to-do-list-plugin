@@ -18,13 +18,17 @@ class CTDL_Templates {
 	/**
 	 * Create the HTML to show a To-Do List Checkbox
 	 * @param int $id
-	 * @param boolean $completed
+	 * @param int $completed
 	 * @param string $single
 	 * @since 3.2
 	 */
-	public static function show_checkbox( $id, $completed = NULL, $single = '' ) {
+	public static function show_checkbox( $id, $completed = 0, $single = '' ) {
 		if ( CTDL_Lib::check_permission( 'todo', 'complete' ) ) {
-			echo sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted floatleft' . $single . '"/>', esc_attr( $id ) );
+			if ( $completed == 0 ) {
+				echo sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted floatleft' . $single . '" />', esc_attr( $id ) );
+			} else {
+				echo sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox completed floatleft' . $single . '" checked="checked" />', esc_attr( $id ) );
+			}
 			$ctdl_complete_nonce = wp_create_nonce( 'todocomplete' );
 			echo '<input type="hidden" name="ctdl_complete_nonce" value="' . esc_attr( $ctdl_complete_nonce ) . '" />';
 		}

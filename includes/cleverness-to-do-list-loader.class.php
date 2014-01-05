@@ -145,7 +145,7 @@ class CTDL_Loader {
 		}
 		add_action( 'wp_ajax_cleverness_delete_todo', array( 'CTDL_Lib', 'delete_todo_callback' ) );
 		add_action( 'wp_ajax_cleverness_todo_complete', array( 'CTDL_Lib', 'complete_todo_callback' ) );
-		add_action( 'wp_ajax_cleverness_display_todos', array( 'CTDL_Lib', 'display_todos_callback' ) );
+		add_action( 'wp_ajax_ctdl_display_todos', array( 'CTDL_Lib', 'display_todos_callback' ) );
 	}
 
 	/**

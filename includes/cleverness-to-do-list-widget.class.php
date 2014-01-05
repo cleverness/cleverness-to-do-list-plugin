@@ -19,7 +19,8 @@ class CTDL_Widget extends WP_Widget {
 	protected $cat_id = '';
 
 	function __construct() {
-		parent::WP_Widget( 'cleverness-to-do-widget', apply_filters( 'ctdl_todo_list', esc_html__( 'To-Do List', 'cleverness-to-do-list' ) ), array( 'description' => __( 'Displays To-Do List Items', 'cleverness-to-do-list' ) ) );
+		parent::WP_Widget( 'cleverness-to-do-widget', apply_filters( 'ctdl_todo_list', esc_html__( 'To-Do List', 'cleverness-to-do-list' ) ),
+			array( 'description' => __( 'Displays To-Do List Items', 'cleverness-to-do-list' ) ) );
 	}
 
 	/**
@@ -112,8 +113,6 @@ class CTDL_Widget extends WP_Widget {
 
 		}
 
-		echo $ClevernessToDoList->list;
-
 		echo '</ol>';
 
 		/** @var $after_widget WP_Widget */
@@ -131,52 +130,14 @@ class CTDL_Widget extends WP_Widget {
 	 * @return array $posts_to_exclude
 	 */
 	protected function show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to, $category = 0, $visible = 0 ) {
-		global $ClevernessToDoList;
-		if ( CTDL_Loader::$settings['categories'] == 1 ) $visibility = get_option( 'CTDL_categories' );
-		$layout = 'list';
+		global $CTDL_templates, $CTDL_visibility;
+		if ( CTDL_Loader::$settings['categories'] == 1 ) $CTDL_visibility = get_option( 'CTDL_categories' );
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
 			$id = get_the_ID();
 			$posts_to_exclude[] = $id;
 
-			list( $priority, $assign_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
-
-			$priority_class = CTDL_Lib::set_priority_class( $priority );
-
-			if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $category == '0' ) {
-				$cats = get_the_terms( $id, 'todocategories' );
-				if ( $cats != NULL ) {
-					foreach( $cats as $category ) {
-						$visible = $visibility["category_$category->term_id"];
-						if ( $this->cat_id != $category->term_id && $visible == 0 ) {
-							$ClevernessToDoList->list .= '</ol><h4>'.esc_html( $category->name ).'</h4><ol>';
-							$this->cat_id = $category->term_id;
-						}
-					}
-				}
-			}
-
-			if ( $visible == 0 ) {
-
-				$ClevernessToDoList->list .= '<li'.$priority_class.'>';
-				$ClevernessToDoList->show_todo_text( get_the_content(), $layout );
-				if ( CTDL_Loader::$settings['show_progress'] == 1 && $progress == 1  && $progress_meta != '' ) {
-					$ClevernessToDoList->list .= ' - ';
-					$ClevernessToDoList->show_progress( $progress_meta, $layout );
-				}
-				if ( CTDL_Loader::$settings['show_deadline'] == 1 && $deadline == 1 && $deadline_meta != '' ) {
-					$ClevernessToDoList->list .= '<br /><span class="deadline">'.apply_filters( 'ctdl_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).': ';
-					$ClevernessToDoList->show_deadline( $deadline_meta, $layout );
-					$ClevernessToDoList->list .= '</span>';
-				}
-				if ( CTDL_Loader::$settings['assign'] == 0 && $assigned_to == 1 && CTDL_Loader::$settings['list_view'] != 0 && $assign_meta != -1 && !in_array( -1, $assign_meta ) ) {
-					$ClevernessToDoList->list .= '<br /><span class="assigned">'.apply_filters( 'ctdl_assigned', esc_html__( 'Assigned to', 'cleverness-to-do-list' ) ).' ';
-					$ClevernessToDoList->show_assigned( $assign_meta, $layout );
-					$ClevernessToDoList->list .= '</span>';
-				}
-				$ClevernessToDoList->list .= '</li>';
-
-			}
+			$CTDL_templates->get_template_part( 'widget' );
 
 		endwhile;
 
