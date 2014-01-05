@@ -179,6 +179,19 @@ class CTDL_Lib {
 	}
 
 	/**
+	 * Ajax callback for getting todos
+	 */
+	public static function display_todos_callback() {
+		global $CTDL_Frontend_Checklist;
+		check_ajax_referer( 'cleverness-todo' );
+
+		$response = CTDL_LIB::get_todos();
+		wp_send_json( $response ); // encode to JSON and send response
+
+		die(); // this is required to return a proper result
+	}
+
+	/**
 	 * Complete to-do item ajax callback
 	 * @static
 	 */
