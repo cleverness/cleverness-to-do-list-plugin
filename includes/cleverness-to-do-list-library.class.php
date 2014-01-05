@@ -186,7 +186,7 @@ class CTDL_Lib {
 		check_ajax_referer( 'ctdl-todo' );
 
 		if ( CTDL_Lib::check_permission( 'todo', 'complete' )) {
-			self::complete_todo( absint( $_POST['cleverness_id'] ), absint( $_POST['cleverness_status'] ) );
+			self::complete_todo( absint( $_POST['ctdl_todo_id'] ), absint( $_POST['ctdl_todo_status'] ) );
 		} else {
 			$message = esc_html__( 'You do not have sufficient privileges to complete items.', 'cleverness-to-do-list' );
 		}

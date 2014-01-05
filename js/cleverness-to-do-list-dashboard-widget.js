@@ -6,8 +6,8 @@ jQuery( document ).ready( function( $ ) {
 
 		var data = {
 		action: 'ctdl_dashboard_complete',
-		cleverness_id: id,
-		cleverness_status: 1,
+		ctdl_todo_id: id,
+		ctdl_todo_status: 1,
 		_ajax_nonce: ctdl.NONCE
 		};
 
