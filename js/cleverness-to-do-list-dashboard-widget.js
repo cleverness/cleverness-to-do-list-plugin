@@ -5,7 +5,7 @@ jQuery( document ).ready( function( $ ) {
 		var todoid = '#todo-' + id;
 
 		var data = {
-		action: 'cleverness_todo_dashboard_complete',
+		action: 'ctdl_dashboard_complete',
 		cleverness_id: id,
 		cleverness_status: 1,
 		_ajax_nonce: ctdl.NONCE

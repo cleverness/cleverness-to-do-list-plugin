@@ -1,3 +1,49 @@
+/* Dashboard Widget Styles */
+#ctdl h4 {
+	margin-top: 15px;
+	clear: both;
+}
+
+#ctdl .todo-item {
+	margin-left: 20px;
+	margin-bottom: 1em;
+}
+
+#ctdl .todo-item p {
+	margin: 0 0 0.2em 0;
+	line-height: 0.8em;
+}
+
+#ctdl .todo-list {
+	clear: both;
+	margin: 8px 0;
+}
+
+#ctdl .add-todo {
+	clear: both;
+	text-align: right;
+}
+
+#ctdl .ctdl-categories, #ctdl .ctdl-categories-label {
+	float: left;
+}
+
+#ctdl .ctdl-categories {
+	margin-top: 0;
+	margin-left: 5px;
+}
+
+#ctdl .description {
+	clear: both;
+}
+
+#ctdl input.floatleft {
+	float: left;
+	margin-right: 5px;
+}
+
+/* */
+
 .todo-important, .widefat .todo-important td, .widefat .todo-important td p {
 	color: #CC0033;
 }
@@ -64,11 +110,6 @@
 	border-radius: 0;
 }
 
-#cleverness_todo input.floatleft {
-	float: left;
-	margin-right: 5px;
-}
-
 table#todo-list thead tr .tablesorter-header {
 	background: rgb(241, 241, 241) url('images/bg.gif');
 	background-image: url('images/bg.gif'), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
@@ -105,26 +146,6 @@ table#todo-list thead tr .sorter-false {
 	overflow: auto;
 }
 
-#cleverness_todo h4 {
-	margin-top: 15px;
-	clear: both;
-}
-
-.todoitem {
-	margin-left: 20px;
-	margin-bottom: 1em;
-}
-
-.todoitem p {
-	margin: 0 0 0.2em 0;
-	line-height: 0.8em;
-}
-
-div.todo-list {
-	clear: both;
-	margin: 8px 0;
-}
-
 #todo-list-completed th {
 	cursor: pointer;
 }
@@ -144,11 +165,3 @@ div.todo-list {
 	background-position: -16px -128px;
 }
 
-.cleverness-to-do-list-categories, .cleverness-to-do-list-categories-label {
-	float: left;
-}
-
-.cleverness-to-do-list-categories {
-	margin-top: 0;
-	margin-left: 5px;
-}

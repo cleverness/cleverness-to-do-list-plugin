@@ -183,13 +183,12 @@ class CTDL_Lib {
 	 * @static
 	 */
 	public static function complete_todo_callback() {
-		check_ajax_referer( 'cleverness-todo' );
-		$permission = CTDL_Lib::check_permission( 'todo', 'complete' );
+		check_ajax_referer( 'ctdl-todo' );
 
-		if ( $permission === true ) {
+		if ( CTDL_Lib::check_permission( 'todo', 'complete' )) {
 			self::complete_todo( absint( $_POST['cleverness_id'] ), absint( $_POST['cleverness_status'] ) );
 		} else {
-			$message = esc_html__( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' );
+			$message = esc_html__( 'You do not have sufficient privileges to complete items.', 'cleverness-to-do-list' );
 		}
 		if ( isset( $message ) ) echo $message;
 
@@ -611,13 +610,46 @@ class CTDL_Lib {
 		switch ( $type ) {
 			case 'category':
 				// check if categories are enabled and the user has the capability or the list view is individual
-				$permission = ( CTDL_Loader::$settings['categories'] == '1' && ( current_user_can( CTDL_Loader::$settings[$action.'_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) ? true : false );
+				$permission = ( CTDL_Loader::$settings['categories'] == '1' && ( current_user_can( CTDL_Loader::$settings[$action . '_capability'] )
+						|| CTDL_Loader::$settings['list_view'] == '0' ) ? true : false );
 				break;
 			case 'todo':
-				$permission = ( current_user_can( CTDL_Loader::$settings[$action.'_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ? true : false );
+				$permission = ( current_user_can( CTDL_Loader::$settings[$action . '_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ? true : false );
 				break;
-			case 'edit':
-				$permission = ( CTDL_Loader::$dashboard_settings['show_edit_link'] == 1 && ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 ) ? true : false );
+		}
+
+		return $permission;
+	}
+
+	/**
+	 * Check if a field should be displayed
+	 * @static
+	 * @param $field
+	 * @param $data
+	 * @return bool
+	 */
+	public static function check_field( $field, $data = NULL ) {
+
+		switch ( $field ) {
+			case 'dashboard-edit':
+				$permission = ( CTDL_Loader::$dashboard_settings['show_edit_link'] == 1 && ( current_user_can( CTDL_Loader::$settings['edit_capability'] )
+						|| CTDL_Loader::$settings['list_view'] == 0 ) ? true : false );
+				break;
+			case 'assigned':
+				$permission = ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) )
+				|| ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) && CTDL_Loader::$settings['assign'] == 0 && $data != 0 && $data != NULL
+				&& $data != -1 && !in_array( -1, $data ) ? true : false );
+				break;
+			case 'dashboard-deadline':
+				$permission = ( ( CTDL_Loader::$settings['show_deadline'] == 1 && isset( CTDL_Loader::$dashboard_settings['show_dashboard_deadline'] ) &&
+						CTDL_Loader::$dashboard_settings['show_dashboard_deadline'] == 1 && $data != NULL ) ? true : false );
+				break;
+			case 'progress':
+				$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && $data != NULL ? true : false );
+				break;
+			case 'dashboard-author':
+				$permission = ( ( CTDL_Loader::$settings['list_view'] == 1 && isset( CTDL_Loader::$dashboard_settings['dashboard_author'] ) &&
+						CTDL_Loader::$dashboard_settings['dashboard_author'] == 0 ) && ( $data != '0' ) ? true : false );
 				break;
 		}
 
