@@ -5,7 +5,7 @@ Author URI: http://cleverness.org
 Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.5
-Tested up to: 3.8
+Tested up to: 4.0
 Stable tag: 3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -139,6 +139,7 @@ and frontend loops
 * Show progress as 100% completed for completed items
 * Fixed Assigned to text shows up even though the value is empty on dashboard widget
 * MP6 adjustments
+* Updated Spanish translation by Jorge Flores [Mayan Group](http://www.mayan.mx/)
 TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes - refresh page after checking/unchecking?
 TODO: Add completed attribute to admin shortcode
 TODO: Add completed only shortcode to todolist shortcode?
@@ -598,7 +599,7 @@ This plugin was originally from Abstract Dimensions (site no longer available) w
 
 Icon by [Hylke Bons](http://www.iconfinder.com/icondetails/30045/32/list_shopping_list_todo_todo_list_icon)
 
-Spanish translation by [Ricardo](http://yabocs.avytes.com/)
+Spanish translation by [Ricardo](http://yabocs.avytes.com/) - Updated by Jorge Flores [Mayan Group](http://www.mayan.mx/)
 
 Russian translation by [Almaz](http://alm.net.ru) - Updated by Sergei Zastavnyi
 
