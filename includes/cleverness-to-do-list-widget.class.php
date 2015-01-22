@@ -30,7 +30,8 @@ class CTDL_Widget extends WP_Widget {
 	 *
 	 */
 	function widget( $args, $instance ) {
-		global $ClevernessToDoList;
+		global $ClevernessToDoList, $CTDL_widget_settings;
+		$CTDL_widget_settings = $instance;
 		get_currentuserinfo();
 		extract( $args );
 
@@ -174,8 +175,9 @@ class CTDL_Widget extends WP_Widget {
 		$instance = wp_parse_args( ( array ) $instance, $defaults ); ?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'cleverness-to-do-list' ); ?>:</label>
-			<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" style="width:100%;" />
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'cleverness-to-do-list' ); ?>:
+			<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" class="widefat" type="text" />
+			</label>
 		</p>
 
 		<p>

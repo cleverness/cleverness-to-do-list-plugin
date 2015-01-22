@@ -655,6 +655,7 @@ class CTDL_Lib {
 	 * @return bool
 	 */
 	public static function check_field( $field, $data = NULL ) {
+		global $CTDL_widget_settings;
 
 		switch ( $field ) {
 			case 'dashboard-edit':
@@ -663,8 +664,9 @@ class CTDL_Lib {
 				break;
 			case 'assigned':
 				$permission = ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) )
-				|| ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) && CTDL_Loader::$settings['assign'] == 0 && $data != 0 && $data != NULL
-				&& $data != -1 && !in_array( -1, $data ) ? true : false );
+				|| ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) && CTDL_Loader::$settings['assign'] == 0 ? true : false );
+				$permission = ( $permission == true && ( $data != 0 && $data != null
+				                && $data != -1 && ( is_array( $data ) && ! in_array( -1, $data ) ) ) ? true : false );
 				break;
 			case 'dashboard-deadline':
 				$permission = ( ( CTDL_Loader::$settings['show_deadline'] == 1 && isset( CTDL_Loader::$dashboard_settings['show_dashboard_deadline'] ) &&
@@ -678,13 +680,13 @@ class CTDL_Lib {
 						CTDL_Loader::$dashboard_settings['dashboard_author'] == 0 ) && ( $data != '0' ) ? true : false );
 				break;
 			case 'widget-deadline':
-				$permission = ( CTDL_Loader::$settings['show_deadline'] == 1 && $deadline == 1 && $data != NULL? true : false );
+				$permission = ( CTDL_Loader::$settings['show_deadline'] == 1 && $CTDL_widget_settings['deadline'] == 1 && $data != NULL? true : false );
 				break;
 			case 'widget-progress':
-				$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && $progress == 1 && $data != NULL ? true : false );
+				$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && $CTDL_widget_settings['progress'] == 1 && $data != NULL ? true : false );
 				break;
 			case 'widget-assigned':
-				$permission = ( CTDL_Loader::$settings['assign'] == 0 && $assigned_to == 1 && CTDL_Loader::$settings['list_view'] != 0 && $assign_meta != -1 && !in_array( -1, $assign_meta ) ? true : false );
+				$permission = ( CTDL_Loader::$settings['assign'] == 0 && $CTDL_widget_settings['assigned_to'] == 1 && CTDL_Loader::$settings['list_view'] != 0 && $data != -1 && ( is_array( $data ) && !in_array( -1, $data ) ) ? true : false );
 				break;
 		}
 

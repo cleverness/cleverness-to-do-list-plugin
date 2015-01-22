@@ -133,18 +133,20 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 == Changelog ==
 
 = 3.4 =
-* Updated version of Select2 to 3.4.3
+* Updated version of Select2 to 3.4.3 TODO: see if newer version
 * Added wp_reset_postdata() to widget loop (thanks to dwightlathan77), delete all todos loop, get_todos loop for master view, get all completed todos loop, main show_todo_list_items loop, dashboard widget loop,
 and frontend loops
-* Show progress as 100% completed for completed items
+* Show progress as 100% completed for completed items TODO: check
 * Fixed Assigned to text shows up even though the value is empty on dashboard widget
 * MP6 adjustments
 * Updated Spanish translation by Jorge Flores [Mayan Group](http://www.mayan.mx/)
 TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes - refresh page after checking/unchecking?
 TODO: Add completed attribute to admin shortcode
 TODO: Add completed only shortcode to todolist shortcode?
-TODO: Email assigned user when todo is modified in any way
+TODO: Email assigned user when todo is modified in any way?
 TODO: Add completed display to dashboard widget
+TODO: Add link to individual post planners
+TODO: mobile testing
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski

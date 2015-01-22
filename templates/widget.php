@@ -18,7 +18,7 @@ if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_o
 	}
 }
 
-if ( $visible == 0 ) : ?>
+if ( $CTDL_visibility == 0 ) : ?>
 
 	<li<?php _e( $priority_class ); ?>>
 
@@ -34,7 +34,7 @@ if ( $visible == 0 ) : ?>
 		<?php endif; ?>
 
 		<?php if ( CTDL_Lib::check_field( 'widget-assigned', $assigned_meta ) ) : ?>
-			<<br/><span class="assigned"><?php echo apply_filters( 'ctdl_assigned', esc_html__( 'Assigned to', 'cleverness-to-do-list' ) ); ?>
+			<br/><span class="assigned"><?php echo apply_filters( 'ctdl_assigned', esc_html__( 'Assigned to', 'cleverness-to-do-list' ) ); ?>
 				<?php CTDL_Templates::show_assigned( $assigned_meta ); ?>
 			</span>
 		<?php endif; ?>
