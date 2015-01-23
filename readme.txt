@@ -147,6 +147,15 @@ TODO: Email assigned user when todo is modified in any way?
 TODO: Add completed display to dashboard widget
 TODO: Add link to individual post planners
 TODO: mobile testing
+TODO: confirm assign users works on android
+TODO: on admin shortcode:
+	Select2 JS
+	Datepicker JS
+	Progress Bar
+	Option to show completed, which will also cause the completed todo to be moved to completed section over ajax and completed to uncompleted
+	ajax to insert todo
+TODO: check single todo completed/uncompleted
+
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski

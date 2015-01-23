@@ -431,6 +431,20 @@ class CTDL_Lib {
 	}
 
 	/**
+	 * Add To-Do Ajax
+	 * @static
+	 */
+	public static function add_todo_callback() {
+		check_ajax_referer( 'cleverness-todo' );
+
+
+		$response = 'test';
+		echo $response;
+
+		die(); // this is required to return a proper result
+	}
+
+	/**
 	 * Delete To-Do Ajax
 	 * @static
 	 */

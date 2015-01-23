@@ -43,7 +43,17 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			}
 
 		if ( is_user_logged_in() ) {
-			$this->display();
+			list( $this->url, $action ) = CTDL_Lib::set_variables();
+
+			// get the existing to-do data and show the edit form if editing a to-do item
+			if ( $action == 'edit-todo' ) {
+				$this->edit_todo_item( $this->url );
+			} else {
+				$this->display();
+				$this->display( 1 );
+				$this->list .= $this->create_new_todo_form();
+			}
+
 		} else {
 			$this->list .= esc_html__( 'You must be logged in to view', 'cleverness-to-do-list' );
 			}
@@ -60,27 +70,20 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		extract( shortcode_atts( array(
 			'category' => 0,
 		), $this->atts ) );
-		list( $this->url, $action ) = CTDL_Lib::set_variables();
-
-		// get the existing to-do data and show the edit form if editing a to-do item
-		if ( $action == 'edit-todo' ) {
-			$this->edit_todo_item( $this->url );
-			return;
-		}
 
 		// otherwise, display the list of to-do items
-		$this->list .= $this->show_heading();
+		if ( $completed == 0 ) {
+			$this->list .= $this->show_heading();
+		}
 
 		$this->list .= '<table id="todo-list" class="todo-table widefat">';
 
 		$this->show_table_headings();
 
 		/** @var $category int */
-		$this->loop_through_todos( 0, $category );
+		$this->loop_through_todos( $completed, $category );
 
 		$this->list .= '</table>';
-
-		$this->list .= $this->create_new_todo_form();
 
 		wp_reset_postdata();
 	}
@@ -278,7 +281,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			$this->form .= do_action( 'ctdl_add_form' );
 			$this->create_todo_text_field();
 			$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
-        	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>';
+        	    <p class="submit"><input id="add-todo" type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>';
 			$this->form .= '</form>';
 
 			return $this->form;
@@ -672,9 +675,10 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				if ( $completed_title != '') {
 					$this->list .= '<h3 class="todo-title">'.esc_html( $completed_title ).'</h3>';
 				}
+				$this->list .= '<div class="refresh">';
 				if ( CTDL_Loader::$settings['categories'] == 0 || CTDL_Loader::$settings['sort_order'] != 'cat_id' ) $this->list .= '<'.$list_type.' class="todolist todolist-completed">';
 				$this->loop_through_todos( 1, $category );
-				$this->list .= '</'.$list_type.'>';
+				$this->list .= '</'.$list_type.'></div>';
 
 			}
 

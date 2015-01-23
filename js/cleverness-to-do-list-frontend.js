@@ -65,6 +65,27 @@ jQuery( document ).ready( function( $ ) {
 		} );
 	} );
 
+	/* Add To-Dos */
+	$('#addtodo').on('click', '#add-todo', function (e) {
+		e.preventDefault();
+
+		$.ajax({
+			type   : 'post',
+			url    : ctdl.AJAX_URL,
+			data   : {
+				action            : 'cleverness_add_todo',
+				ctdl_form		  : $( '#addtodo' ).serialize(),
+				_ajax_nonce       : ctdl.NONCE
+			},
+			success: function (data) {
+				console.log(data);
+			},
+			error  : function (r) {
+				$('#message').html('<p>' + ctdl.ERROR_MSG + '</p>').show().addClass('error below-h2');
+			}
+		});
+	});
+	/* end Add To-Dos */
 
 	/* Delete To-Dos */
 	$( '#todo-list' ).on( 'click', '.delete-todo', function( e ) {
