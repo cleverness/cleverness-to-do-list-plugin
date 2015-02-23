@@ -267,6 +267,8 @@ class CTDL_Lib {
 
 			if ( !wp_verify_nonce( $_REQUEST['todoadd'], 'todoadd' ) ) die( esc_html__( 'Security check failed', 'cleverness-to-do-list' ) );
 
+			$send_email = apply_filters( 'ctdl_send_email', CTDL_Loader::$settings['email_assigned'] );
+
 			$my_post = array(
 				'post_type'        => 'todo',
 				'post_title'       => substr( $_POST['cleverness_todo_description'], 0, 100 ),
@@ -296,7 +298,7 @@ class CTDL_Lib {
 					add_post_meta( $post_id, '_assign', $assign );
 				}
 
-				if ( CTDL_Loader::$settings['email_assigned'] == '1' && CTDL_Loader::$settings['assign'] == '0' ) {
+				if ( $send_email == '1' && CTDL_Loader::$settings['assign'] == '0' ) {
 					$deadline = ( isset( $_POST['cleverness_todo_deadline'] ) ? $_POST['cleverness_todo_deadline'] : 0 );
 					$cat = ( isset( $_POST['cat'] ) ? $_POST['cat'] : 0 );
 					$planner = ( isset( $_POST['cleverness_todo_planner'] ) ? $_POST['cleverness_todo_planner'] : 0 );

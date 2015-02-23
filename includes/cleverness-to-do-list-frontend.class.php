@@ -42,7 +42,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			$this->list .= '<h3 class="todo-title">'.esc_html( $title ).'</h3>';
 			}
 
-		if ( is_user_logged_in() ) {
+		if ( is_user_logged_in() && is_user_member_of_blog() ) {
 			list( $this->url, $action ) = CTDL_Lib::set_variables();
 
 			// get the existing to-do data and show the edit form if editing a to-do item
@@ -228,7 +228,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		if ( $assigned == 1 ) $this->create_assign_field( $assign_meta );
 		/** @var $progress int */
 		if ( $progress == 1 ) $this->create_progress_field( $progress_meta );
-		$this->form .= do_action( 'ctdl_edit_form' );
+		$this->form .= do_action( 'ctdl_edit_form_action' );
+		$this->form = apply_filters( 'ctdl_edit_form', $this->form );
 		$this->create_todo_text_field( $todo_item->post_content );
 		$this->form .= '</table>'.wp_nonce_field( 'todoupdate', 'todoupdate', true, false ).'<input type="hidden" name="action" value="updatetodo" />
         	    <p class="submit"><input type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_edit_text', esc_attr__( 'Edit To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>
@@ -278,7 +279,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			if ( $assigned == 1 ) $this->create_assign_field();
 			/** @var $progress int */
 			if ( $progress == 1 ) $this->create_progress_field();
-			$this->form .= do_action( 'ctdl_add_form' );
+			$this->form .= do_action( 'ctdl_add_form_action' );
+			$this->form = apply_filters( 'ctdl_add_form', $this->form );
 			$this->create_todo_text_field();
 			$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
         	    <p class="submit"><input id="add-todo" type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>';

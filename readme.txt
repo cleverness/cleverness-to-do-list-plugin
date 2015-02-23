@@ -140,14 +140,16 @@ and frontend loops
 * Fixed Assigned to text shows up even though the value is empty on dashboard widget
 * MP6 adjustments
 * Updated Spanish translation by Jorge Flores [Mayan Group](http://www.mayan.mx/)
+* Changed ctdl_add_form and ctdl_edit_form to ctdl_add_form_action and ctdl_add_form_action. ctdl_add_form and ctdl_edit_form are now filters applied after the action
+* Add ctdl_send_email filter
+* Added is_user_member_of_blog() to frontend admin shortcode
 TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes - refresh page after checking/unchecking?
 TODO: Add completed attribute to admin shortcode
 TODO: Add completed only shortcode to todolist shortcode?
-TODO: Email assigned user when todo is modified in any way?
+TODO 3.5: Email assigned user when todo is modified in any way?
 TODO: Add completed display to dashboard widget
 TODO: Add link to individual post planners
 TODO: mobile testing
-TODO: confirm assign users works on android
 TODO: on admin shortcode:
 	Select2 JS
 	Datepicker JS
