@@ -591,7 +591,10 @@ class ClevernessToDoList {
 	 */
 	public function show_planner( $planner ) {
 		$this->list .= '<td class="todo-planner">';
-		if ( $planner != 0 ) $this->list .= get_the_title( $planner );
+		if ( $planner != 0 && PostPlanner_Lib::planner_exists( $planner ) ) {
+			$url = admin_url( 'post.php?post=' . absint( $planner ) . '&action=edit' );
+			$this->list .= '<a href="'.esc_url( $url ).'">'.get_the_title( $planner ).'</a>';
+		}
 		$this->list .= '</td>';
 	}
 

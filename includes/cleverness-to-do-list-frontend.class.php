@@ -123,7 +123,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 				/** @var $priority int */
 				if ( $priority == 1 ) $this->show_priority( $the_priority );
 				/** @var $progress int */
-				if ( $progress == 1 ) $this->show_progress( $progress_meta );
+				if ( $progress == 1 ) $this->show_progress( $progress_meta, 'table', $completed );
 				/** @var $categories int */
 				if ( $categories == 1 ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
 				if ( CTDL_PP ) $this->show_planner( $planner_meta );
@@ -575,6 +575,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	 * @return void
 	 */
 	public function show_progress( $progress, $type = 'list', $completed = 0 ) {
+		$progress = ( $completed == 1 ? '100' : $progress );
 		if ( CTDL_Loader::$settings['show_progress'] == '1' && $progress != '' ) {
 			$this->list .= ' <small class="todo-progress">'.apply_filters( 'ctdl_frontend_checklist_progress', '['.esc_attr( $progress ).'%]' ).'</small>';
 		}
