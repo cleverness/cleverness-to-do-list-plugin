@@ -144,10 +144,12 @@ and frontend loops
 * Add ctdl_send_email filter
 * Added is_user_member_of_blog() to frontend admin shortcode
 * Added link to individual post planners
-TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes - refresh page after checking/unchecking?
+* Changed [todolist] shortcode to use 1 instead of show
+* Fixed an issue with the frontend date added attribute
+TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes
 TODO: Add completed attribute to admin shortcode
-TODO: Add completed only shortcode to todolist shortcode?
-TODO 3.5: Email assigned user when todo is modified in any way?
+TODO: 3.5 Add completed only shortcode to todolist shortcode
+TODO: 3.5: Email assigned user when todo is modified in any way?
 TODO: Add completed display to dashboard widget
 TODO: mobile testing
 	table overflowing, can't see unless background is white
