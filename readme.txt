@@ -144,7 +144,7 @@ and frontend loops
 * Add ctdl_send_email filter
 * Added is_user_member_of_blog() to frontend admin shortcode
 * Added link to individual post planners
-* Changed [todolist] shortcode to use 1 instead of show
+* Changed [todolist] shortcode to use 1 instead of show (show still works)
 * Fixed an issue with the frontend date added attribute
 TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes
 TODO: Add completed attribute to admin shortcode
