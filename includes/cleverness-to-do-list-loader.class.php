@@ -18,7 +18,7 @@ class CTDL_Loader {
 	public static $dashboard_settings;
 
 	public static function init() {
-		global $ClevernessToDoList, $CTDL_Frontend_Checklist, $CTDL_Frontend_Admin, $CTDL_templates, $CTDL_dashboard;
+		global $ClevernessToDoList, $CTDL_Frontend_Checklist, $CTDL_Frontend_Admin, $CTDL_templates, $CTDL_Dashboard_Widget;
 
 		if ( is_admin() ) self::check_for_upgrade();
 		$general_options      = ( get_option( 'CTDL_general' ) ? get_option( 'CTDL_general' ) : array() );
@@ -37,7 +37,7 @@ class CTDL_Loader {
 
 		if ( is_admin() ) {
 			new CTDL_Settings();
-			$CTDL_Dashboard = new CTDL_Dashboard_Widget();
+			$CTDL_Dashboard_Widget = new CTDL_Dashboard_Widget();
 		} else {
 			$CTDL_Frontend_Admin     = new CTDL_Frontend_Admin;
 			$CTDL_Frontend_Checklist = new CTDL_Frontend_Checklist;

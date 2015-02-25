@@ -146,11 +146,13 @@ and frontend loops
 * Added link to individual post planners
 * Changed [todolist] shortcode to use 1 instead of show (show still works)
 * Fixed an issue with the frontend date added attribute
+* Added completed display option to dashboard widget
+* Added templates for dashboard widget and widget
 TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes
 TODO: Add completed attribute to admin shortcode
 TODO: 3.5 Add completed only shortcode to todolist shortcode
-TODO: 3.5: Email assigned user when todo is modified in any way?
-TODO: Add completed display to dashboard widget
+TODO: 3.5: Email assigned user when todo is modified in any way
+TODO: 3.5 templates for rest of the views
 TODO: mobile testing
 	table overflowing, can't see unless background is white
 TODO: on admin shortcode:

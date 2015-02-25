@@ -17,8 +17,7 @@ if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_o
 		}
 	}
 }
-
-if ( $CTDL_visibility == 0 ) : ?>
+?>
 
 	<li<?php _e( $priority_class ); ?>>
 
@@ -42,5 +41,3 @@ if ( $CTDL_visibility == 0 ) : ?>
 		<?php do_action( 'ctdl_widget_list_items' ); ?>
 
 	</li>
-
-<?php endif; ?>

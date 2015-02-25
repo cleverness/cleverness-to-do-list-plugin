@@ -1,10 +1,10 @@
 jQuery( document ).ready( function( $ ) {
 
-	$( '.todo-checkbox' ).click( function () {
+	$( '.cleverness-to-do-list' ).on( 'click', '.todo-checkbox', function () {
 		var status = 0;
 		var id = $( this ).attr( 'id' ).substr( 5 );
 		var todoid = '#todo-' + id;
-		var refresh = $( this ).parent().parent().hasClass( 'refresh' );
+		var refresh = $( this ).parent().parent().parent().hasClass( 'refresh-checklist' );
 		if ( $( this ).prop( 'checked' ) ) status = 1;
 
 		var data = {
@@ -15,24 +15,25 @@ jQuery( document ).ready( function( $ ) {
 		};
 
 		var todo_data = {
-			action: 'ctdl_display_todos',
-			ctdl_status: status,
+			action: 'ctdl_dashboard_display_todos',
 			_ajax_nonce: ctdl.NONCE
 		};
 
 		jQuery.post( ctdl.AJAX_URL, data, function ( response ) {
-			/*$( todoid ).fadeOut( function () {
-				$( this ).remove();
-			} );*/
-			//$( '.todo-checkbox' ).prop( "checked", false );
-			jQuery.post( ctdl.AJAX_URL, todo_data, function ( response ) {
-				if ( status == 1 ) {
-					console.log( response );
-					$( '.completed-checklist' ).html( 'test' );
-				} else if ( status == 0 ) {
-					$( '.uncompleted-checklist' ).html( response );
-				}
-			} );
+
+			// if refresh = true, reload all todos
+			if ( true === refresh ) {
+				jQuery.post( ctdl.AJAX_URL, todo_data, function (response) {
+					$('.cleverness-to-do-list').html( response );
+				});
+			} else {
+				// remove the to-do
+				$(todoid).fadeOut(function () {
+					$(this).remove();
+				});
+				$(todoid + ' .todo-checkbox').prop("checked", false);
+			}
+
 		} );
 	} );
 

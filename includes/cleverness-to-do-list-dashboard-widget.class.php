@@ -34,29 +34,35 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	}
 
 	/** Display the to-do list */
-	public function display( $status = 0 ) {
+	public function display( $completed = 0 ) {
 		CTDL_Loader::$dashboard_settings['dashboard_cat'] = ( isset( CTDL_Loader::$dashboard_settings['dashboard_cat'] ) ? CTDL_Loader::$dashboard_settings['dashboard_cat'] : 0 );
 		$cat_ids = ( is_array( CTDL_Loader::$dashboard_settings['dashboard_cat'] ) ? CTDL_Loader::$dashboard_settings['dashboard_cat'] : array( CTDL_Loader::$dashboard_settings['dashboard_cat'] ) );
 		$limit = ( isset( CTDL_Loader::$dashboard_settings['dashboard_number'] ) ? CTDL_Loader::$dashboard_settings['dashboard_number'] : -1 );
 		$completed = ( CTDL_Loader::$dashboard_settings['show_completed'] == 1 ? 1 : 0 );
 
+		$class = 'cleverness-to-do-list';
 
-			$class = 'uncompleted-checklist';
-			echo '<div class="' . $class . '">';
+		if ( $completed == 1 ) {
+			$class .= ' refresh-checklist';
+		}
+
+		echo '<div class="'.$class.'">';
+
+		echo '<div class="uncompleted-checklist">';
+		foreach ( $cat_ids as $cat_id ) {
+			$this->loop_through_todos( 0, $cat_id, $limit );
+		}
+		echo '</div>';
+
+		if ( $completed == 1 ) {
+			echo '<div class="completed-checklist">';
 			foreach ( $cat_ids as $cat_id ) {
-				$this->loop_through_todos( 0, $cat_id, $limit );
+				$this->loop_through_todos( 1, $cat_id, $limit );
 			}
 			echo '</div>';
+		}
 
-			if ( $completed == 1 ) {
-				$class = 'completed-checklist';
-				echo '<div class="' . $class . '">';
-				foreach ( $cat_ids as $cat_id ) {
-					$this->loop_through_todos( 1, $cat_id, $limit );
-				}
-				echo '</div>';
-			}
-
+		echo '</div>';
 
 	}
 
@@ -227,6 +233,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		wp_register_script( 'ctdl_dashboard_widget_js', CTDL_PLUGIN_URL . '/js/cleverness-to-do-list-dashboard-widget.js', '', CTDL_PLUGIN_VERSION, true );
 		add_action( 'admin_print_scripts-index.php', array( $this, 'dashboard_add_js' ) );
 		add_action( 'wp_ajax_ctdl_dashboard_complete', array( 'CTDL_Lib', 'complete_todo_callback' ) );
+		add_action( 'wp_ajax_ctdl_dashboard_display_todos', array( 'CTDL_Lib', 'dashboard_display_todos_callback' ) );
 		add_action( 'admin_print_styles-index.php', array( 'CTDL_Loader', 'add_admin_css' ) );
 	}
 

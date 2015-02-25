@@ -66,12 +66,12 @@ class CTDL_Widget extends WP_Widget {
 		}
 
 		$ClevernessToDoList->list = '';
+		$visible = 0;
 
 		if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $category == 0 ) {
 
 			$categories = CTDL_Categories::get_categories();
 			$items = 0;
-			$visible = 0;
 			$posts_to_exclude = array();
 			$visibility = get_option( 'CTDL_categories' );
 
@@ -92,7 +92,7 @@ class CTDL_Widget extends WP_Widget {
 			$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, 0, $posts_to_exclude );
 
 			if ( $todo_items->have_posts() ) {
-				$this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to );
+				$this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to, 0, $visible );
 				$items = 1;
 			}
 
@@ -107,7 +107,7 @@ class CTDL_Widget extends WP_Widget {
 			$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, $category );
 
 			if ( $todo_items->have_posts() ) {
-				$this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to, $category );
+				$this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to, $category, $visible );
 			} else {
 				echo '<p>'.apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ).'</p>';
 			}
@@ -138,7 +138,9 @@ class CTDL_Widget extends WP_Widget {
 			$id = get_the_ID();
 			$posts_to_exclude[] = $id;
 
-			$CTDL_templates->get_template_part( 'widget' );
+			if ( $visible == 0 ) {
+				$CTDL_templates->get_template_part( 'widget' );
+			}
 
 		endwhile;
 

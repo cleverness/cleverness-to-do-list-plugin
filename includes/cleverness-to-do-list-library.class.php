@@ -198,10 +198,10 @@ class CTDL_Lib {
 		global $CTDL_Dashboard_Widget;
 		check_ajax_referer( 'ctdl-todo' );
 
-		$response = $CTDL_Dashboard_Widget->display( $_POST['ctdl_status'] );
-		wp_send_json( $response ); // encode to JSON and send response
+		$response = $CTDL_Dashboard_Widget->display();
 
-		die(); // this is required to return a proper result
+		echo $response;
+		die();
 	}
 
 	/**
