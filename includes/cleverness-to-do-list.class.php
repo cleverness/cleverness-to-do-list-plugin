@@ -485,9 +485,9 @@ class ClevernessToDoList {
 		if ( $permission === true ) {
 			if ( is_admin() || $layout == 'table' ) $this->list .= '<td>';
 			if ( $completed == 1 ) {
-				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox completed'.$single.'" checked="checked" />', esc_attr( $id ) );
+				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox todo-completed'.$single.'" checked="checked" />', esc_attr( $id ) );
 			} else {
-				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted'.$single.'"/>', esc_attr( $id ) );
+				$this->list .= sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox todo-uncompleted'.$single.'"/>', esc_attr( $id ) );
 			}
 			$cleverness_todo_complete_nonce = wp_create_nonce( 'todocomplete' );
 			$this->list .= '<input type="hidden" name="cleverness_todo_complete_nonce" value="'.esc_attr( $cleverness_todo_complete_nonce ).'" />';

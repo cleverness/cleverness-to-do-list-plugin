@@ -30,7 +30,6 @@ jQuery( document ).ready( function( $ ) {
 		var id = $( this ).attr( 'id' ).substr( 5 );
 		var todoid = '#todo-' + id;
 		var single = $( this ).hasClass( 'single' );
-		var refresh = $( this ).parent().parent().hasClass( 'refresh' );
 		if ( $( this ).prop( 'checked' ) ) status = 1;
 
 		var data = {
@@ -51,16 +50,6 @@ jQuery( document ).ready( function( $ ) {
 					$( this ).remove();
 				} );
 				//$( '.todo-checkbox' ).prop( "checked", false );
-			}
-			if ( refresh == true ) {
-				jQuery.post( ctdl.AJAX_URL, todo_data, function( response2 ) {
-					if ( status == 1 ) {
-						alert(response2.id);
-						$ ('.completed-checklist' ).html( 'test' );
-					} else if ( status == 0 ) {
-						$( '.uncompleted-checklist' ).html( response.id );
-					}
-				} );
 			}
 		} );
 	} );

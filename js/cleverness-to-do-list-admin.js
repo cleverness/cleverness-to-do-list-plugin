@@ -35,9 +35,9 @@ jQuery( document ).ready( function( $ ) {
 		var action = '';
 		var id = $( this ).attr( 'id' ).substr( 5 );
 		var cleverness_todo_complete_nonce = $( "input[name=cleverness_todo_complete_nonce]" ).val();
-		if ( $( this ).hasClass( 'uncompleted' ) ) {
+		if ( $( this ).hasClass( 'todo-uncompleted' ) ) {
 			action = 'completetodo';
-		} else if ( $( this ).hasClass( 'completed' ) ) {
+		} else if ( $( this ).hasClass( 'todo-completed' ) ) {
 			action = 'uncompletetodo';
 		}
 		document.location.href = 'admin.php?page=cleverness-to-do-list&action='+action+'&id='+id+'&_wpnonce='+cleverness_todo_complete_nonce;
