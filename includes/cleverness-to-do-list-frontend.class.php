@@ -342,8 +342,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 			'date'       => 0,
 			'todoid'     => '',
 			'editlink'   => 0,
-			'completed'  => 0,
-			'refresh'    => 0
+			'completed'  => 0
 		), $this->atts ) );
 		global $current_user;
 		get_currentuserinfo();
@@ -353,9 +352,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 
 		list( $this->url, $this->action ) = CTDL_Lib::set_variables();
 
-		/** @var $refresh int
-		 * @var $completed int */
-		$class = ( $refresh == 1 ? 'refresh todo-checklist' : 'todo-checklist' );
+		/* @var $completed int */
+		$class = 'todo-checklist';
 		$class = ( $completed == 1 ? $class.' completed-checklist' : $class.' uncompleted-checklist' );
 		$this->list .= '<div class="'.$class.'">';
 

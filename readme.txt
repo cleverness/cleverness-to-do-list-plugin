@@ -149,6 +149,7 @@ and frontend loops
 * Added completed display option to dashboard widget
 * Added templates for dashboard widget and widget
 * Added completed=only attribute for todolist shortcode
+* Added completed=1 attribute for todochecklist shortcode to only show completed items
 TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes
 TODO: Add completed attribute to admin shortcode
 TODO: mobile testing
