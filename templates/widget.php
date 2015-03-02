@@ -1,22 +1,9 @@
 <?php
 /** Template for the Widget */
 
-global $CTDL_status, $CTDL_visibility, $CTDL_category;
+global $CTDL_status;
 list( $priority, $assigned_meta, $deadline_meta, $completed_meta, $progress_meta ) = CTDL_Lib::get_todo_meta( $id );
 $priority_class = CTDL_Lib::set_priority_class( $priority );
-
-if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $CTDL_category == '0' ) {
-	$cats = get_the_terms( $id, 'todocategories' );
-	if ( $cats != NULL ) {
-		foreach ( $cats as $category ) {
-			$visible = $CTDL_visibility["category_$category->term_id"];
-			if ( $this->cat_id != $category->term_id && $visible == 0 ) {
-				echo '</ol><h4>' . esc_html( $category->name ) . '</h4><ol>';
-				$this->cat_id = $category->term_id;
-			}
-		}
-	}
-}
 ?>
 
 	<li<?php _e( $priority_class ); ?>>

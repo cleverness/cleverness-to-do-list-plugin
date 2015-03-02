@@ -131,15 +131,33 @@ class CTDL_Widget extends WP_Widget {
 	 * @return array $posts_to_exclude
 	 */
 	protected function show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to, $category = 0, $visible = 0 ) {
-		global $CTDL_templates, $CTDL_visibility;
-		if ( CTDL_Loader::$settings['categories'] == 1 ) $CTDL_visibility = get_option( 'CTDL_categories' );
+		global $CTDL_templates;
+		if ( CTDL_Loader::$settings['categories'] == 1 ) $visibility = get_option( 'CTDL_categories' );
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
 			$id = get_the_ID();
 			$posts_to_exclude[] = $id;
 
 			if ( $visible == 0 ) {
+
+				if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $category == '0' ) {
+					$cats = get_the_terms( $id, 'todocategories' );
+					if ( $cats != null ) {
+						foreach ( $cats as $category ) {
+							$visible = $visibility["category_$category->term_id"];
+							if ( $this->cat_id != $category->term_id && $visible == 0 ) {
+								echo '<h4>' . esc_html( $category->name ) . '</h4>';
+								$this->cat_id = $category->term_id;
+							}
+						}
+					}
+				}
+
+				echo '<ol>';
+
 				$CTDL_templates->get_template_part( 'widget' );
+
+				echo '</ol>';
 			}
 
 		endwhile;
