@@ -181,19 +181,6 @@ class CTDL_Lib {
 	/**
 	 * Ajax callback for getting todos
 	 */
-	public static function display_todos_callback() {
-		global $CTDL_Frontend_Checklist;
-		check_ajax_referer( 'ctdl-todo' );
-
-		$response = CTDL_Lib::get_todos();
-		wp_send_json( $response ); // encode to JSON and send response
-
-		die(); // this is required to return a proper result
-	}
-
-	/**
-	 * Ajax callback for getting todos
-	 */
 	public static function dashboard_display_todos_callback() {
 		global $CTDL_Dashboard_Widget;
 		check_ajax_referer( 'ctdl-todo' );

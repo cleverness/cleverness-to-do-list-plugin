@@ -34,22 +34,22 @@ jQuery( document ).ready( function( $ ) {
 
 		var data = {
 			action: 'cleverness_todo_complete',
-			cleverness_id: id,
-			cleverness_status: status,
-			_ajax_nonce: ctdl.NONCE
-		};
-
-		var todo_data = {
-			action: 'cleverness_display_todos',
+			ctdl_todo_id: id,
+			ctdl_todo_status: status,
 			_ajax_nonce: ctdl.NONCE
 		};
 
 		jQuery.post( ctdl.AJAX_URL, data, function( response ) {
 			if ( single != true ) {
+				if (status == 1) {
+					$(this).prop("checked", true);
+				} else {
+					$(this).prop("checked", false);
+				}
 				$( todoid ).fadeOut( function () {
 					$( this ).remove();
 				} );
-				//$( '.todo-checkbox' ).prop( "checked", false );
+
 			}
 		} );
 	} );

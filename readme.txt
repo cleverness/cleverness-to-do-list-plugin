@@ -150,13 +150,6 @@ and frontend loops
 * Added templates for dashboard widget and widget
 * Added completed=only attribute for todolist shortcode
 * Added completed=1 attribute for todochecklist shortcode to only show completed items
-TODO: Add completed attribute to checklist shortcode - test with master list and with all other attributes
-TODO: Add completed attribute to admin shortcode
-TODO: mobile testing
-	table overflowing, can't see unless background is white
-TODO: on admin shortcode:
-	Option to show completed, which will also cause the completed todo to be moved to completed section over ajax and completed to uncompleted
-	ajax to insert todo
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski
