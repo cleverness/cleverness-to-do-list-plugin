@@ -634,31 +634,39 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 		if ( $category == 'all' ) $category = '0';
 		list( $this->url, $this->action ) = CTDL_Lib::set_variables();
 
-		/** @var $type string */
-		if ( $type == 'table' ) {
+		/** @var $completed string */
+		if ( $completed != 'only' ) {
 
-			$this->list .= '<table id="todo-list" class="todo-table">';
-			/** @var $title string */
-			if ( $title != '' ) $this->list .= '<caption>'.$title.'</caption>';
-			$this->show_table_headings();
-			$this->loop_through_todos( 0, $category );
-			$this->list .= '</table>';
+			/** @var $type string */
+			if ( $type == 'table' ) {
 
-		} elseif ( $type == 'list' ) {
+				$this->list .= '<table id="todo-list" class="todo-table">';
+				/** @var $title string */
+				if ( $title != '' ) {
+					$this->list .= '<caption>' . $title . '</caption>';
+				}
+				$this->show_table_headings();
+				$this->loop_through_todos( 0, $category );
+				$this->list .= '</table>';
 
-			/** @var $title string */
-			if ( $title != '') {
-				$this->list .= '<h3 class="todo-title">'.esc_html( $title ).'</h3>';
+			} elseif ( $type == 'list' ) {
+
+				/** @var $title string */
+				if ( $title != '' ) {
+					$this->list .= '<h3 class="todo-title">' . esc_html( $title ) . '</h3>';
+				}
+				/** @var $list_type string */
+				if ( CTDL_Loader::$settings['categories'] == 0 || CTDL_Loader::$settings['sort_order'] != 'cat_id' ) {
+					$this->list .= '<' . $list_type . ' class="todolist">';
+				}
+				$this->loop_through_todos( 0, $category );
+				$this->list .= '</' . $list_type . '>';
+
 			}
-			/** @var $list_type string */
-			if ( CTDL_Loader::$settings['categories'] == 0 || CTDL_Loader::$settings['sort_order'] != 'cat_id' ) $this->list .= '<'.$list_type.' class="todolist">';
-			$this->loop_through_todos( 0, $category );
-			$this->list .= '</'.$list_type.'>';
 
 		}
 
-		/** @var $completed string */
-		if ( $completed == 'show' || $completed == 1 ) {
+		if ( $completed == 'show' || $completed == 1 || $completed == 'only' ) {
 
 			wp_reset_postdata();
 			$this->cat_id = '';
