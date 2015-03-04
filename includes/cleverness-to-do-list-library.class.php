@@ -185,7 +185,7 @@ class CTDL_Lib {
 		global $CTDL_Dashboard_Widget;
 		check_ajax_referer( 'ctdl-todo' );
 
-		$response = $CTDL_Dashboard_Widget->display();
+		$response = $CTDL_Dashboard_Widget->dashboard_widget();
 
 		echo $response;
 		die();
@@ -582,6 +582,7 @@ class CTDL_Lib {
 	 * @param $id
 	 * @return array
 	 * @since 3.1
+	 * @todo deprecate in 3.5
 	 */
 	public static function get_todo_meta( $id ) {
 		$post_meta = get_post_custom( $id );
@@ -644,52 +645,6 @@ class CTDL_Lib {
 				break;
 			case 'todo':
 				$permission = ( current_user_can( CTDL_Loader::$settings[$action . '_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ? true : false );
-				break;
-		}
-
-		return $permission;
-	}
-
-	/**
-	 * Check if a field should be displayed
-	 * @static
-	 * @param $field
-	 * @param $data
-	 * @return bool
-	 */
-	public static function check_field( $field, $data = NULL ) {
-		global $CTDL_widget_settings;
-
-		switch ( $field ) {
-			case 'dashboard-edit':
-				$permission = ( CTDL_Loader::$dashboard_settings['show_edit_link'] == 1 && ( current_user_can( CTDL_Loader::$settings['edit_capability'] )
-						|| CTDL_Loader::$settings['list_view'] == 0 ) ? true : false );
-				break;
-			case 'assigned':
-				$permission = ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) )
-				|| ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) && CTDL_Loader::$settings['assign'] == 0 ? true : false );
-				$permission = ( $permission == true && ( $data != 0 && $data != null
-				                && $data != -1 && ( is_array( $data ) && ! in_array( -1, $data ) ) ) ? true : false );
-				break;
-			case 'dashboard-deadline':
-				$permission = ( ( CTDL_Loader::$settings['show_deadline'] == 1 && isset( CTDL_Loader::$dashboard_settings['show_dashboard_deadline'] ) &&
-						CTDL_Loader::$dashboard_settings['show_dashboard_deadline'] == 1 && $data != NULL ) ? true : false );
-				break;
-			case 'progress':
-				$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && $data != NULL ? true : false );
-				break;
-			case 'dashboard-author':
-				$permission = ( ( CTDL_Loader::$settings['list_view'] == 1 && isset( CTDL_Loader::$dashboard_settings['dashboard_author'] ) &&
-						CTDL_Loader::$dashboard_settings['dashboard_author'] == 0 ) && ( $data != '0' ) ? true : false );
-				break;
-			case 'widget-deadline':
-				$permission = ( CTDL_Loader::$settings['show_deadline'] == 1 && $CTDL_widget_settings['deadline'] == 1 && $data != NULL? true : false );
-				break;
-			case 'widget-progress':
-				$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && $CTDL_widget_settings['progress'] == 1 && $data != NULL ? true : false );
-				break;
-			case 'widget-assigned':
-				$permission = ( CTDL_Loader::$settings['assign'] == 0 && $CTDL_widget_settings['assigned_to'] == 1 && CTDL_Loader::$settings['list_view'] != 0 && $data != -1 && ( is_array( $data ) && !in_array( -1, $data ) ) ? true : false );
 				break;
 		}
 

@@ -9,91 +9,171 @@
  */
 
 /**
- * Template Functions class
+ * Template Functions
  * @package cleverness-to-do-list
  * @subpackage includes
  */
-class CTDL_Templates {
 
-	/**
-	 * Create the HTML to show a To-Do List Checkbox
-	 * @param int $id
-	 * @param int $completed
-	 * @param string $single
-	 * @since 3.2
-	 */
-	public static function show_checkbox( $id, $completed = 0, $single = '' ) {
-		if ( CTDL_Lib::check_permission( 'todo', 'complete' ) ) {
-			if ( $completed == 0 ) {
-				echo sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox uncompleted floatleft' . $single . '" />', esc_attr( $id ) );
-			} else {
-				echo sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox completed floatleft' . $single . '" checked="checked" />', esc_attr( $id ) );
-			}
-			$ctdl_complete_nonce = wp_create_nonce( 'todocomplete' );
-			echo '<input type="hidden" name="ctdl_complete_nonce" value="' . esc_attr( $ctdl_complete_nonce ) . '" />';
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+function ctdl_category_heading() {
+	global $CTDL_category_id;
+	$cats = get_the_terms( get_the_ID(), 'todocategories' );
+	if ( $cats != null ) {
+		foreach ( $cats as $category ) {
+			$CTDL_category_id = $category->term_id;
+			return $category->name;
 		}
 	}
+	return null;
+}
 
-	/**
-	 * Show the To-Do Text
-	 * @param string $todo_text
-	 */
-	public static function show_todo_text( $todo_text ) {
-		$todo_text = ( CTDL_Loader::$settings['autop'] == 1 ? wpautop( $todo_text ) : $todo_text );
-		echo ( CTDL_Loader::$settings['wysiwyg'] == 1 ? $todo_text : stripslashes( $todo_text ) );
-	}
+/**
+ * Get Dashboard Widget category settings
+ * @return array
+ *
+ * @since 3.4
+ */
+function ctdl_dashboard_categories() {
+	$categories = ( isset( CTDL_Loader::$dashboard_settings['dashboard_cat'] ) ? CTDL_Loader::$dashboard_settings['dashboard_cat'] : 0 );
+	return ( is_array( $categories ) ? $categories : array( $categories ) );
+}
 
-	/**
-	 * Show the User that a To-Do Item is Assigned To
-	 * @param int $assign
-	 * @since 3.4
-	 */
-	public static function show_assigned( $assign ) {
-		if ( is_array( $assign ) ) {
-			$assign_users = '';
-			foreach ( $assign as $value ) {
-				if ( $value != '-1' && $value != '' && $value != 0 ) {
-					$user = get_userdata( $value );
-					$assign_users .= $user->display_name . ', ';
-				}
-			}
-			echo substr( $assign_users, 0, -2 );
+/**
+ * Create the HTML to show the to-do's priority class
+ * @return string
+ *
+ * @since 3.4
+ */
+function ctdl_priority_class() {
+	return CTDL_Lib::set_priority_class( get_post_meta( get_the_ID(), '_priority', true ) );
+}
+
+/**
+ * Create the HTML to show a To-Do List Checkbox
+ *
+ * @since 3.4
+ */
+function ctdl_checkbox() {
+	global $CTDL_status;
+	if ( CTDL_Lib::check_permission( 'todo', 'complete' ) ) {
+		if ( $CTDL_status == 0 ) {
+			return sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox todo-uncompleted" />', absint( get_the_ID() ) );
 		} else {
-			if ( $assign != '-1' && $assign != '' && $assign != 0 ) {
-				$assign_user = get_userdata( $assign );
-				esc_html_e( $assign_user->display_name );
-			}
+			return sprintf( '<input type="checkbox" id="ctdl-%d" class="todo-checkbox todo-completed" checked="checked" />', absint( get_the_ID() ) );
 		}
 	}
+	return null;
+}
 
-	/**
-	 * Show the Deadline for a To-Do Item
-	 * @param string $deadline
-	 * @since 3.4
-	 */
-	public static function show_deadline( $deadline ) {
-		echo ( $deadline != NULL ? sprintf( '%s', date( CTDL_Loader::$settings['date_format'], $deadline ) ) : NULL );
+/**
+ * Show the To-Do Text
+ *
+ * @since 3.4
+ */
+function ctdl_todo_text() {
+	$todo_text = ( CTDL_Loader::$settings['autop'] == 1 ? wpautop( get_the_content() ) : get_the_content() );
+	$todo_text = ( CTDL_Loader::$settings['wysiwyg'] == 1 ? $todo_text : stripslashes( $todo_text ) );
+	return $todo_text;
+}
+
+/**
+ * Show the User that a To-Do Item is Assigned To
+ *
+ * @since 3.4
+ */
+function ctdl_assigned() {
+	$assign = get_post_meta( get_the_ID(), '_assigned', true );
+	if ( is_array( $assign ) ) {
+		$assign_users = '';
+		foreach ( $assign as $value ) {
+			if ( $value != '-1' && $value != '' && $value != 0 ) {
+				$user = get_userdata( $value );
+				$assign_users .= $user->display_name . ', ';
+			}
+		}
+		return substr( $assign_users, 0, -2 );
+	} else {
+		if ( $assign != '-1' && $assign != '' && $assign != 0 ) {
+			$assign_user = get_userdata( $assign );
+			return $assign_user->display_name;
+		}
+	}
+	return null;
+}
+
+/**
+ * Show the Deadline for a To-Do Item
+ *
+ * @since 3.4
+ */
+function ctdl_deadline() {
+	$deadline = date( CTDL_Loader::$settings['date_format'], get_post_meta( get_the_ID(), '_deadline', true ) );
+	return $deadline;
+}
+
+/**
+ * Show the Progress of a To-Do Item
+
+ * @since 3.4
+ */
+function ctdl_progress() {
+	global $CTDL_status;
+	$progress = ( $CTDL_status == 1 ? '100' : get_post_meta( get_the_ID(), '_progress', true ) );
+	return $progress;
+}
+
+/**
+ * Check if a field should be displayed
+ * @static
+ *
+ * @param $field
+ *
+ * @return bool
+ */
+function ctdl_check_field( $field ) {
+	global $CTDL_widget_settings, $CTDL_category, $CTDL_category_id;
+
+	switch ( $field ) {
+		case 'dashboard-edit':
+			$permission = ( CTDL_Loader::$dashboard_settings['show_edit_link'] == 1 && ( current_user_can( CTDL_Loader::$settings['edit_capability'] )
+			    || CTDL_Loader::$settings['list_view'] == 0 ) ? true : false );
+			break;
+		case 'assigned':
+			$data = get_post_meta( get_the_ID(), '_assigned', true );
+			$permission = ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) )
+			    || ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) && CTDL_Loader::$settings['assign'] == 0 ? true : false );
+			$permission = ( $permission == true && ( $data != 0 && $data != null
+			    && $data != '-1' && ( is_array( $data ) && ! in_array( '-1', $data ) ) ) ? true : false );
+			break;
+		case 'dashboard-deadline':
+			$permission = ( ( CTDL_Loader::$settings['show_deadline'] == 1 && isset( CTDL_Loader::$dashboard_settings['show_dashboard_deadline'] ) &&
+			                  CTDL_Loader::$dashboard_settings['show_dashboard_deadline'] == 1 && get_post_meta( get_the_ID(), '_deadline', true ) != null ) ? true : false );
+			break;
+		case 'progress':
+			$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && get_post_meta( get_the_ID(), '_progress', true ) != null ? true : false );
+			break;
+		case 'dashboard-author':
+			$permission = ( ( CTDL_Loader::$settings['list_view'] == 1 && isset( CTDL_Loader::$dashboard_settings['dashboard_author'] ) &&
+			                  CTDL_Loader::$dashboard_settings['dashboard_author'] == 0 ) ? true : false );
+			break;
+		case 'dashboard-category':
+			$permission = ( CTDL_Loader::$settings['categories'] == 1 && ( 0 == $CTDL_category_id || $CTDL_category != $CTDL_category_id ) ? true : false );
+			break;
+		case 'widget-deadline':
+			$permission = ( CTDL_Loader::$settings['show_deadline'] == 1 && $CTDL_widget_settings['deadline'] == 1 && get_post_meta( get_the_ID(), '_deadline', true ) != null ? true : false );
+			break;
+		case 'widget-progress':
+			$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && $CTDL_widget_settings['progress'] == 1 && get_post_meta( get_the_ID(), '_progress', true ) != null ? true : false );
+			break;
+		case 'widget-assigned':
+			$data = get_post_meta( get_the_ID(), '_assigned', true );
+			$permission = ( CTDL_Loader::$settings['assign'] == 0 && $CTDL_widget_settings['assigned_to'] == 1 && CTDL_Loader::$settings['list_view'] != 0 && $data != '-1' && ( is_array( $data ) && ! in_array( '-1', $data ) ) ? true : false );
+			break;
 	}
 
-	/**
-	 * Show the Progress of a To-Do Item
-	 * @param int $progress
-	 * @param int $completed
-	 * @since 3.4
-	 */
-	public static function show_progress( $progress, $completed = 0 ) {
-		$progress = ( $completed == 1 ? '100' : $progress );
-		echo ( $progress != NULL ? sprintf( '%d', esc_attr( $progress ) ) : NULL );
-	}
-
-	/**
-	 * Show To-Do Item Author
-	 * @param int $author
-	 * @since 3.4
-	 */
-	public static function show_added_by( $author ) {
-		esc_attr_e( $author );
-	}
-
-
+	return $permission;
 }

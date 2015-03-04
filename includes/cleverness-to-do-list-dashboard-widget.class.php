@@ -24,43 +24,19 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	 * Creates the dashboard widget
 	 */
 	public function dashboard_widget() {
-
-		$this->display();
-
-		if ( CTDL_Lib::check_permission( 'todo', 'add' ) ) {
-			echo '<p class="add-todo">' . '<a href="admin.php?page=cleverness-to-do-list#addtodo">' .
-					apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ) . '  &raquo;</a></p>';
-		}
-	}
-
-	/** Display the to-do list */
-	public function display( $completed = 0 ) {
-		CTDL_Loader::$dashboard_settings['dashboard_cat'] = ( isset( CTDL_Loader::$dashboard_settings['dashboard_cat'] ) ? CTDL_Loader::$dashboard_settings['dashboard_cat'] : 0 );
-		$cat_ids = ( is_array( CTDL_Loader::$dashboard_settings['dashboard_cat'] ) ? CTDL_Loader::$dashboard_settings['dashboard_cat'] : array( CTDL_Loader::$dashboard_settings['dashboard_cat'] ) );
-		$limit = ( isset( CTDL_Loader::$dashboard_settings['dashboard_number'] ) ? CTDL_Loader::$dashboard_settings['dashboard_number'] : -1 );
+		global $CTDL_templates;
 		$completed = ( CTDL_Loader::$dashboard_settings['show_completed'] == 1 ? 1 : 0 );
-
 		$class = 'cleverness-to-do-list';
 
-		if ( $completed == 1 ) {
+		if ( 1 == $completed ) {
 			$class .= ' refresh-checklist';
 		}
 
 		echo '<div class="'.$class.'">';
 
-		echo '<div class="uncompleted-checklist">';
-		foreach ( $cat_ids as $cat_id ) {
-			$this->loop_through_todos( 0, $cat_id, $limit );
-		}
-		echo '</div>';
+		$CTDL_templates->get_template_part( 'dashboard', 'widget' );
 
-		if ( $completed == 1 ) {
-			echo '<div class="completed-checklist">';
-			foreach ( $cat_ids as $cat_id ) {
-				$this->loop_through_todos( 1, $cat_id, $limit );
-			}
-			echo '</div>';
-		}
+		echo '<input type="hidden" name="ctdl_complete_nonce" value="' . wp_create_nonce( 'todocomplete' ) . '" />';
 
 		echo '</div>';
 
@@ -73,10 +49,11 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	 * @param int $cat_id
 	 * @param $limit
 	 */
-	protected function loop_through_todos( $status = 0, $cat_id = 0, $limit = -1 ) {
+	public function loop_through_todos( $status = 0, $cat_id = 0, $limit = 1000 ) {
 		global $userdata, $current_user;
 		get_currentuserinfo();
 
+		$limit = ( isset( CTDL_Loader::$dashboard_settings['dashboard_number'] ) ? CTDL_Loader::$dashboard_settings['dashboard_number'] : $limit );
 		$user = ( CTDL_Lib::check_permission( 'todo', 'view' ) ? $current_user->ID : $userdata->ID );
 
 		if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $cat_id == 0 ) {
@@ -89,7 +66,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 				$todo_items = CTDL_Lib::get_todos( $user, $limit, $status, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
-					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $status, $cat_id ) );
+					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $status, $category->term_id ) );
 					$items = 1;
 				}
 			}
@@ -124,7 +101,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	 * @param int $cat_id
 	 * @return array $posts_to_exclude
 	 */
-	protected function show_todo_list_items( $todo_items, $status = 0, $cat_id = 0 ) {
+	public function show_todo_list_items( $todo_items, $status = 0, $cat_id = 0 ) {
 		global $CTDL_templates, $CTDL_status, $CTDL_category;
 		$CTDL_status = $status;
 		$CTDL_category = $cat_id;
@@ -134,7 +111,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 			$id = get_the_ID();
 			$posts_to_exclude[] = $id;
 
-			$CTDL_templates->get_template_part( 'dashboard', 'widget' );
+			$CTDL_templates->get_template_part( 'dashboard', 'single' );
 
 		endwhile;
 
@@ -220,6 +197,11 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 	 * Setup the dashboard widget
 	 */
 	public function dashboard_setup() {
+		global $CTDL_status, $CTDL_category, $CTDL_category_id;
+		$CTDL_status = 0;
+		$CTDL_category = 0;
+		$CTDL_category_id = 0;
+
 		if ( CTDL_Lib::check_permission( 'todo', 'view' ) ) {
 			wp_add_dashboard_widget( 'ctdl', apply_filters( 'ctdl_todo_list', esc_html__( 'To-Do List', 'cleverness-to-do-list' ) ) .
 					' <a href="admin.php?page=cleverness-to-do-list">&raquo;</a>', array( $this, 'dashboard_widget' ), array( $this, 'dashboard_options' ) );
