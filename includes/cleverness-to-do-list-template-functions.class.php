@@ -19,6 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Get category heading
+ * @return null
+ *
+ * @since 3.4
+ */
 function ctdl_category_heading() {
 	global $CTDL_category_id;
 	$cats = get_the_terms( get_the_ID(), 'todocategories' );
@@ -117,13 +123,36 @@ function ctdl_deadline() {
 
 /**
  * Show the Progress of a To-Do Item
-
+ *
  * @since 3.4
  */
 function ctdl_progress() {
 	global $CTDL_status;
 	$progress = ( $CTDL_status == 1 ? '100' : get_post_meta( get_the_ID(), '_progress', true ) );
 	return $progress;
+}
+
+/**
+ * Show the Post Planner associated with a To-Do Item
+ * @return mixed
+ *
+ * @since 3.4
+ */
+function ctdl_planner() {
+	$url = admin_url( 'post.php?post=' . absint( get_post_meta( get_the_ID(), '_planner', true ) ) . '&action=edit' );
+	$planner = '<a href="' . $url . '">' . get_the_title( get_post_meta( get_the_ID(), '_planner', true ) ) . '</a>';
+	return $planner;
+}
+
+/**
+ * Show the Date Completed of a To-Do Item
+ * @return mixed
+ *
+ * @since 3.4
+ */
+function ctdl_completed_date() {
+	$date = date( CTDL_Loader::$settings['date_format'], strtotime( get_post_meta( get_the_ID(), '_completed', true ) ) );
+	return $date;
 }
 
 /**
@@ -138,9 +167,14 @@ function ctdl_check_field( $field ) {
 	global $CTDL_widget_settings, $CTDL_category, $CTDL_category_id;
 
 	switch ( $field ) {
-		case 'dashboard-edit':
-			$permission = ( CTDL_Loader::$dashboard_settings['show_edit_link'] == 1 && ( current_user_can( CTDL_Loader::$settings['edit_capability'] )
-			    || CTDL_Loader::$settings['list_view'] == 0 ) ? true : false );
+		case 'completed':
+			$permission = ( CTDL_Loader::$settings['show_completed_date'] == 1 && get_post_meta( get_the_ID(), '_completed', true ) != '0000-00-00 00:00:00' ? true : false );
+			break;
+		case 'planner':
+			$permission = ( CTDL_Loader::$settings['post_planner'] == 1 && get_post_meta( get_the_ID(), '_planner', true ) != null &&  PostPlanner_Lib::planner_exists( get_post_meta( get_the_ID(), '_planner', true ) ) ? true : false );
+			break;
+		case 'progress':
+			$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && get_post_meta( get_the_ID(), '_progress', true ) != null ? true : false );
 			break;
 		case 'assigned':
 			$data = get_post_meta( get_the_ID(), '_assigned', true );
@@ -153,8 +187,9 @@ function ctdl_check_field( $field ) {
 			$permission = ( ( CTDL_Loader::$settings['show_deadline'] == 1 && isset( CTDL_Loader::$dashboard_settings['show_dashboard_deadline'] ) &&
 			                  CTDL_Loader::$dashboard_settings['show_dashboard_deadline'] == 1 && get_post_meta( get_the_ID(), '_deadline', true ) != null ) ? true : false );
 			break;
-		case 'progress':
-			$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && get_post_meta( get_the_ID(), '_progress', true ) != null ? true : false );
+		case 'dashboard-edit':
+			$permission = ( CTDL_Loader::$dashboard_settings['show_edit_link'] == 1 && ( current_user_can( CTDL_Loader::$settings['edit_capability'] )
+			                                                                             || CTDL_Loader::$settings['list_view'] == 0 ) ? true : false );
 			break;
 		case 'dashboard-author':
 			$permission = ( ( CTDL_Loader::$settings['list_view'] == 1 && isset( CTDL_Loader::$dashboard_settings['dashboard_author'] ) &&
