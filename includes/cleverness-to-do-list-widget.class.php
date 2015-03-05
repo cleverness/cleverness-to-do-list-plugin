@@ -6,7 +6,6 @@
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
  * @version 3.2
- * @todo fix category privacy to work when sort order is any
  */
 
 /**
@@ -77,6 +76,8 @@ class CTDL_Widget extends WP_Widget {
 
 			foreach ( $categories as $category ) {
 
+				echo '<ol>';
+
 				$category_id = $category->term_id;
 				$visible = $visibility["category_$category->term_id"];
 
@@ -87,12 +88,16 @@ class CTDL_Widget extends WP_Widget {
 					$items = 1;
 				}
 
+				echo '</ol>';
+
 			}
 
 			$todo_items = CTDL_Lib::get_todos( $user, $limit, 0, 0, $posts_to_exclude );
 
 			if ( $todo_items->have_posts() ) {
+				echo '<ol>';
 				$this->show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to, 0, $visible );
+				echo '</ol>';
 				$items = 1;
 			}
 
@@ -131,8 +136,8 @@ class CTDL_Widget extends WP_Widget {
 	 * @return array $posts_to_exclude
 	 */
 	protected function show_todo_list_items( $todo_items, $progress, $deadline, $assigned_to, $category = 0, $visible = 0 ) {
-		global $CTDL_templates;
-		if ( CTDL_Loader::$settings['categories'] == 1 ) $visibility = get_option( 'CTDL_categories' );
+		global $CTDL_templates, $CTDL_visibility;
+		if ( CTDL_Loader::$settings['categories'] == 1 ) $CTDL_visibility = get_option( 'CTDL_categories' );
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
 			$id = get_the_ID();
@@ -141,11 +146,10 @@ class CTDL_Widget extends WP_Widget {
 			if ( $visible == 0 ) {
 
 				if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $category == '0' ) {
-					$cats = get_the_terms( $id, 'todocategories' );
+					$cats = get_the_terms( get_the_ID(), 'todocategories' );
 					if ( $cats != null ) {
 						foreach ( $cats as $category ) {
-							$visible = $visibility["category_$category->term_id"];
-							if ( $this->cat_id != $category->term_id && $visible == 0 ) {
+							if ( $this->cat_id != $category->term_id ) {
 								echo '<h4>' . esc_html( $category->name ) . '</h4>';
 								$this->cat_id = $category->term_id;
 							}
@@ -153,11 +157,7 @@ class CTDL_Widget extends WP_Widget {
 					}
 				}
 
-				echo '<ol>';
-
-				$CTDL_templates->get_template_part( 'widget' );
-
-				echo '</ol>';
+				$CTDL_templates->get_template_part( 'widget', 'single' );
 			}
 
 		endwhile;

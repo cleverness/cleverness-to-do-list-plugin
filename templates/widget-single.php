@@ -1,8 +1,4 @@
-<?php
-/** Template for the Cleverness To-Do List Widget */
-?>
-
-<li<?php echo esc_attr( ctdl_priority_class() ); ?>>
+<li<?php echo esc_html( ctdl_priority_class() ); ?>>
 
 	<?php echo wp_kses_post( ctdl_todo_text() ); ?>
 
