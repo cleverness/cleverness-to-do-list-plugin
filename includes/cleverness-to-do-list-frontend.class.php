@@ -14,7 +14,7 @@
  * @subpackage includes
  */
 class CTDL_Frontend_Admin extends ClevernessToDoList {
-	protected $atts;
+	public $atts;
 	public $add_script;
 
 	public function __construct() {
@@ -32,12 +32,13 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 	public function display_admin( $atts ) {
 		extract( shortcode_atts( array(
 			'title' => '',
-			'completed' => 0,
-			'completed_date' => 0
+			'completed' => 0
 		), $atts ) );
 		$this->atts = $atts;
 		$this->add_script = true;
 		$this->list = '';
+
+		$this->list = '<div class="cleverness-to-do-admin">';
 
 		/** @var $title string */
 		if ( $title != '' ) {
@@ -62,6 +63,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		} else {
 			$this->list .= esc_html__( 'You must be logged in to view', 'cleverness-to-do-list' );
 			}
+
+		$this->list .= '</div>';
 
 		return $this->list;
 	}
@@ -270,7 +273,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 
 			$this->form = '<h3>'.apply_filters( 'ctdl_add_heading', esc_html__( 'Add New To-Do Item', 'cleverness-to-do-list' ) ).'</h3>';
 
-			$this->form .= '<form name="addtodo" id="addtodo" action="'.$this->url.'" method="post">
+			$this->form .= '<form name="addtodo" id="addtodo">
 	  		    <table class="todo-form form-table">';
 			/** @var $priority int */
 			if ( $priority == 1 ) $this->create_priority_field();
@@ -292,7 +295,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			$this->form .= do_action( 'ctdl_add_form_action' );
 			$this->form = apply_filters( 'ctdl_add_form', $this->form );
 			$this->create_todo_text_field();
-			$this->form .= '</table>'.wp_nonce_field( 'todoadd', 'todoadd', true, false ).'<input type="hidden" name="action" value="addtodo" />
+			$this->form .= '</table>' . wp_nonce_field( 'todoadd', 'todoadd', true, false ) . '
         	    <p class="submit"><input id="add-todo" type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>';
 			$this->form .= '</form>';
 

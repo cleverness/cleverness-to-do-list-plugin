@@ -67,7 +67,7 @@ jQuery( document ).ready( function( $ ) {
 				_ajax_nonce       : ctdl.NONCE
 			},
 			success: function (data) {
-				console.log(data);
+				$('.cleverness-to-do-admin').html(data);
 			},
 			error  : function (r) {
 				$('#message').html('<p>' + ctdl.ERROR_MSG + '</p>').show().addClass('error below-h2');

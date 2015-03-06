@@ -424,10 +424,15 @@ class CTDL_Lib {
 	 * @static
 	 */
 	public static function add_todo_callback() {
-		check_ajax_referer( 'cleverness-todo' );
+		global $CTDL_Frontend_Admin;
+		check_ajax_referer( 'ctdl-todo' );
 
+		self::insert_todo();
 
 		$response = 'test';
+
+		//$response = $CTDL_Frontend_Admin->display_admin( $CTDL_Frontend_Admin->atts );
+
 		echo $response;
 
 		die(); // this is required to return a proper result

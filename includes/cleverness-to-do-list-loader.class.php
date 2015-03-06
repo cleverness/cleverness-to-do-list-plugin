@@ -38,12 +38,10 @@ class CTDL_Loader {
 		if ( is_admin() ) {
 			new CTDL_Settings();
 			$CTDL_Dashboard_Widget = new CTDL_Dashboard_Widget();
-		} else {
-			$CTDL_Frontend_Admin     = new CTDL_Frontend_Admin;
-			$CTDL_Frontend_Checklist = new CTDL_Frontend_Checklist;
-			new CTDL_Frontend_List;
 		}
-
+		$CTDL_Frontend_Admin     = new CTDL_Frontend_Admin;
+		$CTDL_Frontend_Checklist = new CTDL_Frontend_Checklist;
+		new CTDL_Frontend_List;
 	}
 
 	/**
@@ -125,9 +123,8 @@ class CTDL_Loader {
 			include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-settings.class.php';
 			include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-help.class.php';
 			include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-dashboard-widget.class.php';
-		} else {
-			include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-frontend.class.php';
 		}
+		include_once CTDL_PLUGIN_DIR.'includes/cleverness-to-do-list-frontend.class.php';
 	}
 
 	/**
@@ -135,7 +132,6 @@ class CTDL_Loader {
 	 * @static
 	 */
 	private static function call_wp_hooks() {
-		global $CTDL_Frontend_Checklist;
 		if ( self::$settings['admin_bar'] == 1 ) add_action( 'admin_bar_menu', array( 'CTDL_Lib', 'add_to_toolbar' ), 999 );
 		if ( is_admin() ) {
 			add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
