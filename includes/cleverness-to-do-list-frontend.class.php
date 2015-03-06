@@ -38,7 +38,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		$this->add_script = true;
 		$this->list = '';
 
-		$this->list = '<div class="cleverness-to-do-admin">';
+		$this->list = '<div class="ctdl-frontend-admin">';
 
 		/** @var $title string */
 		if ( $title != '' ) {
@@ -52,11 +52,13 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			if ( $action == 'edit-todo' ) {
 				$this->edit_todo_item( $this->url );
 			} else {
+				$this->list .= '<div class="ctdl-tables">';
 				$this->display();
 				/** @var int $completed */
 				if ( 1 == $completed ) {
 					$this->display( 1 );
 				}
+				$this->list .= '</div>';
 				$this->list .= $this->create_new_todo_form();
 			}
 
@@ -72,19 +74,16 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 	/**
 	 * Display a to-do list
 	 * @param int $completed
-	 * @return void
+	 * @return string
 	 */
 	public function display( $completed = 0 ) {
 		extract( shortcode_atts( array(
 			'category' => 0,
 		), $this->atts ) );
+		$class = ( $completed == 0 ? 'ctdl-uncompleted' : 'ctdl-completed' );
+		$id = ( $completed == 0 ? 'todo-list' : 'todo-list-completed' );
 
-		// otherwise, display the list of to-do items
-		if ( $completed == 0 ) {
-			$this->list .= $this->show_heading();
-		}
-
-		$this->list .= '<table id="todo-list" class="todo-table widefat">';
+		$this->list .= '<table id="'.$id.'" class="todo-table widefat '.$class.'">';
 
 		$this->show_table_headings( $completed );
 
@@ -94,6 +93,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		$this->list .= '</table>';
 
 		wp_reset_postdata();
+
+		return $this->list;
 	}
 
 	/**

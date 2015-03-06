@@ -192,6 +192,22 @@ class CTDL_Lib {
 	}
 
 	/**
+	 * Ajax callback for getting todos on the frontend
+	 */
+	public static function frontend_display_todos_callback() {
+		global $CTDL_Frontend_Admin;
+		check_ajax_referer( 'ctdl-todo' );
+
+		$response = $CTDL_Frontend_Admin->display( 0 );
+		if ( $_POST['ctdl_show_completed'] == true ) {
+			$response .= $CTDL_Frontend_Admin->display( 1 );
+		}
+
+		echo $response;
+		die();
+	}
+
+	/**
 	 * Complete to-do item ajax callback
 	 * @static
 	 */

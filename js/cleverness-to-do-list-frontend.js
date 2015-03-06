@@ -1,6 +1,6 @@
 jQuery( document ).ready( function( $ ) {
 
-	$( '#todo-list' ).tablesorter();
+	$( '#todo-list', '#todo-list-completed' ).tablesorter();
 
 	$( "#cleverness_todo_assign" ).select2( {
 		placeholder: ctdl.SELECT_USER
@@ -25,11 +25,12 @@ jQuery( document ).ready( function( $ ) {
 		$( "#cleverness_todo_deadline" ).datepicker( { dateFormat:$cleverness_todo_dateformat } );
 	} );
 
-	$( '.todo-checkbox' ).click( function () {
+	$( '.todo-table' ).on ( 'click', '.todo-checkbox', ( function () {
 		var status = 0;
 		var id = $( this ).attr( 'id' ).substr( 5 );
 		var todoid = '#todo-' + id;
 		var single = $( this ).hasClass( 'single' );
+		var completed = $( '.todo-table' ).hasClass( 'ctdl-completed' );
 		if ( $( this ).prop( 'checked' ) ) status = 1;
 
 		var data = {
@@ -39,20 +40,32 @@ jQuery( document ).ready( function( $ ) {
 			_ajax_nonce: ctdl.NONCE
 		};
 
+		var todo_data = {
+			action     : 'cleverness_frontend_display_todos',
+			ctdl_show_completed : completed,
+			_ajax_nonce: ctdl.NONCE
+		};
+
 		jQuery.post( ctdl.AJAX_URL, data, function( response ) {
 			if ( single != true ) {
-				if (status == 1) {
-					$(this).prop("checked", true);
+				if (true == completed) {
+					jQuery.post(ctdl.AJAX_URL, todo_data, function (response) {
+						$('.ctdl-tables').html(response);
+					});
 				} else {
-					$(this).prop("checked", false);
+					if (status == 1) {
+						$(this).prop("checked", true);
+					} else {
+						$(this).prop("checked", false);
+					}
+					$(todoid).fadeOut(function () {
+						$(this).remove();
+					});
 				}
-				$( todoid ).fadeOut( function () {
-					$( this ).remove();
-				} );
 
 			}
 		} );
-	} );
+	} ) );
 
 	/* Add To-Dos */
 	$('#addtodo').on('click', '#add-todo', function (e) {
