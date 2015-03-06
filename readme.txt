@@ -138,18 +138,19 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 and frontend loops
 * Show progress as 100% completed for completed items
 * Fixed Assigned to text shows up even though the value is empty on dashboard widget
-* MP6 adjustments
+* Admin style adjustments
 * Updated Spanish translation by Jorge Flores [Mayan Group](http://www.mayan.mx/)
 * Changed ctdl_add_form and ctdl_edit_form to ctdl_add_form_action and ctdl_add_form_action. ctdl_add_form and ctdl_edit_form are now filters applied after the action
 * Add ctdl_send_email filter
 * Added is_user_member_of_blog() to frontend admin shortcode
 * Added link to individual post planners
-* Changed [todolist] shortcode to use 1 instead of show (show still works)
+* Changed todolist shortcode to use 1 instead of show (show still works)
 * Fixed an issue with the frontend date added attribute
 * Added completed display option to dashboard widget
 * Added templates for dashboard widget and widget
 * Added completed=only attribute for todolist shortcode
 * Added completed=1 attribute for todochecklist shortcode to only show completed items
+* Added completed and completed_date attributes for todoadmin shortcode
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski

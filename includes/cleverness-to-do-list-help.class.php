@@ -156,6 +156,8 @@ class CTDL_Help {
 			<li><strong>date</strong> &#8211; <?php esc_html_e( 'default is hide (0). Use 1 to show', 'cleverness-to-do-list' ); ?>.</li>
 			<li><strong>editlink</strong> &#8211; <?php esc_html_e( 'default is show (1). Use 0 to hide', 'cleverness-to-do-list' ); ?>.</li>
 			<li><strong>category</strong> &#8211; <?php esc_html_e( 'default is all categories (0). Use the category ID to show a specific category', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>completed</strong> &#8211; <?php esc_html_e( 'default is hide (0). Use 1 to show', 'cleverness-to-do-list' ); ?></li>
+			<li><strong>completed_date</strong> &#8211; <?php esc_html_e( 'default is hide (0). Use 1 to show', 'cleverness-to-do-list' ); ?></li>
 		</ul>
 		<p><strong><?php esc_html_e( 'Example:', 'cleverness-to-do-list' ); ?></strong><br/>
 		<?php esc_html_e( 'Set the title to "Things to Do" and show the priority and the progress.', 'cleverness-to-do-list' ); ?><br/>
