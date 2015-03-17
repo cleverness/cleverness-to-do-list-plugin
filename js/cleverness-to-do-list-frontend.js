@@ -1,5 +1,7 @@
 jQuery( document ).ready( function( $ ) {
 
+	$( '#ctdl-message').hide();
+
 	$( '#todo-list', '#todo-list-completed' ).tablesorter();
 
 	$( "#cleverness_todo_assign" ).select2( {
@@ -25,7 +27,8 @@ jQuery( document ).ready( function( $ ) {
 		$( "#cleverness_todo_deadline" ).datepicker( { dateFormat:$cleverness_todo_dateformat } );
 	} );
 
-	$( '.todo-table' ).on ( 'click', '.todo-checkbox', ( function () {
+	/* For todoadmin shortcode */
+	$( '.todo-table' ).on( 'click', '.todo-checkbox', ( function () {
 		var status = 0;
 		var id = $( this ).attr( 'id' ).substr( 5 );
 		var todoid = '#todo-' + id;
@@ -67,30 +70,63 @@ jQuery( document ).ready( function( $ ) {
 		} );
 	} ) );
 
+	/* For todochecklist shortcode */
+	$('.todo-checklist .todo-checkbox').click(function () {
+		var status = 0;
+		var id = $(this).attr('id').substr(5);
+		var todoid = '#todo-' + id;
+		var single = $(this).hasClass('single');
+		if ($(this).prop('checked')) status = 1;
+		var data = {
+			action          : 'cleverness_todo_complete',
+			ctdl_todo_id    : id,
+			ctdl_todo_status: status,
+			_ajax_nonce     : ctdl.NONCE
+		};
+		jQuery.post(ctdl.AJAX_URL, data, function (response) {
+			if (single != true) {
+				if (status == 1) {
+					$(this).prop("checked", true);
+				} else {
+					$(this).prop("checked", false);
+				}
+				$(todoid).fadeOut(function () {
+					$(this).remove();
+				});
+			}
+		});
+	});
+
 	/* Add To-Dos */
-	$('#addtodo').on('click', '#add-todo', function (e) {
+	$('#addtodo').submit( function (e) {
 		e.preventDefault();
+		var data = 'action=cleverness_add_todo&_ajax_nonce=' + ctdl.NONCE + '&' + $( '#addtodo' ).serialize();
 
 		$.ajax({
 			type   : 'post',
 			url    : ctdl.AJAX_URL,
-			data   : {
-				action            : 'cleverness_add_todo',
-				ctdl_form		  : $( '#addtodo' ).serialize(),
-				_ajax_nonce       : ctdl.NONCE
-			},
+			data   : data,
 			success: function (data) {
-				$('.cleverness-to-do-admin').html(data);
+				if ( data != 0 ) {
+					$('#addtodo').each(function () {
+						this.reset();
+					});
+					var message = '<p>' + ctdl.INSERT_MSG + '</p>';
+					$('#ctdl-message').html(message).show().addClass('ctdl-message');
+					$('#todo-list').html(data);
+				} else {
+					$('#ctdl-message').html('<p>' + ctdl.ERROR_MSG + '</p>').show().addClass('ctdl-message ctdl-error');
+				}
 			},
 			error  : function (r) {
-				$('#message').html('<p>' + ctdl.ERROR_MSG + '</p>').show().addClass('error below-h2');
+				$('#ctdl-message').html('<p>' + ctdl.ERROR_MSG + '</p>').show().addClass('ctdl-message ctdl-error');
 			}
 		});
 	});
 	/* end Add To-Dos */
 
 	/* Delete To-Dos */
-	$( '#todo-list' ).on( 'click', '.delete-todo', function( e ) {
+	$( '.todo-table' ).on( 'click', '.delete-todo', function( e ) {
 		e.preventDefault();
 		var confirmed = confirm( ctdl.CONFIRMATION_MSG );
 		if ( confirmed == false ) return false;
@@ -112,17 +148,8 @@ jQuery( document ).ready( function( $ ) {
 						$( '#todo-list tbody tr' ).removeClass( 'alternate' );
 						$( '#todo-list tbody tr:visible:even' ).addClass( 'alternate' );
 					});
-				} else if ( data == 0 ) {
-					$( '#message' ).html( '<p>'+ctdl.ERROR_MSG+'</p>' ).show().addClass( 'error below-h2' );
-					$( todotr ).css( 'background', '#FFEBE8' );
-				} else if ( data == -1 ) {
-					$( '#message' ).html( '<p>'+ctdl.PERMISSION_MSG+'</p>' ).show().addClass( 'error below-h2' );
 				}
-      		},
-      	    error: function( r ) {
-				$( '#message' ).html( '<p>'+ctdl.ERROR_MSG+'</p>' ).show().addClass( 'error below-h2' );
-				$( todotr ).css( 'background', '#FFEBE8' );
-			}
+      		}
     	} );
 	} );
 	/* end Delete To-Dos */

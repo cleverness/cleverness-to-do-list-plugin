@@ -56,3 +56,13 @@ table#todo-list thead tr .sorter-false {
 table#todo-list {
 	vertical-align: text-top;
 }
+
+.ctdl-message {
+	padding: 0.5em;
+	margin: 0.5em;
+	border: 1px solid #ccc;
+}
+
+.ctdl-error {
+	border: 1px solid red;
+}

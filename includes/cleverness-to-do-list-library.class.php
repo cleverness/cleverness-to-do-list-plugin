@@ -36,7 +36,7 @@ class CTDL_Lib {
 	 * @param array $to_exclude
 	 * @return WP_Query
 	 */
-	public static function get_todos( $user = 0, $limit = -1, $status = 0, $cat_id = 0, $to_exclude = array() ) {
+	public static function get_todos( $user = 0, $limit = 10000, $status = 0, $cat_id = 0, $to_exclude = array() ) {
 
 		/* Sort Order */
 		// if sort_order is post_date, order by that first
@@ -255,6 +255,23 @@ class CTDL_Lib {
 	}
 
 	/**
+	 * Add To-Do Ajax
+	 * @static
+	 */
+	public static function add_todo_callback() {
+		global $CTDL_Frontend_Admin;
+		check_ajax_referer( 'ctdl-todo' );
+
+		self::insert_todo();
+
+		$response = $CTDL_Frontend_Admin->display( 0 );
+
+		echo $response;
+
+		die(); // this is required to return a proper result
+	}
+
+	/**
 	 * Insert new to-do item into the database
 	 * @static
 	 * @return mixed
@@ -436,30 +453,11 @@ class CTDL_Lib {
 	}
 
 	/**
-	 * Add To-Do Ajax
-	 * @static
-	 */
-	public static function add_todo_callback() {
-		global $CTDL_Frontend_Admin;
-		check_ajax_referer( 'ctdl-todo' );
-
-		self::insert_todo();
-
-		$response = 'test';
-
-		//$response = $CTDL_Frontend_Admin->display_admin( $CTDL_Frontend_Admin->atts );
-
-		echo $response;
-
-		die(); // this is required to return a proper result
-	}
-
-	/**
 	 * Delete To-Do Ajax
 	 * @static
 	 */
 	public static function delete_todo_callback() {
-		check_ajax_referer( 'cleverness-todo' );
+		check_ajax_referer( 'ctdl-todo' );
 		$permission = CTDL_Lib::check_permission( 'todo', 'delete' );
 		$status = ( $permission === true ? CTDL_Lib::delete_todo( absint( $_POST['cleverness_todo_id'] ) ) : -1 );
 		echo $status;

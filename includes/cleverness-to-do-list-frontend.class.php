@@ -38,7 +38,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		$this->add_script = true;
 		$this->list = '';
 
-		$this->list = '<div class="ctdl-frontend-admin">';
+		$this->list = '<div id="ctdl-frontend-admin">';
 
 		/** @var $title string */
 		if ( $title != '' ) {
@@ -297,7 +297,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			$this->form = apply_filters( 'ctdl_add_form', $this->form );
 			$this->create_todo_text_field();
 			$this->form .= '</table>' . wp_nonce_field( 'todoadd', 'todoadd', true, false ) . '
-        	    <p class="submit"><input id="add-todo" type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'" /></p>';
+        	    <input id="add-todo" type="submit" name="submit" class="button-primary" value="'.apply_filters( 'ctdl_add_text', esc_attr__( 'Add To-Do Item', 'cleverness-to-do-list' ) ).'" />
+        	    <div id="ctdl-message"></div>';
 			$this->form .= '</form>';
 
 			return $this->form;

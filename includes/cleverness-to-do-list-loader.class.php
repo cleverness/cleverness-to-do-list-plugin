@@ -234,6 +234,7 @@ class CTDL_Loader {
 	 */
 	public static function get_js_vars() {
 		return array(
+			'INSERT_MSG'                  => __( 'New To-Do Added', 'cleverness-to-do-list' ),
 			'SUCCESS_MSG'                 => __( 'To-Do Deleted.', 'cleverness-to-do-list' ),
 			'ERROR_MSG'                   => __( 'There was a problem performing that action.', 'cleverness-to-do-list' ),
 			'PERMISSION_MSG'              => __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' ),
