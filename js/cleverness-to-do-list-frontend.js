@@ -45,27 +45,27 @@ jQuery( document ).ready( function( $ ) {
 
 		var todo_data = {
 			action     : 'cleverness_frontend_display_todos',
-			ctdl_show_completed : completed,
+			ctdl_status : status,
 			_ajax_nonce: ctdl.NONCE
 		};
 
 		jQuery.post( ctdl.AJAX_URL, data, function( response ) {
-			if ( single != true ) {
-				if (true == completed) {
-					jQuery.post(ctdl.AJAX_URL, todo_data, function (response) {
-						$('.ctdl-tables').html(response);
-					});
-				} else {
-					if (status == 1) {
-						$(this).prop("checked", true);
-					} else {
-						$(this).prop("checked", false);
+			if (status == 1) {
+				$(this).prop("checked", true);
+			} else {
+				$(this).prop("checked", false);
+			}
+			$(todoid).fadeOut(function () {
+				$(this).remove();
+			});
+			if (true == completed) {
+				var table = '#todo-list';
+				jQuery.post(ctdl.AJAX_URL, todo_data, function (response) {
+					if ( status == 1 ) {
+						table = '#todo-list-completed';
 					}
-					$(todoid).fadeOut(function () {
-						$(this).remove();
-					});
-				}
-
+					$(table).html(response);
+				});
 			}
 		} );
 	} ) );

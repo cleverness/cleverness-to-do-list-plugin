@@ -198,10 +198,7 @@ class CTDL_Lib {
 		global $CTDL_Frontend_Admin;
 		check_ajax_referer( 'ctdl-todo' );
 
-		$response = $CTDL_Frontend_Admin->display( 0 );
-		if ( $_POST['ctdl_show_completed'] == true ) {
-			$response .= $CTDL_Frontend_Admin->display( 1 );
-		}
+		$response = $CTDL_Frontend_Admin->display( $_POST['ctdl_status'] );
 
 		echo $response;
 		die();
