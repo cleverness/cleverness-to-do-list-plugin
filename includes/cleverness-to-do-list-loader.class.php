@@ -233,6 +233,7 @@ class CTDL_Loader {
 	 * @return array
 	 */
 	public static function get_js_vars() {
+		global $CTDL_Frontend_Admin;
 		return array(
 			'INSERT_MSG'                  => __( 'New To-Do Added', 'cleverness-to-do-list' ),
 			'SUCCESS_MSG'                 => __( 'To-Do Deleted.', 'cleverness-to-do-list' ),
@@ -244,8 +245,8 @@ class CTDL_Loader {
 			'CONFIRMATION_DEL_TABLES_MSG' => __( "You are about to permanently delete database tables. This cannot be undone. \n 'Cancel' to stop, 'OK' to delete.", 'cleverness-to-do-list' ),
 			'SELECT_USER'                 => __( 'Select a User', 'cleverness-to-do-list' ),
 			'NONCE'                       => wp_create_nonce( 'ctdl-todo' ),
-			'AJAX_URL'                    => admin_url( 'admin-ajax.php' )
-		);
+			'AJAX_URL'                    => admin_url( 'admin-ajax.php' ),
+			'TODOADMIN_ATTS'              => $CTDL_Frontend_Admin->atts );
 	}
 
 	/**

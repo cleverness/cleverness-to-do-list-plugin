@@ -113,7 +113,7 @@ class ClevernessToDoList {
 	 * @param int $cat_id
 	 * @param int $limit
 	 */
-	protected function loop_through_todos( $completed = 0, $cat_id = 0, $limit = -1 ) {
+	protected function loop_through_todos( $completed = 0, $cat_id = 0, $limit = 10000 ) {
 		global $current_user, $userdata;
 		$user = CTDL_Lib::get_user_id( $current_user, $userdata );
 
@@ -523,14 +523,14 @@ class ClevernessToDoList {
 		$edit = '';
 		$url = $this->url.'?action=edit-todo&amp;id='.absint( $id );
 		if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
-			if ( is_admin() && ! DOING_AJAX ) {
+			if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 				$edit = '<input class="edit-todo button-secondary" type="button" value="'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit' ) ).'" />';
 			} else {
 				$edit = '<a href="'.$url.'" class="edit-todo">'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit' ) ).'</a>';
 				}
 			}
 		if ( current_user_can( CTDL_Loader::$settings['delete_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
-			if ( is_admin() && ! DOING_AJAX ) {
+			if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 				$edit .= ' <input class="delete-todo button-secondary" type="button" value="'.apply_filters( 'ctdl_delete', esc_attr__( 'Delete' ) ).'" />';
 			} else {
 				$edit .= ' | <a href="" class="delete-todo">'.apply_filters( 'ctdl_delete', esc_html__( 'Delete' ) ).'</a>';

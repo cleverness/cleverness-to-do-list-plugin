@@ -198,6 +198,8 @@ class CTDL_Lib {
 		global $CTDL_Frontend_Admin;
 		check_ajax_referer( 'ctdl-todo' );
 
+		$CTDL_Frontend_Admin->atts = $_POST['ctdl_shortcode_atts'];
+
 		$response = $CTDL_Frontend_Admin->display( $_POST['ctdl_status'] );
 
 		echo $response;

@@ -46,6 +46,7 @@ jQuery( document ).ready( function( $ ) {
 		var todo_data = {
 			action     : 'cleverness_frontend_display_todos',
 			ctdl_status : status,
+			ctdl_shortcode_atts : ctdl.TODOADMIN_ATTS,
 			_ajax_nonce: ctdl.NONCE
 		};
 
