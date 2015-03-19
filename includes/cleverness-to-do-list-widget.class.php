@@ -238,4 +238,7 @@ class CTDL_Widget extends WP_Widget {
 
 }
 
-add_action( 'widgets_init', create_function( '', 'register_widget( "CTDL_Widget" );' ) );
+add_action( 'widgets_init', 'cleverness_todo_register_widget' );
+function cleverness_todo_register_widget() {
+	register_widget( 'CTDL_Widget' );
+}

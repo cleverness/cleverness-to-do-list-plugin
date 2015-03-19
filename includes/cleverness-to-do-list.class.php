@@ -131,7 +131,7 @@ class ClevernessToDoList {
 					$visible = $visibility["category_$category->term_id"];
 				}
 
-				$todo_items = CTDL_Lib::get_todos( $user, -1, $completed, $category->term_id );
+				$todo_items = CTDL_Lib::get_todos( $user, 10000, $completed, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
 					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $completed, $visible ) );
@@ -139,7 +139,7 @@ class ClevernessToDoList {
 				}
 			}
 
-			$todo_items = CTDL_Lib::get_todos( $user, -1, $completed, 0, $posts_to_exclude );
+			$todo_items = CTDL_Lib::get_todos( $user, 10000, $completed, 0, $posts_to_exclude );
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items, $completed );
 				$items = 1;
@@ -155,7 +155,7 @@ class ClevernessToDoList {
 
 		} else {
 
-			$todo_items = CTDL_Lib::get_todos( $user, -1, $completed, $cat_id );
+			$todo_items = CTDL_Lib::get_todos( $user, 10000, $completed, $cat_id );
 
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items, $completed );
@@ -521,16 +521,16 @@ class ClevernessToDoList {
 	 */
 	protected function show_edit_link( $id ) {
 		$edit = '';
-		$url = $this->url.'?action=edit-todo&amp;id='.$id;
+		$url = $this->url.'?action=edit-todo&amp;id='.absint( $id );
 		if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
-			if ( is_admin() ) {
+			if ( is_admin() && ! DOING_AJAX ) {
 				$edit = '<input class="edit-todo button-secondary" type="button" value="'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit' ) ).'" />';
 			} else {
 				$edit = '<a href="'.$url.'" class="edit-todo">'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit' ) ).'</a>';
 				}
 			}
 		if ( current_user_can( CTDL_Loader::$settings['delete_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
-			if ( is_admin() ) {
+			if ( is_admin() && ! DOING_AJAX ) {
 				$edit .= ' <input class="delete-todo button-secondary" type="button" value="'.apply_filters( 'ctdl_delete', esc_attr__( 'Delete' ) ).'" />';
 			} else {
 				$edit .= ' | <a href="" class="delete-todo">'.apply_filters( 'ctdl_delete', esc_html__( 'Delete' ) ).'</a>';

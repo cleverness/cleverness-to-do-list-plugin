@@ -339,6 +339,15 @@ class CTDL_Lib {
 	}
 
 	/**
+	 * Set email content type as HTML
+	 * @since 3.4
+	 * @return string
+	 */
+	public static function set_html_email() {
+		return 'text/html';
+	}
+
+	/**
 	 * Send an email to assigned user
 	 * @static
 	 * @param $assign
@@ -349,7 +358,7 @@ class CTDL_Lib {
 	protected static function email_user( $assign, $deadline, $category = 0, $planner = 0 ) {
 		global $current_user;
 		get_currentuserinfo();
-		add_filter( 'wp_mail_content_type', create_function( '', 'return "text/html";' ) );
+		add_filter( 'wp_mail_content_type', CTDL_Lib::set_html_email() );
 
 		$priority = $_POST['cleverness_todo_priority'];
 		$todo_text = $_POST['cleverness_todo_description'];
@@ -402,6 +411,7 @@ class CTDL_Lib {
 				wp_mail( $email, $subject, $email_message, $headers );
 			}
 		}
+		remove_filter( 'wp_mail_content_type', CTDL_Lib::set_html_email() );
 
 	}
 
