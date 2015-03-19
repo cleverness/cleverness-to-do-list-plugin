@@ -152,6 +152,7 @@ and frontend loops
 * Added completed=only attribute for todolist shortcode
 * Added completed=1 attribute for todochecklist shortcode to only show completed items
 * Added completed and completed_date attributes for todoadmin shortcode
+* Added Post Planner display attribute to todoadmin shortcode: planner=1
 * Replaced create_function calls
 * Remove HTML email type after sending email
 

@@ -114,7 +114,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			'addedby'    => 0,
 			'date'       => 0,
 			'editlink'   => 1,
-			'completed_date' => 0
+			'completed_date' => 0,
+			'planner'   => 0
 		), $this->atts ) );
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
@@ -136,7 +137,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 				if ( $progress == 1 ) $this->show_progress( $progress_meta, 'table', $completed );
 				/** @var $categories int */
 				if ( $categories == 1 ) $this->show_category( get_the_terms( $id, 'todocategories' ) );
-				if ( CTDL_PP ) $this->show_planner( $planner_meta );
+				/** @var $planner int */
+				if ( CTDL_PP && $planner == 1 ) $this->show_planner( $planner_meta );
 				/** @var $assigned int */
 				if ( $assigned == 1 ) $this->show_assigned( $assign_meta );
 				/** @var $addedby int */
@@ -173,7 +175,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			'addedby'    => 0,
 			'date'       => 0,
 			'editlink'   => 1,
-			'completed_date' => 0
+			'completed_date' => 0,
+			'planner'   => 0
 		), $this->atts ) );
 
 		$this->list .= '<thead><tr>';
@@ -185,7 +188,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		if ( $progress == 1 && CTDL_Loader::$settings['show_progress'] == 1 ) $this->list .= '<th id="progress-col">'.apply_filters( 'ctdl_heading_progress', esc_html__( 'Progress', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $categories int */
 		if ( $categories == 1 && CTDL_Loader::$settings['categories'] == 1 ) $this->list .= '<th id="category-col">'.apply_filters( 'ctdl_heading_category', esc_html__( 'Category', 'cleverness-to-do-list' ) ).'</th>';
-		if ( CTDL_PP ) $this->list .= '<th id="planner-col">'.apply_filters( 'ctdl_heading_planner', esc_html__( 'Post Planner', 'cleverness-to-do-list' ) ).'</th>';
+		/** @var $planner int */
+		if ( CTDL_PP && $planner == 1 ) $this->list .= '<th id="planner-col">'.apply_filters( 'ctdl_heading_planner', esc_html__( 'Post Planner', 'cleverness-to-do-list' ) ).'</th>';
 		/** @var $assigned int */
 		if ( $assigned == 1 && ( CTDL_Loader::$settings['assign'] == 0 && ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0
 				&& ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) || ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 )
