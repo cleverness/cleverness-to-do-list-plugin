@@ -15,14 +15,14 @@
  */
 class CTDL_Frontend_Admin extends ClevernessToDoList {
 	public $atts;
-	public $add_script;
 
 	public function __construct() {
 		add_shortcode( 'todoadmin', array( $this, 'display_admin' ) );
 		parent::__construct();
-		add_action( 'wp_footer', array( 'CTDL_Loader', 'frontend_checklist_init' ) );
-		add_action( 'wp_footer', array( 'CTDL_Loader', 'frontend_checklist_add_js' ) );
-		}
+		wp_enqueue_style( 'cleverness_todo_list_frontend', CTDL_PLUGIN_URL . '/css/cleverness-to-do-list-frontend.css', array(), CTDL_PLUGIN_VERSION );
+		wp_enqueue_style( 'cleverness_todo_select_css', CTDL_PLUGIN_URL . '/css/cleverness-to-do-list-select2.css', array(), CTDL_PLUGIN_VERSION );
+		wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-fresh.css', array(), CTDL_PLUGIN_VERSION );
+	}
 
 	/**
 	 * Displays the to-do list administration
@@ -35,8 +35,10 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			'completed' => 0
 		), $atts ) );
 		$this->atts = $atts;
-		$this->add_script = true;
 		$this->list = '';
+
+		CTDL_Loader::frontend_checklist_add_js();
+		CTDL_Loader::frontend_checklist_init();
 
 		$this->list = '<div id="ctdl-frontend-admin">';
 
@@ -321,12 +323,11 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	protected $atts;
 	protected $cat_id;
-	public $add_script;
 
 	public function __construct() {
 		add_shortcode( 'todochecklist', array( $this, 'display_checklist' ) );
 		parent::__construct();
-		add_action( 'wp_footer', array( 'CTDL_Loader', 'frontend_checklist_add_js' ) );
+		wp_enqueue_style( 'cleverness_todo_list_frontend', CTDL_PLUGIN_URL . '/css/cleverness-to-do-list-frontend.css', array(), CTDL_PLUGIN_VERSION );
 		}
 
 	/**
@@ -336,6 +337,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	 */
 	public function display_checklist( $atts ) {
 		$this->atts = $atts;
+
+		CTDL_Loader::frontend_checklist_add_js();
 
 		if ( is_user_logged_in() ) {
 			$this->display();

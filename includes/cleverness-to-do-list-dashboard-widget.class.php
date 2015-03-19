@@ -54,6 +54,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		get_currentuserinfo();
 
 		$limit = ( isset( CTDL_Loader::$dashboard_settings['dashboard_number'] ) ? CTDL_Loader::$dashboard_settings['dashboard_number'] : $limit );
+		$limit = ( $limit == '-1' ? 10000 : $limit );
 		$user = ( CTDL_Lib::check_permission( 'todo', 'view' ) ? $current_user->ID : $userdata->ID );
 
 		if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $cat_id == 0 ) {

@@ -260,6 +260,7 @@ class CTDL_Lib {
 	public static function add_todo_callback() {
 		global $CTDL_Frontend_Admin;
 		check_ajax_referer( 'ctdl-todo' );
+		$CTDL_Frontend_Admin->atts = $_POST['ctdl_shortcode_atts'];
 
 		self::insert_todo();
 
@@ -633,7 +634,7 @@ class CTDL_Lib {
 
 		$results = get_posts( array(
 			'post_type'      => 'planner',
-			'posts_per_page' => -1,
+			'posts_per_page' => 10000,
 			'post_status'    => 'any'
 		) );
 

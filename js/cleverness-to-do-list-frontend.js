@@ -101,7 +101,7 @@ jQuery( document ).ready( function( $ ) {
 	/* Add To-Dos */
 	$('#addtodo').submit( function (e) {
 		e.preventDefault();
-		var data = 'action=cleverness_add_todo&_ajax_nonce=' + ctdl.NONCE + '&' + $( '#addtodo' ).serialize();
+		var data = 'action=cleverness_add_todo&ctdl_shortcode_atts=' + ctdl.TODOADMIN_ATTS + '&_ajax_nonce=' + ctdl.NONCE + '&' + $( '#addtodo' ).serialize();
 
 		$.ajax({
 			type   : 'post',
@@ -146,8 +146,8 @@ jQuery( document ).ready( function( $ ) {
 				if ( data == 1 ) {
 					$( _item ).parent().html( '<p>'+ctdl.SUCCESS_MSG+'</p>' ) // replace edit and delete buttons with message
 					$( todotr ).css( 'background', '#FFFFE0' ).delay( 2000 ).fadeOut( 400, function () { // change the table row background, fade, and remove row, re-stripe
-						$( '#todo-list tbody tr' ).removeClass( 'alternate' );
-						$( '#todo-list tbody tr:visible:even' ).addClass( 'alternate' );
+						$( '.todo-table tr' ).removeClass( 'alternate' );
+						$( '.todo-table tbody tr:visible:even' ).addClass( 'alternate' );
 					});
 				}
       		}
