@@ -37,15 +37,14 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		$this->atts = $atts;
 		$this->list = '';
 
-		CTDL_Loader::frontend_checklist_add_js();
-		CTDL_Loader::frontend_checklist_init();
+		CTDL_Loader::frontend_admin_init();
 
 		$this->list = '<div id="ctdl-frontend-admin">';
 
 		/** @var $title string */
 		if ( $title != '' ) {
 			$this->list .= '<h3 class="todo-title">'.esc_html( $title ).'</h3>';
-			}
+		}
 
 		if ( is_user_logged_in() && is_user_member_of_blog() ) {
 			list( $this->url, $action ) = CTDL_Lib::set_variables();
@@ -338,7 +337,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	public function display_checklist( $atts ) {
 		$this->atts = $atts;
 
-		CTDL_Loader::frontend_checklist_add_js();
+		CTDL_Loader::frontend_checklist_init();
 
 		if ( is_user_logged_in() ) {
 			$this->display();
