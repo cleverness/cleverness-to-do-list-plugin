@@ -2,7 +2,7 @@ jQuery(document).ready(function ($) {
 
 	$('#ctdl-message').hide();
 
-	$('#todo-list', '#todo-list-completed').tablesorter();
+	$('.todo-table').tablesorter();
 
 	$("#cleverness_todo_assign").select2({
 		placeholder: ctdl.SELECT_USER

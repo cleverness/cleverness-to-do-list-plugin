@@ -8,22 +8,22 @@ div.todo-list {
 	clear: both;
 }
 
-table#todo-list thead tr .tablesorter-header {
+table.todo-table thead tr .tablesorter-header {
 	background-image: url('images/bg.gif');
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
 }
 
-table#todo-list thead tr .tablesorter-headerAsc {
+table.todo-table thead tr .tablesorter-headerAsc {
 	background-image: url('images/asc.gif');
 }
 
-table#todo-list thead tr .tablesorter-headerDesc {
+table.todo-table thead tr .tablesorter-headerDesc {
 	background-image: url('images/desc.gif');
 }
 
-table#todo-list thead tr .sorter-false {
+table.todo-table thead tr .sorter-false {
 	background-image: url('');
 }
 
