@@ -300,7 +300,6 @@ class CTDL_Loader {
 	 */
 	public static function frontend_css() {
 		wp_enqueue_style( 'cleverness_todo_list_frontend', CTDL_PLUGIN_URL . '/css/cleverness-to-do-list-frontend.css', array(), CTDL_PLUGIN_VERSION );
-		wp_enqueue_style( 'cleverness_todo_select_css', CTDL_PLUGIN_URL . '/css/cleverness-to-do-list-select2.css', array(), CTDL_PLUGIN_VERSION );
 		wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-fresh.css', array(), CTDL_PLUGIN_VERSION );
 	}
 
