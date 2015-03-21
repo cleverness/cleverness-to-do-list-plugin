@@ -250,14 +250,19 @@ class CTDL_Loader {
 	}
 
 	/**
-	 * Add the scripts for the To-Do List admin frontend
+	 * Register the scripts for the To-Do List admin frontend
 	 */
-	public static function frontend_admin_init() {
+	public static function frontend_admin_register_scripts() {
 		wp_register_script( 'cleverness_metadata_js', CTDL_PLUGIN_URL . '/js/jquery.metadata.js', '', CTDL_PLUGIN_VERSION, true );
 		wp_register_script( 'cleverness_tablesorter_js', CTDL_PLUGIN_URL . '/js/jquery.tablesorter.min.js', '', CTDL_PLUGIN_VERSION, true );
 		wp_register_script( 'cleverness_todo_select2_js', CTDL_PLUGIN_URL . '/js/select2.min.js', '', CTDL_PLUGIN_VERSION, true );
 		wp_register_script( 'cleverness_todo_frontend_admin_js', CTDL_PLUGIN_URL . '/js/cleverness-to-do-list-frontend-admin.js', array( 'jquery' ), CTDL_PLUGIN_VERSION, true );
+	}
 
+	/**
+	 * Enqueue the scripts for the To-Do List admin frontend
+	 */
+	public static function frontend_admin_enqueue_scripts() {
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_script( 'jquery-color' );
@@ -273,15 +278,30 @@ class CTDL_Loader {
 	}
 
 	/**
-	 * Enqueue and Localize JavaScript for the To-Do List frontend
+	 * Register the scripts for the To-Do List frontend checklist
 	 */
-	public static function frontend_checklist_init() {
-		wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL.'/js/cleverness-to-do-list-frontend.js', array( 'jquery' ), CTDL_PLUGIN_VERSION, true );
+	public static function frontend_checklist_register_scripts() {
+		wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL . '/js/cleverness-to-do-list-frontend.js', array( 'jquery' ), CTDL_PLUGIN_VERSION, true );
 
+	}
+
+	/**
+	 * Enqueue and Localize JavaScript for the To-Do List frontend checklist
+	 */
+	public static function frontend_checklist_enqueue_scripts() {
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'cleverness_todo_checklist_complete_js' );
 
 		wp_localize_script( 'cleverness_todo_checklist_complete_js', 'ctdl', CTDL_Loader::get_js_vars() );
+	}
+
+	/**
+	 * Register and enqueue the css for the frontend
+	 */
+	public static function frontend_css() {
+		wp_enqueue_style( 'cleverness_todo_list_frontend', CTDL_PLUGIN_URL . '/css/cleverness-to-do-list-frontend.css', array(), CTDL_PLUGIN_VERSION );
+		wp_enqueue_style( 'cleverness_todo_select_css', CTDL_PLUGIN_URL . '/css/cleverness-to-do-list-select2.css', array(), CTDL_PLUGIN_VERSION );
+		wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-fresh.css', array(), CTDL_PLUGIN_VERSION );
 	}
 
 }

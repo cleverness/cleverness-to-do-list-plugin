@@ -19,9 +19,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 	public function __construct() {
 		add_shortcode( 'todoadmin', array( $this, 'display_admin' ) );
 		parent::__construct();
-		wp_enqueue_style( 'cleverness_todo_list_frontend', CTDL_PLUGIN_URL . '/css/cleverness-to-do-list-frontend.css', array(), CTDL_PLUGIN_VERSION );
-		wp_enqueue_style( 'cleverness_todo_select_css', CTDL_PLUGIN_URL . '/css/cleverness-to-do-list-select2.css', array(), CTDL_PLUGIN_VERSION );
-		wp_enqueue_style( 'jquery.ui.theme', CTDL_PLUGIN_URL . '/css/jquery-ui-fresh.css', array(), CTDL_PLUGIN_VERSION );
+		add_action( 'wp_enqueue_scripts', array( 'CTDL_Loader', 'frontend_admin_register_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( 'CTDL_Loader', 'frontend_css' ) );
 	}
 
 	/**
@@ -37,7 +36,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		$this->atts = $atts;
 		$this->list = '';
 
-		CTDL_Loader::frontend_admin_init();
+		CTDL_Loader::frontend_admin_enqueue_scripts();
 
 		$this->list = '<div id="ctdl-frontend-admin">';
 
@@ -326,7 +325,8 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	public function __construct() {
 		add_shortcode( 'todochecklist', array( $this, 'display_checklist' ) );
 		parent::__construct();
-		wp_enqueue_style( 'cleverness_todo_list_frontend', CTDL_PLUGIN_URL . '/css/cleverness-to-do-list-frontend.css', array(), CTDL_PLUGIN_VERSION );
+		add_action( 'wp_enqueue_scripts', array( 'CTDL_Loader', 'frontend_checklist_register_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( 'CTDL_Loader', 'frontend_css' ) );
 		}
 
 	/**
@@ -337,7 +337,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 	public function display_checklist( $atts ) {
 		$this->atts = $atts;
 
-		CTDL_Loader::frontend_checklist_init();
+		CTDL_Loader::frontend_checklist_enqueue_scripts();
 
 		if ( is_user_logged_in() ) {
 			$this->display();
