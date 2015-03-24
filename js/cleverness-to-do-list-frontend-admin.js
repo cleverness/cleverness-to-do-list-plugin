@@ -74,7 +74,12 @@ jQuery(document).ready(function ($) {
 	/* Add To-Dos */
 	$('#addtodo').submit(function (e) {
 		e.preventDefault();
-		var data = 'action=cleverness_add_todo&ctdl_shortcode_atts=' + ctdl.TODOADMIN_ATTS + '&_ajax_nonce=' + ctdl.NONCE + '&' + $('#addtodo').serialize();
+		var data = $('#addtodo').serializeArray();
+		data.push(
+			{name: 'action', value: 'cleverness_add_todo'},
+			{name: '_ajax_nonce', value: ctdl.NONCE},
+			{name: 'ctdl_shortcode_atts', value: JSON.stringify(ctdl.TODOADMIN_ATTS)}
+		);
 
 		$.ajax({
 			type   : 'post',

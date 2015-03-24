@@ -29,9 +29,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 	 * @return string To-Do List
 	 */
 	public function display_admin( $atts ) {
-		if ( ! isset( $this->atts ) ) {
-			$this->atts = $atts;
-		}
+		$this->atts = $atts;
+
 		$atts = shortcode_atts( array(
 			'title' => '',
 			'completed' => 0

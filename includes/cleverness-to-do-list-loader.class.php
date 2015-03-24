@@ -234,7 +234,7 @@ class CTDL_Loader {
 	 */
 	public static function get_js_vars() {
 		global $CTDL_Frontend_Admin;
-		return array(
+		$array = array(
 			'INSERT_MSG'                  => __( 'New To-Do Added', 'cleverness-to-do-list' ),
 			'SUCCESS_MSG'                 => __( 'To-Do Deleted.', 'cleverness-to-do-list' ),
 			'ERROR_MSG'                   => __( 'There was a problem performing that action.', 'cleverness-to-do-list' ),
@@ -246,7 +246,12 @@ class CTDL_Loader {
 			'SELECT_USER'                 => __( 'Select a User', 'cleverness-to-do-list' ),
 			'NONCE'                       => wp_create_nonce( 'ctdl-todo' ),
 			'AJAX_URL'                    => admin_url( 'admin-ajax.php' ),
-			'TODOADMIN_ATTS'              => $CTDL_Frontend_Admin->atts );
+		);
+		if ( isset( $CTDL_Frontend_Admin->atts ) ) {
+			$array['TODOADMIN_ATTS'] = $CTDL_Frontend_Admin->atts;
+		}
+
+		return $array;
 	}
 
 	/**

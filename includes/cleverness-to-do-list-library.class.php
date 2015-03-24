@@ -260,7 +260,8 @@ class CTDL_Lib {
 	public static function add_todo_callback() {
 		global $CTDL_Frontend_Admin;
 		check_ajax_referer( 'ctdl-todo' );
-		//$CTDL_Frontend_Admin->atts = $_POST['ctdl_shortcode_atts'];
+
+		$CTDL_Frontend_Admin->atts = json_decode( stripslashes( $_POST['ctdl_shortcode_atts'] ) );
 
 		self::insert_todo();
 
