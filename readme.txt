@@ -155,6 +155,7 @@ and frontend loops
 * Added Post Planner display attribute to todoadmin shortcode: planner=1
 * Replaced create_function calls
 * Remove HTML email type after sending email
+* Removed uses of extract
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski
