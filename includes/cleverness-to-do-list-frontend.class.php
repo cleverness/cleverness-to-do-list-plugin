@@ -382,7 +382,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 
 		} else {
 
-			$this->loop_through_todos( $atts['completed'], $atts['$category'] );
+			$this->loop_through_todos( $atts['completed'], $atts['category'] );
 
 		}
 

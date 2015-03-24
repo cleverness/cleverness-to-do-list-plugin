@@ -85,6 +85,11 @@ class CTDL_Lib {
 					'post_type'      => 'todo',
 					'author'         => $author,
 					'post_status'    => 'publish',
+					'posts_per_page' => 10000,
+					'no_found_rows'  => true,
+					'update_post_meta_cache' => false,
+					'update_post_term_cache' => false,
+					'fields'         => 'ids',
 					'meta_query'     => array(
 											array(
 												'key' => '_user_'.$user.'_status',
@@ -92,9 +97,11 @@ class CTDL_Lib {
 											) )
 					);
 				$posts_to_exclude = new WP_Query( $posts_to_exclude_args );
-				while ( $posts_to_exclude->have_posts() ) : $posts_to_exclude->the_post();
-					$to_exclude[] = get_the_ID();
-				endwhile;
+				if ( $posts_to_exclude->have_posts() ):
+					foreach ( $posts_to_exclude->posts as $id ):
+						$to_exclude[] = $id;
+					endforeach;
+				endif;
 				wp_reset_postdata();
 
 				if ( CTDL_Loader::$settings['show_only_assigned'] == '0' && $user != 0 && ( !current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) {
@@ -148,6 +155,7 @@ class CTDL_Lib {
 				'orderby'        => $orderby,
 				'meta_key'       => $metakey,
 				'order'          => 'ASC',
+				'no_found_rows'  => true,
 				'post__not_in'   => $to_exclude,
 				'tax_query'      => array(
 										array(
@@ -169,6 +177,7 @@ class CTDL_Lib {
 				'orderby'        => $orderby,
 				'meta_key'       => $metakey,
 				'order'          => 'ASC',
+				'no_found_rows'  => true,
 				'meta_query'     => $metaquery,
 				'post__not_in'   => $to_exclude,
 			);
@@ -636,7 +645,10 @@ class CTDL_Lib {
 		$results = get_posts( array(
 			'post_type'      => 'planner',
 			'posts_per_page' => 10000,
-			'post_status'    => 'any'
+			'post_status'    => 'any',
+			'no_found_rows' => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false
 		) );
 
 		return $results;
