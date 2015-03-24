@@ -79,7 +79,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 				$items = 1;
 			}
 
-			if ( $items == 0 ) {
+			if ( $items == 0 && $status == 0 ) {
 				echo '<p>' . apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ) . '</p>';
 			}
 		} else {
@@ -88,7 +88,7 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items, $status );
-			} else {
+			} elseif ( $status == 0 ) {
 				echo '<p>' . apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ) . '</p>';
 			}
 		}
