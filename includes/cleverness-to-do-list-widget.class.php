@@ -32,7 +32,6 @@ class CTDL_Widget extends WP_Widget {
 		global $ClevernessToDoList, $CTDL_widget_settings;
 		$CTDL_widget_settings = $instance;
 		get_currentuserinfo();
-		extract( $args );
 
 		$title       = apply_filters( 'widget_title', $instance['title'] );
 		$limit       = ( $instance['number'] == '-1' ? 10000 : $instance['number'] );
@@ -53,15 +52,12 @@ class CTDL_Widget extends WP_Widget {
 			$user = 0;
 		}
 
-		/** @var $before_widget WP_Widget */
-		echo $before_widget;
+		echo $args['before_widget'];
 
 		if ( $title ) {
-			/** @var $before_title string */
-			echo $before_title;
+			echo $args['before_title'];
 			echo $title;
-			/** @var $after_title string */
-			echo $after_title;
+			echo $args['after_title'];
 		}
 
 		$ClevernessToDoList->list = '';
@@ -121,8 +117,7 @@ class CTDL_Widget extends WP_Widget {
 
 		echo '</ol>';
 
-		/** @var $after_widget WP_Widget */
-		echo $after_widget;
+		echo $args['after_widget'];
 	}
 
 	/**

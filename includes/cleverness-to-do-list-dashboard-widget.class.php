@@ -237,13 +237,11 @@ class CTDL_CategoryWalker extends Walker_Category {
 			'name' => 'ctdl_dashboard_settings[dashboard_cat]'
 		), $args );
 
-		extract( $args );
-
 		if ( empty( $taxonomy ) )
 			$taxonomy = 'category';
 
-		$output .= "\n<li id='{$taxonomy}-{$category->term_id}'>" . '<label class="selectit"><input value="' . $category->term_id . '" type="checkbox" name="' . $name . '[]" id="in-' . $taxonomy . '-'
-				. $category->term_id . '"' . checked( in_array( $category->term_id, $selected_cats ), true, false ) . disabled( empty( $args['disabled'] ), false, false ) . ' /> ' . esc_html( apply_filters( 'the_category', $category->name ) ) . '</label>';
+		$output .= "\n<li id='{$taxonomy}-{$category->term_id}'>" . '<label class="selectit"><input value="' . $category->term_id . '" type="checkbox" name="' . $args['name'] . '[]" id="in-' . $taxonomy . '-'
+				. $category->term_id . '"' . checked( in_array( $category->term_id, $args['selected_cats'] ), true, false ) . disabled( empty( $args['disabled'] ), false, false ) . ' /> ' . esc_html( apply_filters( 'the_category', $category->name ) ) . '</label>';
 	}
 
 	function end_el( &$output, $page, $depth = 0, $args = array() ) {
