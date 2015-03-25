@@ -494,7 +494,9 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 					$assign_user = get_userdata( $assign );
 					$assigned = $assign_user->display_name;
 				}
-				$this->list .= ' <small class="todo-assigned">['.apply_filters( 'ctdl_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ).': '.esc_attr( $assigned ).']</small>';
+				if ( $assigned != '' ) {
+					$this->list .= ' <small class="todo-assigned">[' . apply_filters( 'ctdl_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ) . ': ' . esc_attr( $assigned ) . ']</small>';
+				}
 			}
 		}
    	}
