@@ -681,7 +681,8 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 			'addedby'           => 1,
 			'date'              => 0,
 			'list_type'         => 'ol',
-			'category'          => '0'
+			'category'          => '0',
+			'completed_date'    => 0
 		), $this->atts, 'todolist' );
 
 		while ( $todo_items->have_posts() ) : $todo_items->the_post();
@@ -712,7 +713,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				if ( ( $atts['addedby'] == 'show' || $atts['addedby'] == 1 ) && CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 ) $this->show_addedby( get_the_author(), $atts['type'] );
 				if ( ( $atts['deadline'] == 'show' || $atts['deadline'] == 1 ) && CTDL_Loader::$settings['show_deadline'] == 1 ) $this->show_deadline( $deadline_meta, $atts['type'] );
 				if ( $atts['date'] == 1 && CTDL_Loader::$settings['show_date_added'] == 1) $this->show_date_added( get_the_date( 'Ymd' ), get_the_date( CTDL_Loader::$settings['date_format'] ), $atts['type'] );
-				if ( CTDL_Loader::$settings['show_completed_date'] && $completed == 1 ) $this->show_completed( $completed_meta, $atts['type'] );
+				if ( $atts['completed_date'] == 1 && CTDL_Loader::$settings['show_completed_date'] && $completed == 1 ) $this->show_completed( $completed_meta, $atts['type'] );
 				$this->list .= do_action( 'ctdl_list_items' );
 
 				if ( $atts['type'] == 'table' ) {
@@ -740,7 +741,8 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 			'progress' => 1,
 			'addedby'  => 1,
 			'date'     => 0,
-			'category' => 0
+			'category' => 0,
+			'completed_date' => 0
 		), $this->atts, 'todolist' );
 
 		$this->list .= '<thead><tr>';
@@ -753,9 +755,9 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				&& CTDL_Loader::$settings['assign'] == 0 ) ) $this->list .= '<th class="assigned-col">'.apply_filters( 'ctdl_heading_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ).'</th>';
 		if ( ( $atts['addedby'] == 'show' || $atts['addedby'] == 1 ) && CTDL_Loader::$settings['list_view'] == 1 && CTDL_Loader::$settings['todo_author'] == 0 )
 			$this->list .= '<th class="added-col">'.apply_filters( 'ctdl_heading_added_by', esc_html__( 'Added By', 'cleverness-to-do-list' ) ).'</th>';
-		if ( ( $atts['deadline'] == 'show' || $atts['deadline'] ==1 ) && CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th class="deadline-col">'.apply_filters( 'ctdl_heading_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).'</th>';
+		if ( ( $atts['deadline'] == 'show' || $atts['deadline'] == 1 ) && CTDL_Loader::$settings['show_deadline'] == 1 ) $this->list .= '<th class="deadline-col">'.apply_filters( 'ctdl_heading_deadline', esc_html__( 'Deadline', 'cleverness-to-do-list' ) ).'</th>';
 		if ( $atts['date'] == 1 && CTDL_Loader::$settings['show_date_added'] == 1 ) $this->list .= '<th class="date-col">'.apply_filters( 'ctdl_heading_date_added', esc_html__( 'Date Added', 'cleverness-to-do-list' ) ).'</th>';
-		if ( $completed == 1 ) $this->list .= '<th class="completed-col">'.apply_filters( 'ctdl_heading_completed', esc_html__( 'Completed', 'cleverness-to-do-list' ) ).'</th>';
+		if ( $completed == 1 && $atts['completed_date'] == 1 ) $this->list .= '<th class="completed-col">'.apply_filters( 'ctdl_heading_completed', esc_html__( 'Completed', 'cleverness-to-do-list' ) ).'</th>';
 		$this->list .= do_action( 'ctdl_table_headings' );
 		$this->list .= '</tr></thead>';
 	}
