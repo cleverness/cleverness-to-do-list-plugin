@@ -429,7 +429,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 				$this->list .= '<div class="todoitem">';
 				$this->show_todo_text( get_the_content(), 'list' );
 				if ( $atts['priority'] == 1 ) $this->show_priority( $the_priority );
-				if ( $atts['progress'] == 1 ) $this->show_progress( $progress_meta );
+				if ( $atts['progress'] == 1 ) $this->show_progress( $progress_meta, 'list', $completed );
 				if ( $atts['assigned'] == 1 ) $this->show_assigned( $assign_meta );
 				if ( $atts['addedby'] == 1 ) $this->show_addedby( get_the_author() );
 				if ( $atts['deadline'] == 1 ) $this->show_deadline( $deadline_meta );
