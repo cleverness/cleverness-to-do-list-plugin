@@ -486,8 +486,10 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 				if ( is_array( $assign ) ) {
 					$assign_users = '';
 					foreach ( $assign as $value ) {
-						$user = get_userdata( $value );
-						$assign_users .= $user->display_name.', ';
+						if ( $value != '-1' && $value != '' && $value != 0 ) {
+							$user = get_userdata( $value );
+							$assign_users .= $user->display_name . ', ';
+						}
 					}
 					$assigned .= substr( $assign_users, 0, -2 );
 				} else {
