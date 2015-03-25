@@ -817,7 +817,9 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 				if ( $layout == 'table' ) {
 					$this->list .= '<td class="todo-assigned">'.esc_attr( $assigned ).'</td>';
 				} else {
-					$this->list .= ' - '.apply_filters( 'ctdl_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ).': '.esc_attr( $assigned );
+					if ( $assigned != '' ) {
+						$this->list .= ' - ' . apply_filters( 'ctdl_assigned', esc_html__( 'Assigned To', 'cleverness-to-do-list' ) ) . ': ' . esc_attr( $assigned );
+					}
 				}
 			} else {
 				if ( $layout == 'table' ) $this->list .= '<td class="todo-assigned"></td>';
