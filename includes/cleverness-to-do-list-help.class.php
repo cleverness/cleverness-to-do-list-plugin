@@ -136,8 +136,8 @@ class CTDL_Help {
 			<li><strong>completed</strong> &#8211; <?php esc_html_e( 'default is 0. Use 1 to show completed items only', 'cleverness-to-do-list' ); ?></li>
 		</ul>
 		<p><strong><?php esc_html_e( 'Example:', 'cleverness-to-do-list' ); ?></strong><br/>
-		<?php esc_html_e( 'Set the title to "My To-Do List" and show the deadline and the category.', 'cleverness-to-do-list' ); ?><br/>
-		&#91;todoadmin title="My To-Do List" deadline=1 categories=1&#93;</p>
+		<?php esc_html_e( 'Set the title to "My To-Do List" and show the deadline and only items in a specific category.', 'cleverness-to-do-list' ); ?><br/>
+		&#91;todochecklist title="My To-Do List" deadline=1 category=1&#93;</p>
 
 		<hr/>
 
