@@ -36,7 +36,7 @@ class CTDL_Lib {
 	 * @param array $to_exclude
 	 * @return WP_Query
 	 */
-	public static function get_todos( $user = 0, $limit = 10000, $status = 0, $cat_id = 0, $to_exclude = array() ) {
+	public static function get_todos( $user = 0, $limit = 5000, $status = 0, $cat_id = 0, $to_exclude = array() ) {
 
 		/* Sort Order */
 		// if sort_order is post_date, order by that first
@@ -644,7 +644,7 @@ class CTDL_Lib {
 
 		$results = get_posts( array(
 			'post_type'      => 'planner',
-			'posts_per_page' => 10000,
+			'posts_per_page' => 1000,
 			'post_status'    => 'any',
 			'no_found_rows' => true,
 			'update_post_meta_cache' => false,

@@ -113,7 +113,7 @@ class ClevernessToDoList {
 	 * @param int $cat_id
 	 * @param int $limit
 	 */
-	protected function loop_through_todos( $completed = 0, $cat_id = 0, $limit = 10000 ) {
+	protected function loop_through_todos( $completed = 0, $cat_id = 0, $limit = 5000 ) {
 		global $current_user, $userdata;
 		$user = CTDL_Lib::get_user_id( $current_user, $userdata );
 
@@ -131,7 +131,7 @@ class ClevernessToDoList {
 					$visible = $visibility["category_$category->term_id"];
 				}
 
-				$todo_items = CTDL_Lib::get_todos( $user, 10000, $completed, $category->term_id );
+				$todo_items = CTDL_Lib::get_todos( $user, 5000, $completed, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
 					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $completed, $visible ) );
@@ -139,7 +139,7 @@ class ClevernessToDoList {
 				}
 			}
 
-			$todo_items = CTDL_Lib::get_todos( $user, 10000, $completed, 0, $posts_to_exclude );
+			$todo_items = CTDL_Lib::get_todos( $user, 5000, $completed, 0, $posts_to_exclude );
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items, $completed );
 				$items = 1;
@@ -155,7 +155,7 @@ class ClevernessToDoList {
 
 		} else {
 
-			$todo_items = CTDL_Lib::get_todos( $user, 10000, $completed, $cat_id );
+			$todo_items = CTDL_Lib::get_todos( $user, 5000, $completed, $cat_id );
 
 			if ( $todo_items->have_posts() ) {
 				$this->show_todo_list_items( $todo_items, $completed );

@@ -34,7 +34,7 @@ class CTDL_Widget extends WP_Widget {
 		get_currentuserinfo();
 
 		$title       = apply_filters( 'widget_title', $instance['title'] );
-		$limit       = ( $instance['number'] == '-1' ? 10000 : $instance['number'] );
+		$limit       = ( $instance['number'] == '-1' ? 1000 : $instance['number'] );
 		$assigned_to = $instance['assigned_to'];
 		$deadline    = $instance['deadline'];
 		$progress    = $instance['progress'];
