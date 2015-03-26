@@ -157,6 +157,7 @@ and frontend loops
 * Replaced create_function calls
 * Remove HTML email type after sending email
 * Removed uses of extract
+* Changed CSS class in todochecklist from 'uncompleted' to 'todo-uncompleted'
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski

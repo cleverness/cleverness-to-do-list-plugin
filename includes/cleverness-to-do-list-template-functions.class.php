@@ -55,7 +55,18 @@ function ctdl_dashboard_categories() {
  * @since 3.4
  */
 function ctdl_priority_class() {
-	return CTDL_Lib::set_priority_class( get_post_meta( get_the_ID(), '_priority', true ) );
+	$priority = get_post_meta( get_the_ID(), '_priority', true );
+	$priority_class = '';
+
+	if ( $priority == '0' ) {
+		$priority_class = 'todo-important';
+	} elseif ( $priority == '1' ) {
+		$priority_class = 'todo-normal';
+	} elseif ( $priority == '2' ) {
+		$priority_class = 'todo-low';
+	}
+
+	return $priority_class;
 }
 
 /**
@@ -92,7 +103,7 @@ function ctdl_todo_text() {
  * @since 3.4
  */
 function ctdl_assigned() {
-	$assign = get_post_meta( get_the_ID(), '_assigned', true );
+	$assign = get_post_meta( get_the_ID(), '_assign', true );
 	if ( is_array( $assign ) ) {
 		$assign_users = '';
 		foreach ( $assign as $value ) {
@@ -177,11 +188,11 @@ function ctdl_check_field( $field ) {
 			$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && get_post_meta( get_the_ID(), '_progress', true ) != null ? true : false );
 			break;
 		case 'assigned':
-			$data = get_post_meta( get_the_ID(), '_assigned', true );
+			$data = get_post_meta( get_the_ID(), '_assign', true );
 			$permission = ( ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 0 && ( current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) )
 			    || ( CTDL_Loader::$settings['list_view'] != 0 && CTDL_Loader::$settings['show_only_assigned'] == 1 ) && CTDL_Loader::$settings['assign'] == 0 ? true : false );
 			$permission = ( $permission == true && ( $data != 0 && $data != null
-			    && $data != '-1' && ( is_array( $data ) && ! in_array( '-1', $data ) ) ) ? true : false );
+			    && $data != '-1' && ! ( is_array( $data ) && in_array( '-1', $data ) ) ) ? true : false );
 			break;
 		case 'dashboard-deadline':
 			$permission = ( ( CTDL_Loader::$settings['show_deadline'] == 1 && isset( CTDL_Loader::$dashboard_settings['show_dashboard_deadline'] ) &&
@@ -205,8 +216,10 @@ function ctdl_check_field( $field ) {
 			$permission = ( CTDL_Loader::$settings['show_progress'] == 1 && $CTDL_widget_settings['progress'] == 1 && get_post_meta( get_the_ID(), '_progress', true ) != null ? true : false );
 			break;
 		case 'widget-assigned':
-			$data = get_post_meta( get_the_ID(), '_assigned', true );
-			$permission = ( CTDL_Loader::$settings['assign'] == 0 && $CTDL_widget_settings['assigned_to'] == 1 && CTDL_Loader::$settings['list_view'] != 0 && $data != '-1' && ( is_array( $data ) && ! in_array( '-1', $data ) ) ? true : false );
+			$data = get_post_meta( get_the_ID(), '_assign', true );
+			$permission = ( CTDL_Loader::$settings['assign'] == 0 && $CTDL_widget_settings['assigned_to'] == 1 && CTDL_Loader::$settings['list_view'] != 0 ? true : false );
+			$permission = ( $permission == true && ( $data != 0 && $data != null && $data != '-1' && ! ( is_array( $data ) && in_array( '-1', $data ) ) ) ? true : false );
+			//$permission = ( CTDL_Loader::$settings['assign'] == 0 && $CTDL_widget_settings['assigned_to'] == 1 && CTDL_Loader::$settings['list_view'] != 0 && $data != '-1' && ( is_array( $data ) && ! in_array( '-1', $data ) ) ? true : false );
 			break;
 	}
 
