@@ -138,6 +138,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 and frontend loops
 * Show progress as 100% completed for completed items
 * Fixed Assigned to text shows up even though the value is empty on dashboard widget
+* Fixed Master View - view assigned only - completed items issue
 * Admin style adjustments
 * Updated Spanish translation by Jorge Flores [Mayan Group](http://www.mayan.mx/)
 * Changed ctdl_add_form and ctdl_edit_form to ctdl_add_form_action and ctdl_add_form_action. ctdl_add_form and ctdl_edit_form are now filters applied after the action

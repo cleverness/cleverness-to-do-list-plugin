@@ -5,7 +5,7 @@
  * Library of functions for the To-Do List
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.2
+ * @version 3.4
  */
 
 /**
@@ -124,18 +124,34 @@ class CTDL_Lib {
 					);
 				}
 
-			} elseif ( $status == 1 && $user != 0 ) {
-				$metaquery = array(
-					array(
-						'key'   => '_status',
-						'value' => 0,
-					),
-					array(
-						'key'   => '_user_'.$user.'_status',
-						'value' => 1,
-					)
-				);
-			}
+			} elseif ( $status == 1 && $user != 0 )
+				if ( CTDL_Loader::$settings['show_only_assigned'] == '0' && ( ! current_user_can( CTDL_Loader::$settings['view_all_assigned_capability'] ) ) ) {
+					$metaquery = array(
+						array(
+							'key'   => '_status',
+							'value' => 0,
+						),
+						array(
+							'key'   => '_user_' . $user . '_status',
+							'value' => 1,
+						),
+						array(
+							'key'   => '_assign',
+							'value' => $user,
+						)
+					);
+				} else {
+					$metaquery = array(
+						array(
+							'key'   => '_status',
+							'value' => 0,
+						),
+						array(
+							'key'   => '_user_' . $user . '_status',
+							'value' => 1,
+						)
+					);
+				}
 
 		} else {
 			$metaquery = array(
