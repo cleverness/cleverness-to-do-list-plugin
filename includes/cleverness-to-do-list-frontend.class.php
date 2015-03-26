@@ -80,6 +80,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 			'category' => 0,
 		), $this->atts, 'todoadmin' );
 
+		if ( $completed == 0 ) $this->list .= $this->show_heading();
+
 		$class = ( $completed == 0 ? 'ctdl-uncompleted' : 'ctdl-completed' );
 		$id = ( $completed == 0 ? 'todo-list' : 'todo-list-completed' );
 
