@@ -103,7 +103,7 @@ function ctdl_todo_text() {
  * @since 3.4
  */
 function ctdl_assigned() {
-	$assign = get_post_meta( get_the_ID(), '_assign', true );
+	$assign = get_post_meta( get_the_ID(), '_assign' );
 	if ( is_array( $assign ) ) {
 		$assign_users = '';
 		foreach ( $assign as $value ) {
