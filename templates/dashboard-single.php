@@ -3,7 +3,7 @@
 global $CTDL_status;
 ?>
 
-<?php if ( ctdl_check_field( 'dashboard-category' ) ) : ?>
+<?php if ( ctdl_check_field( 'dashboard-category-heading' ) ) : ?>
 	<h4><?php echo esc_html( ctdl_category_heading() ); ?></h4>
 <?php endif; ?>
 
@@ -14,6 +14,11 @@ global $CTDL_status;
 	<div class="todo-item<?php echo ( $CTDL_status == 1 ? ' completed-to-do' : NULL ); ?>">
 
 		<?php echo wp_kses_post( ctdl_todo_text() ); ?>
+
+		<?php if ( ctdl_check_field( 'dashboard-category' ) ) : ?>
+			<small>[<?php echo apply_filters( 'ctdl_category', esc_html__( 'Category', 'cleverness-to-do-list' ) ); ?>:
+			<?php echo esc_html( ctdl_category() ); ?>]</small>
+		<?php endif; ?>
 
 		<?php if ( ctdl_check_field( 'assigned' ) ) : ?>
 			<small>[<?php echo apply_filters( 'ctdl_assigned', esc_html__( 'Assigned to', 'cleverness-to-do-list' ) ); ?>

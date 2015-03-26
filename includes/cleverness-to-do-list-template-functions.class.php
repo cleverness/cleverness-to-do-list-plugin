@@ -98,6 +98,20 @@ function ctdl_todo_text() {
 }
 
 /**
+ * Show the To-Do Category
+ *
+ * @since 3.4
+ */
+function ctdl_category() {
+	$categories = get_the_terms( get_the_ID(), 'todocategories' );
+	$cats = '';
+	foreach ( $categories as $category ) {
+		$cats .= $category->name;
+	}
+	return $cats;
+}
+
+/**
  * Show the User that a To-Do Item is Assigned To
  *
  * @since 3.4
@@ -175,7 +189,8 @@ function ctdl_completed_date() {
  * @return bool
  */
 function ctdl_check_field( $field ) {
-	global $CTDL_widget_settings, $CTDL_category, $CTDL_category_id;
+	global $CTDL_widget_settings, $CTDL_category_id;
+	$permission = false;
 
 	switch ( $field ) {
 		case 'completed':
@@ -206,8 +221,19 @@ function ctdl_check_field( $field ) {
 			$permission = ( ( CTDL_Loader::$settings['list_view'] == 1 && isset( CTDL_Loader::$dashboard_settings['dashboard_author'] ) &&
 			                  CTDL_Loader::$dashboard_settings['dashboard_author'] == 0 ) ? true : false );
 			break;
+		case 'dashboard-category-heading':
+			$data = get_the_terms( get_the_ID(), 'todocategories' );
+			$cat = '';
+			if ( $data != NULL ) {
+				foreach ( $data as $category ) {
+					$cat = $category->term_id;
+				}
+			}
+			$permission = ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && ( 0 == $CTDL_category_id || $cat != $CTDL_category_id ) ? true : false );
+			break;
 		case 'dashboard-category':
-			$permission = ( CTDL_Loader::$settings['categories'] == 1 && ( 0 == $CTDL_category_id || $CTDL_category != $CTDL_category_id ) ? true : false );
+			$data = get_the_terms( get_the_ID(), 'todocategories' );
+			$permission = ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] != 'cat_id' && $data != NULL ? true : false );
 			break;
 		case 'widget-deadline':
 			$permission = ( CTDL_Loader::$settings['show_deadline'] == 1 && $CTDL_widget_settings['deadline'] == 1 && get_post_meta( get_the_ID(), '_deadline', true ) != null ? true : false );
@@ -219,7 +245,6 @@ function ctdl_check_field( $field ) {
 			$data = get_post_meta( get_the_ID(), '_assign', true );
 			$permission = ( CTDL_Loader::$settings['assign'] == 0 && $CTDL_widget_settings['assigned_to'] == 1 && CTDL_Loader::$settings['list_view'] != 0 ? true : false );
 			$permission = ( $permission == true && ( $data != 0 && $data != null && $data != '-1' && ! ( is_array( $data ) && in_array( '-1', $data ) ) ) ? true : false );
-			//$permission = ( CTDL_Loader::$settings['assign'] == 0 && $CTDL_widget_settings['assigned_to'] == 1 && CTDL_Loader::$settings['list_view'] != 0 && $data != '-1' && ( is_array( $data ) && ! in_array( '-1', $data ) ) ? true : false );
 			break;
 	}
 
