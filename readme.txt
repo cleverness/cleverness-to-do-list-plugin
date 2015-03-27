@@ -158,6 +158,7 @@ and frontend loops
 * Remove HTML email type after sending email
 * Removed uses of extract
 * Changed CSS class in todochecklist from 'uncompleted' to 'todo-uncompleted'
+* Fixed todoadmin table overflowing container
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski

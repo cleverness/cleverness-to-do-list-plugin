@@ -53,8 +53,10 @@ table.todo-table thead tr .sorter-false {
 	margin-left: 20px;
 }
 
-table#todo-list {
+.todo-table {
 	vertical-align: text-top;
+	table-layout: fixed;
+	width:        100%;
 }
 
 .ctdl-message {
