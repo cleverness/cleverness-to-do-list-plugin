@@ -139,6 +139,7 @@ class CTDL_Loader {
 			add_filter( 'plugin_action_links', array( 'CTDL_Lib', 'add_settings_link' ), 10, 2 );
 			if ( self::$settings['categories'] == 1 ) add_action( 'admin_init', array( 'CTDL_Categories', 'initialize_categories' ) );
 		}
+		add_action( 'split_shared_term', array( 'CTDL_Lib', 'split_shared_term' ), 10, 4 );
 		add_action( 'wp_ajax_cleverness_add_todo', array( 'CTDL_Lib', 'add_todo_callback' ) );
 		add_action( 'wp_ajax_cleverness_delete_todo', array( 'CTDL_Lib', 'delete_todo_callback' ) );
 		add_action( 'wp_ajax_cleverness_todo_complete', array( 'CTDL_Lib', 'complete_todo_callback' ) );
@@ -287,7 +288,6 @@ class CTDL_Loader {
 	 */
 	public static function frontend_checklist_register_scripts() {
 		wp_register_script( 'cleverness_todo_checklist_complete_js', CTDL_PLUGIN_URL . '/js/cleverness-to-do-list-frontend.js', array( 'jquery' ), CTDL_PLUGIN_VERSION, true );
-
 	}
 
 	/**

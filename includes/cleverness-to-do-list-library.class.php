@@ -829,6 +829,37 @@ class CTDL_Lib {
 	}
 
 	/**
+	 * Update stored options when a term gets split.
+	 *
+	 * @param int    $term_id          ID of the formerly shared term.
+	 * @param int    $new_term_id      ID of the new term created for the $term_taxonomy_id.
+	 * @param int    $term_taxonomy_id ID for the term_taxonomy row affected by the split.
+	 * @param string $taxonomy         Taxonomy for the split term.
+	 */
+	public static function split_shared_term( $term_id, $new_term_id, $term_taxonomy_id, $taxonomy ) {
+
+		if ( 'todocategories' == $taxonomy ) {
+			$dashboard = get_option( 'CTDL_dashboard_settings' );
+
+			$found_term = array_search( $term_id, $dashboard );
+			if ( false !== $found_term ) {
+				$dashboard[ $found_term ] = $new_term_id;
+				update_option( 'CTDL_dashboard_settings', $dashboard );
+			}
+
+			$visibility = get_option( 'CTDL_categories' );
+			$found_term = array_search( $term_id, $visibility );
+			if ( false !== $found_term ) {
+				$visibility[ $found_term ] = $new_term_id;
+				update_option( 'CTDL_categories', $visibility );
+			}
+
+			//todo: widget option
+		}
+
+	}
+
+	/**
 	 * Create database table and add default options
 	 * @static
 	 */
