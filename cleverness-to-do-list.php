@@ -16,7 +16,7 @@ Plugin URI: http://cleverness.org/plugins/to-do-list/
  * @package cleverness-to-do-list
  * @version 3.4
  */
-
+defined( 'ABSPATH' ) or die();
 add_action( 'init', 'cleverness_todo_loader' );
 include_once 'includes/cleverness-to-do-list-widget.class.php';
 
