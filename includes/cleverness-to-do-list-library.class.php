@@ -841,12 +841,13 @@ class CTDL_Lib {
 		if ( 'todocategories' == $taxonomy ) {
 			$dashboard = get_option( 'CTDL_dashboard_settings' );
 
-			$found_term = array_search( $term_id, $dashboard );
+			$found_term = array_search( $term_id, $dashboard['dashboard_cat'] );
 			if ( false !== $found_term ) {
-				$dashboard[ $found_term ] = $new_term_id;
+				$dashboard['dashboard_cat'][ $found_term ] = $new_term_id;
 				update_option( 'CTDL_dashboard_settings', $dashboard );
 			}
 
+			// todo is this being used? properly?
 			$visibility = get_option( 'CTDL_categories' );
 			$found_term = array_search( $term_id, $visibility );
 			if ( false !== $found_term ) {
@@ -854,7 +855,7 @@ class CTDL_Lib {
 				update_option( 'CTDL_categories', $visibility );
 			}
 
-			//todo: widget option
+			//todo: widget option widget_cleverness-to-do-widget
 		}
 
 	}
