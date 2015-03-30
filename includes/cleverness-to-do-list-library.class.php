@@ -855,7 +855,13 @@ class CTDL_Lib {
 				update_option( 'CTDL_categories', $visibility );
 			}
 
-			//todo: widget option widget_cleverness-to-do-widget
+			$widget = get_option( 'widget_cleverness-to-do-widget' );
+
+			$found_term = array_search( $term_id, $widget['category'] );
+			if ( false !== $found_term ) {
+				$widget['category'][ $found_term ] = $new_term_id;
+				update_option( 'widget_cleverness-to-do-widget', $widget );
+			}
 		}
 
 	}
