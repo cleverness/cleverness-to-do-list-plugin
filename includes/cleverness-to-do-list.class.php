@@ -85,11 +85,11 @@ class ClevernessToDoList {
 	 */
 	protected function show_heading() {
 		$heading = '';
-		if ( is_admin() ) $heading = '<h3>'.esc_html__( 'To-Do Items', 'cleverness-to-do-list' );
+		if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) $heading = '<h3>'.esc_html__( 'To-Do Items', 'cleverness-to-do-list' );
 		if ( current_user_can( CTDL_Loader::$settings['add_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 			$heading .= ' (<a href="#addtodo">'.esc_html__( 'Add New Item', 'cleverness-to-do-list' ).'</a>)';
 		}
-		if ( is_admin() ) $heading .= '</h3>';
+		if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX )) $heading .= '</h3>';
 		return apply_filters( 'ctdl_heading', $heading );
 	}
 

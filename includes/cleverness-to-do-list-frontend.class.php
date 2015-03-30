@@ -42,7 +42,7 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		$this->list = '<div id="ctdl-frontend-admin">';
 
 		if ( $atts['title'] != '' ) {
-			$this->list .= '<h3 class="todo-title">'.esc_html( $atts['title'] ).'</h3>';
+			$this->list .= '<h3 class="todo-title">'.esc_html( $atts['title'] ).$this->show_heading().'</h3>';
 		}
 
 		if ( is_user_logged_in() && is_user_member_of_blog() ) {
@@ -79,8 +79,6 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		$atts = shortcode_atts( array(
 			'category' => 0,
 		), $this->atts, 'todoadmin' );
-
-		if ( $completed == 0 ) $this->list .= $this->show_heading();
 
 		$class = ( $completed == 0 ? 'ctdl-uncompleted' : 'ctdl-completed' );
 		$id = ( $completed == 0 ? 'todo-list' : 'todo-list-completed' );
