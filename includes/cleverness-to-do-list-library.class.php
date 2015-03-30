@@ -847,11 +847,10 @@ class CTDL_Lib {
 				update_option( 'CTDL_dashboard_settings', $dashboard );
 			}
 
-			// todo is this being used? properly?
 			$visibility = get_option( 'CTDL_categories' );
-			$found_term = array_search( $term_id, $visibility );
+			$found_term = array_search( 'category_'.$term_id, $visibility );
 			if ( false !== $found_term ) {
-				$visibility[ $found_term ] = $new_term_id;
+				$visibility[ 'category_'.$found_term ] = 'category_'.$new_term_id;
 				update_option( 'CTDL_categories', $visibility );
 			}
 
