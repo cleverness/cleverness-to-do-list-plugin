@@ -111,9 +111,7 @@
 }
 
 table#todo-list thead tr .tablesorter-header {
-	background: rgb(241, 241, 241) url('images/bg.gif');
-	background-image: url('images/bg.gif'), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
-	background-image: url('images/bg.gif'), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
+	background: url('images/bg.gif');
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
@@ -121,19 +119,14 @@ table#todo-list thead tr .tablesorter-header {
 
 table#todo-list thead tr .tablesorter-headerAsc {
 	background-image: url('images/asc.gif');
-	background-image: url('images/asc.gif'), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
-	background-image: url('images/asc.gif'), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
 }
 
 table#todo-list thead tr .tablesorter-headerDesc {
 	background-image: url('images/desc.gif');
-	background-image: url('images/desc.gif'), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
-	background-image: url('images/desc.gif'), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
 }
 
 table#todo-list thead tr .sorter-false {
-	background-image: url(''), -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
-	background-image: url(''), -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC));
+	background-image: url('');
 }
 
 .toplevel_page_cleverness-to-do-list #ui-datepicker-div {
