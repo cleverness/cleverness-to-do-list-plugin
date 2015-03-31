@@ -75,7 +75,7 @@ class CTDL_Categories {
 			$options = get_option( 'CTDL_categories' );
 			$options["category_$category_id"] = absint( $_POST['cleverness_todo_cat_visibility'] );
 			update_option( 'CTDL_categories', $options );
-			return 1;
+			return $term['term_id'];
 		} else {
 			return 0;
 		}
@@ -167,7 +167,11 @@ class CTDL_Categories {
 		<div class="icon32"><img src="<?php echo CTDL_PLUGIN_URL; ?>/images/cleverness-todo-icon.png" alt="" /></div>
 		<h2><?php echo apply_filters( 'ctdl_categories_title', esc_html__( 'To-Do List Categories', 'cleverness-to-do-list' ) ); ?></h2>
 
-		<?php if ( $cleverness_todo_message != '' ) echo '<div id="message" class="error below-h2"><p>'.$cleverness_todo_message.'</p></div>'; ?>
+		<?php if ( $cleverness_todo_message != '' )  {
+			echo '<div id="message" class="error below-h2"><p>'.$cleverness_todo_message.'</p></div>';
+		} else {
+			echo '<div id="message"></div>';
+		} ?>
 
 		<h3><?php echo apply_filters( 'ctdl_add_category', esc_html__( 'Add New Category', 'cleverness-to-do-list' ) ); ?></h3>
 
@@ -281,6 +285,7 @@ class CTDL_Categories {
 			'SUCCESS_MSG'       => __( 'Category Deleted.', 'cleverness-to-do-list' ),
 			'ERROR_MSG'         => __( 'There was a problem performing that action.', 'cleverness-to-do-list' ),
 			'PERMISSION_MSG'    => __( 'You do not have sufficient privileges to do that.', 'cleverness-to-do-list' ),
+			'SPLIT_MSG'         => __( 'Category has been split. Please refresh to see new ID', 'cleverness-to-do-list' ),
 			'EDIT_CAT'          => __( 'Save Changes', 'cleverness-to-do-list' ),
 			'PUBLIC'            => __( 'Public', 'cleverness-to-do-list' ),
 			'PRIVATE'           => __( 'Private', 'cleverness-to-do-list' ),

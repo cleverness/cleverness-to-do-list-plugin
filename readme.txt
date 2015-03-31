@@ -160,6 +160,7 @@ and frontend loops
 * Changed CSS class in todochecklist from 'uncompleted' to 'todo-uncompleted'
 * Fixed todoadmin table overflowing container
 * Update widget, dashboard, and category visibility options if category is split in 4.2
+* Show a message if the category id has changed when updating the name
 * Changed to-do editor to full width
 * Removed gradient from table
 * Only show sorting arrows for column heading on hover

@@ -89,20 +89,23 @@ jQuery( document ).ready( function( $ ) {
 				_ajax_nonce: ctdlcat.NONCE
 			},
         	success: function( data ) {
-				if ( data == 1 ) {
+				if (data == 0) {
+					$('#message').html('<p>' + ctdlcat.ERROR_MSG + '</p>').show().addClass('error below-h2');
+					$(todotr).css('background', '#FFEBE8');
+				} else if (data == -1) {
+					$('#message').html('<p>' + ctdlcat.PERMISSION_MSG + '</p>').show().addClass('error below-h2');
+				} else {
 					var color = todotr.css( 'background-color' );
 					var visibilitytxt = ctdlcat.PUBLIC;
 					if ( visibility == 1 ) { visibilitytxt = ctdlcat.PRIVATE }
+					if ( data != $( todotr).attr( 'id' ) ) {
+						$('#message').html('<p>' + ctdlcat.SPLIT_MSG + '</p>').show().addClass('error below-h2');
+					}
 					$( _item).parent().empty().html( '<input class="edit-todo-category button-secondary" type="button" value="Edit" /> <input class="delete-todo-category button-secondary delete-tag" type="button" value="Delete" />' );
 					$( todotr ).find( ':nth-child(2)' ).empty().html( catname );
 					$( todotr ).find( ':nth-child(3)' ).empty().html(visibilitytxt );
 					$( todotr ).css( 'background-color', '#FFFFE0' );
 					$( todotr ).animate( {'background-color' : color}, 3000 );
-				} else if ( data == 0 ) {
-					$( '#message' ).html( '<p>'+ctdlcat.ERROR_MSG+'</p>' ).show().addClass( 'error below-h2' );
-					$( todotr ).css( 'background', '#FFEBE8' );
-				} else if ( data == -1 ) {
-					$( '#message' ).html( '<p>'+ctdlcat.PERMISSION_MSG+'</p>' ).show().addClass( 'error below-h2' );
 				}
       		},
       	error: function( r ) {
