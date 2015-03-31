@@ -841,7 +841,7 @@ class CTDL_Lib {
 		if ( 'todocategories' == $taxonomy ) {
 
 			//update dashboard options
-			$dashboard = get_option( 'CTDL_dashboard_settings' );
+			$dashboard = get_option( 'CTDL_dashboard_settings', array() );
 
 			$found_term = array_search( $term_id, $dashboard['dashboard_cat'] );
 			if ( false !== $found_term ) {
@@ -850,7 +850,7 @@ class CTDL_Lib {
 			}
 
 			// update category options
-			$visibility = get_option( 'CTDL_categories' );
+			$visibility = get_option( 'CTDL_categories', array() );
 
 			$found_term = array_search( 'category_'.$term_id, $visibility );
 			if ( false !== $found_term ) {
@@ -859,7 +859,7 @@ class CTDL_Lib {
 			}
 
 			// update widget options
-			$widgets = get_option( 'widget_cleverness-to-do-widget' );
+			$widgets = get_option( 'widget_cleverness-to-do-widget', array() );
 
 			foreach ( $widgets as &$widget ) {
 				$found_term = array_search( $term_id, $widget['category'] );
@@ -1307,7 +1307,7 @@ class CTDL_Lib {
 		}
 
 		// update category options
-		$visibility = get_option( 'CTDL_categories' );
+		$visibility = get_option( 'CTDL_categories', array() );
 
 		foreach ( $visibility as $key => $value ) {
 			$key = substr( $key, 9 );
@@ -1320,7 +1320,7 @@ class CTDL_Lib {
 		}
 
 		// update widget options
-		$widgets = get_option( 'widget_cleverness-to-do-widget' );
+		$widgets = get_option( 'widget_cleverness-to-do-widget', array() );
 
 		foreach ( $widgets as &$widget ) {
 			$new_term_id = wp_get_split_term( $widget['category'], 'todocategories' );
