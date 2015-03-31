@@ -955,7 +955,10 @@ class CTDL_Lib {
 
 				// if db version < 3.4, split taxonomies
 				if ( version_compare( $installed_version, '3.4', '<' ) ) {
-					self::split_taxonomies();
+					global $wp_version;
+					if ( version_compare( $wp_version, '4.2', '>=' ) ) {
+						self::split_taxonomies();
+					}
 				}
 
 			}
