@@ -850,7 +850,7 @@ class CTDL_Lib {
 			$visibility = get_option( 'CTDL_categories' );
 			$found_term = array_search( 'category_'.$term_id, $visibility );
 			if ( false !== $found_term ) {
-				$visibility[ 'category_'.$found_term ] = 'category_'.$new_term_id;
+				$visibility[ 'category_' . $new_term_id ] = $found_term;
 				update_option( 'CTDL_categories', $visibility );
 			}
 
@@ -860,7 +860,7 @@ class CTDL_Lib {
 			if ( false !== $found_term ) {
 				$widget['category'][ $found_term ] = $new_term_id;
 				update_option( 'widget_cleverness-to-do-widget', $widget );
-			}
+			} //@todo category being added as new array instead of updating option
 		}
 
 	}
