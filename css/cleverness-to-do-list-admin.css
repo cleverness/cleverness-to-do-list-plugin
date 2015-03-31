@@ -140,12 +140,6 @@ table#todo-list thead tr .sorter-false {
 	display: none;
 }
 
-#wp-clevernesstododescription-wrap {
-	width: 60%;
-	min-width: 500px;
-	overflow: auto;
-}
-
 #todo-list-completed th {
 	cursor: pointer;
 }
