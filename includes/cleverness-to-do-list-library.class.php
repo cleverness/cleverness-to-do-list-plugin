@@ -839,6 +839,8 @@ class CTDL_Lib {
 	public static function split_shared_term( $term_id, $new_term_id, $term_taxonomy_id, $taxonomy ) {
 
 		if ( 'todocategories' == $taxonomy ) {
+
+			//update dashboard options
 			$dashboard = get_option( 'CTDL_dashboard_settings' );
 
 			$found_term = array_search( $term_id, $dashboard['dashboard_cat'] );
@@ -847,13 +849,16 @@ class CTDL_Lib {
 				update_option( 'CTDL_dashboard_settings', $dashboard );
 			}
 
+			// update category options
 			$visibility = get_option( 'CTDL_categories' );
+
 			$found_term = array_search( 'category_'.$term_id, $visibility );
 			if ( false !== $found_term ) {
 				$visibility[ 'category_' . $new_term_id ] = $visibility[ 'category_'.$term_id ];
 				update_option( 'CTDL_categories', $visibility );
 			}
 
+			// update widget options
 			$widgets = get_option( 'widget_cleverness-to-do-widget' );
 
 			foreach ( $widgets as &$widget ) {
@@ -887,8 +892,8 @@ class CTDL_Lib {
 		if ( $installed_version != CTDL_DB_VERSION ) {
 
 			include_once plugin_dir_path( __FILE__ ).'/cleverness-to-do-list-loader.class.php';
-			if ( !post_type_exists( 'todo' ) ) CTDL_Loader::setup_custom_post_type();
-			if ( !taxonomy_exists( 'todocategories' ) ) CTDL_Loader::create_taxonomies();
+			if ( ! post_type_exists( 'todo' ) ) CTDL_Loader::setup_custom_post_type();
+			if ( ! taxonomy_exists( 'todocategories' ) ) CTDL_Loader::create_taxonomies();
 
 			// if there was no db version option
 			if ( $installed_version  == 0 ) {
@@ -948,20 +953,9 @@ class CTDL_Lib {
 					self::convert_deadlines();
 				}
 
+				// if db version < 3.4, split taxonomies
 				if ( version_compare( $installed_version, '3.4', '<' ) ) {
-					$featured_tag_ids = get_option( 'featured_tags', array() );
-
-					// Check to see whether any IDs correspond to post_tag terms that have been split.
-					foreach ( $featured_tag_ids as $index => $featured_tag_id ) {
-						$new_term_id = wp_get_split_term( $featured_tag_id, 'post_tag' );
-
-						if ( $new_term_id ) {
-							$featured_tag_ids[ $index ] = $new_term_id;
-						}
-					}
-
-					// Resave.
-					update_option( 'featured_tags', $featured_tag_ids );
+					self::split_taxonomies();
 				}
 
 			}
@@ -1278,6 +1272,61 @@ class CTDL_Lib {
 				update_post_meta( $result->ID, '_deadline', strtotime( $deadline ) );
 			}
 		}
+
+	}
+
+	/**
+	 * Split todocategories taxonomy options
+	 *
+	 * @static
+	 * @since 3.4
+	 */
+	public static function split_taxonomies() {
+		// update dashboard options
+		$dashboard = get_option( 'CTDL_dashboard_settings', array() );
+
+		if ( is_array( $dashboard['category'] ) ) {
+			foreach ( $dashboard['category'] as $key => $value ) {
+				$new_term_id = wp_get_split_term( $value, 'todocategories' );
+
+				if ( $new_term_id ) {
+					$dashboard['category'][ $key ] = $new_term_id;
+					update_option( 'CTDL_dashboard_settings', $dashboard );
+				}
+			}
+		} else {
+			$new_term_id = wp_get_split_term( $dashboard['category'], 'todocategories' );
+
+			if ( $new_term_id ) {
+				$dashboard['category'] = $new_term_id;
+				update_option( 'CTDL_dashboard_settings', $dashboard );
+			}
+		}
+
+		// update category options
+		$visibility = get_option( 'CTDL_categories' );
+
+		foreach ( $visibility as $key => $value ) {
+			$key = substr( $key, 9 );
+			$new_term_id = wp_get_split_term( $key, 'todocategories' );
+
+			if ( $new_term_id ) {
+				$visibility['category_'.$new_term_id ] = $value;
+				update_option( 'CTDL_categories', $visibility );
+			}
+		}
+
+		// update widget options
+		$widgets = get_option( 'widget_cleverness-to-do-widget' );
+
+		foreach ( $widgets as &$widget ) {
+			$new_term_id = wp_get_split_term( $widget['category'], 'todocategories' );
+
+			if ( $new_term_id ) {
+				$widget[ 'category' ] = $new_term_id;
+			}
+		}
+		update_option( 'widget_cleverness-to-do-widget', $widgets );
 
 	}
 
