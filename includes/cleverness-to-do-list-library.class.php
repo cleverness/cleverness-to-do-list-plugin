@@ -854,13 +854,16 @@ class CTDL_Lib {
 				update_option( 'CTDL_categories', $visibility );
 			}
 
-			$widget = get_option( 'widget_cleverness-to-do-widget' );
+			$widgets = get_option( 'widget_cleverness-to-do-widget' );
 
-			$found_term = array_search( $term_id, $widget['category'] );
-			if ( false !== $found_term ) {
-				$widget['category'][ $found_term ] = $new_term_id;
-				update_option( 'widget_cleverness-to-do-widget', $widget );
-			} //@todo category being added as new array instead of updating option
+			foreach ( $widgets as $widget ) {
+				$found_term = array_search( $term_id, $widget['category'] );
+				if ( false !== $found_term ) {
+					$widgets[$widget]['category'] = $new_term_id;
+				}
+			}
+			update_option( 'widget_cleverness-to-do-widget', $widgets );
+
 		}
 
 	}
