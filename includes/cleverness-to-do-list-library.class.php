@@ -850,7 +850,7 @@ class CTDL_Lib {
 			$visibility = get_option( 'CTDL_categories' );
 			$found_term = array_search( 'category_'.$term_id, $visibility );
 			if ( false !== $found_term ) {
-				$visibility[ 'category_' . $new_term_id ] = $found_term;
+				$visibility[ 'category_' . $new_term_id ] = $visibility[ $found_term ];
 				update_option( 'CTDL_categories', $visibility );
 			}
 
