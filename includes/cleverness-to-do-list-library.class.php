@@ -856,10 +856,10 @@ class CTDL_Lib {
 
 			$widgets = get_option( 'widget_cleverness-to-do-widget' );
 
-			foreach ( $widgets as $widget ) {
+			foreach ( $widgets as &$widget ) {
 				$found_term = array_search( $term_id, $widget['category'] );
 				if ( false !== $found_term ) {
-					$widgets[$widget]['category'] = $new_term_id;
+					$widget['category'] = $new_term_id;
 				}
 			}
 			update_option( 'widget_cleverness-to-do-widget', $widgets );
