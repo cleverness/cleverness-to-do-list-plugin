@@ -111,18 +111,19 @@
 }
 
 table#todo-list thead tr .tablesorter-header {
-	background: url('images/bg.gif');
-	background-repeat: no-repeat;
-	background-position: center right;
 	cursor: pointer;
 }
 
+table#todo-list thead tr .tablesorter-header:hover {
+	background: url('images/bg.gif') no-repeat center right;
+}
+
 table#todo-list thead tr .tablesorter-headerAsc {
-	background-image: url('images/asc.gif');
+	background: url('images/asc.gif') no-repeat center right;
 }
 
 table#todo-list thead tr .tablesorter-headerDesc {
-	background-image: url('images/desc.gif');
+	background: url('images/desc.gif') no-repeat center right;
 }
 
 table#todo-list thead tr .sorter-false {

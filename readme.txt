@@ -161,6 +161,8 @@ and frontend loops
 * Fixed todoadmin table overflowing container
 * Update widget, dashboard, and category visibility options if category is split in 4.2
 * Changed to-do editor to full width
+* Removed gradient from table
+* Only show sorting arrows for column heading on hover
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski

@@ -948,6 +948,22 @@ class CTDL_Lib {
 					self::convert_deadlines();
 				}
 
+				if ( version_compare( $installed_version, '3.4', '<' ) ) {
+					$featured_tag_ids = get_option( 'featured_tags', array() );
+
+					// Check to see whether any IDs correspond to post_tag terms that have been split.
+					foreach ( $featured_tag_ids as $index => $featured_tag_id ) {
+						$new_term_id = wp_get_split_term( $featured_tag_id, 'post_tag' );
+
+						if ( $new_term_id ) {
+							$featured_tag_ids[ $index ] = $new_term_id;
+						}
+					}
+
+					// Resave.
+					update_option( 'featured_tags', $featured_tag_ids );
+				}
+
 			}
 
 		}
