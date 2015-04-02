@@ -164,6 +164,7 @@ and frontend loops
 * Changed to-do editor to full width
 * Removed gradient from table
 * Only show sorting arrows for column heading on hover
+* Use dashicon for menu icon; changeable with ctdl_icon filter
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski

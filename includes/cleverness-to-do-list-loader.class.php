@@ -155,7 +155,7 @@ class CTDL_Loader {
 		global $cleverness_todo_page, $cleverness_todo_cat_page;
 
 		$cleverness_todo_page = add_menu_page( apply_filters( 'ctdl_todo_list', __( 'To-Do List', 'cleverness-to-do-list' ) ), apply_filters( 'ctdl_todo_list', __( 'To-Do List', 'cleverness-to-do-list' ) ),
-			self::$settings['view_capability'], 'cleverness-to-do-list', array( __CLASS__, 'plugin_page' ), CTDL_PLUGIN_URL.'/images/cleverness-todo-icon-sm.png' );
+			self::$settings['view_capability'], 'cleverness-to-do-list', array( __CLASS__, 'plugin_page' ), apply_filters( 'ctdl_icon', 'dashicons-yes' ) );
 		if ( self::$settings['categories'] == 1 ) {
 			$cleverness_todo_cat_page = add_submenu_page( 'cleverness-to-do-list', apply_filters( 'ctdl_categories_title', __( 'To-Do List Categories', 'cleverness-to-do-list' ) ),
 				apply_filters( 'ctdl_categories', __( 'Categories', 'cleverness-to-do-list' ) ),
