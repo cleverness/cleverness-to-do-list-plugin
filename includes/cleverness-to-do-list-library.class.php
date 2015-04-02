@@ -1144,7 +1144,7 @@ class CTDL_Lib {
 
 			if ( $version < 3.4 ) {
 				$dashboard_options = get_option( 'CTDL_dashboard_settings' );
-				$dashboard_options['show_completed'] = 1;
+				$dashboard_options['show_completed'] = 0;
 				update_option( 'CTDL_dashboard_settings', $dashboard_options );
 			}
 
