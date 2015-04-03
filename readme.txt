@@ -26,7 +26,7 @@ A sidebar widget is available as well as shortcode to display the to-do list ite
 
 There are two shortcodes for front-end administration of the list. Management of categories is restricted to the back-end.
 
-You can also use this plugin to create custom to-do lists for your Post Planners if you own my premium plugin, [Post Planner](http://codecanyon.net/item/wordpress-post-planner/2496996?ref=seaserpentstudio).
+You can also use this plugin to create custom to-do lists for your Post Planners if you own my commercial plugin, [Post Planner](http://codecanyon.net/item/wordpress-post-planner/2496996?ref=seaserpentstudio).
 
 [Plugin Website](http://cleverness.org/plugins/to-do-list/)
 

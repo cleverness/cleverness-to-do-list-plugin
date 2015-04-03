@@ -197,7 +197,7 @@ class CTDL_Settings {
 		else : ?>
 			<input type="hidden" name="<?php echo $this->general_key; ?>[post_planner]" value="0" />
 			<a href="http://codecanyon.net/item/wordpress-cleverness-to-do-list/2496996?ref=seaserpentstudio" class="button-secondary"><?php esc_html_e( 'Purchase Post Planner Plugin', 'cleverness-to-do-list' ); ?></a>
-			<span class="description">Get more information on my <a href="http://codecanyon.net/item/wordpress-cleverness-to-do-list/2496996?ref=seaserpentstudio">Post Planner</a> premium plugin</span>
+			<span class="description">Get more information on my <a href="http://codecanyon.net/item/wordpress-cleverness-to-do-list/2496996?ref=seaserpentstudio">Post Planner</a> commercial plugin</span>
 		<?php
 		endif;
 	}
