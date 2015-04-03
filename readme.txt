@@ -146,7 +146,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Changed CSS class in todochecklist shortcode from 'uncompleted' to 'todo-uncompleted'
 * Changed todolist shortcode to use 1 instead of show (show still works)
 * Changed default to-do limits from unlimited
-* Changed to dashicon for menu icon; changeable with ctdl_icon filter
+* Changed to dashicons for menu icon; changeable with ctdl_icon filter
 * Changed ctdl_add_form and ctdl_edit_form to ctdl_add_form_action and ctdl_add_form_action. ctdl_add_form and ctdl_edit_form are now filters applied after the action
 * Added ctdl_send_email filter
 * Added is_user_member_of_blog() to frontend admin shortcode
