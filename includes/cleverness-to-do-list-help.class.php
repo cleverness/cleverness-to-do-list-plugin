@@ -25,8 +25,10 @@ class CTDL_Help {
 		$screen = get_current_screen();
 
 		$cleverness_todo_help_sidebar = '<p><strong>'.esc_html__( 'Like This Plugin?', 'cleverness-to-do-list' ).'</strong><br />
-			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org" target="_blank">'.esc_html__( 'Please Donate', 'cleverness-to-do-list' ).'</a></p>
-			<p><a href="http://cleverness.org/plugins/to-do-list/" target="_blank">'.esc_html__( 'Plugin Website', 'cleverness-to-do-list' ).'</a></p>';
+			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org">'.esc_html__( 'Please Donate', 'cleverness-to-do-list' ).'</a></p>
+			<p><a href="http://cleverness.org/plugins/to-do-list/">'.esc_html__( 'Plugin Website', 'cleverness-to-do-list' ).'</a></p>
+			<p><a href="http://codebrainmedia.com">'.esc_html__( 'Paid Customizations', 'cleverness-to-do-list' ).'</a></p>
+			<p><a href="http://codebrainmedia.com">' . esc_html__( 'Website Development', 'cleverness-to-do-list' ) . '</a></p>';
 
 		if ( $screen->id != $cleverness_todo_page && $screen->id != $cleverness_todo_cat_page && $screen->id != $cleverness_todo_settings_page ) return;
 

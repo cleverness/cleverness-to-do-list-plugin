@@ -162,7 +162,7 @@ and frontend loops
 * Replaced create_function calls
 * Remove HTML email type after sending email
 * Removed uses of extract
-* Update widget, dashboard, and category visibility options if category is split in WordPress 4.2
+* Update widget, dashboard, and category visibility options if category is split in WordPress 4.2 (shortcodes will need to be updated manually if a category id has changed)
 * Show a message if the category id has changed when updating the name
 * Only show sorting arrows for column heading on hover
 * Backend style adjustments to match WordPress UI
