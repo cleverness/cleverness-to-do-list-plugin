@@ -51,14 +51,15 @@ Several options are available:
 * **progress** - default is *show*. Use a blank value to hide.
 * **addedby** - default is *show*. Use a blank value to hide.
 * **date** - default is hide (0). Use 1 to show.
-* **completed** - default is blank. Set to *show* to display completed items.
+* **completed** - default is blank. Set to *show* to display completed items. Set to *only* to show just the completed items.
 * **completed_title** - default is no title.
+* **completed_date** – default is hide (0). Use 1 to show.
 * **list_type** - default is *ol* (ordered list). Use *ul* to show an unordered list.
 * **category** - default is *all*. Use the category ID to show a specific category.
 
 Example:
 
-Table view with the title of Upcoming Articles and showing the progress and who the item was assigned to.
+Table view with the title of Upcoming Articles, hiding priorities, deadline, and added by.
 
 [todolist title="Upcoming Articles" type="table" priorities="" deadline="" addedby=""]
 
@@ -77,15 +78,15 @@ The options are:
 * **date** - default is hide (0). Use 1 to show.
 * **editlink** - default is hide (0). Use 1 to show.
 * **todoid** - default is blank (""). Use the ID of the to-do item to display just one item.
+* **completed** – default is 0. Use 1 to show completed items only
 
 Example:
 
-Set the title to "My To-Do List" and show the deadline and the category.
+Set the title to "My To-Do List" and show the deadline and only items in a specific category.
 
-[todoadmin title="My To-Do List" deadline=1 categories=1]
+[todochecklist title="My To-Do List" deadline=1 category=1]
 
 = What is the shortcode to display the administration page in the front-end? =
-Permalinks must be enabled on the site to be able to use this feature.
 [todoadmin]
 
 The options are:
@@ -100,6 +101,9 @@ The options are:
 * **date** - default is hide (0). Use 1 to show.
 * **editlink** - default is show (1). Use 0 to hide.
 * **category** - default is all categories (0).  Use the category ID to show a specific category.
+* **completed** – default is hide (0). Use 1 to show
+* **completed_date** – default is hide (0). Use 1 to show
+* **planner** – default is hide(0). Use 1 to show
 
 Example:
 

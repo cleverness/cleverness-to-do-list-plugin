@@ -109,12 +109,13 @@ class CTDL_Help {
 			<li><strong>date</strong> &#8211; <?php _e( 'default is hide (0). Use 1 to show', 'cleverness-to-do-list' ); ?>.</li>
 			<li><strong>completed</strong> &#8211; <?php _e( 'default is blank. Set to <em>show</em> to display completed items', 'cleverness-to-do-list' ); ?>. Set to <em>only</em> to show just the completed items.</li>
 			<li><strong>completed_title</strong> &#8211; <?php _e( 'default is no title', 'cleverness-to-do-list' ); ?>.</li>
+			<li><strong>completed_date</strong> &#8211; <?php _e( 'default is hide (0). Use 1 to show', 'cleverness-to-do-list' ); ?>.</li>
 			<li><strong>list_type</strong> &#8211; <?php _e( 'default is <em>ol</em> (ordered list). Use <em>ul</em> to show an unordered list', 'cleverness-to-do-list' ); ?>.</li>
 			<li><strong>category</strong> &#8211; <?php _e( 'default is <em>all</em>. Use the category ID to show a specific category', 'cleverness-to-do-list' ); ?>.</li>
 		</ul>
 
 		<p><strong><?php esc_html_e( 'Example:', 'cleverness-to-do-list' ); ?></strong><br/>
-		<?php esc_html_e( 'Table view with the title of Upcoming Articles and showing the progress and who the item was assigned to.', 'cleverness-to-do-list' ); ?><br/>
+		<?php esc_html_e( 'Table view with the title of Upcoming Articles, hiding priorities, deadline, and added by.', 'cleverness-to-do-list' ); ?><br/>
 		&#91;todolist title="Upcoming Articles" type="table" priorities="" deadline="" addedby=""&#93;</p>
 
 		<hr/>
@@ -142,7 +143,6 @@ class CTDL_Help {
 		<hr/>
 
 		<h4><?php esc_html_e( 'Display a To-Do List Administration Area', 'cleverness-to-do-list' ); ?></h4>
-		<p><em><?php esc_html_e( 'This features only works with permalinks enabled.', 'cleverness-to-do-list' ); ?></em></p>
 		<p><strong>&#91;todoadmin&#93;</strong></p>
 
 		<ul>
