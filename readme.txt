@@ -137,38 +137,37 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 == Changelog ==
 
 = 3.4 =
-* Updated version of Select2 to 3.5.2
-* Added wp_reset_postdata() to widget loop (thanks to dwightlathan77), delete all todos loop, get_todos loop for master view, get all completed todos loop, main show_todo_list_items loop, dashboard widget loop,
-and frontend loops
-* Show progress as 100% completed for completed items
-* Fixed Assigned to text shows up even though the value is empty on dashboard widget
+* Fixed Assigned to text showing up even though the value is empty on dashboard widget
 * Fixed Master View - view assigned only - completed items issue
-* Admin style adjustments
-* Updated Spanish translation by Jorge Flores [Mayan Group](http://www.mayan.mx/)
-* Changed ctdl_add_form and ctdl_edit_form to ctdl_add_form_action and ctdl_add_form_action. ctdl_add_form and ctdl_edit_form are now filters applied after the action
-* Add ctdl_send_email filter
-* Added is_user_member_of_blog() to frontend admin shortcode
-* Added link to individual post planners
+* Fixed an issue with the frontend date added attribute
+* Fixed todoadmin table overflowing container
+* Changed progress to show 100% completed for completed items
+* Changed to-do editor to full width
+* Changed CSS class in todochecklist shortcode from 'uncompleted' to 'todo-uncompleted'
 * Changed todolist shortcode to use 1 instead of show (show still works)
 * Changed default to-do limits from unlimited
-* Fixed an issue with the frontend date added attribute
+* Changed to dashicon for menu icon; changeable with ctdl_icon filter
+* Changed ctdl_add_form and ctdl_edit_form to ctdl_add_form_action and ctdl_add_form_action. ctdl_add_form and ctdl_edit_form are now filters applied after the action
+* Added ctdl_send_email filter
+* Added is_user_member_of_blog() to frontend admin shortcode
+* Added link to individual post planners
 * Added completed display option to dashboard widget
 * Added templates for dashboard widget and widget
-* Added completed=only attribute for todolist shortcode
+* Added completed=only attribute for todolist shortcode to show only completed items
 * Added completed=1 attribute for todochecklist shortcode to only show completed items
-* Added completed and completed_date attributes for todoadmin shortcode
+* Added completed=1 and completed_date=1 attributes for todoadmin shortcode to show completed items
 * Added Post Planner display attribute to todoadmin shortcode: planner=1
+* Added wp_reset_postdata() to widget loop (thanks to dwightlathan77), delete all todos loop, get_todos loop for master view, get all completed todos loop, main show_todo_list_items loop, dashboard widget loop,
+and frontend loops
 * Replaced create_function calls
 * Remove HTML email type after sending email
 * Removed uses of extract
-* Changed CSS class in todochecklist from 'uncompleted' to 'todo-uncompleted'
-* Fixed todoadmin table overflowing container
-* Update widget, dashboard, and category visibility options if category is split in 4.2
+* Update widget, dashboard, and category visibility options if category is split in WordPress 4.2
 * Show a message if the category id has changed when updating the name
-* Changed to-do editor to full width
-* Removed gradient from table
 * Only show sorting arrows for column heading on hover
-* Use dashicon for menu icon; changeable with ctdl_icon filter
+* Backend style adjustments to match WordPress UI
+* Updated version of Select2 to 3.5.2
+* Updated Spanish translation by Jorge Flores [Mayan Group](http://www.mayan.mx/)
 
 = 3.3.2 =
 * Updated Polish translation from Michał Wielkopolski
