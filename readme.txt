@@ -152,7 +152,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Added is_user_member_of_blog() to frontend admin shortcode
 * Added link to individual post planners
 * Added completed display option to dashboard widget
-* Added templates for dashboard widget and widget
+* Added templates for dashboard widget and widget - can be overwritten in your theme folders
 * Added completed=only attribute for todolist shortcode to show only completed items
 * Added completed=1 attribute for todochecklist shortcode to only show completed items
 * Added completed=1 and completed_date=1 attributes for todoadmin shortcode to show completed items
