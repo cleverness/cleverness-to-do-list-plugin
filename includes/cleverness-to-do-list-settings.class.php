@@ -501,6 +501,9 @@ class CTDL_Settings {
 			<?php wp_nonce_field( 'update-options' ); ?>
 			<?php settings_fields( $tab ); ?>
 			<?php do_settings_sections( $tab ); ?>
+			<?php if ( $tab == $this->general_key ) : ?>
+				<p><?php esc_html_e( 'The Dashboard Widget options are set from within the widget itself. Hover over the top right of the widget next to the toggle button and a Configure link will appear.', 'cleverness-to-do-list' ); ?></p>
+			<?php endif; ?>
 			<?php if ( $tab == $this->advanced_key ) {
 				$this->show_delete_tables_button();
 				$this->show_delete_todos_button();
