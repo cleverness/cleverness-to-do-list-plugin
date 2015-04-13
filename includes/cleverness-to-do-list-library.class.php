@@ -311,7 +311,7 @@ class CTDL_Lib {
 
 		if ( $permission === true ) {
 
-			if ( !wp_verify_nonce( $_REQUEST['todoadd'], 'todoadd' ) ) die( esc_html__( 'Security check failed', 'cleverness-to-do-list' ) );
+			if ( ! wp_verify_nonce( $_REQUEST['todoadd'], 'todoadd' ) ) die( esc_html__( 'Security check failed', 'cleverness-to-do-list' ) );
 
 			$send_email = apply_filters( 'ctdl_send_email', CTDL_Loader::$settings['email_assigned'] );
 

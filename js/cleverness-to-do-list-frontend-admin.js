@@ -75,6 +75,12 @@ jQuery(document).ready(function ($) {
 	$('#addtodo').submit(function (e) {
 		e.preventDefault();
 		var data = $('#addtodo').serializeArray();
+		if (jQuery('#wp-clevernesstododescription-wrap').hasClass('tmce-active') && tinyMCE.get('clevernesstododescription')) {
+			data.push({
+				name : 'cleverness_todo_description',
+				value: tinyMCE.get('clevernesstododescription').getContent()
+			});
+		}
 		data.push(
 			{name: 'action', value: 'cleverness_add_todo'},
 			{name: '_ajax_nonce', value: ctdl.NONCE},
