@@ -28,7 +28,8 @@ class CTDL_Help {
 			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org">'.esc_html__( 'Please Donate', 'cleverness-to-do-list' ).'</a></p>
 			<p><a href="http://cleverness.org/plugins/to-do-list/">'.esc_html__( 'Plugin Website', 'cleverness-to-do-list' ).'</a></p>
 			<p><a href="http://codebrainmedia.com">'.esc_html__( 'Paid Customizations', 'cleverness-to-do-list' ).'</a></p>
-			<p><a href="http://codebrainmedia.com">' . esc_html__( 'Website Development', 'cleverness-to-do-list' ) . '</a></p>';
+			<p><a href="http://codebrainmedia.com">' . esc_html__( 'Website Development', 'cleverness-to-do-list' ) . '</a></p>
+			<p><a href="http://codebrainmedia.com"><img src="'.CTDL_PLUGIN_URL.'/images/codebrainmedia.gif" width="150" alt="CodeBrain Media" /></a></p>';
 
 		if ( $screen->id != $cleverness_todo_page && $screen->id != $cleverness_todo_cat_page && $screen->id != $cleverness_todo_settings_page ) return;
 

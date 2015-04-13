@@ -825,7 +825,10 @@ class CTDL_Lib {
 	 */
 	public static function cleverness_todo_admin_footer() {
 		$plugin_data = get_plugin_data( CTDL_FILE );
-		printf( __( "%s plugin | Version %s | by %s | <a href='http://codebrainmedia.com'>CodeBrain Media</a> | <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org'>Donate</a><br />", 'cleverness-to-do-list' ), $plugin_data['Title'], $plugin_data['Version'], $plugin_data['Author'] );
+		printf( __( "%s plugin | Version %s | by %s |
+			<img src='".CTDL_PLUGIN_URL."/images/codebrainmedialogo.gif' width='25' />
+			<a href='http://codebrainmedia.com'>CodeBrain Media</a>
+			| <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cindy@cleverness.org'>Donate</a><br />", 'cleverness-to-do-list' ), $plugin_data['Title'], $plugin_data['Version'], $plugin_data['Author'] );
 	}
 
 	/**
