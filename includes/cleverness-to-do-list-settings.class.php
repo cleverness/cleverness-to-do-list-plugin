@@ -511,6 +511,7 @@ class CTDL_Settings {
 			<?php if ( $tab == 'importexport' ) $this->importexport_fields(); ?>
 			<?php if ( $tab != 'importexport' ) submit_button(); ?>
 		</form>
+		<p><?php esc_html_e( 'Documentation for this plugin can be viewed from the Help tab on the top right.', 'cleverness-to-do-list' ); ?></p>
 	</div>
 	<?php
 	add_action( 'in_admin_footer', 'CTDL_Lib::cleverness_todo_admin_footer' );
