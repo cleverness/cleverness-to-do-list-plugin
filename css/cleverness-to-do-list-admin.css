@@ -139,7 +139,7 @@ table#todo-list thead tr .sorter-false {
 }
 
 #todo-list-completed #checkbox-col .icon {
-	background: url(images/ui-icons_888888_256x240.png);
+	background: url('images/ui-icons_888888_256x240.png');
 	display: block;
 	height: 16px;
 	width: 16px;
