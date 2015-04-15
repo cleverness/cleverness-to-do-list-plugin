@@ -5,7 +5,7 @@
  * Creates the settings and page to manage the plugin settings
  * @author C.M. Kendrick <cindy@cleverness.org>
  * @package cleverness-to-do-list
- * @version 3.3
+ * @version 3.4
  */
 
 /**
@@ -483,7 +483,7 @@ class CTDL_Settings {
 		global $cleverness_todo_settings_page;
 		$cleverness_todo_settings_page = add_submenu_page( 'cleverness-to-do-list', __( 'To-Do List Settings', 'cleverness-to-do-list' ), __( 'Settings', 'cleverness-to-do-list' ), 'manage_options',
 			'cleverness-to-do-list-settings', array( $this, 'plugin_options_page' ) );
-		add_action( "load-$cleverness_todo_settings_page", 'CTDL_Help::cleverness_todo_help_tab' );
+		add_action( "load-$cleverness_todo_settings_page", array( 'CTDL_Help', 'cleverness_todo_help_tab' ) );
 	}
 
 	/*
@@ -514,7 +514,7 @@ class CTDL_Settings {
 		<p><?php esc_html_e( 'Documentation for this plugin can be viewed from the Help tab on the top right.', 'cleverness-to-do-list' ); ?></p>
 	</div>
 	<?php
-	add_action( 'in_admin_footer', 'CTDL_Lib::cleverness_todo_admin_footer' );
+	add_action( 'in_admin_footer', array( 'CTDL_Lib', 'cleverness_todo_admin_footer' ) );
 	}
 
 	/*
@@ -526,7 +526,6 @@ class CTDL_Settings {
 	function plugin_options_tabs() {
 		$current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : $this->general_key;
 
-		echo '<div class="icon32"><img src="'.CTDL_PLUGIN_URL.'/images/cleverness-todo-icon.png" alt="" /></div>';
 		echo '<h2 class="nav-tab-wrapper">';
 		foreach ( $this->plugin_tabs as $tab_key => $tab_caption ) {
 			$active = $current_tab == $tab_key ? 'nav-tab-active' : '';

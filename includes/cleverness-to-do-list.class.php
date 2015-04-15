@@ -124,10 +124,10 @@ class ClevernessToDoList {
 			$items = 0;
 			$visible = 0;
 			$posts_to_exclude = array();
-			if ( !is_admin() ) $visibility = get_option( 'CTDL_categories' );
+			if ( !is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) $visibility = get_option( 'CTDL_categories' );
 
 			foreach ( $categories as $category) {
-				if ( !is_admin() ) {
+				if ( !is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 					$visible = $visibility["category_$category->term_id"];
 				}
 
