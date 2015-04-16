@@ -175,7 +175,9 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 				$todo_items = CTDL_Lib::get_todos( $user, 5000, $completed, $category->term_id );
 
 				if ( $todo_items->have_posts() ) {
-					$headings = $this->show_table_headings( $completed );
+					if ( $headings == 0 ) {
+						$headings = $this->show_table_headings( $completed );
+					}
 					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $completed, $visible ) );
 					$items = 1;
 				}
