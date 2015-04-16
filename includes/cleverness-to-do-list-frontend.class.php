@@ -85,8 +85,6 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 
 		$this->list .= '<table id="'.$id.'" class="todo-table widefat '.$class.'">';
 
-		$this->show_table_headings( $completed );
-
 		$this->loop_through_todos( $completed, $atts['category'] );
 
 		$this->list .= '</table>';
@@ -151,8 +149,79 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 	}
 
 	/**
+	 * Loop through to-do items
+	 *
+	 * @param int $completed
+	 * @param int $cat_id
+	 * @param int $limit
+	 */
+	protected function loop_through_todos( $completed = 0, $cat_id = 0, $limit = 5000 ) {
+		global $current_user, $userdata;
+		$user = CTDL_Lib::get_user_id( $current_user, $userdata );
+
+		// if categories are enabled and sort order is set to cat id and we're not getting todos for a specific category
+		if ( CTDL_Loader::$settings['categories'] == 1 && CTDL_Loader::$settings['sort_order'] == 'cat_id' && $cat_id == 0 ) {
+
+			$categories       = CTDL_Categories::get_categories();
+			$items            = 0;
+			$visible          = 0;
+			$headings         = 0;
+			$posts_to_exclude = array();
+			$visibility = get_option( 'CTDL_categories' );
+
+			foreach ( $categories as $category ) {
+				$visible = $visibility["category_$category->term_id"];
+
+				$todo_items = CTDL_Lib::get_todos( $user, 5000, $completed, $category->term_id );
+
+				if ( $todo_items->have_posts() ) {
+					$headings = $this->show_table_headings( $completed );
+					array_splice( $posts_to_exclude, count( $posts_to_exclude ), 0, $this->show_todo_list_items( $todo_items, $completed, $visible ) );
+					$items = 1;
+				}
+			}
+
+			$todo_items = CTDL_Lib::get_todos( $user, 5000, $completed, 0, $posts_to_exclude );
+			if ( $todo_items->have_posts() ) {
+				if ( $headings == 0 ) {
+					$this->show_table_headings( $completed );
+				}
+				$this->show_todo_list_items( $todo_items, $completed );
+				$items = 1;
+			}
+
+			if ( $items == 0 ) {
+				if ( $completed == 0 ) {
+					$this->list .= '<tr><td>' . apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ) . '</td></tr>';
+				} else {
+					$this->list .= '<tr><td>' . apply_filters( 'ctdl_no_completed_items', esc_html__( 'No completed items.', 'cleverness-to-do-list' ) ) . '</td></tr>';
+				}
+			}
+
+		} else {
+
+			$todo_items = CTDL_Lib::get_todos( $user, 5000, $completed, $cat_id );
+
+			if ( $todo_items->have_posts() ) {
+				$this->show_table_headings( $completed );
+				$this->show_todo_list_items( $todo_items, $completed );
+			} else {
+				if ( $completed == 0 ) {
+					$this->list .= '<tr><td>' . apply_filters( 'ctdl_no_items', esc_html__( 'No items to do.', 'cleverness-to-do-list' ) ) . '</td></tr>';
+				} else {
+					$this->list .= '<tr><td>' . apply_filters( 'ctdl_no_completed_items', esc_html__( 'No completed items.', 'cleverness-to-do-list' ) ) . '</td></tr>';
+				}
+			}
+
+		}
+	}
+
+	/**
 	 * Creates the HTML for the To-Do List Table Headings
+	 *
 	 * @param $completed
+	 *
+	 * @return int|void
 	 */
 	public function show_table_headings( $completed = 0 ) {
 		$atts = shortcode_atts( array(
@@ -187,6 +256,8 @@ class CTDL_Frontend_Admin extends ClevernessToDoList {
 		if ( $atts['editlink'] == 1 && current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == 0 )
 			$this->list .= '<th id="action-col" class="{sorter: false} no-sort">'.apply_filters( 'ctdl_heading_action', esc_html__( 'Action', 'cleverness-to-do-list' ) ).'</th>';
 		$this->list .= '</tr></thead>';
+
+		return 1;
 	}
 
 	/**
