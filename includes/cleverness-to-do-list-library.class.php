@@ -995,21 +995,21 @@ class CTDL_Lib {
 
 			$advanced_options = array(
 				'date_format'               => 'm/d/Y',
-				'priority_0'                => __( 'Important', 'cleverness-to-do-list' ),
-				'priority_1'                => __( 'Normal', 'cleverness-to-do-list' ),
-				'priority_2'                => __( 'Low', 'cleverness-to-do-list' ),
+				'priority_0'                => esc_html__( 'Important', 'cleverness-to-do-list' ),
+				'priority_1'                => esc_html__( 'Normal', 'cleverness-to-do-list' ),
+				'priority_2'                => esc_html__( 'Low', 'cleverness-to-do-list' ),
 				'assign'                    => 1,
 				'show_only_assigned'        => 1,
 				'user_roles'                => 'contributor, author, editor, administrator',
 				'email_assigned'            => 0,
 				'email_from'                => html_entity_decode( get_bloginfo( 'name' ) ),
-				'email_subject'             => __( 'A to-do list item has been assigned to you', 'cleverness-to-do-list' ),
-				'email_text'                => __( 'The following item has been assigned to you:', 'cleverness-to-do-list' ),
+				'email_subject'             => esc_html__( 'A to-do list item has been assigned to you', 'cleverness-to-do-list' ),
+				'email_text'                => esc_html__( 'The following item has been assigned to you:', 'cleverness-to-do-list' ),
 				'email_category'            => 1,
 				'email_show_assigned_by'    => 0,
 				'show_id'                   => 0,
 				'show_date_added'           => 0,
-				'email_from_email'          => get_bloginfo( 'admin_email' ),
+				'email_from_email'          => esc_html( get_bloginfo( 'admin_email' ) ),
 			);
 
 			$permissions_options = array(
@@ -1030,7 +1030,8 @@ class CTDL_Lib {
 				'show_dashboard_deadline' => 0,
 				'show_edit_link'          => 0,
 				'dashboard_author'        => 1,
-				'show_completed'          => 0
+				'show_completed'          => 0,
+				'dashboard_heading'       => esc_html__( 'To-Do List', 'cleverness-to-do-list' )
 			);
 
 			add_option( 'CTDL_general', $general_options );
@@ -1148,6 +1149,7 @@ class CTDL_Lib {
 			if ( $version < 3.4 ) {
 				$dashboard_options = get_option( 'CTDL_dashboard_settings' );
 				$dashboard_options['show_completed'] = 0;
+				$dashboard_options['dashboard_heading'] = esc_html__( 'To-Do List', 'cleverness-to-do-list' );
 				update_option( 'CTDL_dashboard_settings', $dashboard_options );
 			}
 

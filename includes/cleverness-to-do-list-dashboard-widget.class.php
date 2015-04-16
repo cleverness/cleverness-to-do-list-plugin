@@ -131,17 +131,23 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		}
 		settings_fields( 'ctdl-dashboard-settings-group' );
 		$options = get_option( 'CTDL_dashboard_settings' );
+		$heading = ( isset( $options['dashboard_heading'] ) ? $options['dashboard_heading'] : __( 'To-Do List', 'cleverness-to-do-list' ) );
 		$cat_id = ( isset( $options['dashboard_cat'] ) ? $options['dashboard_cat'] : 0 );
 		$cat_ids = ( is_array( $cat_id ) ? $cat_id : array( $cat_id ) );
 		?>
 		<fieldset>
-			<p><label for="ctdl_dashboard_settings[dashboard_number]"><?php esc_html_e( 'Number of List Items to Show', 'cleverness-to-do-list' ); ?></label>
+			<p><label for="ctdl_dashboard_settings[dashboard_heading]"><?php esc_html_e( 'Heading', 'cleverness-to-do-list' ); ?></label>
+				<input type="text" class="widefat" id="ctdl_dashboard_settings[dashboard_heading]" name="ctdl_dashboard_settings[dashboard_heading]"
+				       value="<?php echo esc_html( $heading ); ?>" />
+			</p>
+
+			<p><label for="ctdl_dashboard_settings[dashboard_number]"><?php esc_html_e( 'Number of Items', 'cleverness-to-do-list' ); ?></label>
 				<select id="ctdl_dashboard_settings[dashboard_number]" name="ctdl_dashboard_settings[dashboard_number]">
-					<option value="1"<?php if ( $options['dashboard_number'] == '1' ) echo ' selected="selected"'; ?>><?php _e( '1', 'cleverness-to-do-list' ); ?></option>
-					<option value="5"<?php if ( $options['dashboard_number'] == '5' ) echo ' selected="selected"'; ?>><?php _e( '5', 'cleverness-to-do-list' ); ?></option>
-					<option value="10"<?php if ( $options['dashboard_number'] == '10' ) echo ' selected="selected"'; ?>><?php _e( '10', 'cleverness-to-do-list' ); ?></option>
-					<option value="15"<?php if ( $options['dashboard_number'] == '15' ) echo ' selected="selected"'; ?>><?php _e( '15', 'cleverness-to-do-list' ); ?></option>
-					<option value="-1"<?php if ( $options['dashboard_number'] == '-1' ) echo ' selected="selected"'; ?>><?php _e( 'All', 'cleverness-to-do-list' ); ?>&nbsp;</option>
+					<option value="1"<?php if ( $options['dashboard_number'] == '1' ) echo ' selected="selected"'; ?>><?php esc_html_e( '1', 'cleverness-to-do-list' ); ?></option>
+					<option value="5"<?php if ( $options['dashboard_number'] == '5' ) echo ' selected="selected"'; ?>><?php esc_html_e( '5', 'cleverness-to-do-list' ); ?></option>
+					<option value="10"<?php if ( $options['dashboard_number'] == '10' ) echo ' selected="selected"'; ?>><?php esc_html_e( '10', 'cleverness-to-do-list' ); ?></option>
+					<option value="15"<?php if ( $options['dashboard_number'] == '15' ) echo ' selected="selected"'; ?>><?php esc_html_e( '15', 'cleverness-to-do-list' ); ?></option>
+					<option value="-1"<?php if ( $options['dashboard_number'] == '-1' ) echo ' selected="selected"'; ?>><?php esc_html_e( 'All', 'cleverness-to-do-list' ); ?>&nbsp;</option>
 				</select>
 			</p>
 
@@ -182,9 +188,9 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 				</ul>
 			<?php endif; ?>
 
-			<p class="description"><?php _e( 'This setting is only used when <em>List View</em> is set to <em>Group</em>.', 'cleverness-to-do-list' ); ?></p>
+			<p class="description"><?php _e( 'The setting below is only used when <em>List View</em> is set to <em>Group</em>.', 'cleverness-to-do-list' ); ?></p>
 
-			<p><label for="ctdl_dashboard_settings[dashboard_author]"><?php _e( 'Show <em>Added By</em> on Dashboard Widget', 'cleverness-to-do-list' ); ?></label>
+			<p><label for="ctdl_dashboard_settings[dashboard_author]"><?php _e( 'Show Added By', 'cleverness-to-do-list' ); ?></label>
 				<select id="ctdl_dashboard_settings[dashboard_author]" name="ctdl_dashboard_settings[dashboard_author]">
 					<option value="0"<?php if ( $options['dashboard_author'] == 0 ) echo ' selected="selected"'; ?>><?php esc_html_e( 'Yes', 'cleverness-to-do-list' ); ?>&nbsp;</option>
 					<option value="1"<?php if ( $options['dashboard_author'] == 1 ) echo ' selected="selected"'; ?>><?php esc_html_e( 'No', 'cleverness-to-do-list' ); ?></option>
@@ -202,9 +208,11 @@ class CTDL_Dashboard_Widget extends ClevernessToDoList {
 		$CTDL_status = 0;
 		$CTDL_category = 0;
 		$CTDL_category_id = 0;
+		$heading = ( isset( CTDL_Loader::$dashboard_settings['dashboard_heading'] ) && CTDL_Loader::$dashboard_settings['dashboard_heading'] != ''
+			? CTDL_Loader::$dashboard_settings['dashboard_heading'] : __( 'To-Do List', 'cleverness-to-do-list' ) );
 
 		if ( CTDL_Lib::check_permission( 'todo', 'view' ) ) {
-			wp_add_dashboard_widget( 'ctdl', apply_filters( 'ctdl_todo_list', esc_html__( 'To-Do List', 'cleverness-to-do-list' ) ) .
+			wp_add_dashboard_widget( 'ctdl', apply_filters( 'ctdl_todo_list', esc_html( $heading ) ) .
 					' <a href="admin.php?page=cleverness-to-do-list">&raquo;</a>', array( $this, 'dashboard_widget' ), array( $this, 'dashboard_options' ) );
 		}
 	}

@@ -148,6 +148,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 * Changed default to-do limits from unlimited
 * Changed to dashicons for menu icon; changeable with ctdl_icon filter
 * Changed ctdl_add_form and ctdl_edit_form to ctdl_add_form_action and ctdl_add_form_action. ctdl_add_form and ctdl_edit_form are now filters applied after the action
+* Added heading option to Dashboard Widget
 * Added ctdl_send_email filter
 * Added is_user_member_of_blog() to frontend admin shortcode
 * Added link to individual post planners
