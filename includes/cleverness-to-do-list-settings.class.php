@@ -55,8 +55,8 @@ class CTDL_Settings {
 	}
 
 	function section_advanced_db_desc() {
-		_e( 'If you have recently upgraded and your to-do items are all still visible, you can delete the custom database tables since they are no longer used. You can also delete all your to-do items here.', 'cleverness-to-do-list' );
-		echo '<br /><strong><em>'.__( 'These actions cannot be undone. Please be sure you want to proceed. It is advised that you back up your database first.', 'cleverness-to-do-list' ).'</em></strong>';
+		_e( 'If you have recently upgraded from a pre 3.0 version and your to-do items migrated successfully, you can delete the custom database tables since they are no longer used. You can also delete all your to-do items here.', 'cleverness-to-do-list' );
+		echo '<br /><br /><strong><em>'.__( 'These actions cannot be undone. Please be sure you want to proceed. It is advised that you back up your database first.', 'cleverness-to-do-list' ).'</em></strong>';
 	}
 
 
@@ -97,7 +97,7 @@ class CTDL_Settings {
 			<option value="0"<?php if ( $this->general_settings['categories'] == 0 ) echo ' selected="selected"'; ?>><?php _e( 'Disabled', 'cleverness-to-do-list' ); ?>&nbsp;</option>
 			<option value="1"<?php if ( $this->general_settings['categories'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Enabled', 'cleverness-to-do-list' ); ?></option>
 		</select>
-		<span class="description"><?php _e( 'If you would like to organize your to-do list into categories, enable it here.', 'cleverness-to-do-list' ); ?></span>
+		<span class="description"><?php _e( 'Enable if you would like to organize your to-do list into categories.', 'cleverness-to-do-list' ); ?></span>
 	<?php
 	}
 
@@ -214,19 +214,19 @@ class CTDL_Settings {
 		add_settings_field( 'show_id', __( 'Show To-Do Item ID', 'cleverness-to-do-list' ), array ( $this, 'show_id_option' ), $this->advanced_key, 'section_advanced' );
 		add_settings_field( 'show_date_added', __( 'Show Date To-Do Was Added', 'cleverness-to-do-list' ), array ( $this, 'show_date_added_option' ), $this->advanced_key, 'section_advanced' );
 		do_action( 'ctdl_advanced_settings' );
-		add_settings_section( 'section_advanced_assign', __( 'Assign To-Do Items Settings (Only When Using Group or Master View)', 'cleverness-to-do-list' ), array( $this, 'section_advanced_assign_desc' ), $this->advanced_key );
+		add_settings_section( 'section_advanced_assign', __( 'Assign To-Do Items Settings (Only When Using Group or Master List View Types)', 'cleverness-to-do-list' ), array( $this, 'section_advanced_assign_desc' ), $this->advanced_key );
 		add_settings_field( 'assign', __( 'Assign To-Do Items to Users', 'cleverness-to-do-list' ), array( $this, 'assign_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'show_only_assigned', __( 'Show a User Only the To-Do Items Assigned to Them', 'cleverness-to-do-list' ), array( $this, 'show_only_assigned_option' ), $this->advanced_key,
 			'section_advanced_assign' );
 		add_settings_field( 'user_roles', __( 'User Roles to Show', 'cleverness-to-do-list' ), array( $this, 'user_roles_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_assigned', __( 'Email Assigned To-Do Items to User', 'cleverness-to-do-list' ), array( $this, 'email_assigned_option' ), $this->advanced_key, 'section_advanced_assign' );
-		add_settings_field( 'email_category', __( 'Add Category to Subject', 'cleverness-to-do-list' ), array( $this, 'email_category_option' ), $this->advanced_key, 'section_advanced_assign' );
+		add_settings_field( 'email_category', __( 'Add Category to Email Subject', 'cleverness-to-do-list' ), array( $this, 'email_category_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_show_assigned_by', __( 'Show Who Assigned the To-Do Item in Email', 'cleverness-to-do-list' ), array( $this, 'email_show_assigned_by_option' ), $this->advanced_key, 'section_advanced_assign' );
-		add_settings_field( 'email_from', __( 'From Field for Emails Sent to User', 'cleverness-to-do-list' ), array( $this, 'email_from_option' ), $this->advanced_key, 'section_advanced_assign' );
+		add_settings_field( 'email_from', __( 'From Field for Emails', 'cleverness-to-do-list' ), array( $this, 'email_from_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_field( 'email_from_email', esc_attr__( 'From Email', 'cleverness-to-do-list' ), array( $this, 'email_from_email_option' ), $this->advanced_key, 'section_advanced_assign' );
-		add_settings_field( 'email_subject', __( 'Subject Field for Emails Sent to User', 'cleverness-to-do-list' ), array( $this, 'email_subject_option' ), $this->advanced_key,
+		add_settings_field( 'email_subject', __( 'Subject Field for Emails', 'cleverness-to-do-list' ), array( $this, 'email_subject_option' ), $this->advanced_key,
 			'section_advanced_assign' );
-		add_settings_field( 'email_text', __( 'Text in Emails Sent to User', 'cleverness-to-do-list' ), array( $this, 'email_text_option' ), $this->advanced_key, 'section_advanced_assign' );
+		add_settings_field( 'email_text', __( 'Text in Emails', 'cleverness-to-do-list' ), array( $this, 'email_text_option' ), $this->advanced_key, 'section_advanced_assign' );
 		add_settings_section( 'section_advanced_database', __( 'Database Cleanup', 'cleverness-to-do-list' ), array( $this, 'section_advanced_db_desc' ), $this->advanced_key );
 	}
 
@@ -240,7 +240,7 @@ class CTDL_Settings {
 
 	function priority_0_option() { ?>
 		<input type="text" name="<?php echo $this->advanced_key; ?>[priority_0]" value="<?php echo $this->advanced_settings['priority_0']; ?>" />
-		<span class="description"><?php _e( 'The highest priority list items are shown in red in the lists.', 'cleverness-to-do-list' ); ?></span>
+		<span class="description"><?php _e( 'The highest priority list items are displayed as red text.', 'cleverness-to-do-list' ); ?></span>
 	<?php }
 
 	function priority_1_option() { ?>
@@ -249,7 +249,7 @@ class CTDL_Settings {
 
 	function priority_2_option() { ?>
 		<input type="text" name="<?php echo $this->advanced_key; ?>[priority_2]" value="<?php echo $this->advanced_settings['priority_2']; ?>" />
-		<span class="description"><?php _e( 'The lowest priority list items are shown in a lighter grey.', 'cleverness-to-do-list' ); ?></span>
+		<span class="description"><?php _e( 'The lowest priority list items are displayed as lighter grey text.', 'cleverness-to-do-list' ); ?></span>
 	<?php }
 
 	function show_id_option() { ?>
@@ -545,13 +545,13 @@ class CTDL_Settings {
 	function show_delete_tables_button() {
 		$cleverness_todo_delete_tables_nonce = wp_create_nonce( 'tododeletetables' );
 		$url = get_admin_url().'admin.php?page=cleverness-to-do-list-settings&amp;&tab=CTDL_advanced&amp;action=deletetables&_wpnonce='.esc_attr( $cleverness_todo_delete_tables_nonce );
-		echo '<p><a class="button-secondary" href="'.$url.'" title="'.__( 'Delete Tables', 'cleverness-to-do-list' ).'>" id="delete-tables">'.__( 'Delete Tables', 'cleverness-to-do-list' ).'</a></p>';
+		echo '<p><a class="button-secondary" href="'.esc_url( $url ).'" title="'.__( 'Delete Tables', 'cleverness-to-do-list' ).'>" id="delete-tables">'.__( 'Delete Tables', 'cleverness-to-do-list' ).'</a></p>';
 	}
 
 	function show_delete_todos_button() {
 		$cleverness_todo_delete_todos_nonce = wp_create_nonce( 'tododeletetodos' );
 		$url = get_admin_url().'admin.php?page=cleverness-to-do-list-settings&amp;&tab=CTDL_advanced&amp;action=deletealltodos&_wpnonce='.esc_attr( $cleverness_todo_delete_todos_nonce );
-		echo '<p><a class="button-secondary" href="'.$url.'" title="'.__( 'Delete All To-Do Items', 'cleverness-to-do-list' ).'>" id="delete-all-todos">'.__( 'Delete All To-Do Items', 'cleverness-to-do-list' ).'</a></p>';
+		echo '<p><a class="button-secondary" href="'.esc_url( $url ).'" title="'.__( 'Delete All To-Do Items', 'cleverness-to-do-list' ).'>" id="delete-all-todos">'.__( 'Delete All To-Do Items', 'cleverness-to-do-list' ).'</a></p>';
 	}
 
 	function importexport_fields() {
