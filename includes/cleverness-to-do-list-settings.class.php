@@ -61,17 +61,16 @@ class CTDL_Settings {
 
 
 	function section_permission_desc() {
-		echo '<strong>';
-		_e( 'The only permission that applies to the Individual list type is the View To-Do List permission.', 'cleverness-to-do-list' );
+		echo '<strong style="color: red;">';
+		_e( 'Important! When using the Master List View type users that you do not want to edit the list should only be allowed to View To-Do List and Complete To-Do Items, otherwise they will be able to edit the Master list to-dos.', 'cleverness-to-do-list' );
+		echo '<br /><br />';
+		_e( 'The only permission that applies to the Individual List View type is the View To-Do List permission.', 'cleverness-to-do-list');
 		echo '</strong><br /><br />';
 		_e( 'You should chose the highest level capabilities that the users you want to be able to preform that action will have.', 'cleverness-to-do-list' );
 		echo '<br /><br />';
 		_e( 'The default general capabilities of each user role are as follows: ', 'cleverness-to-do-list' );
 		echo '<br />';
 		_e( 'Subscribers: Read, Contributors: Edit Posts, Authors: Publish Posts, Editors: Edit Others Posts, Administrators: Manage Options', 'cleverness-to-do-list' );
-		echo '<br /><br /><em><strong>';
-		_e( 'When using the Master list type non-administrator users should only be allowed to view and complete items, otherwise they will be able to edit the Master list.', 'cleverness-to-do-list' );
-		echo '</strong></em>';
 	}
 
 	function register_general_settings() {
@@ -108,9 +107,10 @@ class CTDL_Settings {
 			<option value="1"<?php if ( $this->general_settings['list_view'] == 1 ) echo ' selected="selected"'; ?>><?php _e( 'Group', 'cleverness-to-do-list' ); ?></option>
 			<option value="2"<?php if ( $this->general_settings['list_view'] == 2 ) echo ' selected="selected"'; ?>><?php _e( 'Master', 'cleverness-to-do-list' ); ?></option>
 		</select>
-		<span class="description"><?php _e( 'List View sets how the to-do lists are viewed.<br /> The Individual setting allows each user to have their own private to-do list.
-		The Group setting allows all users to share one to-do list. The Master setting allows you to have one master list for all users with individual completion of items.', 'cleverness-to-do-list' ); ?></span>
-		<br /><span class="description"><?php _e( 'Make sure you adjust the User Permissions appropriately when using the Master List View.', 'cleverness-to-do-list' ); ?></span>
+		<span class="description"><?php _e( 'List View sets how the to-do lists function.<br /> The Individual setting allows each user to have their own private to-do list.<br />
+		The Group setting allows all users to share one to-do list.<br />
+		The Master setting allows you to have one master list (created by an admin) for all users with individual completion of items.', 'cleverness-to-do-list' ); ?></span>
+		<br /><span class="description"><?php _e( 'Important! Adjust the User Permissions appropriately when using the Master List View. More details are available on the User Permissions tab.', 'cleverness-to-do-list' ); ?></span>
 	<?php }
 
 	function show_deadline_option() { ?>
