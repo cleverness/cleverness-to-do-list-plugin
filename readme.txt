@@ -137,36 +137,36 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 == Changelog ==
 
 = 3.4 =
-* Fixed Assigned to text showing up even though the value is empty on dashboard widget
-* Fixed Master View - view assigned only - completed items issue
+* Fixed Assigned To text showing even though the value is empty on dashboard widget
+* Fixed Master View - view assigned only - completed items issue where items were showing that should not be
 * Fixed an issue with the frontend date added attribute
-* Fixed todoadmin table overflowing container
-* Changed progress to show 100% completed for completed items
+* Fixed todoadmin shortcode table overflowing container
+* Changed progress to show as 100% completed for completed items
 * Changed to-do editor to full width
 * Changed CSS class in todochecklist shortcode from 'uncompleted' to 'todo-uncompleted'
-* Changed todolist shortcode to use 1 instead of show (show still works)
+* Changed todolist shortcode attributes to use 1 instead of show (show still works)
 * Changed default to-do limits from unlimited
 * Changed to dashicons for menu icon; changeable with ctdl_icon filter
-* Changed ctdl_add_form and ctdl_edit_form to ctdl_add_form_action and ctdl_add_form_action. ctdl_add_form and ctdl_edit_form are now filters applied after the action
-* Added heading option to Dashboard Widget
-* Added ctdl_send_email filter
-* Added is_user_member_of_blog() to frontend admin shortcode
-* Added link to individual post planners
-* Added completed display option to dashboard widget
-* Added templates for dashboard widget and widget - can be overwritten in your theme folders
+* Changed ctdl_add_form and ctdl_edit_form filters to ctdl_add_form_action and ctdl_edit_form_action hooks. ctdl_add_form and ctdl_edit_form are now filters applied to the forms after the new actions
+* Added heading option to dashboard widget (configure link is show when hovering over widget title)
+* Added ctdl_send_email filter that determines if email notification should be sent or not
+* Added is_user_member_of_blog() to todoadmin shortcode
+* Added link to individual Post Planner's titles instead of showing just the title
+* Added completed items display option to dashboard widget (configure link is show when hovering over widget title)
+* Added templates for dashboard widget and widget - can be overwritten in your theme folder by copying files from the plugin's /templates/ folder to a folder named ctdl-templates in your theme
 * Added completed=only attribute for todolist shortcode to show only completed items
-* Added completed=1 attribute for todochecklist shortcode to only show completed items
-* Added completed=1 and completed_date=1 attributes for todoadmin shortcode to show completed items
+* Added completed=1 attribute for todochecklist shortcode to show only completed items
+* Added completed=1 and completed_date=1 attributes for todoadmin shortcode to show completed items and date completed
 * Added Post Planner display attribute to todoadmin shortcode: planner=1
 * Added wp_reset_postdata() to widget loop (thanks to dwightlathan77), delete all todos loop, get_todos loop for master view, get all completed todos loop, main show_todo_list_items loop, dashboard widget loop,
 and frontend loops
 * Replaced create_function calls
-* Remove HTML email type after sending email
+* Removed HTML email type after sending email
 * Removed uses of extract
 * Update widget, dashboard, and category visibility options if category is split in WordPress 4.2 (shortcodes will need to be updated manually if a category id has changed)
-* Show a message if the category id has changed when updating the name
-* Only show sorting arrows for column heading on hover
-* Backend style adjustments to match WordPress UI
+* Show a message if the category id has changed when updating the category name
+* Only show sorting arrows for table column headings on hover
+* Backend style adjustments to match current WordPress UI
 * Updated version of Select2 to 3.5.2
 * Updated Spanish translation by Jorge Flores [Mayan Group](http://www.mayan.mx/)
 
