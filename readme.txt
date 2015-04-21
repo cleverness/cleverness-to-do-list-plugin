@@ -123,6 +123,15 @@ Set the title to "Things to Do" and show the priority and the progress.
 * **Purge To-Do Items Capability** - This allows the selected capability to purge all the completed to-do items.
 * **Add Categories Capability** - This allows the selected capability to add new categories.
 
+= How can I customize the plugin? =
+
+I have numerous hooks in the plugin so you can customize how it looks and functions. If a hook is needed somewhere, please [let me know](http://cleverness.org/contact/).
+
+* [View the list of actions and filters](http://cleverness.org/plugins/to-do-list/cleverness-to-do-list-filters-and-hooks/).
+* [View the WordPress Codex article on hooks](https://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters).
+
+You can create your own templates for the dashboard widget and the widget. You can find them in the `/templates/` directory. Place them in your theme's folder in a directory called `ctdl-templates`.
+
 = What should I do if I find a bug? =
 
 Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave a comment](http://cleverness.org/plugins/to-do-list/#respond) or [contact me](http://cleverness.org/contact/).

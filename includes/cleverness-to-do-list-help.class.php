@@ -51,6 +51,12 @@ class CTDL_Help {
 		'callback'	  => __CLASS__.'::cleverness_todo_faqs_help',
 		) );
 
+		$screen->add_help_tab( array(
+			'id' => 'cleverness_todo_list_customizing_tab',
+			'title' => __( 'Customizing', 'cleverness-to-do-list' ),
+			'callback' => __CLASS__.'::cleverness_todo_customizing_help',
+		) );
+
 		if ( current_user_can( 'manage_options' ) ) {
 			$screen->add_help_tab( array(
 			'id'          => 'cleverness_todo_list_permissions_tab',
@@ -91,6 +97,20 @@ class CTDL_Help {
 		<a href="http://cleverness.org/plugins/to-do-list/#respond" target="_blank">http://cleverness.org/plugins/to-do-list/#respond</a><br/>
 		<a href="http://cleverness.org/contact/" target="_blank">http://cleverness.org/contact/</a>
 		</p>
+	<?php }
+
+	/**
+	 * Creates the Customizing help section
+	 * @static
+	 * @since 3.4
+	 */
+	public static function cleverness_todo_customizing_help() { ?>
+		<h3><?php esc_html_e( 'Customizing', 'cleverness-to-do-list' ); ?></h3>
+		<p>I have numerous hooks in the plugin so you can customize how it looks and functions. If a hook is needed somewhere, please <a href="http://cleverness.org/contact/">let me know</a>.<br />
+			<a href="http://cleverness.org/plugins/to-do-list/cleverness-to-do-list-filters-and-hooks/">View the list of actions and filters</a>.<br />
+			<a href="https://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters">View WordPress Codex article on using hooks</a>.</p>
+
+		<p>You can create your own templates for the dashboard widget and the widget. You can find them in the /templates/ directory. Place them in your theme's folder in a directory called ctdl-templates.</p>
 	<?php }
 
 	/**
@@ -185,7 +205,7 @@ class CTDL_Help {
 			<li><strong><?php esc_html_e( 'Assign To-Do Item Capability', 'cleverness-to-do-list' ); ?></strong>
 			&#8211; <?php esc_html_e( 'This allows the selected capability to assign to-do items to individual users', 'cleverness-to-do-list' ); ?>.</li>
 			<li><strong><?php esc_html_e( 'View All Assigned Tasks Capability', 'cleverness-to-do-list' ); ?></strong>
-			&#8211; <?php esc_html_e( 'This allows the selected capability to view all tasks even if <em>Show Each User Only Their Assigned Tasks</em> is set to <em>Yes</em>', 'cleverness-to-do-list' ); ?>.</li>
+			&#8211; <?php esc_html_e( 'This allows the selected capability to view all tasks even if Show Each User Only Their Assigned Tasks is set to Yes', 'cleverness-to-do-list' ); ?>.</li>
 			<li><strong><?php esc_html_e( 'Delete To-Do Item Capability', 'cleverness-to-do-list' ); ?></strong> &#8211; <?php esc_html_e( 'This allows the selected capability to delete individual to-do items', 'cleverness-to-do-list' ); ?>.</li>
 			<li><strong><?php esc_html_e( 'Purge To-Do Items Capability', 'cleverness-to-do-list' ); ?></strong>
 			&#8211; <?php esc_html_e( 'This allows the selected capability to purge all the completed to-do items', 'cleverness-to-do-list' ); ?>.</li>
