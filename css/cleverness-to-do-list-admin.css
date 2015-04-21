@@ -11,7 +11,10 @@
 
 #ctdl .todo-item p {
 	margin: 0 0 0.2em 0;
-	line-height: 0.8em;
+}
+
+#ctdl input[type="checkbox"] {
+	margin-top:    0.1em;
 }
 
 #ctdl .todo-list {

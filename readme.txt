@@ -6,7 +6,7 @@ Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.8
 Tested up to: 4.2
-Stable tag: 3.4
+Stable tag: 3.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,6 +144,9 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 4. Everything Enabled
 
 == Changelog ==
+
+= 3.4.1 =
+* Fixed issue with dashboard widget line height
 
 = 3.4 =
 * Fixed Assigned To text showing even though the value is empty on dashboard widget
@@ -460,6 +463,9 @@ and frontend loops
 
 == Upgrade Notice ==
 
+= 3.4.1 =
+Bug fix
+
 = 3.4 =
 Bug fixes, new features
 
@@ -629,8 +635,6 @@ Major changes to plugin
 == Credits ==
 
 This plugin was originally from Abstract Dimensions (site no longer available) with a patch to display the list in the dashboard by WordPress by Example (site also no longer available). It was abandoned prior to WordPress 2.7.
-
-Icon by [Hylke Bons](http://www.iconfinder.com/icondetails/30045/32/list_shopping_list_todo_todo_list_icon)
 
 Spanish translation by [Ricardo](http://yabocs.avytes.com/) - Updated by Jorge Flores [Mayan Group](http://www.mayan.mx/)
 
