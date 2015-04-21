@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cleverness To-Do List\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-17 16:55-0500\n"
-"PO-Revision-Date: 2015-04-17 16:55-0500\n"
+"POT-Creation-Date: 2015-04-20 21:59-0500\n"
+"PO-Revision-Date: 2015-04-20 21:59-0500\n"
 "Last-Translator: C.M. Kendrick <cindy@cleverness.org>\n"
 "Language-Team:  <cindy@cleverness.org>\n"
 "MIME-Version: 1.0\n"
@@ -163,7 +163,7 @@ msgstr ""
 
 #: ../includes/cleverness-to-do-list-dashboard-widget.class.php:134
 #: ../includes/cleverness-to-do-list-dashboard-widget.class.php:212
-#: ../includes/cleverness-to-do-list-help.class.php:77
+#: ../includes/cleverness-to-do-list-help.class.php:83
 #: ../includes/cleverness-to-do-list-library.class.php:787
 #: ../includes/cleverness-to-do-list-library.class.php:1034
 #: ../includes/cleverness-to-do-list-library.class.php:1152
@@ -419,17 +419,22 @@ msgstr ""
 msgid "FAQs"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:57
+#: ../includes/cleverness-to-do-list-help.class.php:56
+#: ../includes/cleverness-to-do-list-help.class.php:108
+msgid "Customizing"
+msgstr ""
+
+#: ../includes/cleverness-to-do-list-help.class.php:63
 #: ../includes/cleverness-to-do-list-settings.class.php:350
 msgid "User Permissions"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:64
-#: ../includes/cleverness-to-do-list-help.class.php:204
+#: ../includes/cleverness-to-do-list-help.class.php:70
+#: ../includes/cleverness-to-do-list-help.class.php:224
 msgid "Post Planner Integration"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:78
+#: ../includes/cleverness-to-do-list-help.class.php:84
 msgid ""
 "This plugin provides users with a to-do list feature. You can configure the "
 "plugin to have private to-do lists for each user, for all users to share a "
@@ -442,7 +447,7 @@ msgid ""
 "included as well as front-end administration."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:79
+#: ../includes/cleverness-to-do-list-help.class.php:85
 msgid ""
 "A new menu item is added to manage your list and it is also listed on a "
 "dashboard widget. A sidebar widget is available as well as shortcode to "
@@ -451,236 +456,236 @@ msgid ""
 "to the back-end."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:87
+#: ../includes/cleverness-to-do-list-help.class.php:93
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:89
+#: ../includes/cleverness-to-do-list-help.class.php:95
 msgid "What should I do if I find a bug?"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:90
+#: ../includes/cleverness-to-do-list-help.class.php:96
 msgid "Visit the plugin website and leave a comment or contact me."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:101
+#: ../includes/cleverness-to-do-list-help.class.php:121
 msgid "Shortcode Documentation"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:102
+#: ../includes/cleverness-to-do-list-help.class.php:122
 msgid "Display a List of To-Do Items"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:106
+#: ../includes/cleverness-to-do-list-help.class.php:126
 msgid ""
 "you can chose <em>list</em> or <em>table</em> view. Default is <em>list</em>"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:107
+#: ../includes/cleverness-to-do-list-help.class.php:127
 msgid ""
 "default is <em>show</em>. Use a blank value to hide (only applies to table "
 "view)"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:108
-#: ../includes/cleverness-to-do-list-help.class.php:109
-#: ../includes/cleverness-to-do-list-help.class.php:110
-#: ../includes/cleverness-to-do-list-help.class.php:111
+#: ../includes/cleverness-to-do-list-help.class.php:128
+#: ../includes/cleverness-to-do-list-help.class.php:129
+#: ../includes/cleverness-to-do-list-help.class.php:130
+#: ../includes/cleverness-to-do-list-help.class.php:131
 msgid "default is <em>show</em>. Use a blank value to hide"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:112
-#: ../includes/cleverness-to-do-list-help.class.php:115
-#: ../includes/cleverness-to-do-list-help.class.php:131
 #: ../includes/cleverness-to-do-list-help.class.php:132
-#: ../includes/cleverness-to-do-list-help.class.php:133
-#: ../includes/cleverness-to-do-list-help.class.php:134
-#: ../includes/cleverness-to-do-list-help.class.php:136
-#: ../includes/cleverness-to-do-list-help.class.php:137
-#: ../includes/cleverness-to-do-list-help.class.php:138
+#: ../includes/cleverness-to-do-list-help.class.php:135
+#: ../includes/cleverness-to-do-list-help.class.php:151
+#: ../includes/cleverness-to-do-list-help.class.php:152
 #: ../includes/cleverness-to-do-list-help.class.php:153
 #: ../includes/cleverness-to-do-list-help.class.php:154
-#: ../includes/cleverness-to-do-list-help.class.php:155
 #: ../includes/cleverness-to-do-list-help.class.php:156
 #: ../includes/cleverness-to-do-list-help.class.php:157
 #: ../includes/cleverness-to-do-list-help.class.php:158
-#: ../includes/cleverness-to-do-list-help.class.php:159
-#: ../includes/cleverness-to-do-list-help.class.php:162
-#: ../includes/cleverness-to-do-list-help.class.php:163
+#: ../includes/cleverness-to-do-list-help.class.php:173
+#: ../includes/cleverness-to-do-list-help.class.php:174
+#: ../includes/cleverness-to-do-list-help.class.php:175
+#: ../includes/cleverness-to-do-list-help.class.php:176
+#: ../includes/cleverness-to-do-list-help.class.php:177
+#: ../includes/cleverness-to-do-list-help.class.php:178
+#: ../includes/cleverness-to-do-list-help.class.php:179
+#: ../includes/cleverness-to-do-list-help.class.php:182
+#: ../includes/cleverness-to-do-list-help.class.php:183
 msgid "default is hide (0). Use 1 to show"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:113
+#: ../includes/cleverness-to-do-list-help.class.php:133
 msgid "default is blank. Set to <em>show</em> to display completed items"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:114
-#: ../includes/cleverness-to-do-list-help.class.php:130
-#: ../includes/cleverness-to-do-list-help.class.php:152
+#: ../includes/cleverness-to-do-list-help.class.php:134
+#: ../includes/cleverness-to-do-list-help.class.php:150
+#: ../includes/cleverness-to-do-list-help.class.php:172
 msgid "default is no title"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:116
+#: ../includes/cleverness-to-do-list-help.class.php:136
 msgid ""
 "default is <em>ol</em> (ordered list). Use <em>ul</em> to show an unordered "
 "list"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:117
+#: ../includes/cleverness-to-do-list-help.class.php:137
 msgid ""
 "default is <em>all</em>. Use the category ID to show a specific category"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:120
-#: ../includes/cleverness-to-do-list-help.class.php:142
-#: ../includes/cleverness-to-do-list-help.class.php:166
+#: ../includes/cleverness-to-do-list-help.class.php:140
+#: ../includes/cleverness-to-do-list-help.class.php:162
+#: ../includes/cleverness-to-do-list-help.class.php:186
 msgid "Example:"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:121
+#: ../includes/cleverness-to-do-list-help.class.php:141
 msgid ""
 "Table view with the title of Upcoming Articles, hiding priorities, deadline, "
 "and added by."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:126
+#: ../includes/cleverness-to-do-list-help.class.php:146
 msgid "Display a Checklist of To-Do Items"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:135
+#: ../includes/cleverness-to-do-list-help.class.php:155
 msgid ""
 "default is all categories (0).  Use the category ID to show a specific "
 "category"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:139
+#: ../includes/cleverness-to-do-list-help.class.php:159
 msgid ""
 "default is blank (\"\"). Use the ID of the to-do item to display just one "
 "item"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:140
+#: ../includes/cleverness-to-do-list-help.class.php:160
 msgid "default is 0. Use 1 to show completed items only"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:143
+#: ../includes/cleverness-to-do-list-help.class.php:163
 msgid ""
 "Set the title to \"My To-Do List\" and show the deadline and only items in a "
 "specific category."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:148
+#: ../includes/cleverness-to-do-list-help.class.php:168
 msgid "Display a To-Do List Administration Area"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:160
+#: ../includes/cleverness-to-do-list-help.class.php:180
 msgid "default is show (1). Use 0 to hide"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:161
+#: ../includes/cleverness-to-do-list-help.class.php:181
 msgid ""
 "default is all categories (0). Use the category ID to show a specific "
 "category"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:164
+#: ../includes/cleverness-to-do-list-help.class.php:184
 msgid "default is hide(0). Use 1 to show"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:167
+#: ../includes/cleverness-to-do-list-help.class.php:187
 msgid ""
 "Set the title to \"Things to Do\" and show the priority and the progress."
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:177
+#: ../includes/cleverness-to-do-list-help.class.php:197
 msgid "Additional Information on User Permissions"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:180
+#: ../includes/cleverness-to-do-list-help.class.php:200
 msgid "View To-Do Item Capability"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:180
+#: ../includes/cleverness-to-do-list-help.class.php:200
 msgid "This allows the selected capability to view to-do items"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:181
+#: ../includes/cleverness-to-do-list-help.class.php:201
 #: ../includes/cleverness-to-do-list-settings.class.php:355
 msgid "Complete To-Do Item Capability"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:182
+#: ../includes/cleverness-to-do-list-help.class.php:202
 msgid ""
 "This allows the selected capability to mark to-do items as completed or "
 "uncompleted"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:183
+#: ../includes/cleverness-to-do-list-help.class.php:203
 #: ../includes/cleverness-to-do-list-settings.class.php:356
 msgid "Add To-Do Item Capability"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:183
+#: ../includes/cleverness-to-do-list-help.class.php:203
 msgid "This allows the selected capability to add new to-do items"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:184
+#: ../includes/cleverness-to-do-list-help.class.php:204
 #: ../includes/cleverness-to-do-list-settings.class.php:357
 msgid "Edit To-Do Item Capability"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:184
+#: ../includes/cleverness-to-do-list-help.class.php:204
 msgid "This allows the selected capability to edit existing to-do items"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:185
+#: ../includes/cleverness-to-do-list-help.class.php:205
 #: ../includes/cleverness-to-do-list-settings.class.php:358
 msgid "Assign To-Do Item Capability"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:186
+#: ../includes/cleverness-to-do-list-help.class.php:206
 msgid ""
 "This allows the selected capability to assign to-do items to individual users"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:187
+#: ../includes/cleverness-to-do-list-help.class.php:207
 msgid "View All Assigned Tasks Capability"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:188
+#: ../includes/cleverness-to-do-list-help.class.php:208
 msgid ""
-"This allows the selected capability to view all tasks even if <em>Show Each "
-"User Only Their Assigned Tasks</em> is set to <em>Yes</em>"
+"This allows the selected capability to view all tasks even if Show Each User "
+"Only Their Assigned Tasks is set to Yes"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:189
+#: ../includes/cleverness-to-do-list-help.class.php:209
 #: ../includes/cleverness-to-do-list-settings.class.php:360
 msgid "Delete To-Do Item Capability"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:189
+#: ../includes/cleverness-to-do-list-help.class.php:209
 msgid "This allows the selected capability to delete individual to-do items"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:190
+#: ../includes/cleverness-to-do-list-help.class.php:210
 msgid "Purge To-Do Items Capability"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:191
+#: ../includes/cleverness-to-do-list-help.class.php:211
 msgid ""
 "This allows the selected capability to purge all the completed to-do items"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:192
+#: ../includes/cleverness-to-do-list-help.class.php:212
 #: ../includes/cleverness-to-do-list-settings.class.php:362
 msgid "Add Categories Capability"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:192
+#: ../includes/cleverness-to-do-list-help.class.php:212
 msgid "This allows the selected capability to add new categories"
 msgstr ""
 
-#: ../includes/cleverness-to-do-list-help.class.php:242
+#: ../includes/cleverness-to-do-list-help.class.php:262
 #: ../includes/cleverness-to-do-list-settings.class.php:199
 msgid "Purchase Post Planner Plugin"
 msgstr ""
