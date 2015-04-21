@@ -22,7 +22,7 @@ permission levels using capabilities. There are also settings to show deadline a
 
 A new menu item is added to the backend to manage your list and the to-do list is also listed on a dashboard widget.
 
-A sidebar widget is available as well as shortcode to display the to-do list items on your site.
+A sidebar widget is available as well as a shortcode to display the to-do list items on your site.
 
 There are two shortcodes for front-end administration of the list. Management of categories is restricted to the back-end.
 
