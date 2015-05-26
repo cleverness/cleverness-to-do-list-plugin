@@ -6,7 +6,7 @@ Plugin URI: http://cleverness.org/plugins/to-do-list
 Tags: to-do, to do list, to-do list, list, todo, to do, assign, task, assignments, multi-author
 Requires at least: 3.8
 Tested up to: 4.2
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,6 +144,10 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 4. Everything Enabled
 
 == Changelog ==
+
+= 3.4.2 =
+* Fixed missing translations
+* Changed widget constructor
 
 = 3.4.1 =
 * Fixed issue with dashboard widget line height
@@ -462,6 +466,9 @@ and frontend loops
 * Fixed to work in WordPress 2.8
 
 == Upgrade Notice ==
+
+= 3.4.2 =
+Bug fix
 
 = 3.4.1 =
 Bug fix

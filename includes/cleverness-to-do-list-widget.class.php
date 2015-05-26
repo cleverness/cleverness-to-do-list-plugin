@@ -18,7 +18,7 @@ class CTDL_Widget extends WP_Widget {
 	protected $cat_id = '';
 
 	function __construct() {
-		parent::WP_Widget( 'cleverness-to-do-widget', apply_filters( 'ctdl_todo_list', esc_html__( 'To-Do List', 'cleverness-to-do-list' ) ),
+		parent::__construct( 'cleverness-to-do-widget', apply_filters( 'ctdl_todo_list', esc_html__( 'To-Do List', 'cleverness-to-do-list' ) ),
 			array( 'description' => __( 'Displays To-Do List Items', 'cleverness-to-do-list' ) ) );
 	}
 
