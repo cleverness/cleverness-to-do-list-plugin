@@ -146,7 +146,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 == Changelog ==
 
 = 3.4.2 =
-* Fixed missing translations
+* Fixed missing translation textdomains
 * Changed widget constructor
 * Changed todolist shortcode table-layout CSS back to auto to prevent heading overlap
 
