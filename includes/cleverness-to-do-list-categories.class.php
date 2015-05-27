@@ -231,8 +231,8 @@ class CTDL_Categories {
 								echo esc_html__( 'Private', 'cleverness-to-do-list' );
 							} ?></td>
 							<td>
-								<input class="edit-todo-category button-secondary" type="button" value="<?php esc_attr_e( 'Edit' ); ?>" />
-								<input class="delete-todo-category button-secondary" type="button" value="<?php esc_attr_e( 'Delete' ); ?>" />
+								<input class="edit-todo-category button-secondary" type="button" value="<?php esc_attr_e( 'Edit', 'cleverness-to-do-list' ); ?>" />
+								<input class="delete-todo-category button-secondary" type="button" value="<?php esc_attr_e( 'Delete', 'cleverness-to-do-list' ); ?>" />
 							</td>
 						</tr>
 				<?php } } ?>

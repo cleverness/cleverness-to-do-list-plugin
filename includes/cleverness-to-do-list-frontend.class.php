@@ -539,7 +539,7 @@ class CTDL_Frontend_Checklist extends ClevernessToDoList {
 		$edit = '';
 		$url  = admin_url( 'admin.php?page=cleverness-to-do-list&amp;action=edit-todo&amp;id='.$id );
 		if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
-			$edit = '<a href="'.$url.'" class="edit-todo">'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit' ) ).'</a>';
+			$edit = '<a href="'.$url.'" class="edit-todo">'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit', 'cleverness-to-do-list' ) ).'</a>';
 		}
 		if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 			$this->list .= ' <small class="edit-todo">['.$edit.']</small>';
@@ -685,7 +685,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 
 			if ( $atts['type'] == 'table' ) {
 
-				$this->list .= '<table id="todo-list" class="todo-table">';
+				$this->list .= '<table id="todo-list" class="todo-table todolist">';
 
 				if ( $atts['title'] != '' ) {
 					$this->list .= '<caption>' . $atts['title'] . '</caption>';
@@ -716,7 +716,7 @@ class CTDL_Frontend_List extends ClevernessToDoList {
 
 			if ( $atts['type'] == 'table' ) {
 
-				$this->list .= '<table id="todo-list-completed" class="todo-table">';
+				$this->list .= '<table id="todo-list-completed" class="todo-table todolist">';
 				if ( $atts['completed_title'] != '' ) $this->list .= '<caption>'.$atts['completed_title'].'</caption>';
 				$this->show_table_headings( 1 );
 				$this->loop_through_todos( 1, $category );

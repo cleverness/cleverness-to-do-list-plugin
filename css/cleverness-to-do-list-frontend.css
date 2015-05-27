@@ -59,6 +59,10 @@ table.todo-table thead tr .sorter-false {
 	width:        100%;
 }
 
+.todo-table.todolist {
+	table-layout: auto;
+}
+
 .ctdl-message {
 	padding: 0.5em;
 	margin: 0.5em;

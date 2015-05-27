@@ -148,6 +148,7 @@ Visit [the plugin website](http://cleverness.org/plugins/to-do-list/) and [leave
 = 3.4.2 =
 * Fixed missing translations
 * Changed widget constructor
+* Changed todolist shortcode table-layout CSS back to auto to prevent heading overlap
 
 = 3.4.1 =
 * Fixed issue with dashboard widget line height

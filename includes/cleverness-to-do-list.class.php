@@ -524,16 +524,16 @@ class ClevernessToDoList {
 		$url = $this->url.'?action=edit-todo&amp;id='.absint( $id );
 		if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 			if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
-				$edit = '<input class="edit-todo button-secondary" type="button" value="'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit' ) ).'" />';
+				$edit = '<input class="edit-todo button-secondary" type="button" value="'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit', 'cleverness-to-do-list' ) ).'" />';
 			} else {
-				$edit = '<a href="'.$url.'" class="edit-todo">'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit' ) ).'</a>';
+				$edit = '<a href="'.$url.'" class="edit-todo">'.apply_filters( 'ctdl_edit', esc_attr__( 'Edit', 'cleverness-to-do-list' ) ).'</a>';
 				}
 			}
 		if ( current_user_can( CTDL_Loader::$settings['delete_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
 			if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
-				$edit .= ' <input class="delete-todo button-secondary" type="button" value="'.apply_filters( 'ctdl_delete', esc_attr__( 'Delete' ) ).'" />';
+				$edit .= ' <input class="delete-todo button-secondary" type="button" value="'.apply_filters( 'ctdl_delete', esc_attr__( 'Delete', 'cleverness-to-do-list' ) ).'" />';
 			} else {
-				$edit .= ' | <a href="" class="delete-todo">'.apply_filters( 'ctdl_delete', esc_html__( 'Delete' ) ).'</a>';
+				$edit .= ' | <a href="" class="delete-todo">'.apply_filters( 'ctdl_delete', esc_html__( 'Delete', 'cleverness-to-do-list' ) ).'</a>';
 				}
 			}
 	  	if ( current_user_can( CTDL_Loader::$settings['edit_capability'] ) || CTDL_Loader::$settings['list_view'] == '0' ) {
